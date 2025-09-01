@@ -5,16 +5,16 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <!-- Logo -->
-          <div class="flex items-center space-x-3">
+          <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer">
             <AltusLogo variant="dark" size="32" :animated="true" />
             <span class="text-xl font-bold text-gray-900">Altus 4</span>
-          </div>
+          </a>
 
           <!-- Navigation Links -->
           <div class="hidden md:flex items-center space-x-8">
-            <a href="#features" class="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
-            <a href="#architecture" class="text-gray-600 hover:text-gray-900 transition-colors">Architecture</a>
-            <a href="#status" class="text-gray-600 hover:text-gray-900 transition-colors">Status</a>
+            <a href="/#features" class="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
+            <a href="/#architecture" class="text-gray-600 hover:text-gray-900 transition-colors">Architecture</a>
+            <a href="/#status" class="text-gray-600 hover:text-gray-900 transition-colors">Status</a>
             <Button variant="outline" size="sm" as="a" href="https://github.com/altus4/core" target="_blank" rel="noopener noreferrer">
               <GitHubIcon class="mr-2 h-4 w-4" />
               GitHub
@@ -34,9 +34,9 @@
         <!-- Mobile Menu -->
         <div v-if="mobileMenuOpen" class="md:hidden border-t border-gray-200 py-4">
           <div class="flex flex-col space-y-4">
-            <a href="#features" @click="mobileMenuOpen = false" class="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
-            <a href="#architecture" @click="mobileMenuOpen = false" class="text-gray-600 hover:text-gray-900 transition-colors">Architecture</a>
-            <a href="#status" @click="mobileMenuOpen = false" class="text-gray-600 hover:text-gray-900 transition-colors">Status</a>
+            <a href="/#features" @click="mobileMenuOpen = false" class="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
+            <a href="/#architecture" @click="mobileMenuOpen = false" class="text-gray-600 hover:text-gray-900 transition-colors">Architecture</a>
+            <a href="/#status" @click="mobileMenuOpen = false" class="text-gray-600 hover:text-gray-900 transition-colors">Status</a>
             <Button variant="outline" size="sm" class="self-start" as="a" href="https://github.com/altus4/core" target="_blank" rel="noopener noreferrer">
               <GitHubIcon class="mr-2 h-4 w-4" />
               GitHub
@@ -48,26 +48,35 @@
 
     <!-- Main Content -->
     <main>
-      <!-- Hero Section -->
-      <HeroSection />
+      <!-- Home Page -->
+      <template v-if="currentPage === 'home'">
+        <!-- Hero Section -->
+        <HeroSection />
 
-      <!-- Features Section -->
-      <section id="features">
-        <FeaturesSection />
-      </section>
+        <!-- Features Section -->
+        <section id="features">
+          <FeaturesSection />
+        </section>
 
-      <!-- Technical Specifications -->
-      <section id="architecture">
-        <TechSpecsSection />
-      </section>
+        <!-- Technical Specifications -->
+        <section id="architecture">
+          <TechSpecsSection />
+        </section>
 
-      <!-- Project Status -->
-      <section id="status">
-        <ProjectStatusSection />
-      </section>
+        <!-- Project Status -->
+        <section id="status">
+          <ProjectStatusSection />
+        </section>
 
-      <!-- Call to Action -->
-      <CallToActionSection />
+        <!-- Call to Action -->
+        <CallToActionSection />
+      </template>
+
+      <!-- Privacy Policy Page -->
+      <PrivacyPolicy v-if="currentPage === 'privacy'" />
+
+      <!-- Terms of Use Page -->
+      <TermsOfUse v-if="currentPage === 'terms'" />
     </main>
 
     <!-- Footer -->
@@ -86,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { Button } from '@/components/ui/button';
 import AltusLogo from '@/components/ui/AltusLogo.vue';
 import HeroSection from '@/components/HeroSection.vue';
@@ -95,6 +104,8 @@ import TechSpecsSection from '@/components/TechSpecsSection.vue';
 import ProjectStatusSection from '@/components/ProjectStatusSection.vue';
 import CallToActionSection from '@/components/CallToActionSection.vue';
 import FooterSection from '@/components/FooterSection.vue';
+import PrivacyPolicy from '@/components/PrivacyPolicy.vue';
+import TermsOfUse from '@/components/TermsOfUse.vue';
 import {
   Github as GitHubIcon,
   Menu as MenuIcon,
@@ -105,8 +116,23 @@ import {
 // Mobile menu state
 const mobileMenuOpen = ref(false);
 
+// Simple routing state
+const currentRoute = ref(window.location.pathname);
+
 // Scroll to top functionality
 const showScrollTop = ref(false);
+
+// Computed property to determine which page to show
+const currentPage = computed(() => {
+  switch (currentRoute.value) {
+    case '/privacy':
+      return 'privacy';
+    case '/terms':
+      return 'terms';
+    default:
+      return 'home';
+  }
+});
 
 const handleScroll = () => {
   showScrollTop.value = window.scrollY > 400;
@@ -119,14 +145,55 @@ const scrollToTop = () => {
   });
 };
 
+// Simple routing functions
+const handlePopState = () => {
+  currentRoute.value = window.location.pathname;
+};
+
 // Smooth scroll for anchor links
 const handleAnchorClick = (event: Event) => {
   const target = event.target as HTMLAnchorElement;
-  if (target.hash) {
+  const href = target.getAttribute('href');
+
+  if (href?.startsWith('/#')) {
     event.preventDefault();
-    const element = document.querySelector(target.hash);
+    const hash = href.substring(1); // Remove the '/' to get just '#features'
+
+    // If we're not on the home page, navigate to home first
+    if (currentRoute.value !== '/') {
+      window.history.pushState({}, '', '/');
+      currentRoute.value = '/';
+
+      // Wait for the next tick to ensure home page is rendered
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          const navHeight = 64;
+          const elementTop = element.getBoundingClientRect().top + window.scrollY - navHeight;
+          window.scrollTo({
+            top: elementTop,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    } else {
+      // We're already on home page, just scroll to the element
+      const element = document.querySelector(hash);
+      if (element) {
+        const navHeight = 64;
+        const elementTop = element.getBoundingClientRect().top + window.scrollY - navHeight;
+        window.scrollTo({
+          top: elementTop,
+          behavior: 'smooth'
+        });
+      }
+    }
+  } else if (href?.startsWith('#')) {
+    // Regular anchor links on the same page
+    event.preventDefault();
+    const element = document.querySelector(href);
     if (element) {
-      const navHeight = 64; // Height of fixed navigation
+      const navHeight = 64;
       const elementTop = element.getBoundingClientRect().top + window.scrollY - navHeight;
       window.scrollTo({
         top: elementTop,
@@ -138,18 +205,33 @@ const handleAnchorClick = (event: Event) => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
+  window.addEventListener('popstate', handlePopState);
 
-  // Add smooth scroll to all anchor links
+  // Add smooth scroll to all anchor links and handle internal navigation
   document.addEventListener('click', (event) => {
     const target = event.target as HTMLElement;
-    const anchor = target.closest('a[href^="#"]') as HTMLAnchorElement;
+    const anchor = target.closest('a') as HTMLAnchorElement;
+
     if (anchor) {
-      handleAnchorClick(event);
+      const href = anchor.getAttribute('href');
+
+      // Handle anchor links
+      if (href?.startsWith('#') || href?.startsWith('/#')) {
+        handleAnchorClick(event);
+      }
+      // Handle internal navigation (privacy, terms, home)
+      else if (href === '/' || href === '/privacy' || href === '/terms') {
+        event.preventDefault();
+        window.history.pushState({}, '', href);
+        currentRoute.value = href;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   });
 });
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('popstate', handlePopState);
 });
 </script>

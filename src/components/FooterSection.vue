@@ -5,10 +5,10 @@
       <div class="py-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
         <!-- Brand -->
         <div class="lg:col-span-2">
-          <div class="flex items-center space-x-3 mb-4">
+          <a href="/" class="flex items-center space-x-3 mb-4 hover:opacity-80 transition-opacity cursor-pointer inline-flex">
             <AltusLogo variant="light" size="40" :animated="false" />
             <h3 class="text-2xl font-bold">Altus 4</h3>
-          </div>
+          </a>
                     <p class="text-gray-300 mb-6 max-w-md">
             Production-ready AI-enhanced MySQL search platform trusted by enterprises.
             87% test coverage, comprehensive security, and zero-migration deployment.
@@ -33,9 +33,9 @@
         <div>
           <h4 class="text-lg font-semibold mb-4">Product</h4>
           <div class="space-y-3">
-            <a href="#features" class="block text-gray-300 hover:text-white transition-colors">Features</a>
-            <a href="#architecture" class="block text-gray-300 hover:text-white transition-colors">Architecture</a>
-            <a href="#status" class="block text-gray-300 hover:text-white transition-colors">Project Status</a>
+            <a href="/#features" class="block text-gray-300 hover:text-white transition-colors">Features</a>
+            <a href="/#architecture" class="block text-gray-300 hover:text-white transition-colors">Architecture</a>
+            <a href="/#status" class="block text-gray-300 hover:text-white transition-colors">Project Status</a>
             <a href="https://github.com/altus4/core/projects" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Roadmap</a>
             <a href="https://github.com/altus4/core/releases" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Changelog</a>
           </div>
@@ -47,9 +47,9 @@
           <div class="space-y-3">
             <a href="https://github.com/altus4/core#readme" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Documentation</a>
             <a href="https://github.com/altus4/core#api-documentation" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">API Reference</a>
-            <a href="https://github.com/altus4/core#quick-start" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Quick Start</a>
-            <a href="https://github.com/altus4/core#examples" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Examples</a>
-            <a href="https://github.com/altus4/core#development" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Tutorials</a>
+            <a href="https://github.com/altus4/core#installation" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Quick Start</a>
+            <a href="https://github.com/altus4/core/tree/main/docs/examples" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Examples</a>
+            <a href="https://github.com/altus4/core/tree/main/docs/development" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Tutorials</a>
           </div>
         </div>
       </div>
@@ -90,8 +90,8 @@
         </div>
         <div class="flex items-center space-x-6 text-sm text-gray-400">
           <a href="https://github.com/altus4/core/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Apache 2.0 License</a>
-          <a href="https://altus4.thavarshan.com/privacy" class="hover:text-white transition-colors">Privacy Policy</a>
-          <a href="https://altus4.thavarshan.com/terms" class="hover:text-white transition-colors">Terms of Use</a>
+          <a href="/privacy" class="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="/terms" class="hover:text-white transition-colors">Terms of Use</a>
         </div>
       </div>
     </div>
