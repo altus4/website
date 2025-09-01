@@ -45,8 +45,7 @@
             <a href="https://github.com/altus4/core#readme" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Documentation</a>
             <a href="https://github.com/altus4/core/tree/main/docs/api" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">API Reference</a>
             <a href="https://github.com/altus4/core/tree/main/docs/setup" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Quick Start</a>
-            <a href="https://github.com/altus4/core/tree/main/docs/examples" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Examples</a>
-            <a href="https://github.com/altus4/core/tree/main/docs/development" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Tutorials</a>
+            <a href="https://github.com/altus4/core/tree/main/docs/examples" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Examples & Tutorials</a>
           </div>
         </div>
       </div>
