@@ -99,7 +99,6 @@
 import AltusLogo from '@/components/ui/AltusLogo.vue';
 import {
   Github as GitHubIcon,
-  Twitter as TwitterIcon,
   Linkedin as LinkedinIcon,
   Mail as MailIcon
 } from 'lucide-vue-next';
