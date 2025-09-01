@@ -5,7 +5,7 @@
       <div class="py-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
         <!-- Brand -->
         <div class="lg:col-span-2">
-          <a href="/" class="flex items-center space-x-3 mb-4 hover:opacity-80 transition-opacity cursor-pointer inline-flex">
+          <a href="/" class="items-center space-x-3 mb-4 hover:opacity-80 transition-opacity cursor-pointer inline-flex">
             <AltusLogo variant="light" size="40" :animated="false" />
             <h3 class="text-2xl font-bold">Altus 4</h3>
           </a>
@@ -17,13 +17,10 @@
             <a href="https://github.com/altus4/core" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
               <GitHubIcon class="h-6 w-6" />
             </a>
-            <a href="https://twitter.com/altus4dev" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
-              <TwitterIcon class="h-6 w-6" />
-            </a>
-            <a href="https://linkedin.com/company/altus4" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+            <a href="https://www.linkedin.com/in/thavarshan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
               <LinkedinIcon class="h-6 w-6" />
             </a>
-            <a href="mailto:support@altus4.dev" class="text-gray-400 hover:text-white transition-colors">
+            <a href="mailto:tjthavarshan@gmail.com" class="text-gray-400 hover:text-white transition-colors">
               <MailIcon class="h-6 w-6" />
             </a>
           </div>
@@ -36,7 +33,7 @@
             <a href="/#features" class="block text-gray-300 hover:text-white transition-colors">Features</a>
             <a href="/#architecture" class="block text-gray-300 hover:text-white transition-colors">Architecture</a>
             <a href="/#status" class="block text-gray-300 hover:text-white transition-colors">Project Status</a>
-            <a href="https://github.com/altus4/core/projects" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Roadmap</a>
+            <a href="https://github.com/altus4/core/discussions/12" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Roadmap</a>
             <a href="https://github.com/altus4/core/releases" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Changelog</a>
           </div>
         </div>
@@ -46,8 +43,8 @@
           <h4 class="text-lg font-semibold mb-4">Resources</h4>
           <div class="space-y-3">
             <a href="https://github.com/altus4/core#readme" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Documentation</a>
-            <a href="https://github.com/altus4/core#api-documentation" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">API Reference</a>
-            <a href="https://github.com/altus4/core#installation" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Quick Start</a>
+            <a href="https://github.com/altus4/core/tree/main/docs/api" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">API Reference</a>
+            <a href="https://github.com/altus4/core/tree/main/docs/setup" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Quick Start</a>
             <a href="https://github.com/altus4/core/tree/main/docs/examples" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Examples</a>
             <a href="https://github.com/altus4/core/tree/main/docs/development" target="_blank" rel="noopener noreferrer" class="block text-gray-300 hover:text-white transition-colors">Tutorials</a>
           </div>
