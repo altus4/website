@@ -13,15 +13,15 @@
 
         <!-- CTA Buttons -->
         <div class="flex flex-col items-center justify-center gap-4 sm:flex-row mb-12">
-          <Button variant="secondary" size="lg" class="min-w-48 bg-white text-blue-600 hover:bg-gray-50" as="a" href="https://github.com/altus4/core" target="_blank" rel="noopener noreferrer">
+          <Button variant="secondary" size="lg" class="min-w-48 bg-white text-blue-600 hover:bg-gray-50 hover:text-blue-800" as="a" href="https://github.com/altus4/core" target="_blank" rel="noopener noreferrer">
             <GitHubIcon class="mr-2 h-5 w-5" />
             View on GitHub
           </Button>
-          <Button variant="outline" size="lg" class="min-w-48 border-white text-white hover:bg-white hover:text-blue-600" as="a" href="https://github.com/altus4/core#readme" target="_blank" rel="noopener noreferrer">
+          <Button variant="outline" size="lg" class="min-w-48 bg-white text-blue-600 hover:bg-gray-50 hover:text-blue-800" as="a" href="https://github.com/altus4/core#readme" target="_blank" rel="noopener noreferrer">
             <BookOpenIcon class="mr-2 h-5 w-5" />
             Read Documentation
           </Button>
-          <Button variant="outline" size="lg" class="min-w-48 border-white text-white hover:bg-white hover:text-blue-600" as="a" href="https://github.com/altus4/core#quick-start" target="_blank" rel="noopener noreferrer">
+          <Button variant="outline" size="lg" class="min-w-48 bg-white text-blue-600 hover:bg-gray-50 hover:text-blue-800" as="a" href="https://github.com/altus4/core#quick-start" target="_blank" rel="noopener noreferrer">
             <DownloadIcon class="mr-2 h-5 w-5" />
             Quick Start Guide
           </Button>
