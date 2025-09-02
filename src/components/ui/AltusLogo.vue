@@ -10,15 +10,34 @@
   >
     <title>Altus 4 Logo</title>
     <defs>
-      <linearGradient :id="`logoGradient-${uniqueId}`" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" :style="`stop-color:${gradientStart};stop-opacity:1`" />
-        <stop offset="100%" :style="`stop-color:${gradientEnd};stop-opacity:1`" />
+      <linearGradient
+        :id="`logoGradient-${uniqueId}`"
+        x1="0%"
+        y1="0%"
+        x2="100%"
+        y2="100%"
+      >
+        <stop
+          offset="0%"
+          :style="`stop-color:${gradientStart};stop-opacity:1`"
+        />
+        <stop
+          offset="100%"
+          :style="`stop-color:${gradientEnd};stop-opacity:1`"
+        />
       </linearGradient>
-      <filter :id="`subtleGlow-${uniqueId}`" x="-20%" y="-20%" width="140%" height="140%" v-if="animated">
-        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <filter
+        v-if="animated"
+        :id="`subtleGlow-${uniqueId}`"
+        x="-20%"
+        y="-20%"
+        width="140%"
+        height="140%"
+      >
+        <feGaussianBlur stdDeviation="2" result="coloredBlur" />
         <feMerge>
-          <feMergeNode in="coloredBlur"/>
-          <feMergeNode in="SourceGraphic"/>
+          <feMergeNode in="coloredBlur" />
+          <feMergeNode in="SourceGraphic" />
         </feMerge>
       </filter>
     </defs>
@@ -35,18 +54,45 @@
         <!-- Animated accent elements (only show if animated prop is true) -->
         <template v-if="animated">
           <circle cx="380" cy="280" r="6" :fill="accentColor" opacity="0.5">
-            <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite"/>
+            <animate
+              attributeName="opacity"
+              values="0.5;0.8;0.5"
+              dur="3s"
+              repeatCount="indefinite"
+            />
           </circle>
           <circle cx="720" cy="420" r="4" :fill="accentColor" opacity="0.6">
-            <animate attributeName="opacity" values="0.6;0.3;0.6" dur="2.5s" repeatCount="indefinite"/>
+            <animate
+              attributeName="opacity"
+              values="0.6;0.3;0.6"
+              dur="2.5s"
+              repeatCount="indefinite"
+            />
           </circle>
           <circle cx="320" cy="650" r="3" :fill="accentColor" opacity="0.4">
-            <animate attributeName="opacity" values="0.4;0.7;0.4" dur="2.8s" repeatCount="indefinite"/>
+            <animate
+              attributeName="opacity"
+              values="0.4;0.7;0.4"
+              dur="2.8s"
+              repeatCount="indefinite"
+            />
           </circle>
 
           <!-- Connection lines -->
-          <path d="M350,200 Q400,250 450,200" :stroke="accentColor" stroke-width="2" fill="none" opacity="0.3"/>
-          <path d="M750,600 Q700,650 650,600" :stroke="accentColor" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <path
+            d="M350,200 Q400,250 450,200"
+            :stroke="accentColor"
+            stroke-width="2"
+            fill="none"
+            opacity="0.3"
+          />
+          <path
+            d="M750,600 Q700,650 650,600"
+            :stroke="accentColor"
+            stroke-width="1.5"
+            fill="none"
+            opacity="0.4"
+          />
         </template>
       </g>
     </g>
@@ -54,41 +100,41 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 interface Props {
-  variant?: 'dark' | 'light';
-  size?: string | number;
-  animated?: boolean;
-  class?: string;
+  variant?: 'dark' | 'light'
+  size?: string | number
+  animated?: boolean
+  class?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'dark',
   size: '32',
   animated: true,
-  class: ''
-});
+  class: '',
+})
 
 // Generate unique ID for gradients to avoid conflicts when multiple logos are on the same page
-const uniqueId = Math.random().toString(36).substr(2, 9);
+const uniqueId = Math.random().toString(36).substr(2, 9)
 
 // Computed color schemes based on variant
 const gradientStart = computed(() => {
-  return props.variant === 'dark' ? '#1f2937' : '#f9fafb';
-});
+  return props.variant === 'dark' ? '#1f2937' : '#f9fafb'
+})
 
 const gradientEnd = computed(() => {
-  return props.variant === 'dark' ? '#111827' : '#e5e7eb';
-});
+  return props.variant === 'dark' ? '#111827' : '#e5e7eb'
+})
 
 const accentColor = computed(() => {
-  return props.variant === 'dark' ? '#6b7280' : '#9ca3af';
-});
+  return props.variant === 'dark' ? '#6b7280' : '#9ca3af'
+})
 
 const containerClass = computed(() => {
-  return `altus-logo ${props.class}`;
-});
+  return `altus-logo ${props.class}`
+})
 </script>
 
 <style scoped>

@@ -7,7 +7,8 @@
           Technical Architecture
         </h2>
         <p class="text-xl text-gray-600">
-          Built with modern technologies and best practices for scalability and maintainability.
+          Built with modern technologies and best practices for scalability and
+          maintainability.
         </p>
       </div>
 
@@ -16,19 +17,27 @@
         <div class="order-2 lg:order-1">
           <Card>
             <CardHeader>
-              <h3 class="text-2xl font-semibold text-gray-900">System Architecture</h3>
+              <h3 class="text-2xl font-semibold text-gray-900">
+                System Architecture
+              </h3>
             </CardHeader>
             <CardContent>
               <!-- Architecture Flow -->
               <div class="space-y-6">
                 <!-- Client Layer -->
                 <div class="flex items-center space-x-4">
-                  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100"
+                  >
                     <MonitorIcon class="h-6 w-6 text-blue-600" />
                   </div>
                   <div class="flex-1">
-                    <h4 class="font-semibold text-gray-900">Client Applications</h4>
-                    <p class="text-sm text-gray-600">Web, mobile, and API clients</p>
+                    <h4 class="font-semibold text-gray-900">
+                      Client Applications
+                    </h4>
+                    <p class="text-sm text-gray-600">
+                      Web, mobile, and API clients
+                    </p>
                   </div>
                 </div>
 
@@ -39,12 +48,18 @@
 
                 <!-- API Layer -->
                 <div class="flex items-center space-x-4">
-                  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100"
+                  >
                     <ServerIcon class="h-6 w-6 text-green-600" />
                   </div>
                   <div class="flex-1">
-                    <h4 class="font-semibold text-gray-900">Express.js REST API</h4>
-                    <p class="text-sm text-gray-600">JWT auth, rate limiting, validation</p>
+                    <h4 class="font-semibold text-gray-900">
+                      Express.js REST API
+                    </h4>
+                    <p class="text-sm text-gray-600">
+                      JWT auth, rate limiting, validation
+                    </p>
                   </div>
                 </div>
 
@@ -55,19 +70,27 @@
 
                 <!-- Search Engine -->
                 <div class="flex items-center space-x-4">
-                  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100">
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100"
+                  >
                     <SearchIcon class="h-6 w-6 text-purple-600" />
                   </div>
                   <div class="flex-1">
-                    <h4 class="font-semibold text-gray-900">Altus 4 Search Engine</h4>
-                    <p class="text-sm text-gray-600">AI enhancement + MySQL full-text</p>
+                    <h4 class="font-semibold text-gray-900">
+                      Altus 4 Search Engine
+                    </h4>
+                    <p class="text-sm text-gray-600">
+                      AI enhancement + MySQL full-text
+                    </p>
                   </div>
                 </div>
 
                 <!-- Data Layer -->
                 <div class="grid grid-cols-2 gap-4 mt-6">
                   <div class="flex items-center space-x-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
+                    <div
+                      class="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100"
+                    >
                       <DatabaseIcon class="h-5 w-5 text-orange-600" />
                     </div>
                     <div>
@@ -76,7 +99,9 @@
                     </div>
                   </div>
                   <div class="flex items-center space-x-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
+                    <div
+                      class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100"
+                    >
                       <ZapIcon class="h-5 w-5 text-red-600" />
                     </div>
                     <div>
@@ -95,7 +120,9 @@
           <!-- Core Technologies -->
           <Card>
             <CardHeader>
-              <h3 class="text-xl font-semibold text-gray-900">Core Technologies</h3>
+              <h3 class="text-xl font-semibold text-gray-900">
+                Core Technologies
+              </h3>
             </CardHeader>
             <CardContent>
               <div class="space-y-3">
@@ -130,36 +157,48 @@
           <!-- Security Features -->
           <Card>
             <CardHeader>
-              <h3 class="text-xl font-semibold text-gray-900">Security Features</h3>
+              <h3 class="text-xl font-semibold text-gray-900">
+                Security Features
+              </h3>
             </CardHeader>
             <CardContent>
               <div class="space-y-3">
                 <div class="flex items-start space-x-3">
                   <CheckIcon class="h-5 w-5 text-green-500 mt-0.5" />
                   <div>
-                    <p class="font-medium text-gray-900">API Key Authentication</p>
-                    <p class="text-sm text-gray-600">Production-ready API key system with tiered permissions</p>
+                    <p class="font-medium text-gray-900">
+                      API Key Authentication
+                    </p>
+                    <p class="text-sm text-gray-600">
+                      Production-ready API key system with tiered permissions
+                    </p>
                   </div>
                 </div>
                 <div class="flex items-start space-x-3">
                   <CheckIcon class="h-5 w-5 text-green-500 mt-0.5" />
                   <div>
                     <p class="font-medium text-gray-900">Password Encryption</p>
-                    <p class="text-sm text-gray-600">bcrypt hashing with salt rounds</p>
+                    <p class="text-sm text-gray-600">
+                      bcrypt hashing with salt rounds
+                    </p>
                   </div>
                 </div>
                 <div class="flex items-start space-x-3">
                   <CheckIcon class="h-5 w-5 text-green-500 mt-0.5" />
                   <div>
                     <p class="font-medium text-gray-900">Input Validation</p>
-                    <p class="text-sm text-gray-600">Request sanitization and validation</p>
+                    <p class="text-sm text-gray-600">
+                      Request sanitization and validation
+                    </p>
                   </div>
                 </div>
                 <div class="flex items-start space-x-3">
                   <CheckIcon class="h-5 w-5 text-green-500 mt-0.5" />
                   <div>
                     <p class="font-medium text-gray-900">Rate Limiting</p>
-                    <p class="text-sm text-gray-600">API rate limiting and throttling</p>
+                    <p class="text-sm text-gray-600">
+                      API rate limiting and throttling
+                    </p>
                   </div>
                 </div>
               </div>
@@ -182,7 +221,9 @@
                   <div class="text-sm text-gray-600">Test Pass Rate</div>
                 </div>
                 <div class="text-center">
-                  <div class="text-2xl font-bold text-purple-600">&lt;100ms</div>
+                  <div class="text-2xl font-bold text-purple-600">
+                    &lt;100ms
+                  </div>
                   <div class="text-sm text-gray-600">Search Response</div>
                 </div>
                 <div class="text-center">
@@ -199,7 +240,7 @@
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
   Monitor as MonitorIcon,
   Server as ServerIcon,
@@ -207,6 +248,6 @@ import {
   Database as DatabaseIcon,
   Zap as ZapIcon,
   ArrowDown as ArrowDownIcon,
-  Check as CheckIcon
-} from 'lucide-vue-next';
+  Check as CheckIcon,
+} from 'lucide-vue-next'
 </script>

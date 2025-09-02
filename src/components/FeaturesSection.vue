@@ -7,7 +7,8 @@
           Production-Ready Features
         </h2>
         <p class="text-xl text-gray-600">
-          Fully implemented and tested features ready for enterprise deployment with comprehensive security and monitoring.
+          Fully implemented and tested features ready for enterprise deployment
+          with comprehensive security and monitoring.
         </p>
       </div>
 
@@ -17,15 +18,20 @@
         <Card class="hover:shadow-lg transition-shadow">
           <CardHeader>
             <div class="mb-4">
-              <div class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600">
+              <div
+                class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600"
+              >
                 <BrainIcon class="h-6 w-6 text-white" />
               </div>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900">AI-Enhanced Search</h3>
+            <h3 class="text-xl font-semibold text-gray-900">
+              AI-Enhanced Search
+            </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              Leverage OpenAI API integration to enhance search results with semantic understanding and contextual relevance.
+              Leverage OpenAI API integration to enhance search results with
+              semantic understanding and contextual relevance.
             </p>
             <div class="flex items-center text-sm text-blue-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
@@ -38,15 +44,20 @@
         <Card class="hover:shadow-lg transition-shadow">
           <CardHeader>
             <div class="mb-4">
-              <div class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-emerald-600">
+              <div
+                class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-emerald-600"
+              >
                 <ZapIcon class="h-6 w-6 text-white" />
               </div>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900">High Performance</h3>
+            <h3 class="text-xl font-semibold text-gray-900">
+              High Performance
+            </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              Optimized MySQL full-text search with Redis caching for lightning-fast query responses and scalability.
+              Optimized MySQL full-text search with Redis caching for
+              lightning-fast query responses and scalability.
             </p>
             <div class="flex items-center text-sm text-green-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
@@ -59,15 +70,20 @@
         <Card class="hover:shadow-lg transition-shadow">
           <CardHeader>
             <div class="mb-4">
-              <div class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-violet-600">
+              <div
+                class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-violet-600"
+              >
                 <ShieldIcon class="h-6 w-6 text-white" />
               </div>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900">Enterprise Security</h3>
+            <h3 class="text-xl font-semibold text-gray-900">
+              Enterprise Security
+            </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              Production-ready API key authentication system, bcrypt password hashing, and secure API endpoints for B2B service integration.
+              Production-ready API key authentication system, bcrypt password
+              hashing, and secure API endpoints for B2B service integration.
             </p>
             <div class="flex items-center text-sm text-purple-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
@@ -80,15 +96,20 @@
         <Card class="hover:shadow-lg transition-shadow">
           <CardHeader>
             <div class="mb-4">
-              <div class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-red-600">
+              <div
+                class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-red-600"
+              >
                 <DatabaseIcon class="h-6 w-6 text-white" />
               </div>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900">MySQL Integration</h3>
+            <h3 class="text-xl font-semibold text-gray-900">
+              MySQL Integration
+            </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              Native MySQL full-text search capabilities with advanced indexing and query optimization for complex searches.
+              Native MySQL full-text search capabilities with advanced indexing
+              and query optimization for complex searches.
             </p>
             <div class="flex items-center text-sm text-orange-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
@@ -101,15 +122,20 @@
         <Card class="hover:shadow-lg transition-shadow">
           <CardHeader>
             <div class="mb-4">
-              <div class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-cyan-600">
+              <div
+                class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-cyan-600"
+              >
                 <CodeIcon class="h-6 w-6 text-white" />
               </div>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900">Developer Friendly</h3>
+            <h3 class="text-xl font-semibold text-gray-900">
+              Developer Friendly
+            </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              TypeScript-first approach with comprehensive testing, clear documentation, and Express.js REST API.
+              TypeScript-first approach with comprehensive testing, clear
+              documentation, and Express.js REST API.
             </p>
             <div class="flex items-center text-sm text-teal-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
@@ -122,15 +148,21 @@
         <Card class="hover:shadow-lg transition-shadow">
           <CardHeader>
             <div class="mb-4">
-              <div class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500 to-pink-600">
+              <div
+                class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500 to-pink-600"
+              >
                 <RocketIcon class="h-6 w-6 text-white" />
               </div>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900">Production Ready</h3>
+            <h3 class="text-xl font-semibold text-gray-900">
+              Production Ready
+            </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              100% test pass rate with 508 comprehensive unit and integration tests across 21 test suites ensures reliability in production environments.
+              100% test pass rate with 508 comprehensive unit and integration
+              tests across 21 test suites ensures reliability in production
+              environments.
             </p>
             <div class="flex items-center text-sm text-rose-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
@@ -144,7 +176,7 @@
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
   Brain as BrainIcon,
   Zap as ZapIcon,
@@ -152,6 +184,6 @@ import {
   Database as DatabaseIcon,
   Code as CodeIcon,
   Rocket as RocketIcon,
-  Check as CheckIcon
-} from 'lucide-vue-next';
+  Check as CheckIcon,
+} from 'lucide-vue-next'
 </script>
