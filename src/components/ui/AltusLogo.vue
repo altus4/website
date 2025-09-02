@@ -57,17 +57,17 @@
 import { computed } from 'vue';
 
 interface Props {
-    variant?: 'dark' | 'light';
-    size?: string | number;
-    animated?: boolean;
-    class?: string;
+  variant?: 'dark' | 'light';
+  size?: string | number;
+  animated?: boolean;
+  class?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    variant: 'dark',
-    size: '32',
-    animated: true,
-    class: ''
+  variant: 'dark',
+  size: '32',
+  animated: true,
+  class: ''
 });
 
 // Generate unique ID for gradients to avoid conflicts when multiple logos are on the same page
@@ -75,28 +75,28 @@ const uniqueId = Math.random().toString(36).substr(2, 9);
 
 // Computed color schemes based on variant
 const gradientStart = computed(() => {
-    return props.variant === 'dark' ? '#1f2937' : '#f9fafb';
+  return props.variant === 'dark' ? '#1f2937' : '#f9fafb';
 });
 
 const gradientEnd = computed(() => {
-    return props.variant === 'dark' ? '#111827' : '#e5e7eb';
+  return props.variant === 'dark' ? '#111827' : '#e5e7eb';
 });
 
 const accentColor = computed(() => {
-    return props.variant === 'dark' ? '#6b7280' : '#9ca3af';
+  return props.variant === 'dark' ? '#6b7280' : '#9ca3af';
 });
 
 const containerClass = computed(() => {
-    return `altus-logo ${props.class}`;
+  return `altus-logo ${props.class}`;
 });
 </script>
 
 <style scoped>
 .altus-logo {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .altus-logo:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 </style>

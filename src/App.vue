@@ -5,9 +5,9 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <!-- Logo -->
-          <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer">
+          <a href="/" class="flex items-center hover:opacity-80 transition-opacity cursor-pointer">
             <AltusLogo variant="dark" size="32" :animated="true" />
-            <span class="text-xl font-bold text-gray-900">Altus 4</span>
+            <span class="text-xl font-bold text-gray-900 -ml-1.5">ltus 4</span>
           </a>
 
           <!-- Navigation Links -->
