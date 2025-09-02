@@ -5,7 +5,7 @@
         <!-- Badge -->
         <div class="mb-8 inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700">
           <span class="mr-2 flex h-2 w-2 rounded-full bg-green-400"></span>
-          Production Ready • 87.15% Test Coverage • 407 Tests
+          Production Ready • 100% Test Pass Rate • 508 Tests
         </div>
 
         <!-- Main Heading -->

@@ -67,11 +67,11 @@
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              Built-in JWT authentication, bcrypt password hashing, and secure API endpoints for production deployments.
+              Production-ready API key authentication system, bcrypt password hashing, and secure API endpoints for B2B service integration.
             </p>
             <div class="flex items-center text-sm text-purple-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
-              JWT & bcrypt security
+              API Key & bcrypt security
             </div>
           </CardContent>
         </Card>
@@ -130,11 +130,11 @@
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              87.15% test coverage with comprehensive unit and integration tests ensures reliability in production environments.
+              100% test pass rate with 508 comprehensive unit and integration tests across 21 test suites ensures reliability in production environments.
             </p>
             <div class="flex items-center text-sm text-rose-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
-              87.15% test coverage
+              100% test pass rate (508 tests)
             </div>
           </CardContent>
         </Card>
