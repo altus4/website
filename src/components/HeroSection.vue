@@ -47,9 +47,7 @@
             size="lg"
             class="min-w-40"
             as="a"
-            href="https://github.com/altus4/core#readme"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/docs/"
           >
             <BookOpenIcon class="mr-2 h-5 w-5" />
             Documentation
