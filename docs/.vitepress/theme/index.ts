@@ -85,10 +85,20 @@ export default {
                 const { svg } = await mermaid.render(graphId, graphDefinition)
                 container.innerHTML = svg
 
-                // Replace the code block with the rendered diagram
-                const preElement = element.parentElement
-                if (preElement && preElement.parentElement) {
-                  preElement.parentElement.replaceChild(container, preElement)
+                // Find the correct parent element to replace (the <pre> element)
+                const preElement = element.parentElement // This should be <pre>
+                console.log('Element structure:', {
+                  element: element.tagName,
+                  parent: preElement?.tagName,
+                  grandparent: preElement?.parentElement?.tagName,
+                })
+
+                if (preElement && preElement.tagName === 'PRE') {
+                  // Replace only the <pre> element, not its parent
+                  preElement.parentElement?.replaceChild(container, preElement)
+                } else {
+                  // Fallback: replace the element itself if structure is different
+                  element.parentElement?.replaceChild(container, element)
                 }
               } catch (error) {
                 console.error('Mermaid rendering failed:', error)

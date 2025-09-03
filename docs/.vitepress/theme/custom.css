@@ -2,16 +2,21 @@
 .mermaid-diagram {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin: 1.5rem 0;
   padding: 1rem;
   background-color: var(--vp-c-bg-soft);
   border-radius: 8px;
   border: 1px solid var(--vp-c-border);
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .mermaid-diagram svg {
   max-width: 100%;
+  max-height: 600px;
   height: auto;
+  width: auto;
 }
 
 /* Dark mode adjustments */
