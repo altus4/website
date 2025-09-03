@@ -5,6 +5,7 @@ This guide will help you set up automatic synchronization between your main repo
 ## 🎯 Overview
 
 The setup creates:
+
 - 📁 **Separate docs repository**: `altus4/docs` for documentation only
 - 🔄 **Automatic sync**: Changes in `docs/` directory trigger sync to docs repo
 - 🚀 **GitHub Pages**: Auto-deployment of documentation site
@@ -21,7 +22,8 @@ The setup creates:
 ### Step 1: Create the Documentation Repository
 
 1. **Create the repository** on GitHub:
-   ```
+
+   ```text
    Repository name: altus4/docs
    Description: Documentation for Altus 4 - AI-Enhanced MySQL Full-Text Search Engine
    Visibility: Public (recommended for GitHub Pages)
@@ -60,11 +62,13 @@ In your **main repository** (this one):
 
 1. **Make a change** to any file in the `docs/` directory
 2. **Commit and push** to the `main` or `develop` branch:
+
    ```bash
    git add docs/
    git commit -m "docs: test sync setup"
    git push origin main
    ```
+
 3. **Check the Actions tab** in your main repository to see the sync workflow running
 4. **Verify the docs repository** receives the changes
 5. **Check GitHub Pages** deployment (may take a few minutes)
@@ -103,7 +107,8 @@ npm run docs:sync:force
 After setup, your repositories will look like:
 
 ### Main Repository (`altus4/core`)
-```
+
+```text
 ├── docs/                          # Source documentation
 │   ├── .vitepress/
 │   ├── api/
@@ -117,7 +122,8 @@ After setup, your repositories will look like:
 ```
 
 ### Docs Repository (`altus4/docs`)
-```
+
+```text
 ├── .vitepress/                    # VitePress config (synced)
 ├── api/                          # API docs (synced)
 ├── architecture/                 # Architecture docs (synced)
@@ -152,10 +158,10 @@ Edit `.github/workflows/sync-docs.yml` to customize:
 # Trigger branches
 on:
   push:
-    branches: [ main, develop ]  # Add/remove branches as needed
+    branches: [main, develop] # Add/remove branches as needed
     paths:
-      - 'docs/**'               # Only sync on docs changes
-      - 'README.md'             # Also sync README changes
+      - 'docs/**' # Only sync on docs changes
+      - 'README.md' # Also sync README changes
 ```
 
 ## 🔍 Troubleshooting
@@ -174,9 +180,11 @@ on:
 
 3. **Sync Script Fails**
    - Run script manually to see detailed error messages:
+
      ```bash
      ./scripts/sync-docs.sh
      ```
+
    - Check git configuration and credentials
 
 4. **GitHub Pages Not Deploying**
@@ -219,10 +227,10 @@ After setup is complete:
 
 ## 🔗 Useful Links
 
-- **Documentation Site**: https://altus4.github.io/docs
-- **Docs Repository**: https://github.com/altus4/docs
-- **VitePress Documentation**: https://vitepress.dev/
-- **GitHub Actions Documentation**: https://docs.github.com/en/actions
+- **Documentation Site**: <https://altus4.github.io/docs>
+- **Docs Repository**: <https://github.com/altus4/docs>
+- **VitePress Documentation**: <https://vitepress.dev/>
+- **GitHub Actions Documentation**: <https://docs.github.com/en/actions>
 
 ---
 

@@ -12,13 +12,13 @@ on:
       force_sync:
         description: 'Force sync even if no changes detected'
         required: false
-        default: 'false'
+        default: false
         type: boolean
 
 jobs:
   sync-docs:
     runs-on: ubuntu-latest
-    if: github.repository == 'altus4/core' || github.repository == 'yourusername/altus4'
+    if: github.repository == 'altus4/website'
 
     steps:
       - name: Checkout source repository

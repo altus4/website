@@ -88,10 +88,16 @@ export default [
       'no-unused-vars': 'off',
       'no-undef': 'off',
       'no-console': 'off',
+      'no-redeclare': 'off',
+      'no-unreachable': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-redeclare': 'off',
       'no-useless-catch': 'off',
       'prettier/prettier': 'off',
+      // Disable all parsing-related rules for markdown code blocks
+      'no-irregular-whitespace': 'off',
+      'no-unexpected-multiline': 'off',
     },
   },
   // VitePress configuration files

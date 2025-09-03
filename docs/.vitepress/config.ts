@@ -53,15 +53,11 @@ export default defineConfig({
       },
       {
         text: 'API Reference',
-        items: [
-          { text: 'API Overview', link: '/api/' },
-        ],
+        items: [{ text: 'API Overview', link: '/api/' }],
       },
       {
         text: 'Architecture',
-        items: [
-          { text: 'System Architecture', link: '/architecture/' },
-        ],
+        items: [{ text: 'System Architecture', link: '/architecture/' }],
       },
       {
         text: 'Services',
@@ -79,15 +75,11 @@ export default defineConfig({
       },
       {
         text: 'Examples',
-        items: [
-          { text: 'Examples Overview', link: '/examples/' },
-        ],
+        items: [{ text: 'Examples Overview', link: '/examples/' }],
       },
       {
         text: 'Testing',
-        items: [
-          { text: 'Testing Guide', link: '/testing/' },
-        ],
+        items: [{ text: 'Testing Guide', link: '/testing/' }],
       },
     ],
 

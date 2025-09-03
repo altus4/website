@@ -2,7 +2,7 @@ import { h } from 'vue'
 import DefaultTheme from 'vitepress/theme'
 import type { Theme } from 'vitepress'
 
-// Import your project's main CSS
+// Import the project's main CSS
 import '../../../src/style.css'
 
 export default {

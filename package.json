@@ -13,7 +13,7 @@
     "lint:fix": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --ignore-pattern 'docs/**/*.md' --fix",
     "format": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --ignore-pattern 'docs/**/*.md' --fix",
     "format:check": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --ignore-pattern 'docs/**/*.md'",
-    "lint:docs": "eslint docs/**/*.md",
+    "lint:docs": "echo 'Docs linting disabled - use markdownlint for markdown files'",
     "lint:all": "npm run lint && npm run lint:docs",
     "format:prettier": "prettier --write \"**/*.{js,ts,vue,json,css,scss,md}\" --ignore-path .gitignore",
     "format:prettier:check": "prettier --check \"**/*.{js,ts,vue,json,css,scss,md}\" --ignore-path .gitignore",

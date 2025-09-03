@@ -24,11 +24,11 @@ A modern, responsive marketing website for Altus 4 - an AI-enhanced MySQL full-t
 ## Sections
 
 1. **Hero Section**: Value proposition with clear CTA buttons
-2. **Features Section**: Showcase of key capabilities (AI, Performance, Security)
-3. **Technical Specifications**: Architecture overview and tech stack details
-4. **Project Status**: Current metrics, completion status, and roadmap
-5. **Call to Action**: Community engagement and quick start links
-6. **Footer**: Contact information, resources, and tech stack
+1. **Features Section**: Showcase of key capabilities (AI, Performance, Security)
+1. **Technical Specifications**: Architecture overview and tech stack details
+1. **Project Status**: Current metrics, completion status, and roadmap
+1. **Call to Action**: Community engagement and quick start links
+1. **Footer**: Contact information, resources, and tech stack
 
 ## Quick Start
 
@@ -46,19 +46,19 @@ git clone <repository-url>
 cd altus4-website
 ```
 
-2. Install dependencies:
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Start the development server:
+1. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-4. Open your browser and visit `http://localhost:5173`
+1. Open your browser and visit `http://localhost:5173`
 
 ### Build for Production
 
@@ -108,7 +108,7 @@ This project includes comprehensive VitePress documentation that automatically s
 
 ### 📚 Documentation Site
 
-**Live Documentation**: [https://altus4.github.io/docs](https://altus4.github.io/docs)
+Live Documentation: [https://altus4.github.io/docs](https://altus4.github.io/docs)
 
 ### 🔄 Documentation Sync
 
@@ -196,7 +196,7 @@ This project is licensed under the MIT License.
 
 ## Author
 
-**Thavarshan**
+Thavarshan
 
 - Website: [thavarshan.com](https://thavarshan.com)
 - GitHub: [@thavarshan](https://github.com/thavarshan)

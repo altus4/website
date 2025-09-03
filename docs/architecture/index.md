@@ -50,11 +50,11 @@ graph TD
 
 User-facing interfaces and integrations
 
-| Component | Description | Technology |
-|-----------|-------------|------------|
-| **Web UI** | Primary user interface | Vue.js, Tailwind CSS |
-| **Mobile Apps** | iOS/Android applications | React Native (future) |
-| **Third-party Integrations** | API consumers | REST API clients |
+| Component                    | Description              | Technology            |
+| ---------------------------- | ------------------------ | --------------------- |
+| **Web UI**                   | Primary user interface   | Vue.js, Tailwind CSS  |
+| **Mobile Apps**              | iOS/Android applications | React Native (future) |
+| **Third-party Integrations** | API consumers            | REST API clients      |
 
 ### 🔌 API Layer
 
@@ -75,13 +75,13 @@ Request handling and middleware pipeline
 
 Business logic and orchestration
 
-| Service | Purpose | Key Features |
-|---------|---------|-------------|
-| **SearchService** | Search orchestration | Multi-database, AI integration |
-| **DatabaseService** | MySQL operations | Connection pooling, query optimization |
-| **AIService** | AI integration | OpenAI API, semantic search |
-| **CacheService** | Performance optimization | Redis caching, analytics |
-| **UserService** | User management | Authentication, profiles |
+| Service             | Purpose                  | Key Features                           |
+| ------------------- | ------------------------ | -------------------------------------- |
+| **SearchService**   | Search orchestration     | Multi-database, AI integration         |
+| **DatabaseService** | MySQL operations         | Connection pooling, query optimization |
+| **AIService**       | AI integration           | OpenAI API, semantic search            |
+| **CacheService**    | Performance optimization | Redis caching, analytics               |
+| **UserService**     | User management          | Authentication, profiles               |
 
 ### 📊 Data Layer
 
