@@ -283,15 +283,15 @@ refactor(database): optimize connection pooling
 ```typescript
 // src/types/index.ts
 export interface IAnalyticsService {
-  generateReport(userId: string, dateRange: DateRange): Promise<AnalyticsReport>;
-  getUserMetrics(userId: string): Promise<UserMetrics>;
+  generateReport(userId: string, dateRange: DateRange): Promise<AnalyticsReport>
+  getUserMetrics(userId: string): Promise<UserMetrics>
 }
 
 export interface AnalyticsReport {
-  searchCount: number;
-  averageResponseTime: number;
-  popularQueries: string[];
-  trends: TrendData[];
+  searchCount: number
+  averageResponseTime: number
+  popularQueries: string[]
+  trends: TrendData[]
 }
 ```
 
@@ -299,8 +299,8 @@ export interface AnalyticsReport {
 
 ```typescript
 // src/services/AnalyticsService.ts
-import { IAnalyticsService } from '@/types';
-import { logger } from '@/utils/logger';
+import { IAnalyticsService } from '@/types'
+import { logger } from '@/utils/logger'
 
 export class AnalyticsService implements IAnalyticsService {
   constructor(
@@ -308,29 +308,38 @@ export class AnalyticsService implements IAnalyticsService {
     private databaseService: DatabaseService
   ) {}
 
-  async generateReport(userId: string, dateRange: DateRange): Promise<AnalyticsReport> {
+  async generateReport(
+    userId: string,
+    dateRange: DateRange
+  ): Promise<AnalyticsReport> {
     try {
-      logger.info(`Generating analytics report for user ${userId}`);
+      logger.info(`Generating analytics report for user ${userId}`)
 
       // Implementation here
-      const searchCount = await this.getSearchCount(userId, dateRange);
-      const averageResponseTime = await this.getAverageResponseTime(userId, dateRange);
+      const searchCount = await this.getSearchCount(userId, dateRange)
+      const averageResponseTime = await this.getAverageResponseTime(
+        userId,
+        dateRange
+      )
 
       return {
         searchCount,
         averageResponseTime,
         popularQueries: [],
         trends: [],
-      };
+      }
     } catch (error) {
-      logger.error('Failed to generate analytics report:', error);
-      throw new AppError('ANALYTICS_ERROR', 'Failed to generate report');
+      logger.error('Failed to generate analytics report:', error)
+      throw new AppError('ANALYTICS_ERROR', 'Failed to generate report')
     }
   }
 
-  private async getSearchCount(userId: string, dateRange: DateRange): Promise<number> {
+  private async getSearchCount(
+    userId: string,
+    dateRange: DateRange
+  ): Promise<number> {
     // Implementation
-    return 0;
+    return 0
   }
 }
 ```
@@ -339,21 +348,21 @@ export class AnalyticsService implements IAnalyticsService {
 
 ```typescript
 // src/controllers/AnalyticsController.ts
-import { Request, Response } from 'express';
-import { AnalyticsService } from '@/services/AnalyticsService';
+import { Request, Response } from 'express'
+import { AnalyticsService } from '@/services/AnalyticsService'
 
 export class AnalyticsController {
   constructor(private analyticsService: AnalyticsService) {}
 
   generateReport = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { userId } = req.user!;
-      const { startDate, endDate } = req.query;
+      const { userId } = req.user!
+      const { startDate, endDate } = req.query
 
       const report = await this.analyticsService.generateReport(userId, {
         startDate: new Date(startDate as string),
         endDate: new Date(endDate as string),
-      });
+      })
 
       res.json({
         success: true,
@@ -362,11 +371,11 @@ export class AnalyticsController {
           timestamp: new Date(),
           requestId: req.id,
         },
-      });
+      })
     } catch (error) {
-      throw error; // Let error middleware handle it
+      throw error // Let error middleware handle it
     }
-  };
+  }
 }
 ```
 
@@ -374,21 +383,21 @@ export class AnalyticsController {
 
 ```typescript
 // src/routes/analytics.ts
-import { Router } from 'express';
-import { z } from 'zod';
-import { AnalyticsController } from '@/controllers/AnalyticsController';
-import { authenticateApiKey, requirePermission } from '@/middleware/apiKeyAuth';
-import { validateRequest } from '@/middleware/validation';
+import { Router } from 'express'
+import { z } from 'zod'
+import { AnalyticsController } from '@/controllers/AnalyticsController'
+import { authenticateApiKey, requirePermission } from '@/middleware/apiKeyAuth'
+import { validateRequest } from '@/middleware/validation'
 
-const router = Router();
-const analyticsController = new AnalyticsController();
+const router = Router()
+const analyticsController = new AnalyticsController()
 
 const generateReportSchema = z.object({
   query: z.object({
     startDate: z.string().datetime(),
     endDate: z.string().datetime(),
   }),
-});
+})
 
 router.get(
   '/report',
@@ -396,41 +405,44 @@ router.get(
   requirePermission('analytics'),
   validateRequest(generateReportSchema),
   analyticsController.generateReport
-);
+)
 
-export default router;
+export default router
 ```
 
 1. **Write Tests**
 
 ```typescript
 // src/services/AnalyticsService.test.ts
-import { AnalyticsService } from './AnalyticsService';
+import { AnalyticsService } from './AnalyticsService'
 
 describe('AnalyticsService', () => {
-  let analyticsService: AnalyticsService;
-  let mockCacheService: jest.Mocked<CacheService>;
-  let mockDatabaseService: jest.Mocked<DatabaseService>;
+  let analyticsService: AnalyticsService
+  let mockCacheService: jest.Mocked<CacheService>
+  let mockDatabaseService: jest.Mocked<DatabaseService>
 
   beforeEach(() => {
-    mockCacheService = createMockCacheService();
-    mockDatabaseService = createMockDatabaseService();
+    mockCacheService = createMockCacheService()
+    mockDatabaseService = createMockDatabaseService()
 
-    analyticsService = new AnalyticsService(mockCacheService, mockDatabaseService);
-  });
+    analyticsService = new AnalyticsService(
+      mockCacheService,
+      mockDatabaseService
+    )
+  })
 
   describe('generateReport', () => {
     it('should generate analytics report successfully', async () => {
       const report = await analyticsService.generateReport('user1', {
         startDate: new Date('2024-01-01'),
         endDate: new Date('2024-01-31'),
-      });
+      })
 
-      expect(report).toBeDefined();
-      expect(report.searchCount).toBeGreaterThanOrEqual(0);
-    });
-  });
-});
+      expect(report).toBeDefined()
+      expect(report.searchCount).toBeGreaterThanOrEqual(0)
+    })
+  })
+})
 ```
 
 ## Debugging
@@ -493,13 +505,13 @@ node --inspect src/index.ts
 Use structured logging for debugging:
 
 ```typescript
-import { logger } from '@/utils/logger';
+import { logger } from '@/utils/logger'
 
 // Different log levels
-logger.debug('Detailed debugging info');
-logger.info('General information');
-logger.warn('Warning conditions');
-logger.error('Error conditions');
+logger.debug('Detailed debugging info')
+logger.info('General information')
+logger.warn('Warning conditions')
+logger.error('Error conditions')
 
 // Structured logging with context
 logger.info('User search request', {
@@ -507,7 +519,7 @@ logger.info('User search request', {
   query: 'database optimization',
   searchMode: 'semantic',
   duration: 150,
-});
+})
 
 // Error logging with stack trace
 try {
@@ -517,7 +529,7 @@ try {
     error: error.message,
     stack: error.stack,
     context: { userId, requestId },
-  });
+  })
 }
 ```
 
@@ -530,7 +542,7 @@ try {
 ```typescript
 // Proper connection management
 export class DatabaseService {
-  private pool: Pool;
+  private pool: Pool
 
   constructor() {
     this.pool = mysql.createPool({
@@ -538,7 +550,7 @@ export class DatabaseService {
       connectionLimit: 10,
       acquireTimeout: 60000,
       timeout: 60000,
-    });
+    })
   }
 }
 ```
@@ -547,11 +559,11 @@ export class DatabaseService {
 
 ```typescript
 // Use prepared statements
-const query = 'SELECT * FROM users WHERE id = ? AND status = ?';
-const [rows] = await connection.execute(query, [userId, 'active']);
+const query = 'SELECT * FROM users WHERE id = ? AND status = ?'
+const [rows] = await connection.execute(query, [userId, 'active'])
 
 // Avoid SELECT *
-const query = 'SELECT id, name, email FROM users WHERE id = ?';
+const query = 'SELECT id, name, email FROM users WHERE id = ?'
 
 // Use appropriate indexes
 // CREATE INDEX idx_user_email ON users(email);
@@ -608,13 +620,13 @@ clearInterval(timer);
 ```typescript
 // Memory usage monitoring
 setInterval(() => {
-  const memUsage = process.memoryUsage();
+  const memUsage = process.memoryUsage()
   logger.info('Memory usage', {
     rss: Math.round(memUsage.rss / 1024 / 1024) + ' MB',
     heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024) + ' MB',
     heapTotal: Math.round(memUsage.heapTotal / 1024 / 1024) + ' MB',
-  });
-}, 60000); // Every minute
+  })
+}, 60000) // Every minute
 ```
 
 ## Error Handling
@@ -630,22 +642,22 @@ export class AppError extends Error {
     public statusCode: number = 500,
     public details?: any
   ) {
-    super(message);
-    this.name = 'AppError';
-    Error.captureStackTrace(this, this.constructor);
+    super(message)
+    this.name = 'AppError'
+    Error.captureStackTrace(this, this.constructor)
   }
 }
 
 // Specific error types
 export class ValidationError extends AppError {
   constructor(message: string, details?: any) {
-    super('VALIDATION_ERROR', message, 400, details);
+    super('VALIDATION_ERROR', message, 400, details)
   }
 }
 
 export class NotFoundError extends AppError {
   constructor(resource: string) {
-    super('NOT_FOUND', `${resource} not found`, 404);
+    super('NOT_FOUND', `${resource} not found`, 404)
   }
 }
 ```
@@ -659,20 +671,20 @@ export class SearchService {
     try {
       // Validate input
       if (!request.query?.trim()) {
-        throw new ValidationError('Search query cannot be empty');
+        throw new ValidationError('Search query cannot be empty')
       }
 
       // Perform search
-      const results = await this.executeSearch(request);
-      return results;
+      const results = await this.executeSearch(request)
+      return results
     } catch (error) {
       if (error instanceof AppError) {
-        throw error; // Re-throw known errors
+        throw error // Re-throw known errors
       }
 
       // Log unexpected errors
-      logger.error('Unexpected search error:', error);
-      throw new AppError('SEARCH_FAILED', 'Search operation failed');
+      logger.error('Unexpected search error:', error)
+      throw new AppError('SEARCH_FAILED', 'Search operation failed')
     }
   }
 }
@@ -680,10 +692,10 @@ export class SearchService {
 // Controller error handling (let middleware handle)
 export class SearchController {
   search = async (req: Request, res: Response): Promise<void> => {
-    const results = await this.searchService.search(req.body);
-    res.json({ success: true, data: results });
+    const results = await this.searchService.search(req.body)
+    res.json({ success: true, data: results })
     // Don't catch errors here - let error middleware handle them
-  };
+  }
 }
 ```
 
@@ -698,7 +710,7 @@ const searchSchema = z.object({
   databases: z.array(z.string().uuid()),
   searchMode: z.enum(['natural', 'boolean', 'semantic']).default('natural'),
   limit: z.number().min(1).max(100).default(20),
-});
+})
 
 // Use in middleware
 export const validateRequest = (schema: z.ZodSchema) => {
@@ -708,18 +720,18 @@ export const validateRequest = (schema: z.ZodSchema) => {
         body: req.body,
         query: req.query,
         params: req.params,
-      });
+      })
 
-      req.body = validated.body || req.body;
-      req.query = validated.query || req.query;
-      req.params = validated.params || req.params;
+      req.body = validated.body || req.body
+      req.query = validated.query || req.query
+      req.params = validated.params || req.params
 
-      next();
+      next()
     } catch (error) {
-      throw new ValidationError('Invalid request data', error.errors);
+      throw new ValidationError('Invalid request data', error.errors)
     }
-  };
-};
+  }
+}
 ```
 
 ### SQL Injection Prevention
@@ -732,9 +744,9 @@ const query = `
   WHERE MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)
   AND category = ?
   LIMIT ?
-`;
+`
 
-const [rows] = await connection.execute(query, [searchTerm, category, limit]);
+const [rows] = await connection.execute(query, [searchTerm, category, limit])
 
 // Never concatenate user input
 // BAD: `SELECT * FROM users WHERE id = ${userId}`
@@ -745,79 +757,92 @@ const [rows] = await connection.execute(query, [searchTerm, category, limit]);
 
 ```typescript
 // API key authentication
-export const authenticateApiKey = async (req: Request, res: Response, next: NextFunction) => {
+export const authenticateApiKey = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization
     if (!authHeader) {
-      throw new AppError('NO_API_KEY', 'Authorization header missing', 401);
+      throw new AppError('NO_API_KEY', 'Authorization header missing', 401)
     }
 
-    const parts = authHeader.split(' ');
+    const parts = authHeader.split(' ')
     if (parts.length !== 2 || parts[0] !== 'Bearer') {
       throw new AppError(
         'INVALID_AUTH_FORMAT',
         'Authorization header must be in format: Bearer <api_key>',
         401
-      );
+      )
     }
 
-    const apiKey = parts[1];
+    const apiKey = parts[1]
     if (!apiKey.startsWith('altus4_sk_')) {
-      throw new AppError('INVALID_API_KEY_FORMAT', 'API key must start with altus4_sk_', 401);
+      throw new AppError(
+        'INVALID_API_KEY_FORMAT',
+        'API key must start with altus4_sk_',
+        401
+      )
     }
 
-    const result = await apiKeyService.validateApiKey(apiKey);
+    const result = await apiKeyService.validateApiKey(apiKey)
     if (!result) {
-      throw new AppError('INVALID_API_KEY', 'Invalid or expired API key', 401);
+      throw new AppError('INVALID_API_KEY', 'Invalid or expired API key', 401)
     }
 
-    const clientIp = req.ip || req.connection?.remoteAddress || 'unknown';
-    await apiKeyService.updateLastUsedIp(result.apiKey.id, clientIp);
+    const clientIp = req.ip || req.connection?.remoteAddress || 'unknown'
+    await apiKeyService.updateLastUsedIp(result.apiKey.id, clientIp)
 
-    req.user = result.user;
-    req.apiKey = result.apiKey;
-    next();
+    req.user = result.user
+    req.apiKey = result.apiKey
+    next()
   } catch (error) {
     if (error instanceof AppError) {
-      throw error;
+      throw error
     }
-    throw new AppError('AUTH_ERROR', 'Authentication failed', 401);
+    throw new AppError('AUTH_ERROR', 'Authentication failed', 401)
   }
-};
+}
 
 // Permission-based authorization for API keys
 export const requirePermission = (permission: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.apiKey) {
-      throw new AppError('UNAUTHORIZED', 'Authentication required', 401);
+      throw new AppError('UNAUTHORIZED', 'Authentication required', 401)
     }
 
     if (!req.apiKey.permissions.includes(permission)) {
-      throw new AppError('INSUFFICIENT_PERMISSIONS', `Permission '${permission}' required`, 403, {
-        required: permission,
-        available: req.apiKey.permissions,
-      });
+      throw new AppError(
+        'INSUFFICIENT_PERMISSIONS',
+        `Permission '${permission}' required`,
+        403,
+        {
+          required: permission,
+          available: req.apiKey.permissions,
+        }
+      )
     }
-    next();
-  };
-};
+    next()
+  }
+}
 
 // Role-based authorization
 export const requireRole = (role: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
-      throw new AppError('UNAUTHORIZED', 'Authentication required', 401);
+      throw new AppError('UNAUTHORIZED', 'Authentication required', 401)
     }
 
     if (req.user.role !== 'admin' && req.user.role !== role) {
       throw new AppError('FORBIDDEN', `${role} role required`, 403, {
         required: role,
         current: req.user.role,
-      });
+      })
     }
-    next();
-  };
-};
+    next()
+  }
+}
 ```
 
 ## Testing Guidelines
@@ -829,59 +854,61 @@ describe('ServiceName', () => {
   // Setup and teardown
   beforeEach(() => {
     // Initialize test environment
-  });
+  })
 
   afterEach(() => {
     // Clean up after each test
-  });
+  })
 
   describe('methodName', () => {
     it('should handle success case correctly', async () => {
       // Arrange
       const input = {
         /* test data */
-      };
+      }
       const expected = {
         /* expected result */
-      };
+      }
 
       // Act
-      const result = await service.methodName(input);
+      const result = await service.methodName(input)
 
       // Assert
-      expect(result).toEqual(expected);
-    });
+      expect(result).toEqual(expected)
+    })
 
     it('should handle error case gracefully', async () => {
       // Arrange
       const invalidInput = {
         /* invalid data */
-      };
+      }
 
       // Act & Assert
-      await expect(service.methodName(invalidInput)).rejects.toThrow('Expected error message');
-    });
-  });
-});
+      await expect(service.methodName(invalidInput)).rejects.toThrow(
+        'Expected error message'
+      )
+    })
+  })
+})
 ```
 
 ### Mocking External Dependencies
 
 ```typescript
 // Mock external services
-jest.mock('@/services/AIService');
-jest.mock('openai');
+jest.mock('@/services/AIService')
+jest.mock('openai')
 
 // Create typed mocks
 const mockAIService = {
   isAvailable: jest.fn(),
   processSearchQuery: jest.fn(),
-} as jest.Mocked<AIService>;
+} as jest.Mocked<AIService>
 
 // Mock with implementation
 mockAIService.processSearchQuery.mockImplementation(async query => {
-  return { optimizedQuery: query, confidence: 0.95 };
-});
+  return { optimizedQuery: query, confidence: 0.95 }
+})
 ```
 
 ## Documentation Standards

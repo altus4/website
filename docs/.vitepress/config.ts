@@ -1,7 +1,7 @@
-import { defineConfig } from 'vitepress';
-import { fileURLToPath, URL } from 'node:url';
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
+import { defineConfig } from 'vitepress'
+import { fileURLToPath, URL } from 'node:url'
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -136,4 +136,4 @@ export default defineConfig({
 
     socialLinks: [{ icon: 'github', link: 'https://github.com/altus4/core' }],
   },
-});
+})

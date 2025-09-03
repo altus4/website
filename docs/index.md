@@ -9,7 +9,7 @@ Welcome to the comprehensive documentation for Altus 4. This documentation provi
 Altus 4 is an advanced AI-powered MySQL full-text search engine that enhances traditional database search capabilities with:
 
 - **Semantic Search**: AI-powered understanding of query intent and context
-- **Multi-Database Support**: Search across multiple MySQL databases simultaneously  
+- **Multi-Database Support**: Search across multiple MySQL databases simultaneously
 - **Intelligent Caching**: Redis-backed performance optimization
 - **API-First Design**: RESTful API with comprehensive authentication
 - **Real-time Analytics**: Search trends and performance insights
@@ -42,23 +42,26 @@ Visit `http://localhost:3000/health` to verify the installation.
 ## Documentation Sections
 
 ### For New Users
+
 1. **[Setup & Installation](setup/)** - Get Altus 4 running
 2. **[API Overview](api/)** - Understanding the API
 3. **[Examples](examples/)** - Practical code examples
 
-### For Developers  
+### For Developers
+
 1. **[Architecture](architecture/)** - System design and patterns
 2. **[Services](services/)** - Core business logic documentation
 3. **[Development Guide](development/)** - Contributing and development workflow
 
 ### For DevOps
+
 1. **[Setup & Deployment](setup/)** - Production deployment guide
 2. **[Testing](testing/)** - Testing strategies and examples
 
 ## Key Features
 
 - **🔍 Advanced Search**: Natural language, boolean, and semantic search modes
-- **🤖 AI Integration**: OpenAI-powered query optimization and result enhancement  
+- **🤖 AI Integration**: OpenAI-powered query optimization and result enhancement
 - **⚡ High Performance**: Intelligent caching and parallel database queries
 - **🔐 Enterprise Security**: API key authentication with tiered rate limiting
 - **📊 Rich Analytics**: Search trends, performance metrics, and insights
