@@ -1,82 +1,97 @@
-import { h } from 'vue'
 import DefaultTheme from 'vitepress/theme'
 import type { Theme } from 'vitepress'
-import { onMounted, watch, nextTick } from 'vue'
-import { useRoute } from 'vitepress'
 import './custom.css'
 
 export default {
   extends: DefaultTheme,
-  Layout: () => {
-    return h(DefaultTheme.Layout, null, {
-      // Custom layout slots if needed
-    })
-  },
-  enhanceApp() {
-    // Register global components if needed
-    // app.component('MyGlobalComponent', MyComponent)
-  },
-  setup() {
-    const route = useRoute()
-
-    const initializeMermaid = async () => {
-      // Only run on client side
-      if (typeof window === 'undefined') return
-
-      const { default: mermaid } = await import('mermaid')
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: 'default',
-        themeVariables: {
-          primaryColor: '#3b82f6',
-          primaryTextColor: '#1f2937',
-          primaryBorderColor: '#e5e7eb',
-          lineColor: '#6b7280',
-          secondaryColor: '#f3f4f6',
-          tertiaryColor: '#ffffff',
-        },
-      })
-
-      // Find all mermaid code blocks and render them
-      const mermaidElements = document.querySelectorAll(
-        'pre code.language-mermaid'
-      )
-      mermaidElements.forEach((element, index) => {
-        const graphDefinition = element.textContent || ''
-        const graphId = `mermaid-${Date.now()}-${index}`
-
-        // Create a div to hold the rendered diagram
-        const mermaidDiv = document.createElement('div')
-        mermaidDiv.id = graphId
-        mermaidDiv.className = 'mermaid-diagram'
-
-        // Replace the code block with the diagram
-        element.parentElement?.parentElement?.replaceChild(
-          mermaidDiv,
-          element.parentElement
-        )
-
-        // Render the diagram
-        mermaid
-          .render(graphId, graphDefinition)
-          .then(({ svg }) => {
-            mermaidDiv.innerHTML = svg
+  enhanceApp({ router }) {
+    if (typeof window !== 'undefined') {
+      // Initialize Mermaid when the app starts
+      const initMermaid = async () => {
+        try {
+          console.log('Initializing Mermaid...')
+          const { default: mermaid } = await import('mermaid')
+          
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: 'default',
+            themeVariables: {
+              primaryColor: '#3b82f6',
+              primaryTextColor: '#1f2937',
+              primaryBorderColor: '#e5e7eb',
+              lineColor: '#6b7280',
+              secondaryColor: '#f3f4f6',
+              tertiaryColor: '#ffffff',
+            },
           })
-          .catch(error => {
-            console.error('Mermaid rendering error:', error)
-            mermaidDiv.innerHTML = `<pre><code>${graphDefinition}</code></pre>`
-          })
-      })
+          
+          console.log('Mermaid initialized successfully')
+
+          // Function to render mermaid diagrams
+          const renderMermaidDiagrams = async () => {
+            const mermaidElements = document.querySelectorAll('pre code.language-mermaid')
+            console.log(`Found ${mermaidElements.length} mermaid diagrams to render`)
+            
+            for (let i = 0; i < mermaidElements.length; i++) {
+              const element = mermaidElements[i] as HTMLElement
+              
+              // Skip if already processed
+              if (element.getAttribute('data-mermaid-processed')) {
+                console.log(`Skipping already processed diagram ${i}`)
+                continue
+              }
+              
+              const graphDefinition = element.textContent || ''
+              const graphId = `mermaid-diagram-${Date.now()}-${i}`
+              
+              console.log(`Processing mermaid diagram ${i}:`, graphDefinition.substring(0, 50) + '...')
+
+              // Mark as being processed
+              element.setAttribute('data-mermaid-processed', 'processing')
+
+              // Create container for the diagram
+              const container = document.createElement('div')
+              container.className = 'mermaid-diagram'
+              container.id = graphId
+
+              try {
+                // Render the mermaid diagram
+                const { svg } = await mermaid.render(graphId, graphDefinition)
+                container.innerHTML = svg
+                
+                // Replace the code block with the rendered diagram
+                const preElement = element.parentElement
+                if (preElement && preElement.parentElement) {
+                  preElement.parentElement.replaceChild(container, preElement)
+                  console.log(`Successfully rendered mermaid diagram ${i}`)
+                }
+              } catch (error) {
+                console.error(`Mermaid rendering failed for diagram ${i}:`, error)
+                // Keep the original code block on error
+                element.setAttribute('data-mermaid-processed', 'error')
+              }
+            }
+          }
+
+          // Render diagrams on initial load
+          renderMermaidDiagrams()
+
+          // Re-render on route changes
+          router.onAfterRouteChanged = () => {
+            setTimeout(renderMermaidDiagrams, 100)
+          }
+
+        } catch (error) {
+          console.error('Failed to initialize Mermaid:', error)
+        }
+      }
+
+      // Initialize after DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMermaid)
+      } else {
+        initMermaid()
+      }
     }
-
-    onMounted(() => {
-      initializeMermaid()
-    })
-
-    watch(
-      () => route.path,
-      () => nextTick(() => initializeMermaid()),
-      { immediate: true }
-    )
   },
 } satisfies Theme
