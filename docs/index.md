@@ -92,7 +92,7 @@ Need help with Altus 4?
 
 ## 🧪 Sync Test Status
 
-**Last Updated**: December 2024  
+**Last Updated**: December 2024
 **Test Status**: ✅ Documentation sync is working!
 
 This section was added to test the automatic synchronization between the main repository (`altus4/website`) and the documentation repository (`altus4/docs`).
