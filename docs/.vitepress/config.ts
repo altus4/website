@@ -48,17 +48,19 @@ export default defineConfig({
         text: 'Getting Started',
         items: [
           { text: 'Introduction', link: '/' },
-          { text: 'Setup Guide', link: '/setup/' },
+          { text: 'Setup', link: '/setup/' },
         ],
       },
       {
-        text: 'Documentation',
+        text: 'API Reference',
         items: [
-          { text: 'API Reference', link: '/api/' },
-          { text: 'Architecture', link: '/architecture/' },
-          { text: 'Services', link: '/services/' },
-          { text: 'Examples', link: '/examples/' },
-          { text: 'Testing', link: '/testing/' },
+          { text: 'API Overview', link: '/api/' },
+        ],
+      },
+      {
+        text: 'Architecture',
+        items: [
+          { text: 'System Architecture', link: '/architecture/' },
         ],
       },
       {
@@ -73,6 +75,18 @@ export default defineConfig({
         items: [
           { text: 'Development Guide', link: '/development/' },
           { text: 'Git Workflow', link: '/development/git-workflow' },
+        ],
+      },
+      {
+        text: 'Examples',
+        items: [
+          { text: 'Examples Overview', link: '/examples/' },
+        ],
+      },
+      {
+        text: 'Testing',
+        items: [
+          { text: 'Testing Guide', link: '/testing/' },
         ],
       },
     ],
