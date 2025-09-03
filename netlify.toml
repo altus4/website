@@ -7,13 +7,13 @@
 [build.environment]
   NODE_VERSION = "20"
 
-# Redirect rules to handle SPA routing
+# Handle VitePress clean URLs - try directory index first
 [[redirects]]
   from = "/docs/*"
   to = "/docs/:splat"
   status = 200
 
-# Fallback for SPA routing (Vue.js app)
+# Handle Vue.js SPA routing (fallback for non-docs paths)
 [[redirects]]
   from = "/*"
   to = "/index.html"
