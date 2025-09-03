@@ -8,7 +8,7 @@ The setup creates:
 
 - **Separate docs repository**: `altus4/docs` for documentation only
 - **Automatic sync**: Changes in `docs/` directory trigger sync to docs repo
-- **GitHub Pages**: Auto-deployment of documentation site
+- **GitHub Pages**: Auto-deployment of documentation site with Mermaid diagram support
 - **Manual sync**: Script for manual synchronization when needed
 
 ## Prerequisites

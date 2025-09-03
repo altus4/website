@@ -115,7 +115,7 @@ graph TD
     C --> D[Target Repository]
     D --> E[GitHub Pages]
     E --> F[Live Documentation]
-    
+
     style A fill:#e8f5e8
     style F fill:#fff3e0
 ```
