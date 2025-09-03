@@ -33,7 +33,7 @@ log_check() {
     echo -e "${BLUE}[CHECK]${NC} $1"
 }
 
-echo "🧪 Testing Altus 4 Documentation Sync Setup"
+echo "Testing Altus 4 Documentation Sync Setup"
 echo "============================================="
 
 # Check if we're in the right directory
@@ -135,11 +135,11 @@ else
 fi
 
 echo ""
-echo "🎉 All checks passed! Your documentation sync setup is ready."
+echo "All checks passed! Your documentation sync setup is ready."
 echo ""
-echo "📋 Next Steps:"
+echo "Next Steps:"
 echo "1. Create the altus4/docs repository on GitHub"
 echo "2. Set up the DOCS_SYNC_TOKEN secret in repository settings"
 echo "3. Test the sync with: npm run docs:sync"
 echo ""
-echo "📚 For detailed setup instructions, see: DOCS_SYNC_SETUP.md"
+echo "For detailed setup instructions, see: DOCS_SYNC_SETUP.md"

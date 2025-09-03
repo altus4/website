@@ -2,22 +2,22 @@
 
 This guide will help you set up automatic synchronization between your main repository's `docs/` directory and a separate `altus4/docs` repository.
 
-## 🎯 Overview
+## Overview
 
 The setup creates:
 
-- 📁 **Separate docs repository**: `altus4/docs` for documentation only
-- 🔄 **Automatic sync**: Changes in `docs/` directory trigger sync to docs repo
-- 🚀 **GitHub Pages**: Auto-deployment of documentation site
-- 🛠️ **Manual sync**: Script for manual synchronization when needed
+- **Separate docs repository**: `altus4/docs` for documentation only
+- **Automatic sync**: Changes in `docs/` directory trigger sync to docs repo
+- **GitHub Pages**: Auto-deployment of documentation site
+- **Manual sync**: Script for manual synchronization when needed
 
-## 📋 Prerequisites
+## Prerequisites
 
 1. **GitHub Account** with permissions to create repositories in the `altus4` organization
 2. **Git configured** with SSH keys or personal access token
 3. **Repository access** to both main and docs repositories
 
-## 🚀 Step-by-Step Setup
+## Step-by-Step Setup
 
 ### Step 1: Create the Documentation Repository
 
@@ -27,7 +27,7 @@ The setup creates:
    Repository name: altus4/docs
    Description: Documentation for Altus 4 - AI-Enhanced MySQL Full-Text Search Engine
    Visibility: Public (recommended for GitHub Pages)
-   Initialize: ✅ Add a README file
+   Initialize: Add a README file
    ```
 
 2. **Enable GitHub Pages**:
@@ -43,8 +43,8 @@ The setup creates:
    - Name: `docs-sync-token`
    - Expiration: **No expiration** (or set as needed)
    - Scopes:
-     - ✅ `repo` (Full control of private repositories)
-     - ✅ `workflow` (Update GitHub Action workflows)
+     - `repo` (Full control of private repositories)
+     - `workflow` (Update GitHub Action workflows)
 
 2. **Copy the token** - you'll need it in the next step
 
@@ -73,7 +73,7 @@ In your **main repository** (this one):
 4. **Verify the docs repository** receives the changes
 5. **Check GitHub Pages** deployment (may take a few minutes)
 
-## 🛠️ Manual Sync Options
+## Manual Sync Options
 
 ### Using npm Scripts
 
@@ -102,7 +102,7 @@ npm run docs:sync:force
 3. Click **Run workflow**
 4. Choose branch and optionally force sync
 
-## 📁 Repository Structure
+## Repository Structure
 
 After setup, your repositories will look like:
 
@@ -134,7 +134,7 @@ After setup, your repositories will look like:
 └── .gitignore                   # Docs-specific gitignore
 ```
 
-## 🔧 Configuration Options
+## Configuration Options
 
 ### Sync Script Configuration
 
@@ -164,7 +164,7 @@ on:
       - 'README.md' # Also sync README changes
 ```
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -207,16 +207,16 @@ git diff
 bash -x scripts/sync-docs.sh
 ```
 
-## 🎉 Success Indicators
+## Success Indicators
 
 When everything is working correctly:
 
-1. ✅ **Automatic Sync**: Changes to `docs/` trigger the sync workflow
-2. ✅ **Docs Repository**: Updated within minutes of main repo changes
-3. ✅ **GitHub Pages**: Documentation site updates automatically
-4. ✅ **Manual Sync**: `npm run docs:sync` works without errors
+1. **Automatic Sync**: Changes to `docs/` trigger the sync workflow
+2. **Docs Repository**: Updated within minutes of main repo changes
+3. **GitHub Pages**: Documentation site updates automatically
+4. **Manual Sync**: `npm run docs:sync` works without errors
 
-## 📚 Next Steps
+## Next Steps
 
 After setup is complete:
 
@@ -225,7 +225,7 @@ After setup is complete:
 3. **Team notification**: Inform team about the new documentation workflow
 4. **Monitor**: Check sync status after first few documentation changes
 
-## 🔗 Useful Links
+## Useful Links
 
 - **Documentation Site**: <https://altus4.github.io/docs>
 - **Docs Repository**: <https://github.com/altus4/docs>

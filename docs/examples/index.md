@@ -2369,18 +2369,18 @@ class AltusAnalyticsDashboard extends EventEmitter {
       console.log(`Last Updated: ${snapshot.timestamp.toLocaleString()}\n`)
 
       // System status
-      const statusIcon = summary.status === 'healthy' ? '✅' : '❌'
+      const statusIcon = summary.status === 'healthy' ? '[OK]' : '[ERROR]'
       console.log(
-        `🖥️  System Status: ${statusIcon} ${summary.status.toUpperCase()}`
+        `System Status: ${statusIcon} ${summary.status.toUpperCase()}`
       )
 
       if (snapshot.system.uptime) {
         console.log(
-          `⏱️  Uptime: ${(snapshot.system.uptime / 3600).toFixed(1)} hours`
+          `Uptime: ${(snapshot.system.uptime / 3600).toFixed(1)} hours`
         )
       }
 
-      console.log('\n📊 SEARCH METRICS')
+      console.log('\nSEARCH METRICS')
       console.log('─'.repeat(50))
       console.log(`Total Searches (30m): ${summary.totalSearches}`)
       console.log(
@@ -2396,17 +2396,17 @@ class AltusAnalyticsDashboard extends EventEmitter {
       console.log(`Total Users: ${snapshot.users.totalUsers || 0}`)
 
       if (snapshot.users.topQueries && snapshot.users.topQueries.length > 0) {
-        console.log('\n🔍 TOP QUERIES')
+        console.log('\nTOP QUERIES')
         snapshot.users.topQueries.slice(0, 5).forEach((query, i) => {
           console.log(`  ${i + 1}. "${query.text}" (${query.count})`)
         })
       }
 
       if (snapshot.trends.length > 0) {
-        console.log('\n📈 TRENDING TOPICS')
+        console.log('\nTRENDING TOPICS')
         console.log('─'.repeat(50))
         snapshot.trends.slice(0, 5).forEach(trend => {
-          const arrow = trend.growth > 0 ? '↗️' : trend.growth < 0 ? '↘️' : '➡️'
+          const arrow = trend.growth > 0 ? '↑' : trend.growth < 0 ? '↓' : '→'
           console.log(
             `  ${arrow} ${trend.category}: ${trend.queries} queries (+${trend.growth}%)`
           )
@@ -2465,7 +2465,7 @@ async function startAnalyticsDashboard() {
     // Set up event listeners
     dashboard.on('metricsUpdated', snapshot => {
       // Handle metrics updates
-      console.log(`📊 Metrics updated at ${snapshot.timestamp}`)
+      console.log(`Metrics updated at ${snapshot.timestamp}`)
     })
 
     dashboard.on('alerts', alerts => {
@@ -2488,7 +2488,7 @@ async function startAnalyticsDashboard() {
     setInterval(async () => {
       try {
         const report = await dashboard.generateReport('1h')
-        console.log('📄 Hourly report generated')
+        console.log('Hourly report generated')
 
         // Save report to file
         const fs = require('fs')

@@ -407,11 +407,11 @@ npm run dev
 The server should start on `http://localhost:3000`. You should see:
 
 ```text
-🚀 Altus 4 Server started on port 3000
+Altus 4 Server started on port 3000
 🌍 Environment: development
-📊 Health check: http://localhost:3000/health
-✅ Database connected successfully
-✅ Redis connected successfully
+Health check: http://localhost:3000/health
+Database connected successfully
+Redis connected successfully
 ```
 
 #### Verify Installation

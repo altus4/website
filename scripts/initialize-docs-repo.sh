@@ -33,7 +33,7 @@ log_error() {
 DOCS_REPO_URL="https://github.com/altus4/docs.git"
 TEMP_DIR="/tmp/altus4-docs-init"
 
-echo -e "${BLUE}🚀 Initializing altus4/docs repository${NC}"
+echo -e "${BLUE}Initializing altus4/docs repository${NC}"
 echo "============================================="
 
 # Check if token is provided
@@ -76,23 +76,23 @@ cat > README.md << 'EOF'
 
 **Complete Documentation for Altus 4 - AI-Enhanced MySQL Full-Text Search Engine**
 
-## 🌐 Live Documentation
+## Live Documentation
 
 Visit the live documentation site: **[https://altus4.github.io/docs](https://altus4.github.io/docs)**
 
-## 📚 What's Inside
+## What's Inside
 
 This repository contains the complete documentation for Altus 4, including:
 
-- **🏗️ Architecture**: System design and component overview
-- **🔧 API Reference**: Complete API documentation with examples
-- **⚙️ Setup & Deployment**: Installation and configuration guides
-- **💻 Development**: Contributing guidelines and development workflow
-- **🧪 Testing**: Testing strategies and implementation guides
-- **📖 Examples**: Practical usage examples and tutorials
-- **🔍 Services**: Detailed service documentation
+- **Architecture**: System design and component overview
+- **API Reference**: Complete API documentation with examples
+- **Setup & Deployment**: Installation and configuration guides
+- **Development**: Contributing guidelines and development workflow
+- **Testing**: Testing strategies and implementation guides
+- **Examples**: Practical usage examples and tutorials
+- **Services**: Detailed service documentation
 
-## 🔄 Auto-Sync
+## Auto-Sync
 
 This repository is automatically synchronized from the main [altus4/website](https://github.com/altus4/website) repository.
 
@@ -101,7 +101,7 @@ This repository is automatically synchronized from the main [altus4/website](htt
 - **Trigger**: Automatic on push to main/develop branches
 - **Manual**: Available via GitHub Actions workflow
 
-## 🚀 Local Development
+## Local Development
 
 To run the documentation locally:
 
@@ -120,7 +120,7 @@ npm run docs:dev
 npm run docs:build
 ```
 
-## 📝 Contributing
+## Contributing
 
 Documentation changes should be made in the main repository:
 
@@ -128,19 +128,19 @@ Documentation changes should be made in the main repository:
 2. **Edit Path**: `docs/` directory
 3. **Auto-Sync**: Changes will be automatically synced to this repository
 
-## 🔗 Links
+## Links
 
 - **Main Repository**: [altus4/website](https://github.com/altus4/website)
 - **Live Documentation**: [altus4.github.io/docs](https://altus4.github.io/docs)
 - **API Demo**: [altus4.dev](https://altus4.dev)
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-**Built with ❤️ by the Altus 4 team**
+**Built by the Altus 4 team**
 EOF
 
 # Create package.json
@@ -320,26 +320,26 @@ hero:
       link: https://github.com/altus4/website
 
 features:
-  - title: 🤖 AI-Powered Search
+  - title: AI-Powered Search
     details: Leverage OpenAI's advanced language models for intelligent query processing and semantic search capabilities.
 
-  - title: ⚡ High Performance
+  - title: High Performance
     details: Optimized MySQL integration with intelligent caching, connection pooling, and query optimization.
 
-  - title: 🔒 Enterprise Security
+  - title: Enterprise Security
     details: Comprehensive security with API key authentication, rate limiting, and audit logging.
 
-  - title: 📊 Real-time Analytics
+  - title: Real-time Analytics
     details: Built-in analytics and monitoring with detailed performance metrics and usage tracking.
 
-  - title: 🔧 Easy Integration
+  - title: Easy Integration
     details: RESTful API with comprehensive documentation, SDKs, and examples for quick integration.
 
-  - title: 🚀 Scalable Architecture
+  - title: Scalable Architecture
     details: Microservices-ready design with horizontal scaling capabilities and cloud deployment options.
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 Get up and running with Altus 4 in minutes:
 
@@ -359,17 +359,17 @@ cp .env.example .env
 npm run dev
 ```
 
-## 📚 Documentation Sections
+## Documentation Sections
 
-- **[🏗️ Architecture](/architecture/)** - System design and component overview
-- **[🔧 API Reference](/api/)** - Complete API documentation with examples
-- **[⚙️ Setup & Deployment](/setup/)** - Installation and configuration guides
-- **[💻 Development](/development/)** - Contributing guidelines and workflow
-- **[🧪 Testing](/testing/)** - Testing strategies and implementation
-- **[📖 Examples](/examples/)** - Practical usage examples and tutorials
-- **[🔍 Services](/services/)** - Detailed service documentation
+- **[Architecture](/architecture/)** - System design and component overview
+- **[API Reference](/api/)** - Complete API documentation with examples
+- **[Setup & Deployment](/setup/)** - Installation and configuration guides
+- **[Development](/development/)** - Contributing guidelines and workflow
+- **[Testing](/testing/)** - Testing strategies and implementation
+- **[Examples](/examples/)** - Practical usage examples and tutorials
+- **[Services](/services/)** - Detailed service documentation
 
-## 🌟 Key Features
+## Key Features
 
 Altus 4 combines the power of MySQL's full-text search with AI enhancement to deliver:
 
@@ -410,20 +410,20 @@ log_info "Cleaning up temporary directory..."
 cd /
 rm -rf "$TEMP_DIR"
 
-log_success "✅ altus4/docs repository has been successfully initialized!"
+log_success "altus4/docs repository has been successfully initialized!"
 echo ""
-echo -e "${BLUE}📋 What was created:${NC}"
-echo "  ✅ Initial README.md with project overview"
-echo "  ✅ package.json with VitePress configuration"
-echo "  ✅ .gitignore for Node.js/VitePress projects"
-echo "  ✅ GitHub Actions workflow for deployment"
-echo "  ✅ Initial documentation structure"
-echo "  ✅ Homepage with hero section and features"
+echo -e "${BLUE}What was created:${NC}"
+echo "  Initial README.md with project overview"
+echo "  package.json with VitePress configuration"
+echo "  .gitignore for Node.js/VitePress projects"
+echo "  GitHub Actions workflow for deployment"
+echo "  Initial documentation structure"
+echo "  Homepage with hero section and features"
 echo ""
-echo -e "${BLUE}🔗 Next steps:${NC}"
+echo -e "${BLUE}Next steps:${NC}"
 echo "  1. Enable GitHub Pages in repository settings"
 echo "  2. Set Pages source to 'GitHub Actions'"
 echo "  3. Run the docs sync workflow to populate content"
 echo "  4. Visit https://altus4.github.io/docs when deployed"
 echo ""
-echo -e "${GREEN}🎉 Repository is ready for documentation sync!${NC}"
+echo -e "${GREEN}Repository is ready for documentation sync!${NC}"

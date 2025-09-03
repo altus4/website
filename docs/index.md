@@ -65,12 +65,12 @@ Visit `http://localhost:3000/health` to verify the installation.
 
 ## Key Features
 
-- **🔍 Advanced Search**: Natural language, boolean, and semantic search modes
-- **🤖 AI Integration**: OpenAI-powered query optimization and result enhancement
-- **⚡ High Performance**: Intelligent caching and parallel database queries
-- **🔐 Enterprise Security**: API key authentication with tiered rate limiting
-- **📊 Rich Analytics**: Search trends, performance metrics, and insights
-- **🔧 Developer Friendly**: Comprehensive API documentation and examples
+- **Advanced Search**: Natural language, boolean, and semantic search modes
+- **AI Integration**: OpenAI-powered query optimization and result enhancement
+- **High Performance**: Intelligent caching and parallel database queries
+- **Enterprise Security**: API key authentication with tiered rate limiting
+- **Rich Analytics**: Search trends, performance metrics, and insights
+- **Developer Friendly**: Comprehensive API documentation and examples
 
 ## API Authentication
 
@@ -90,10 +90,10 @@ Need help with Altus 4?
 - **Issues**: [GitHub Issues](https://github.com/yourusername/altus4/issues)
 - **Community**: [GitHub Discussions](https://github.com/yourusername/altus4/discussions)
 
-## 🧪 Sync Test Status
+## Sync Test Status
 
 **Last Updated**: December 2024
-**Test Status**: ✅ Documentation sync is working!
+**Test Status**: Documentation sync is working!
 
 This section was added to test the automatic synchronization between the main repository (`altus4/website`) and the documentation repository (`altus4/docs`).
 
@@ -104,7 +104,7 @@ This section was added to test the automatic synchronization between the main re
 3. **Target**: Automatically synced to `altus4/docs`
 4. **Deploy**: GitHub Pages automatically builds and deploys
 
-If you can see this section in the `altus4/docs` repository, the sync is working perfectly! 🎉
+If you can see this section in the `altus4/docs` repository, the sync is working perfectly!
 
 ---
 

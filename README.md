@@ -106,11 +106,11 @@ To update the content:
 
 This project includes comprehensive VitePress documentation that automatically syncs to a separate repository.
 
-### 📚 Documentation Site
+### Documentation Site
 
 Live Documentation: [https://altus4.github.io/docs](https://altus4.github.io/docs)
 
-### 🔄 Documentation Sync
+### Documentation Sync
 
 The `docs/` directory is automatically synchronized to the [`altus4/docs`](https://github.com/altus4/docs) repository:
 
@@ -118,7 +118,7 @@ The `docs/` directory is automatically synchronized to the [`altus4/docs`](https
 - **Manual**: Use `npm run docs:sync` for manual synchronization
 - **GitHub Pages**: Auto-deployment to documentation site
 
-### 📝 Working with Documentation
+### Working with Documentation
 
 ```bash
 # Start documentation development server
@@ -137,7 +137,7 @@ npm run docs:sync
 npm run docs:sync:force
 ```
 
-### 🛠️ Documentation Setup
+### Documentation Setup
 
 For initial setup of the documentation sync system, see [`DOCS_SYNC_SETUP.md`](./DOCS_SYNC_SETUP.md).
 

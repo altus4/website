@@ -109,17 +109,17 @@ if [ ! -f "./README.md" ]; then
 
 This repository contains the documentation for Altus 4 - AI-Enhanced MySQL Full-Text Search Engine.
 
-## 📖 Documentation
+## Documentation
 
 Visit our documentation site: [https://altus4.github.io/docs](https://altus4.github.io/docs)
 
-## 🔄 Synchronization
+## Synchronization
 
 This repository is automatically synchronized from the main [altus4/core](https://github.com/altus4/core) repository's `docs/` directory.
 
 **Do not make direct changes to this repository** - all changes should be made in the main repository and will be automatically synced.
 
-## 🏗️ Building Documentation
+## Building Documentation
 
 The documentation is built using [VitePress](https://vitepress.dev/).
 
@@ -134,7 +134,7 @@ npm run docs:dev
 npm run docs:build
 ```
 
-## 📝 Contributing
+## Contributing
 
 To contribute to the documentation:
 
@@ -143,7 +143,7 @@ To contribute to the documentation:
 3. Submit a pull request
 4. Changes will be automatically synced to this repository upon merge
 
-## 📄 License
+## License
 
 This documentation is part of the Altus 4 project and follows the same license terms.
 EOF

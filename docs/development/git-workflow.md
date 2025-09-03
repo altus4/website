@@ -7,7 +7,7 @@ description: Comprehensive commit verification system for Altus 4 to ensure code
 
 This document outlines the comprehensive commit verification system implemented in Altus 4 to ensure code quality, security, and proper Git hygiene.
 
-## 🔐 **GPG Commit Signing**
+## GPG Commit Signing
 
 ### Setup GPG Signing
 
@@ -98,7 +98,7 @@ Prevents pushing problematic commits:
 - **Interactive Prompts** for unsigned commits or security issues
 - **Protected Branch** detection (main/master)
 
-## 🛠️ **Available Commands**
+## Available Commands
 
 ### Verification Commands
 
@@ -133,7 +133,7 @@ npm run commit:configure-signing
 ./bin/setup-gpg.sh configure
 ```
 
-## 📋 **Commit Message Format**
+## Commit Message Format
 
 We use **Conventional Commits** for consistency:
 
@@ -167,7 +167,7 @@ docs: update README with new authentication flow
 test: add unit tests for ApiKeyService
 ```
 
-## 🔍 **Verification Process**
+## Verification Process
 
 ### Before Each Commit
 
@@ -234,7 +234,7 @@ If hooks are too slow:
 2. **Optimize Tests**: Use `--bail` for faster failure
 3. **Cache Dependencies**: Ensure node_modules is cached
 
-## 🎯 **Best Practices**
+## Best Practices
 
 ### For Developers
 
@@ -252,7 +252,7 @@ If hooks are too slow:
 4. **Monitor hook performance** and optimize as needed
 5. **Update verification tools** regularly
 
-## 🔒 **Security Features**
+## Security Features
 
 - **GPG Commit Signing**: Cryptographic verification of commit authorship
 - **Security Auditing**: Automatic vulnerability detection
@@ -260,7 +260,7 @@ If hooks are too slow:
 - **Interactive Prompts**: User confirmation for security issues
 - **Branch Protection**: Warnings for direct commits to protected branches
 
-## 📈 **Metrics and Reporting**
+## Metrics and Reporting
 
 The verification system provides detailed reporting:
 

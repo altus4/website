@@ -8,7 +8,7 @@ description: Comprehensive documentation of Altus 4's system architecture, desig
 AI-Enhanced MySQL Search Engine Architecture
 
 ::: info Sync Test
-🧪 **Sync Test**: This documentation was updated on December 2024 to test automatic synchronization from `altus4/website` to `altus4/docs`.
+**Sync Test**: This documentation was updated on December 2024 to test automatic synchronization from `altus4/website` to `altus4/docs`.
 :::
 
 Altus 4 is built on a modern, scalable architecture that combines traditional database search with AI capabilities. This document covers the system design, patterns, and implementation details.
@@ -42,15 +42,15 @@ graph TD
 
 ### Architecture Principles
 
-- **🔄 Layered Design**: Clear separation of concerns
+- **Layered Design**: Clear separation of concerns
 - **🔌 Dependency Injection**: Loose coupling between components
-- **⚡ Async Processing**: Non-blocking operations throughout
-- **📊 Event-Driven**: Analytics and monitoring via events
-- **🔒 Security-First**: Authentication and authorization at every layer
+- **Async Processing**: Non-blocking operations throughout
+- **Event-Driven**: Analytics and monitoring via events
+- **Security-First**: Authentication and authorization at every layer
 
 ## Core Components
 
-### 🌐 Client Layer
+### Client Layer
 
 User-facing interfaces and integrations
 
@@ -67,15 +67,15 @@ Request handling and middleware pipeline
 ::: details API Layer Components
 
 - **🌍 Express.js Server**: RESTful API endpoints with middleware pipeline
-- **🔐 Authentication**: API key-based authentication with tiered rate limiting
-- **✅ Validation**: Zod schema validation for all endpoints
-- **⏱️ Rate Limiting**: Redis-backed rate limiting per API key tier
-- **⚠️ Error Handling**: Centralized error handling with structured responses
-- **📈 Request Logging**: Comprehensive logging with correlation IDs
+- **Authentication**: API key-based authentication with tiered rate limiting
+- **Validation**: Zod schema validation for all endpoints
+- **Rate Limiting**: Redis-backed rate limiting per API key tier
+- **Error Handling**: Centralized error handling with structured responses
+- **Request Logging**: Comprehensive logging with correlation IDs
 
 :::
 
-### ⚙️ Service Layer
+### Service Layer
 
 Business logic and orchestration
 
@@ -87,7 +87,7 @@ Business logic and orchestration
 | **CacheService**    | Performance optimization | Redis caching, analytics               |
 | **UserService**     | User management          | Authentication, profiles               |
 
-### 📊 Data Layer
+### Data Layer
 
 Storage and external services
 
@@ -118,7 +118,7 @@ AI Processing
 
 ## Design Patterns
 
-### 🔄 1. Dependency Injection
+### 1. Dependency Injection
 
 Constructor-based dependency injection for loose coupling
 
@@ -134,9 +134,9 @@ export class SearchService {
 
 ::: tip Benefits
 
-- **🧪 Improved Testability**: Easy mocking for unit tests
-- **🔄 Flexible Composition**: Services can be easily swapped
-- **🔗 Clear Dependencies**: Explicit dependency relationships
+- **Improved Testability**: Easy mocking for unit tests
+- **Flexible Composition**: Services can be easily swapped
+- **Clear Dependencies**: Explicit dependency relationships
 
 :::
 
