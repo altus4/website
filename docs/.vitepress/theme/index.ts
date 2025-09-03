@@ -33,27 +33,37 @@ export default {
             let mermaidElements = document.querySelectorAll(
               'pre code.language-mermaid'
             )
-            
+
             // If not found, try alternative selectors
             if (mermaidElements.length === 0) {
-              mermaidElements = document.querySelectorAll('code.language-mermaid')
+              mermaidElements = document.querySelectorAll(
+                'code.language-mermaid'
+              )
             }
             if (mermaidElements.length === 0) {
-              mermaidElements = document.querySelectorAll('pre[class*="language-mermaid"] code')
+              mermaidElements = document.querySelectorAll(
+                'pre[class*="language-mermaid"] code'
+              )
             }
             if (mermaidElements.length === 0) {
-              mermaidElements = document.querySelectorAll('[class*="language-mermaid"]')
+              mermaidElements = document.querySelectorAll(
+                '[class*="language-mermaid"]'
+              )
             }
-            
+
             console.log(
               `Found ${mermaidElements.length} mermaid diagrams to render`
             )
-            
+
             // Debug: log all code blocks to see what's available
             const allCodeBlocks = document.querySelectorAll('pre code')
             console.log(`Total code blocks found: ${allCodeBlocks.length}`)
             allCodeBlocks.forEach((block, i) => {
-              console.log(`Code block ${i}:`, block.className, block.textContent?.substring(0, 30) + '...')
+              console.log(
+                `Code block ${i}:`,
+                block.className,
+                block.textContent?.substring(0, 30) + '...'
+              )
             })
 
             for (let i = 0; i < mermaidElements.length; i++) {
