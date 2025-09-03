@@ -55,33 +55,22 @@ export default {
               `Found ${mermaidElements.length} mermaid diagrams to render`
             )
 
-            // Debug: log all code blocks to see what's available
-            const allCodeBlocks = document.querySelectorAll('pre code')
-            console.log(`Total code blocks found: ${allCodeBlocks.length}`)
-            allCodeBlocks.forEach((block, i) => {
-              console.log(
-                `Code block ${i}:`,
-                block.className,
-                block.textContent?.substring(0, 30) + '...'
-              )
-            })
-
             for (let i = 0; i < mermaidElements.length; i++) {
               const element = mermaidElements[i] as HTMLElement
 
               // Skip if already processed
               if (element.getAttribute('data-mermaid-processed')) {
-                console.log(`Skipping already processed diagram ${i}`)
                 continue
               }
 
-              const graphDefinition = element.textContent || ''
-              const graphId = `mermaid-diagram-${Date.now()}-${i}`
+              let graphDefinition = element.textContent || ''
 
-              console.log(
-                `Processing mermaid diagram ${i}:`,
-                graphDefinition.substring(0, 50) + '...'
-              )
+              // Clean up the text content - remove "mermaid" prefix if present
+              if (graphDefinition.startsWith('mermaid')) {
+                graphDefinition = graphDefinition.substring(7).trim()
+              }
+
+              const graphId = `mermaid-diagram-${Date.now()}-${i}`
 
               // Mark as being processed
               element.setAttribute('data-mermaid-processed', 'processing')
@@ -100,13 +89,9 @@ export default {
                 const preElement = element.parentElement
                 if (preElement && preElement.parentElement) {
                   preElement.parentElement.replaceChild(container, preElement)
-                  console.log(`Successfully rendered mermaid diagram ${i}`)
                 }
               } catch (error) {
-                console.error(
-                  `Mermaid rendering failed for diagram ${i}:`,
-                  error
-                )
+                console.error('Mermaid rendering failed:', error)
                 // Keep the original code block on error
                 element.setAttribute('data-mermaid-processed', 'error')
               }
