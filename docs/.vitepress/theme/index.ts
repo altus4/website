@@ -12,7 +12,7 @@ export default {
       // Custom layout slots if needed
     })
   },
-  enhanceApp({ app, router }) {
+  enhanceApp() {
     // Register global components if needed
     // app.component('MyGlobalComponent', MyComponent)
   },
