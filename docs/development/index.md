@@ -1,6 +1,11 @@
+---
+title: Development Guide
+description: Complete development documentation for Altus 4 contributors including setup, workflow, and best practices.
+---
+
 # Development Guide
 
-**Complete development documentation for Altus 4 contributors**
+Complete development documentation for Altus 4 contributors
 
 This guide covers everything developers need to know to contribute effectively to Altus 4, from setting up the development environment to submitting pull requests.
 

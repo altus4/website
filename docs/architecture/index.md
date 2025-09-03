@@ -1,106 +1,122 @@
-# Architecture Documentation
+---
+title: System Architecture
+description: Comprehensive documentation of Altus 4's system architecture, design patterns, and technical implementation details.
+---
 
-**System Architecture and Design Patterns for Altus 4**
+# System Architecture
 
-This section provides comprehensive documentation of Altus 4's system architecture, design decisions, and technical patterns.
+AI-Enhanced MySQL Search Engine Architecture
+
+Altus 4 is built on a modern, scalable architecture that combines traditional database search with AI capabilities. This document covers the system design, patterns, and implementation details.
+
+::: tip Quick Navigation
+
+- [System Overview](#system-overview) - High-level architecture
+- [Core Components](#core-components) - Detailed layer breakdown
+- [Design Patterns](#design-patterns) - Implementation patterns
+- [Data Flow](#data-flow) - Request processing flow
+- [Security](#security-architecture) - Security implementation
+- [Performance](#performance-architecture) - Performance optimization
+
+:::
 
 ## System Overview
 
-Altus 4 follows a layered architecture pattern designed for scalability, maintainability, and testability:
+Altus 4 follows a **layered architecture** pattern optimized for scalability, maintainability, and testability:
 
-```text
-┌─────────────────────────────────────────────────────────┐
-│                  Client Layer                           │
-│  Web UI, Mobile Apps, Third-party Integrations         │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                   API Layer                             │
-│  REST Endpoints, Authentication, Validation, Rate       │
+```mermaid
+graph TD
+    A[Client Layer<br/>Web UI, Mobile Apps, Integrations] --> B[API Layer<br/>REST, Auth, Validation, Rate Limiting]
+    B --> C[Service Layer<br/>Business Logic, Orchestration]
+    C --> D[Data Layer<br/>MySQL, Redis, OpenAI API]
+
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
 ```
 
-│ Client Layer │
-│ Web UI, Mobile Apps, Third-party Integrations │
-└─────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────┐
-│ API Layer │
-│ REST Endpoints, Authentication, Validation, Rate │
-│ Limiting, Request/Response Transformation │
-└─────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────┐
-│ Service Layer │
-│ Business Logic, Orchestration, Error Handling │
-│ SearchService, UserService, AIService, etc. │
-└─────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────┐
-│ Data Layer │
-│ MySQL Databases, Redis Cache, OpenAI API │
-└─────────────────────────────────────────────────────────┘
+### Architecture Principles
 
-```text
-┌─────────────────────────────────────────────────────────┐
-│                  Client Layer                           │
-│  Web UI, Mobile Apps, Third-party Integrations         │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                   API Layer                             │
-│  REST Endpoints, Authentication, Validation, Rate       │
-│  Limiting, Request/Response Transformation              │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                 Service Layer                           │
-│  Business Logic, Orchestration, Error Handling         │
-│  SearchService, UserService, AIService, etc.           │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                  Data Layer                             │
-│  MySQL Databases, Redis Cache, OpenAI API              │
-└─────────────────────────────────────────────────────────┘
-```
+- **🔄 Layered Design**: Clear separation of concerns
+- **🔌 Dependency Injection**: Loose coupling between components
+- **⚡ Async Processing**: Non-blocking operations throughout
+- **📊 Event-Driven**: Analytics and monitoring via events
+- **🔒 Security-First**: Authentication and authorization at every layer
 
 ## Core Components
 
-### API Layer
+### 🌐 Client Layer
 
-- **Express.js Server**: RESTful API endpoints with middleware pipeline
-- **Authentication**: API key-based authentication with tiered rate limiting
-- **Validation**: Zod schema validation for all endpoints
-- **Rate Limiting**: Redis-backed rate limiting per API key tier
-- **Error Handling**: Centralized error handling with structured responses
-- **Request Logging**: Comprehensive request/response logging with correlation IDs
+User-facing interfaces and integrations
 
-### Service Layer
+| Component | Description | Technology |
+|-----------|-------------|------------|
+| **Web UI** | Primary user interface | Vue.js, Tailwind CSS |
+| **Mobile Apps** | iOS/Android applications | React Native (future) |
+| **Third-party Integrations** | API consumers | REST API clients |
 
-- **SearchService**: Core search orchestration and AI integration
-- **DatabaseService**: MySQL connection management and query execution
-- **AIService**: OpenAI API integration for semantic enhancements
-- **CacheService**: Redis operations and analytics storage
-- **UserService**: Authentication and user management
+### 🔌 API Layer
 
-### Data Layer
+Request handling and middleware pipeline
 
-- **MySQL Databases**: Primary data storage with full-text search capabilities
-- **Redis Cache**: Search result caching and analytics data
-- **OpenAI API**: External AI service for semantic processing
+::: details API Layer Components
+
+- **🌍 Express.js Server**: RESTful API endpoints with middleware pipeline
+- **🔐 Authentication**: API key-based authentication with tiered rate limiting
+- **✅ Validation**: Zod schema validation for all endpoints
+- **⏱️ Rate Limiting**: Redis-backed rate limiting per API key tier
+- **⚠️ Error Handling**: Centralized error handling with structured responses
+- **📈 Request Logging**: Comprehensive logging with correlation IDs
+
+:::
+
+### ⚙️ Service Layer
+
+Business logic and orchestration
+
+| Service | Purpose | Key Features |
+|---------|---------|-------------|
+| **SearchService** | Search orchestration | Multi-database, AI integration |
+| **DatabaseService** | MySQL operations | Connection pooling, query optimization |
+| **AIService** | AI integration | OpenAI API, semantic search |
+| **CacheService** | Performance optimization | Redis caching, analytics |
+| **UserService** | User management | Authentication, profiles |
+
+### 📊 Data Layer
+
+Storage and external services
+
+::: code-group
+
+```text [MySQL]
+Primary data storage
+- Full-text search indexes
+- Relational data integrity
+- Connection pooling
+```
+
+```text [Redis]
+Caching & Analytics
+- Search result caching
+- Session storage
+- Analytics data
+```
+
+```text [OpenAI API]
+AI Processing
+- Semantic search
+- Query optimization
+- Result categorization
+```
+
+:::
 
 ## Design Patterns
 
-### 1. Dependency Injection
+### 🔄 1. Dependency Injection
 
-All services use constructor-based dependency injection for loose coupling:
+Constructor-based dependency injection for loose coupling
 
 ```typescript
 export class SearchService {
@@ -112,11 +128,13 @@ export class SearchService {
 }
 ```
 
-**Benefits:**
+::: tip Benefits
 
-- Improved testability with easy mocking
-- Flexible service composition
-- Clear dependency relationships
+- **🧪 Improved Testability**: Easy mocking for unit tests
+- **🔄 Flexible Composition**: Services can be easily swapped
+- **🔗 Clear Dependencies**: Explicit dependency relationships
+
+:::
 
 ### 2. Repository Pattern
 
@@ -169,96 +187,47 @@ class SearchService extends EventEmitter {
 
 ### Search Request Flow
 
-```text
-Client Request
-      ↓
-Authentication Middleware
-      ↓
-Rate Limiting Middleware
-      ↓
-Request Validation
-      ↓
-SearchController.executeSearch()
-      ↓
-SearchService.search()
-      ↓
-┌─────────────────┬─────────────────┬─────────────────┐
-│   Cache Check   │  AI Processing  │ Database Query  │
-│   (Redis)       │   (OpenAI)      │   (MySQL)       │
-└─────────────────┴─────────────────┴─────────────────┘
-      ↓
-Result Processing & Enhancement
-      ↓
-Response Caching
-      ↓
-Analytics Logging
-      ↓
-JSON Response to Client
-```
-
-```text
-Client Request
-  ↓
-Authentication Middleware
-  ↓
-Rate Limiting Middleware
-  ↓
-Request Validation
-  ↓
-SearchController.executeSearch()
-  ↓
-SearchService.search()
-  ↓
-┌─────────────────┬─────────────────┬─────────────────┐
-│   Cache Check   │  AI Processing  │ Database Query  │
-│   (Redis)       │   (OpenAI)      │   (MySQL)       │
-└─────────────────┴─────────────────┴─────────────────┘
-  ↓
-Result Processing & Enhancement
-  ↓
-Response Caching
-  ↓
-Analytics Logging
-  ↓
-JSON Response to Client
+```mermaid
+graph TD
+    A[Client Request] --> B[Authentication Middleware]
+    B --> C[Rate Limiting Middleware]
+    C --> D[Request Validation]
+    D --> E[SearchController.executeSearch]
+    E --> F[SearchService.search]
+    F --> G[Cache Check<br/>Redis]
+    F --> H[AI Processing<br/>OpenAI]
+    F --> I[Database Query<br/>MySQL]
+    G --> J[Result Processing & Enhancement]
+    H --> J
+    I --> J
+    J --> K[Response Caching]
+    K --> L[Analytics Logging]
+    L --> M[JSON Response to Client]
 ```
 
 ### Authentication Flow
 
-```text
-Registration/Login
-      ↓
-Initial JWT Token (Bootstrap Only)
-      ↓
-API Key Creation
-      ↓
-Response with API Key
-      ↓
-Subsequent Requests with API Key
-      ↓
-API Key Verification Middleware
-      ↓
-Request Processing
+```mermaid
+graph TD
+    A[Registration/Login] --> B[Initial JWT Token<br/>Bootstrap Only]
+    B --> C[API Key Creation]
+    C --> D[Response with API Key]
+    D --> E[Subsequent Requests with API Key]
+    E --> F[API Key Verification Middleware]
+    F --> G[Request Processing]
 ```
 
 #### Legacy JWT Flow (Bootstrap Only)
 
-```text
-Login Request (for API key creation only)
-  ↓
-UserService.loginUser()
-  ↓
-Password Verification (bcrypt)
-  ↓
-JWT Token Generation
-  ↓
-Response with JWT + Refresh Token
-  ↓
-Use JWT to Create API Key
-  ↓
-JWT Verification Middleware
-  ↓
-API Key Creation Endpoint
+```mermaid
+graph TD
+    A[Login Request<br/>for API key creation only] --> B[UserService.loginUser]
+    B --> C[Password Verification<br/>bcrypt]
+    C --> D[JWT Token Generation]
+    D --> E[Response with JWT + Refresh Token]
+    E --> F[Use JWT to Create API Key]
+    F --> G[JWT Verification Middleware]
+    G --> H[API Key Creation Endpoint]
 ```
 
 ## Security Architecture
@@ -324,38 +293,20 @@ API Key Creation Endpoint
 
 Current monolithic structure can be decomposed into microservices:
 
-```text
-Current Monolith:
-┌─────────────────────────────────────┐
-│            Altus 4 API              │
-│  ┌─────────┬─────────┬─────────┐   │
-│  │ Search  │  User   │   AI    │   │
-│  │ Service │ Service │ Service │   │
-│  └─────────┴─────────┴─────────┘   │
-└─────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph "Current Monolith"
+        M[Altus 4 API]
+        M --> SS[Search Service]
+        M --> US[User Service]
+        M --> AS[AI Service]
+    end
 
-Future Microservices:
-┌─────────────┐  ┌─────────────┐  ┌─────────────┐
-│   Search    │  │    User     │  │     AI      │
-│  Service    │  │  Service    │  │  Service    │
-└─────────────┘  └─────────────┘  └─────────────┘
-```
-
-```text
-Current Monolith:
-┌─────────────────────────────────────┐
-│            Altus 4 API              │
-│  ┌─────────┬─────────┬─────────┐   │
-│  │ Search  │  User   │   AI    │   │
-│  │ Service │ Service │ Service │   │
-│  └─────────┴─────────┴─────────┘   │
-└─────────────────────────────────────┘
-
-Future Microservices:
-┌─────────────┐  ┌─────────────┐  ┌─────────────┐
-│   Search    │  │    User     │  │     AI      │
-│  Service    │  │  Service    │  │  Service    │
-└─────────────┘  └─────────────┘  └─────────────┘
+    subgraph "Future Microservices"
+        MS1[Search Service]
+        MS2[User Service]
+        MS3[AI Service]
+    end
 ```
 
 ## Error Handling Architecture
@@ -409,71 +360,6 @@ export const errorHandler = (
       requestId: req.headers['x-request-id'],
     },
   });
-};
-```
-
-Response with JWT + Refresh Token
-↓
-
-```typescript
-logger.error('Request failed:', { error, request: req.body });
-
-res.status(statusCode).json({
-  success: false,
-  error: {
-    code,
-    message: error.message,
-    details: error instanceof AppError ? error.details : undefined,
-  },
-  meta: {
-    timestamp: new Date().toISOString(),
-    requestId: req.headers['x-request-id'],
-  },
-});
-};
-```
-
-```text
-↓
-Response with JWT + Refresh Token
-  ↓
-```
-
-```typescript
-logger.error('Request failed:', { error, request: req.body });
-
-res.status(statusCode).json({
-  success: false,
-  error: {
-    code,
-    message: error.message,
-    details: error instanceof AppError ? error.details : undefined,
-  },
-  meta: {
-    timestamp: new Date().toISOString(),
-    requestId: req.headers['x-request-id'],
-  },
-});
-};
-```
-
-↓
-
-```typescript
-logger.error('Request failed:', { error, request: req.body });
-
-res.status(statusCode).json({
-  success: false,
-  error: {
-    code,
-    message: error.message,
-    details: error instanceof AppError ? error.details : undefined,
-  },
-  meta: {
-    timestamp: new Date().toISOString(),
-    requestId: req.headers['x-request-id'],
-  },
-});
 };
 ```
 

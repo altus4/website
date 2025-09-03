@@ -1,6 +1,11 @@
+---
+title: Service Documentation
+description: Comprehensive documentation for each service class in Altus 4, including architecture, implementation details, and code explanations.
+---
+
 # Service Documentation
 
-**Comprehensive Service Layer Documentation**
+Comprehensive Service Layer Documentation
 
 This section provides detailed documentation for each service class in Altus 4, including architecture, implementation details, and code explanations.
 
@@ -8,14 +13,10 @@ This section provides detailed documentation for each service class in Altus 4, 
 
 Altus 4 follows a layered service architecture where each service has specific responsibilities:
 
-```text
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Controllers   │────│    Services     │────│   Data Layer    │
-│                 │    │                 │    │                 │
-│ • Route Handlers│    │ • Business Logic│    │ • MySQL         │
-│ • Input Validation│   │ • Orchestration │    │ • Redis         │
-│ • Response Format│    │ • Error Handling│    │ • OpenAI API    │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
+```mermaid
+graph LR
+    A[Controllers<br/>• Route Handlers<br/>• Input Validation<br/>• Response Format] --> B[Services<br/>• Business Logic<br/>• Orchestration<br/>• Error Handling]
+    B --> C[Data Layer<br/>• MySQL<br/>• Redis<br/>• OpenAI API]
 ```
 
 ### Service Principles
@@ -37,7 +38,7 @@ Altus 4 follows a layered service architecture where each service has specific r
 | **UserService**     | User management      | DatabaseService                          | User CRUD, password hashing, account management             |
 | **ApiKeyService**   | API key management   | DatabaseService                          | API key generation, validation, tiered permissions          |
 
-## Service Documentation
+## Detailed Service Documentation
 
 ### [SearchService](./search-service.md)
 

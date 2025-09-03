@@ -9,6 +9,7 @@ A modern, responsive marketing website for Altus 4 - an AI-enhanced MySQL full-t
 - **Performance Optimized**: Fast loading with optimized assets and smooth scrolling
 - **SEO Friendly**: Comprehensive meta tags and semantic HTML structure
 - **Accessible**: Built with accessibility best practices
+- **Documentation**: Integrated VitePress documentation with automatic sync to separate repository
 
 ## Tech Stack
 
@@ -18,6 +19,7 @@ A modern, responsive marketing website for Altus 4 - an AI-enhanced MySQL full-t
 - **Components**: Custom UI components inspired by Shadcn-Vue
 - **Icons**: Lucide Vue Next
 - **Build Tool**: Vite
+- **Documentation**: VitePress
 
 ## Sections
 
@@ -99,6 +101,45 @@ To update the content:
 4. **Project Status**: Change metrics in `src/components/ProjectStatusSection.vue`
 5. **CTA**: Customize links in `src/components/CallToActionSection.vue`
 6. **Footer**: Update contact info in `src/components/FooterSection.vue`
+
+## Documentation
+
+This project includes comprehensive VitePress documentation that automatically syncs to a separate repository.
+
+### 📚 Documentation Site
+
+**Live Documentation**: [https://altus4.github.io/docs](https://altus4.github.io/docs)
+
+### 🔄 Documentation Sync
+
+The `docs/` directory is automatically synchronized to the [`altus4/docs`](https://github.com/altus4/docs) repository:
+
+- **Automatic**: Triggered on push to `main` or `develop` branches
+- **Manual**: Use `npm run docs:sync` for manual synchronization
+- **GitHub Pages**: Auto-deployment to documentation site
+
+### 📝 Working with Documentation
+
+```bash
+# Start documentation development server
+npm run docs:dev
+
+# Build documentation
+npm run docs:build
+
+# Preview built documentation
+npm run docs:preview
+
+# Sync documentation to separate repository
+npm run docs:sync
+
+# Force sync with custom message
+npm run docs:sync:force
+```
+
+### 🛠️ Documentation Setup
+
+For initial setup of the documentation sync system, see [`DOCS_SYNC_SETUP.md`](./DOCS_SYNC_SETUP.md).
 
 ## Configuration
 

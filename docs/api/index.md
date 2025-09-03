@@ -1,6 +1,11 @@
+---
+title: API Reference
+description: Complete API documentation for Altus 4 including authentication, endpoints, and usage examples.
+---
+
 # API Reference
 
-**Complete API Documentation for Altus 4**
+Complete API Documentation for Altus 4
 
 Altus 4 provides a RESTful API for managing database connections, executing searches, and accessing analytics. All endpoints follow REST conventions and return JSON responses.
 
@@ -208,7 +213,7 @@ API requests are rate-limited based on your API key tier for fair usage and syst
 | **Pro**        | 10,000        | Small-medium prod    | 5 minutes      |
 | **Enterprise** | 100,000       | Large scale prod     | 1 minute       |
 
-### Authentication Endpoints
+### Rate Limiting for Authentication
 
 - **Registration/Login**: 10 requests per minute (IP-based)
 - **API key management**: Based on your API key tier

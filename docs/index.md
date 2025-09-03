@@ -1,6 +1,11 @@
+---
+title: Altus 4 Documentation
+description: Complete documentation hub for Altus 4 - AI-Enhanced MySQL Full-Text Search Engine with semantic search, multi-database support, and intelligent caching.
+---
+
 # Altus 4 Documentation
 
-**Complete Documentation Hub for Altus 4 - AI-Enhanced MySQL Full-Text Search Engine**
+Complete Documentation Hub for Altus 4 - AI-Enhanced MySQL Full-Text Search Engine
 
 Welcome to the comprehensive documentation for Altus 4. This documentation provides detailed information about every aspect of the system, from high-level architecture to low-level implementation details.
 

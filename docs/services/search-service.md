@@ -1,6 +1,11 @@
-# SearchService Documentation
+---
+title: SearchService Documentation
+description: Comprehensive documentation for the SearchService class - the core search orchestration engine of Altus 4.
+---
 
-**Comprehensive documentation for the SearchService class**
+# `SearchService` Documentation
+
+Comprehensive documentation for the SearchService class
 
 The `SearchService` is the core orchestration engine of Altus 4, responsible for coordinating multi-database searches, AI enhancements, caching strategies, and result processing. This document provides detailed explanations of the service's architecture, methods, and implementation patterns.
 
@@ -52,18 +57,16 @@ constructor(
 
 The service orchestrates complex workflows involving multiple external systems:
 
-```text
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│    Cache    │    │ AI Service  │    │  Database   │
-│   Service   │    │  (OpenAI)   │    │   Service   │
-└─────────────┘    └─────────────┘    └─────────────┘
-       │                   │                   │
-       └───────────────────┼───────────────────┘
-                           │
-                    ┌─────────────┐
-                    │   Search    │
-                    │   Service   │
-                    └─────────────┘
+```mermaid
+graph TD
+    A[Search Service] --> B[Cache Service]
+    A --> C[AI Service<br/>OpenAI]
+    A --> D[Database Service]
+
+    style A fill:#e8f5e8
+    style B fill:#e1f5fe
+    style C fill:#f3e5f5
+    style D fill:#fff3e0
 ```
 
 ## Core Methods
@@ -74,8 +77,14 @@ The service orchestrates complex workflows involving multiple external systems:
 
 **Flow Diagram**:
 
-```text
-Request → Cache Check → AI Processing → Database Search → Result Enhancement → Caching → Response
+```mermaid
+graph LR
+    A[Request] --> B[Cache Check]
+    B --> C[AI Processing]
+    C --> D[Database Search]
+    D --> E[Result Enhancement]
+    E --> F[Caching]
+    F --> G[Response]
 ```
 
 **Implementation Breakdown**:

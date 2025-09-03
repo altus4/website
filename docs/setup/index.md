@@ -1,6 +1,11 @@
+---
+title: Setup & Deployment Guide
+description: Complete installation and deployment documentation for Altus 4 from local development to production.
+---
+
 # Setup & Deployment Guide
 
-**Complete installation and deployment documentation for Altus 4**
+Complete installation and deployment documentation for Altus 4
 
 This guide covers everything from local development setup to production deployment with detailed step-by-step instructions.
 

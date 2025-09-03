@@ -1,6 +1,11 @@
+---
+title: Testing Guide
+description: Comprehensive testing documentation for Altus 4 covering unit tests, integration tests, and performance testing.
+---
+
 # Testing Guide
 
-**Comprehensive testing documentation for Altus 4**
+Comprehensive testing documentation for Altus 4
 
 This guide covers all aspects of testing in Altus 4, from unit tests to performance testing, with examples and best practices.
 
@@ -8,22 +13,18 @@ This guide covers all aspects of testing in Altus 4, from unit tests to performa
 
 Altus 4 follows a comprehensive testing strategy based on the testing pyramid:
 
-```text
-    ┌─────────────────────┐
-    │        E2E          │  ← Few, high-value
-    │     (Manual &       │
-    │     Automated)      │
-    └─────────────────────┘
-           ┌─────────────────────────┐
-           │     Integration         │  ← Some, API focused
-           │   (API Endpoints &      │
-           │   Service Integration)  │
-           └─────────────────────────┘
-                  ┌─────────────────────────────┐
-                  │         Unit Tests          │  ← Many, fast
-                  │    (Services, Utils,        │
-                  │     Business Logic)         │
-                  └─────────────────────────────┘
+```mermaid
+graph TB
+    E2E[E2E Tests<br/>Manual & Automated<br/>Few, high-value]
+    INT[Integration Tests<br/>API Endpoints & Service Integration<br/>Some, API focused]
+    UNIT[Unit Tests<br/>Services, Utils, Business Logic<br/>Many, fast]
+
+    E2E -.-> INT
+    INT -.-> UNIT
+
+    style E2E fill:#ffebee
+    style INT fill:#e8f5e8
+    style UNIT fill:#e3f2fd
 ```
 
 ### Testing Principles

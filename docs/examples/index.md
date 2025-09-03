@@ -1,6 +1,11 @@
+---
+title: Code Examples & Tutorials
+description: Practical examples and tutorials for using Altus 4's AI-enhanced MySQL search capabilities.
+---
+
 # Code Examples & Tutorials
 
-**Practical examples and tutorials for using Altus 4**
+Practical examples and tutorials for using Altus 4
 
 This section provides comprehensive code examples, tutorials, and real-world use cases to help you get the most out of Altus 4's AI-enhanced MySQL search capabilities.
 

@@ -1,3 +1,8 @@
+---
+title: Git Workflow & Commit Verification
+description: Comprehensive commit verification system for Altus 4 to ensure code quality, security, and proper Git hygiene.
+---
+
 # Commit Verification Setup for Altus 4
 
 This document outlines the comprehensive commit verification system implemented in Altus 4 to ensure code quality, security, and proper Git hygiene.

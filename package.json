@@ -19,7 +19,9 @@
     "format:prettier:check": "prettier --check \"**/*.{js,ts,vue,json,css,scss,md}\" --ignore-path .gitignore",
     "docs:dev": "vitepress dev docs --port 5174",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "docs:sync": "bash scripts/sync-docs.sh",
+    "docs:sync:force": "bash scripts/sync-docs.sh 'docs: manual sync'"
   },
   "dependencies": {
     "@vueuse/core": "^13.8.0",
