@@ -93,3 +93,4 @@ Need help with Altus 4?
 ---
 
 **Ready to enhance your MySQL search capabilities with AI?** Start with the [Setup Guide](setup/) or explore our [API Reference](api/).
+Testing docs sync
