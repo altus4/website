@@ -1,0 +1,20 @@
+[build]
+  # Build command that builds both the main app and docs
+  command = "npm run build:all"
+  # Publish the combined output directory
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Redirect rules to handle SPA routing
+[[redirects]]
+  from = "/docs/*"
+  to = "/docs/:splat"
+  status = 200
+
+# Fallback for SPA routing (Vue.js app)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

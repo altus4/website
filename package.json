@@ -1,16 +1,21 @@
 {
-  "name": "altus4-website",
+  "name": "@altus4/website",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "build:all": "npm run build && npm run docs:build && npm run copy:docs",
+    "copy:docs": "mkdir -p dist/docs && cp -r docs/.vitepress/dist/* dist/docs/",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx",
     "lint:fix": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
     "format": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
-    "format:check": "eslint . --ext .vue,.js,.ts,.jsx,.tsx"
+    "format:check": "eslint . --ext .vue,.js,.ts,.jsx,.tsx",
+    "docs:dev": "vitepress dev docs --port 5174",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "@vueuse/core": "^13.8.0",
@@ -41,6 +46,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~5.8.3",
     "vite": "^7.1.2",
+    "vitepress": "^2.0.0-alpha.12",
     "vue-eslint-parser": "^10.2.0",
     "vue-tsc": "^3.0.5"
   }
