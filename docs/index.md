@@ -106,6 +106,20 @@ This section was added to test the automatic synchronization between the main re
 
 If you can see this section in the `altus4/docs` repository, the sync is working perfectly!
 
+### Mermaid Diagram Test
+
+```mermaid
+graph TD
+    A[Documentation Source] --> B[GitHub Actions]
+    B --> C[Sync Process]
+    C --> D[Target Repository]
+    D --> E[GitHub Pages]
+    E --> F[Live Documentation]
+    
+    style A fill:#e8f5e8
+    style F fill:#fff3e0
+```
+
 ---
 
 **Ready to enhance your MySQL search capabilities with AI?** Start with the [Setup Guide](setup/) or explore our [API Reference](api/).
