@@ -11,7 +11,7 @@ export default {
         try {
           console.log('Initializing Mermaid...')
           const { default: mermaid } = await import('mermaid')
-          
+
           mermaid.initialize({
             startOnLoad: false,
             theme: 'default',
@@ -24,27 +24,54 @@ export default {
               tertiaryColor: '#ffffff',
             },
           })
-          
+
           console.log('Mermaid initialized successfully')
 
           // Function to render mermaid diagrams
           const renderMermaidDiagrams = async () => {
-            const mermaidElements = document.querySelectorAll('pre code.language-mermaid')
-            console.log(`Found ${mermaidElements.length} mermaid diagrams to render`)
+            // Try multiple selectors to find mermaid code blocks
+            let mermaidElements = document.querySelectorAll(
+              'pre code.language-mermaid'
+            )
             
+            // If not found, try alternative selectors
+            if (mermaidElements.length === 0) {
+              mermaidElements = document.querySelectorAll('code.language-mermaid')
+            }
+            if (mermaidElements.length === 0) {
+              mermaidElements = document.querySelectorAll('pre[class*="language-mermaid"] code')
+            }
+            if (mermaidElements.length === 0) {
+              mermaidElements = document.querySelectorAll('[class*="language-mermaid"]')
+            }
+            
+            console.log(
+              `Found ${mermaidElements.length} mermaid diagrams to render`
+            )
+            
+            // Debug: log all code blocks to see what's available
+            const allCodeBlocks = document.querySelectorAll('pre code')
+            console.log(`Total code blocks found: ${allCodeBlocks.length}`)
+            allCodeBlocks.forEach((block, i) => {
+              console.log(`Code block ${i}:`, block.className, block.textContent?.substring(0, 30) + '...')
+            })
+
             for (let i = 0; i < mermaidElements.length; i++) {
               const element = mermaidElements[i] as HTMLElement
-              
+
               // Skip if already processed
               if (element.getAttribute('data-mermaid-processed')) {
                 console.log(`Skipping already processed diagram ${i}`)
                 continue
               }
-              
+
               const graphDefinition = element.textContent || ''
               const graphId = `mermaid-diagram-${Date.now()}-${i}`
-              
-              console.log(`Processing mermaid diagram ${i}:`, graphDefinition.substring(0, 50) + '...')
+
+              console.log(
+                `Processing mermaid diagram ${i}:`,
+                graphDefinition.substring(0, 50) + '...'
+              )
 
               // Mark as being processed
               element.setAttribute('data-mermaid-processed', 'processing')
@@ -58,7 +85,7 @@ export default {
                 // Render the mermaid diagram
                 const { svg } = await mermaid.render(graphId, graphDefinition)
                 container.innerHTML = svg
-                
+
                 // Replace the code block with the rendered diagram
                 const preElement = element.parentElement
                 if (preElement && preElement.parentElement) {
@@ -66,7 +93,10 @@ export default {
                   console.log(`Successfully rendered mermaid diagram ${i}`)
                 }
               } catch (error) {
-                console.error(`Mermaid rendering failed for diagram ${i}:`, error)
+                console.error(
+                  `Mermaid rendering failed for diagram ${i}:`,
+                  error
+                )
                 // Keep the original code block on error
                 element.setAttribute('data-mermaid-processed', 'error')
               }
@@ -77,10 +107,9 @@ export default {
           renderMermaidDiagrams()
 
           // Re-render on route changes
-          router.onAfterRouteChanged = () => {
+          router.onAfterRouteChange = () => {
             setTimeout(renderMermaidDiagrams, 100)
           }
-
         } catch (error) {
           console.error('Failed to initialize Mermaid:', error)
         }
