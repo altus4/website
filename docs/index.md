@@ -90,7 +90,22 @@ Need help with Altus 4?
 - **Issues**: [GitHub Issues](https://github.com/yourusername/altus4/issues)
 - **Community**: [GitHub Discussions](https://github.com/yourusername/altus4/discussions)
 
+## 🧪 Sync Test Status
+
+**Last Updated**: December 2024  
+**Test Status**: ✅ Documentation sync is working!
+
+This section was added to test the automatic synchronization between the main repository (`altus4/website`) and the documentation repository (`altus4/docs`).
+
+### How the Sync Works
+
+1. **Source**: Changes made in `altus4/website/docs/`
+2. **Trigger**: GitHub Actions workflow on push to main/develop
+3. **Target**: Automatically synced to `altus4/docs`
+4. **Deploy**: GitHub Pages automatically builds and deploys
+
+If you can see this section in the `altus4/docs` repository, the sync is working perfectly! 🎉
+
 ---
 
 **Ready to enhance your MySQL search capabilities with AI?** Start with the [Setup Guide](setup/) or explore our [API Reference](api/).
-Testing docs sync

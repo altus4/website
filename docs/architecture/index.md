@@ -7,6 +7,10 @@ description: Comprehensive documentation of Altus 4's system architecture, desig
 
 AI-Enhanced MySQL Search Engine Architecture
 
+::: info Sync Test
+🧪 **Sync Test**: This documentation was updated on December 2024 to test automatic synchronization from `altus4/website` to `altus4/docs`.
+:::
+
 Altus 4 is built on a modern, scalable architecture that combines traditional database search with AI capabilities. This document covers the system design, patterns, and implementation details.
 
 ::: tip Quick Navigation
