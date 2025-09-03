@@ -1,0 +1,20 @@
+[build]
+  # Build command that builds both the main app and docs
+  command = "npm run build:all"
+  # Publish the combined output directory
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Handle VitePress clean URLs - try directory index first
+[[redirects]]
+  from = "/docs/*"
+  to = "/docs/:splat"
+  status = 200
+
+# Handle Vue.js SPA routing (fallback for non-docs paths)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

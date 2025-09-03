@@ -5,6 +5,7 @@ import vue from 'eslint-plugin-vue'
 import vueParser from 'vue-eslint-parser'
 import prettier from 'eslint-config-prettier'
 import prettierPlugin from 'eslint-plugin-prettier'
+import markdown from 'eslint-plugin-markdown'
 
 export default [
   js.configs.recommended,
@@ -63,7 +64,75 @@ export default [
     },
   },
   prettier,
+  // Markdown files configuration
   {
-    ignores: ['dist/', 'node_modules/', '*.d.ts'],
+    files: ['**/*.md'],
+    plugins: {
+      markdown,
+    },
+    processor: 'markdown/markdown',
+    rules: {
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
+      'no-console': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-useless-catch': 'off',
+      'prettier/prettier': 'off', // Disable prettier for code blocks in markdown
+    },
+  },
+  // Code blocks within markdown files
+  {
+    files: ['**/*.md/*.{js,ts,jsx,tsx,vue}'],
+    rules: {
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
+      'no-console': 'off',
+      'no-redeclare': 'off',
+      'no-unreachable': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-redeclare': 'off',
+      'no-useless-catch': 'off',
+      'prettier/prettier': 'off',
+      // Disable all parsing-related rules for markdown code blocks
+      'no-irregular-whitespace': 'off',
+      'no-unexpected-multiline': 'off',
+    },
+  },
+  // VitePress configuration files
+  {
+    files: ['docs/.vitepress/**/*.ts', 'docs/.vitepress/**/*.js'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
+      },
+      globals: {
+        require: 'readonly',
+        module: 'readonly',
+        __dirname: 'readonly',
+        process: 'readonly',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tsEslint,
+      prettier: prettierPlugin,
+    },
+    rules: {
+      ...tsEslint.configs.recommended.rules,
+      'prettier/prettier': 'error',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
+    ignores: [
+      'dist/',
+      'node_modules/',
+      '*.d.ts',
+      'docs/.vitepress/dist/',
+      'docs/.vitepress/cache/',
+    ],
   },
 ]

@@ -8,5 +8,16 @@
   "bracketSpacing": true,
   "arrowParens": "avoid",
   "endOfLine": "lf",
-  "vueIndentScriptAndStyle": false
+  "vueIndentScriptAndStyle": false,
+  "proseWrap": "preserve",
+  "overrides": [
+    {
+      "files": "*.md",
+      "options": {
+        "proseWrap": "preserve",
+        "printWidth": 80,
+        "tabWidth": 2
+      }
+    }
+  ]
 }

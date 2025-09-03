@@ -32,6 +32,11 @@
               class="text-gray-600 hover:text-gray-900 transition-colors"
               >Status</a
             >
+            <a
+              href="/docs/"
+              class="text-gray-600 hover:text-gray-900 transition-colors"
+              >Documentation</a
+            >
             <Button
               variant="outline"
               size="sm"
@@ -78,6 +83,12 @@
               class="text-gray-600 hover:text-gray-900 transition-colors"
               @click="mobileMenuOpen = false"
               >Status</a
+            >
+            <a
+              href="/docs/"
+              class="text-gray-600 hover:text-gray-900 transition-colors"
+              @click="mobileMenuOpen = false"
+              >Documentation</a
             >
             <Button
               variant="outline"
