@@ -2528,10 +2528,10 @@ Each example includes complete, working code that you can adapt for your specifi
 
 ## Next Steps
 
-- **[API Reference](../api/README.md)** - Complete API documentation
-- **[Architecture Guide](../architecture/README.md)** - System design details
-- **[Testing Guide](../testing/README.md)** - Comprehensive testing strategies
-- **[Development Guide](../development/README.md)** - Contributing guidelines
+- **[API Reference](../api/index.md)** - Complete API documentation
+- **[Architecture Guide](../architecture/index.md)** - System design details
+- **[Testing Guide](../testing/index.md)** - Comprehensive testing strategies
+- **[Development Guide](../development/index.md)** - Contributing guidelines
 
 ---
 

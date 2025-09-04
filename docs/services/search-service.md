@@ -603,11 +603,11 @@ try {
 
 ## Related Documentation
 
-- **[DatabaseService](./DatabaseService.md)** - MySQL operations and connection management
-- **[AIService](./AIService.md)** - OpenAI integration and semantic enhancements
-- **[CacheService](./CacheService.md)** - Redis caching and analytics storage
-- **[API Reference](../api/search.md)** - Search endpoint documentation
-- **[Testing Guide](../testing/unit-tests.md)** - Service testing patterns
+- **[DatabaseService](./index.md#databaseservice)** - MySQL operations and connection management
+- **[AIService](./index.md#aiservice)** - OpenAI integration and semantic enhancements
+- **[CacheService](./index.md#cacheservice)** - Redis caching and analytics storage
+- **[API Reference](../api/index.md)** - Search endpoint documentation
+- **[Testing Guide](../testing/index.md)** - Service testing patterns
 
 ---
 

@@ -40,7 +40,7 @@ Authorization: Bearer <your-api-key>
 | `GET`    | `/api/keys/:id/usage`      | Get API key usage stats | API Key       |
 | `POST`   | `/api/keys/:id/regenerate` | Regenerate API key      | API Key       |
 
-[**→ Complete API Key Authentication Guide**](../api-key-authentication.md)
+[**→ Complete API Key Authentication Guide**](../setup/index.md#api-key-setup)
 
 ## Database Management
 
@@ -59,7 +59,7 @@ Manage MySQL database connections for searching.
 | `GET`    | `/api/databases/:id/schema` | Get database schema        | API Key       |
 | `GET`    | `/api/databases/:id/status` | Get connection status      | API Key       |
 
-[**Complete Database Documentation**](./database.md)
+[**Complete Database Documentation**](../services/index.md#databaseservice)
 
 ## Search Operations
 
@@ -75,7 +75,7 @@ Execute searches across connected databases with AI enhancements.
 | `GET`  | `/api/search/history`     | Get search history        | API Key       |
 | `GET`  | `/api/search/trends`      | Get user search trends    | API Key       |
 
-[**Complete Search Documentation**](./search.md)
+[**Complete Search Documentation**](../services/search-service.md)
 
 ## Analytics & Insights
 
@@ -93,7 +93,7 @@ Access search analytics, performance metrics, and trend data.
 | `GET`  | `/api/analytics/overview`        | Get system overview       | API Key       |
 | `GET`  | `/api/analytics/user-activity`   | Get user activity metrics | API Key       |
 
-[**Complete Analytics Documentation**](./analytics.md)
+[**Complete Analytics Documentation**](../services/index.md#analytics-and-insights)
 
 ## System Endpoints
 
@@ -199,7 +199,7 @@ interface ApiResponse<T> {
 | `AI_SERVICE_ERROR`         | 500         | OpenAI API error                      |
 | `INTERNAL_ERROR`           | 500         | Unexpected server error               |
 
-[**Complete Error Documentation**](./errors.md)
+[**Complete Error Documentation**](#error-handling)
 
 ## Rate Limiting
 
@@ -332,12 +332,12 @@ print(data['data']['results'])
 
 ## Related Documentation
 
-- **[API Key Authentication Guide](../api-key-authentication.md)** - Complete API key setup and usage
-- **[Database Management](./database.md)** - Managing database connections
-- **[Search Operations](./search.md)** - Search API and features
-- **[Analytics API](./analytics.md)** - Analytics and insights
-- **[Request/Response Schemas](./schemas/)** - Complete type definitions
-- **[Error Handling](./errors.md)** - Error codes and troubleshooting
+- **[API Key Authentication Guide](../setup/index.md#api-key-setup)** - Complete API key setup and usage
+- **[Database Management](../services/index.md#databaseservice)** - Managing database connections
+- **[Search Operations](../services/search-service.md)** - Search API and features
+- **[Analytics API](../services/index.md#analytics-and-insights)** - Analytics and insights
+- **[Request/Response Schemas](#request-response-examples)** - Complete type definitions
+- **[Error Handling](#error-handling)** - Error codes and troubleshooting
 
 ## API Testing
 
@@ -359,4 +359,4 @@ print(data['data']['results'])
 
 ---
 
-**Need help?** Check out the [examples section](../examples/README.md) for practical implementations or [report issues](https://github.com/yourusername/altus4/issues) if you find any problems.
+**Need help?** Check out the [examples section](../examples/index.md) for practical implementations or [report issues](https://github.com/altus4/website/issues) if you find any problems.

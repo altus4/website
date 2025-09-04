@@ -59,7 +59,7 @@ The core search orchestration engine that coordinates multi-database searches wi
 - AI service integration patterns
 - Error handling and fallback mechanisms
 
-### [DatabaseService](./database-service.md)
+### DatabaseService
 
 MySQL database connection management and query execution service.
 
@@ -78,7 +78,7 @@ MySQL database connection management and query execution service.
 - Schema introspection and metadata extraction
 - Security patterns for credential handling
 
-### [AIService](./ai-service.md)
+### AIService
 
 OpenAI integration service for AI-enhanced search capabilities.
 
@@ -97,7 +97,7 @@ OpenAI integration service for AI-enhanced search capabilities.
 - Error handling for external API failures
 - Rate limiting and quota management
 
-### [CacheService](./cache-service.md)
+### CacheService
 
 Redis-based caching and analytics service for performance optimization.
 
@@ -116,7 +116,7 @@ Redis-based caching and analytics service for performance optimization.
 - Analytics data modeling
 - Performance monitoring patterns
 
-### [UserService](./user-service.md)
+### UserService
 
 User management service handling account lifecycle and basic authentication.
 
@@ -133,7 +133,7 @@ User management service handling account lifecycle and basic authentication.
 - User data validation and sanitization
 - Security best practices
 
-### [ApiKeyService](./api-key-service.md)
+### ApiKeyService
 
 API key management service for B2B authentication and authorization.
 
@@ -358,7 +358,7 @@ export class NewService implements INewService {
 **Next Steps:**
 
 - [Deep dive into SearchService](./search-service.md)
-- [Understanding DatabaseService](./database-service.md)
-- [AI Integration Patterns](./ai-service.md)
-- [Caching Strategies](./cache-service.md)
-- [Authentication Flows](./user-service.md)
+- [Understanding DatabaseService](#databaseservice)
+- [AI Integration Patterns](#aiservice)
+- [Caching Strategies](#cacheservice)
+- [Authentication Flows](#userservice)

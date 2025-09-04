@@ -743,7 +743,7 @@ grep "Search" logs/combined.log
 
 ## Production Deployment
 
-See [Production Deployment Guide](./production.md) for detailed production setup instructions including:
+See the production deployment section below for detailed production setup instructions including:
 
 - Docker deployment
 - Load balancer configuration
@@ -756,16 +756,16 @@ See [Production Deployment Guide](./production.md) for detailed production setup
 
 After successful installation:
 
-1. **Read the API Documentation**: [API Reference](../api/README.md)
-2. **Explore Examples**: [Code Examples](../examples/README.md)
-3. **Understand the Architecture**: [Architecture Guide](../architecture/README.md)
-4. **Contributing**: [Development Guide](../development/README.md)
+1. **Read the API Documentation**: [API Reference](../api/index.md)
+2. **Explore Examples**: [Code Examples](../examples/index.md)
+3. **Understand the Architecture**: [Architecture Guide](../architecture/index.md)
+4. **Contributing**: [Development Guide](../development/index.md)
 
 ## Support
 
 If you encounter issues not covered in this guide:
 
-- Check the [Troubleshooting FAQ](./troubleshooting.md)
+- Check the troubleshooting section in this guide
 - Search [GitHub Issues](https://github.com/yourusername/altus4/issues)
 - Join our [Community Discussions](https://github.com/yourusername/altus4/discussions)
 - Contact support: <support@altus4.dev>
