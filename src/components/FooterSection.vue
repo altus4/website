@@ -35,7 +35,7 @@
               <LinkedinIcon class="h-6 w-6" />
             </a>
             <a
-              href="mailto:tjthavarshan@gmail.com"
+              href="mailto:altus4@thavarshan.com"
               class="text-gray-400 hover:text-white transition-colors"
             >
               <MailIcon class="h-6 w-6" />
