@@ -333,7 +333,7 @@ Find products across multiple catalogs:
 ```python
 import requests
 
-response = requests.post('https://api.altus4.com/api/v1/search', 
+response = requests.post('https://api.altus4.com/api/v1/search',
   headers={'Authorization': 'Bearer your-api-key'},
   json={
     'query': 'wireless bluetooth headphones',

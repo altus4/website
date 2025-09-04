@@ -286,15 +286,15 @@ The seed script creates sample data for development:
 
 ```bash
 # Create test user
-INSERT INTO users (id, email, password_hash, name, tier) VALUES 
+INSERT INTO users (id, email, password_hash, name, tier) VALUES
 ('dev-user-1', 'dev@altus4.com', '$2b$10$...', 'Development User', 'pro');
 
 # Create test API key
-INSERT INTO api_keys (id, user_id, key_hash, name, tier) VALUES 
+INSERT INTO api_keys (id, user_id, key_hash, name, tier) VALUES
 ('dev-key-1', 'dev-user-1', 'hashed_key', 'Development Key', 'pro');
 
 # Create test database connection
-INSERT INTO databases (id, user_id, name, host, username, password_encrypted, database_name) VALUES 
+INSERT INTO databases (id, user_id, name, host, username, password_encrypted, database_name) VALUES
 ('dev-db-1', 'dev-user-1', 'Test Blog DB', 'localhost', 'blog_user', 'encrypted_password', 'blog_test');
 ```
 
@@ -430,7 +430,7 @@ import { SearchService } from '../../src/services/search.service';
 
 describe('SearchService', () => {
   let searchService: SearchService;
-  
+
   beforeEach(() => {
     searchService = new SearchService({
       database: mockDatabaseService,
@@ -438,13 +438,13 @@ describe('SearchService', () => {
       ai: mockAIService
     });
   });
-  
+
   it('should perform natural language search', async () => {
     const results = await searchService.search({
       query: 'machine learning',
       mode: 'natural'
     });
-    
+
     expect(results).toHaveLength(10);
     expect(results[0]).toHaveProperty('relevance');
   });

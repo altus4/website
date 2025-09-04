@@ -73,16 +73,16 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        
+
         # Connection pooling
         proxy_http_version 1.1;
         proxy_set_header Connection "";
-        
+
         # Timeouts
         proxy_connect_timeout 5s;
         proxy_send_timeout 10s;
         proxy_read_timeout 30s;
-        
+
         # Retry failed requests
         proxy_next_upstream error timeout invalid_header http_500 http_502 http_503;
         proxy_next_upstream_tries 2;
@@ -105,7 +105,7 @@ defaults
     timeout connect 5000ms
     timeout client 50000ms
     timeout server 50000ms
-    
+
     option httplog
     option dontlognull
     option redispatch
@@ -115,18 +115,18 @@ frontend altus4_frontend
     bind *:80
     bind *:443 ssl crt /etc/ssl/certs/altus4.pem
     redirect scheme https if !{ ssl_fc }
-    
+
     # Health check
     acl health_check path_beg /health
     use_backend altus4_health if health_check
-    
+
     # API requests
     default_backend altus4_backend
 
 backend altus4_backend
     balance leastconn
     option httpchk GET /health
-    
+
     server app1 10.0.1.10:3000 check
     server app2 10.0.1.11:3000 check
     server app3 10.0.1.12:3000 check
@@ -337,7 +337,7 @@ class DatabaseService {
   async executeQuery(query: string, params: any[], forceWrite = false): Promise<any> {
     const isWriteOperation = forceWrite || this.isWriteQuery(query);
     const pool = isWriteOperation ? this.writePool : this.getReadPool();
-    
+
     return pool.execute(query, params);
   }
 
@@ -348,7 +348,7 @@ class DatabaseService {
 
   private isWriteQuery(query: string): boolean {
     const writeKeywords = ['INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP', 'ALTER'];
-    return writeKeywords.some(keyword => 
+    return writeKeywords.some(keyword =>
       query.trim().toUpperCase().startsWith(keyword)
     );
   }
@@ -363,19 +363,19 @@ class ConnectionPoolManager {
 
   createPool(config: DatabaseConfig): mysql.Pool {
     const poolSize = this.calculatePoolSize(config);
-    
+
     const pool = mysql.createPool({
       ...config,
       connectionLimit: poolSize.max,
       queueLimit: poolSize.queue,
       timeout: 60000,
       acquireTimeout: 60000,
-      
+
       // Connection management
       reconnect: true,
       idleTimeout: 300000,
       maxIdle: Math.floor(poolSize.max * 0.5),
-      
+
       // Performance settings
       multipleStatements: false,
       queryTimeout: 30000,
@@ -387,7 +387,7 @@ class ConnectionPoolManager {
   private calculatePoolSize(config: DatabaseConfig): PoolConfig {
     const baseCPUs = os.cpus().length;
     const expectedConcurrency = parseInt(process.env.EXPECTED_CONCURRENCY || '100');
-    
+
     return {
       max: Math.min(baseCPUs * 2, Math.ceil(expectedConcurrency / 10)),
       queue: expectedConcurrency * 2
@@ -480,7 +480,7 @@ class DatabaseConnectionManager {
       ...config,
       connectionLimit: this.calculateConnectionLimit(),
       queueLimit: this.calculateQueueLimit(),
-      
+
       // Health monitoring
       pingInterval: 60000,
       reconnect: true,
@@ -490,7 +490,7 @@ class DatabaseConnectionManager {
     // Start health monitoring
     this.startHealthCheck(databaseId, pool);
     this.pools.set(databaseId, pool);
-    
+
     return pool;
   }
 
@@ -498,7 +498,7 @@ class DatabaseConnectionManager {
     const cpuCores = os.cpus().length;
     const memoryGB = Math.floor(os.totalmem() / (1024 ** 3));
     const baseConnections = Math.max(cpuCores * 2, 10);
-    
+
     // Scale based on available memory
     return Math.min(baseConnections + Math.floor(memoryGB / 2), 50);
   }
@@ -625,18 +625,18 @@ class PerformanceBenchmark {
     }
 
     await Promise.allSettled(promises);
-    
+
     const endTime = Date.now();
     const duration = (endTime - startTime) / 1000;
-    
+
     results.throughput = results.totalRequests / duration;
-    
+
     return results;
   }
 
   private async simulateUser(duration: number): Promise<void> {
     const endTime = Date.now() + duration * 1000;
-    
+
     while (Date.now() < endTime) {
       const startTime = Date.now();
       try {
@@ -646,7 +646,7 @@ class PerformanceBenchmark {
       } catch (error) {
         this.recordError(error);
       }
-      
+
       // Wait between requests
       await this.sleep(Math.random() * 1000);
     }
