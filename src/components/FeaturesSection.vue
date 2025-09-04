@@ -160,13 +160,13 @@
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              100% test pass rate with 508 comprehensive unit and integration
-              tests across 21 test suites ensures reliability in production
+              Complete deployment documentation with Docker guides, production
+              setup, monitoring, and scaling strategies for enterprise
               environments.
             </p>
             <div class="flex items-center text-sm text-rose-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
-              100% test pass rate (508 tests)
+              Comprehensive deployment guides
             </div>
           </CardContent>
         </Card>

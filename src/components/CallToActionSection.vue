@@ -8,8 +8,8 @@
         </h2>
         <p class="text-xl text-blue-100 mb-8">
           Join enterprises already using Altus 4 for AI-enhanced MySQL search.
-          Production-ready with 87% test coverage and comprehensive
-          documentation.
+          Production-ready with comprehensive documentation, deployment guides,
+          and extensive testing.
         </p>
 
         <!-- CTA Buttons -->
@@ -43,9 +43,7 @@
             size="lg"
             class="min-w-48 bg-white text-blue-600 hover:bg-gray-50 hover:text-blue-800"
             as="a"
-            href="https://github.com/altus4/core#installation"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/docs/setup/quickstart"
           >
             <DownloadIcon class="mr-2 h-5 w-5" />
             Quick Start Guide
@@ -55,8 +53,8 @@
         <!-- Quick Stats -->
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-3 mb-12">
           <div class="text-center">
-            <div class="text-3xl font-bold text-white">87.15%</div>
-            <div class="text-blue-200">Test Coverage</div>
+            <div class="text-3xl font-bold text-white">Complete</div>
+            <div class="text-blue-200">Documentation</div>
           </div>
           <div class="text-center">
             <div class="text-3xl font-bold text-white">TypeScript</div>
