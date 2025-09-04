@@ -156,146 +156,146 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { Button } from '@/components/ui/button'
-import AltusLogo from '@/components/ui/AltusLogo.vue'
-import HeroSection from '@/components/HeroSection.vue'
-import FeaturesSection from '@/components/FeaturesSection.vue'
-import TechSpecsSection from '@/components/TechSpecsSection.vue'
-import ProjectStatusSection from '@/components/ProjectStatusSection.vue'
-import CallToActionSection from '@/components/CallToActionSection.vue'
-import FooterSection from '@/components/FooterSection.vue'
-import PrivacyPolicy from '@/components/PrivacyPolicy.vue'
-import TermsOfUse from '@/components/TermsOfUse.vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { Button } from '@/components/ui/button';
+import AltusLogo from '@/components/ui/AltusLogo.vue';
+import HeroSection from '@/components/HeroSection.vue';
+import FeaturesSection from '@/components/FeaturesSection.vue';
+import TechSpecsSection from '@/components/TechSpecsSection.vue';
+import ProjectStatusSection from '@/components/ProjectStatusSection.vue';
+import CallToActionSection from '@/components/CallToActionSection.vue';
+import FooterSection from '@/components/FooterSection.vue';
+import PrivacyPolicy from '@/components/PrivacyPolicy.vue';
+import TermsOfUse from '@/components/TermsOfUse.vue';
 import {
   Github as GitHubIcon,
   Menu as MenuIcon,
   X as XIcon,
   ArrowUp as ArrowUpIcon,
-} from 'lucide-vue-next'
+} from 'lucide-vue-next';
 
 // Mobile menu state
-const mobileMenuOpen = ref(false)
+const mobileMenuOpen = ref(false);
 
 // Simple routing state
-const currentRoute = ref(window.location.pathname)
+const currentRoute = ref(window.location.pathname);
 
 // Scroll to top functionality
-const showScrollTop = ref(false)
+const showScrollTop = ref(false);
 
 // Computed property to determine which page to show
 const currentPage = computed(() => {
   switch (currentRoute.value) {
     case '/privacy':
-      return 'privacy'
+      return 'privacy';
     case '/terms':
-      return 'terms'
+      return 'terms';
     default:
-      return 'home'
+      return 'home';
   }
-})
+});
 
 const handleScroll = () => {
-  showScrollTop.value = window.scrollY > 400
-}
+  showScrollTop.value = window.scrollY > 400;
+};
 
 const scrollToTop = () => {
   window.scrollTo({
     top: 0,
     behavior: 'smooth',
-  })
-}
+  });
+};
 
 // Simple routing functions
 const handlePopState = () => {
-  currentRoute.value = window.location.pathname
-}
+  currentRoute.value = window.location.pathname;
+};
 
 // Smooth scroll for anchor links
 const handleAnchorClick = (event: Event) => {
-  const target = event.target as HTMLAnchorElement
-  const href = target.getAttribute('href')
+  const target = event.target as HTMLAnchorElement;
+  const href = target.getAttribute('href');
 
   if (href?.startsWith('/#')) {
-    event.preventDefault()
-    const hash = href.substring(1) // Remove the '/' to get just '#features'
+    event.preventDefault();
+    const hash = href.substring(1); // Remove the '/' to get just '#features'
 
     // If we're not on the home page, navigate to home first
     if (currentRoute.value !== '/') {
-      window.history.pushState({}, '', '/')
-      currentRoute.value = '/'
+      window.history.pushState({}, '', '/');
+      currentRoute.value = '/';
 
       // Wait for the next tick to ensure home page is rendered
       setTimeout(() => {
-        const element = document.querySelector(hash)
+        const element = document.querySelector(hash);
         if (element) {
-          const navHeight = 64
+          const navHeight = 64;
           const elementTop =
-            element.getBoundingClientRect().top + window.scrollY - navHeight
+            element.getBoundingClientRect().top + window.scrollY - navHeight;
           window.scrollTo({
             top: elementTop,
             behavior: 'smooth',
-          })
+          });
         }
-      }, 100)
+      }, 100);
     } else {
       // We're already on home page, just scroll to the element
-      const element = document.querySelector(hash)
+      const element = document.querySelector(hash);
       if (element) {
-        const navHeight = 64
+        const navHeight = 64;
         const elementTop =
-          element.getBoundingClientRect().top + window.scrollY - navHeight
+          element.getBoundingClientRect().top + window.scrollY - navHeight;
         window.scrollTo({
           top: elementTop,
           behavior: 'smooth',
-        })
+        });
       }
     }
   } else if (href?.startsWith('#')) {
     // Regular anchor links on the same page
-    event.preventDefault()
-    const element = document.querySelector(href)
+    event.preventDefault();
+    const element = document.querySelector(href);
     if (element) {
-      const navHeight = 64
+      const navHeight = 64;
       const elementTop =
-        element.getBoundingClientRect().top + window.scrollY - navHeight
+        element.getBoundingClientRect().top + window.scrollY - navHeight;
       window.scrollTo({
         top: elementTop,
         behavior: 'smooth',
-      })
+      });
     }
   }
-}
+};
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-  window.addEventListener('popstate', handlePopState)
+  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('popstate', handlePopState);
 
   // Add smooth scroll to all anchor links and handle internal navigation
   document.addEventListener('click', event => {
-    const target = event.target as HTMLElement
-    const anchor = target.closest('a') as HTMLAnchorElement
+    const target = event.target as HTMLElement;
+    const anchor = target.closest('a') as HTMLAnchorElement;
 
     if (anchor) {
-      const href = anchor.getAttribute('href')
+      const href = anchor.getAttribute('href');
 
       // Handle anchor links
       if (href?.startsWith('#') || href?.startsWith('/#')) {
-        handleAnchorClick(event)
+        handleAnchorClick(event);
       }
       // Handle internal navigation (privacy, terms, home)
       else if (href === '/' || href === '/privacy' || href === '/terms') {
-        event.preventDefault()
-        window.history.pushState({}, '', href)
-        currentRoute.value = href
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        event.preventDefault();
+        window.history.pushState({}, '', href);
+        currentRoute.value = href;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
-  })
-})
+  });
+});
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-  window.removeEventListener('popstate', handlePopState)
-})
+  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('popstate', handlePopState);
+});
 </script>

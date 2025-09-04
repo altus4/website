@@ -114,19 +114,19 @@ All API responses follow this structure:
 
 ```typescript
 interface ApiResponse<T> {
-  success: boolean
-  data?: T
+  success: boolean;
+  data?: T;
   error?: {
-    code: string
-    message: string
-    details?: any
-  }
+    code: string;
+    message: string;
+    details?: any;
+  };
   meta?: {
-    timestamp: Date
-    requestId: string
-    version: string
-    executionTime?: number
-  }
+    timestamp: Date;
+    requestId: string;
+    version: string;
+    executionTime?: number;
+  };
 }
 ```
 
@@ -300,10 +300,10 @@ const response = await fetch('http://localhost:3000/api/search', {
     searchMode: 'natural',
     limit: 10,
   }),
-})
+});
 
-const result = await response.json()
-console.log(result.data.results)
+const result = await response.json();
+console.log(result.data.results);
 ```
 
 ### Python Examples

@@ -199,10 +199,10 @@
 </template>
 
 <script setup lang="ts">
-import AltusLogo from '@/components/ui/AltusLogo.vue'
+import AltusLogo from '@/components/ui/AltusLogo.vue';
 import {
   Github as GitHubIcon,
   Linkedin as LinkedinIcon,
   Mail as MailIcon,
-} from 'lucide-vue-next'
+} from 'lucide-vue-next';
 </script>

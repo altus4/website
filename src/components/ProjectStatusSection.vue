@@ -323,7 +323,7 @@
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   Star as StarIcon,
   CheckCircle as CheckCircleIcon,
@@ -331,5 +331,5 @@ import {
   Clock as ClockIcon,
   ArrowRight as ArrowRightIcon,
   Rocket as RocketIcon,
-} from 'lucide-vue-next'
+} from 'lucide-vue-next';
 </script>
