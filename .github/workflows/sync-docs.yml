@@ -41,10 +41,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           if [ -z "$GH_TOKEN" ]; then
-            echo "❌ GH_TOKEN is not set or is empty"
+            echo "ERROR: GH_TOKEN is not set or is empty"
             exit 1
           else
-            echo "✅ GH_TOKEN is set"
+            echo "SUCCESS: GH_TOKEN is set"
             # Test token by making a simple API call
             curl -s -H "Authorization: token $GH_TOKEN" \
                  -H "Accept: application/vnd.github.v3+json" \
@@ -89,10 +89,10 @@ jobs:
           TEMP_DIR="/tmp/altus4-docs-sync"
           COMMIT_MESSAGE="docs: sync from ${{ steps.commit_info.outputs.sha }} - ${{ steps.commit_info.outputs.message }}"
 
-          echo "🔄 Starting documentation sync..."
-          echo "📝 Commit: ${{ steps.commit_info.outputs.message }}"
-          echo "👤 Author: ${{ steps.commit_info.outputs.author }}"
-          echo "📅 Date: ${{ steps.commit_info.outputs.date }}"
+          echo "Starting documentation sync..."
+          echo "Commit: ${{ steps.commit_info.outputs.message }}"
+          echo "Author: ${{ steps.commit_info.outputs.author }}"
+          echo "Date: ${{ steps.commit_info.outputs.date }}"
 
           # Clean up any existing temp directory
           rm -rf "$TEMP_DIR"
@@ -100,15 +100,15 @@ jobs:
           cd "$TEMP_DIR"
 
           # Clone the docs repository
-          echo "📥 Cloning altus4/docs repository..."
+          echo "Cloning altus4/docs repository..."
           git clone "$DOCS_REPO_URL" .
 
           # Remove all existing files except .git
-          echo "🧹 Clearing existing content..."
+          echo "Clearing existing content..."
           find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
 
           # Copy docs directory contents
-          echo "📋 Copying documentation files..."
+          echo "Copying documentation files..."
           cp -r "$GITHUB_WORKSPACE/docs/"* .
 
           # Copy README from main repository
@@ -116,44 +116,48 @@ jobs:
             cp "$GITHUB_WORKSPACE/README.md" ./MAIN_README.md
           fi
 
+          # Get current date for README
+          CURRENT_DATE=$(date '+%Y-%m-%d')
+          CURRENT_DATETIME=$(date '+%Y-%m-%d %H:%M:%S UTC')
+
           # Create docs-specific README
-          cat > README.md << 'EOF'
+          cat > README.md << EOF
           # Altus 4 Documentation
 
           ![Documentation Status](https://img.shields.io/badge/docs-auto--synced-brightgreen)
-          ![Last Sync](https://img.shields.io/badge/last%20sync-$(date +%Y--%m--%d)-blue)
+          ![Last Sync](https://img.shields.io/badge/last%20sync-${CURRENT_DATE}-blue)
 
           This repository contains the documentation for **Altus 4** - AI-Enhanced MySQL Full-Text Search Engine.
 
-          ## 📖 View Documentation
+          ## View Documentation
 
           **Live Documentation**: [https://altus4.github.io/docs](https://altus4.github.io/docs)
 
-          ## 🔄 Auto-Synchronization
+          ## Auto-Synchronization
 
           This repository is automatically synchronized from the main [altus4/core](https://github.com/altus4/core) repository.
 
-          - **Source**: `docs/` directory in the main repository
-          - **Sync Trigger**: Any push to `main` or `develop` branch that modifies documentation
-          - **Last Sync**: $(date '+%Y-%m-%d %H:%M:%S UTC')
+          - **Source**: \`docs/\` directory in the main repository
+          - **Sync Trigger**: Any push to \`main\` or \`develop\` branch that modifies documentation
+          - **Last Sync**: ${CURRENT_DATETIME}
           - **Source Commit**: [${{ steps.commit_info.outputs.sha }}](https://github.com/altus4/core/commit/${{ github.sha }})
 
-          ## ⚠️ Contributing
+          ## Contributing
 
           **Do not make direct changes to this repository!**
 
           To contribute to the documentation:
 
-          1. 🍴 Fork the [main repository](https://github.com/altus4/core)
-          2. 📝 Make changes to the `docs/` directory
-          3. 🔀 Submit a pull request to the main repository
-          4. ✅ Changes will be automatically synced here upon merge
+          1. Fork the [main repository](https://github.com/altus4/core)
+          2. Make changes to the \`docs/\` directory
+          3. Submit a pull request to the main repository
+          4. Changes will be automatically synced here upon merge
 
-          ## 🏗️ Local Development
+          ## Local Development
 
           To work with the documentation locally:
 
-          ```bash
+          \`\`\`bash
           # Clone the main repository
           git clone https://github.com/altus4/core.git
           cd altus4/docs
@@ -166,9 +170,9 @@ jobs:
 
           # Build for production
           npm run docs:build
-          ```
+          \`\`\`
 
-          ## 📚 Documentation Structure
+          ## Documentation Structure
 
           - **[Setup Guide](./setup/)** - Installation and deployment
           - **[API Reference](./api/)** - Complete API documentation
@@ -178,14 +182,14 @@ jobs:
           - **[Development](./development/)** - Contributing guidelines
           - **[Testing](./testing/)** - Testing strategies and examples
 
-          ## 🤖 Automation Details
+          ## Automation Details
 
           This repository uses GitHub Actions for:
-          - 🔄 **Auto-sync** from main repository
-          - 🏗️ **Auto-build** documentation site
-          - 🚀 **Auto-deploy** to GitHub Pages
+          - **Auto-sync** from main repository
+          - **Auto-build** documentation site
+          - **Auto-deploy** to GitHub Pages
 
-          ## 📄 License
+          ## License
 
           This documentation is part of the Altus 4 project. See the [main repository](https://github.com/altus4/core) for license information.
           EOF
@@ -328,9 +332,9 @@ jobs:
 
           # Check if there are any changes
           if git diff --quiet && git diff --cached --quiet; then
-            echo "⚠️ No changes to sync"
+            echo "WARNING: No changes to sync"
           else
-            echo "✅ Changes detected, committing and pushing..."
+            echo "SUCCESS: Changes detected, committing and pushing..."
 
             # Stage all changes
             git add .
@@ -339,30 +343,30 @@ jobs:
             git commit -m "$COMMIT_MESSAGE"
 
             # Push to remote
-            echo "🚀 Pushing changes to altus4/docs repository..."
+            echo "Pushing changes to altus4/docs repository..."
             git push origin main
 
-            echo "✅ Documentation sync completed successfully!"
+            echo "SUCCESS: Documentation sync completed successfully!"
           fi
 
       - name: Create sync summary
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
-          echo "## 📚 Documentation Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## Documentation Sync Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Status**: Successfully synced to [altus4/docs](https://github.com/altus4/docs)" >> $GITHUB_STEP_SUMMARY
-          echo "📝 **Source Commit**: [${{ steps.commit_info.outputs.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})" >> $GITHUB_STEP_SUMMARY
-          echo "💬 **Commit Message**: ${{ steps.commit_info.outputs.message }}" >> $GITHUB_STEP_SUMMARY
-          echo "👤 **Author**: ${{ steps.commit_info.outputs.author }}" >> $GITHUB_STEP_SUMMARY
-          echo "🌐 **Documentation Site**: [https://altus4.github.io/docs](https://altus4.github.io/docs)" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: Successfully synced to [altus4/docs](https://github.com/altus4/docs)" >> $GITHUB_STEP_SUMMARY
+          echo "**Source Commit**: [${{ steps.commit_info.outputs.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit Message**: ${{ steps.commit_info.outputs.message }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Author**: ${{ steps.commit_info.outputs.author }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Documentation Site**: [https://altus4.github.io/docs](https://altus4.github.io/docs)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "The documentation will be automatically deployed to GitHub Pages within a few minutes." >> $GITHUB_STEP_SUMMARY
 
       - name: No changes summary
         if: steps.check_changes.outputs.has_changes == 'false'
         run: |
-          echo "## 📚 Documentation Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## Documentation Sync Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "ℹ️ **Status**: No changes detected in documentation" >> $GITHUB_STEP_SUMMARY
-          echo "📁 **Checked Paths**: \`docs/\`, \`README.md\`" >> $GITHUB_STEP_SUMMARY
-          echo "🌐 **Current Documentation**: [https://altus4.github.io/docs](https://altus4.github.io/docs)" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: No changes detected in documentation" >> $GITHUB_STEP_SUMMARY
+          echo "**Checked Paths**: \`docs/\`, \`README.md\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Current Documentation**: [https://altus4.github.io/docs](https://altus4.github.io/docs)" >> $GITHUB_STEP_SUMMARY
