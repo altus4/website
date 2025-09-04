@@ -1,11 +1,11 @@
-import js from '@eslint/js'
-import tsEslint from '@typescript-eslint/eslint-plugin'
-import tsParser from '@typescript-eslint/parser'
-import vue from 'eslint-plugin-vue'
-import vueParser from 'vue-eslint-parser'
-import prettier from 'eslint-config-prettier'
-import prettierPlugin from 'eslint-plugin-prettier'
-import markdown from 'eslint-plugin-markdown'
+import js from '@eslint/js';
+import tsEslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import vue from 'eslint-plugin-vue';
+import vueParser from 'vue-eslint-parser';
+import prettier from 'eslint-config-prettier';
+import prettierPlugin from 'eslint-plugin-prettier';
+import markdown from 'eslint-plugin-markdown';
 
 export default [
   js.configs.recommended,
@@ -44,6 +44,8 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       'vue/require-default-prop': 'off',
       'prettier/prettier': 'error',
+      // Strict semicolon rules
+      semi: ['error', 'always'],
     },
   },
   {
@@ -61,6 +63,8 @@ export default [
     },
     rules: {
       'prettier/prettier': 'error',
+      // Strict semicolon rules
+      semi: ['error', 'always'],
     },
   },
   prettier,
@@ -124,6 +128,8 @@ export default [
       ...tsEslint.configs.recommended.rules,
       'prettier/prettier': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
+      // Strict semicolon rules
+      semi: ['error', 'always'],
     },
   },
   {
@@ -135,4 +141,4 @@ export default [
       'docs/.vitepress/cache/',
     ],
   },
-]
+];

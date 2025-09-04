@@ -240,7 +240,7 @@
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   Monitor as MonitorIcon,
   Server as ServerIcon,
@@ -249,5 +249,5 @@ import {
   Zap as ZapIcon,
   ArrowDown as ArrowDownIcon,
   Check as CheckIcon,
-} from 'lucide-vue-next'
+} from 'lucide-vue-next';
 </script>

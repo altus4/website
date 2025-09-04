@@ -1,14 +1,14 @@
-import { defineConfig } from 'vitepress'
-import { fileURLToPath, URL } from 'node:url'
-import tailwindcss from 'tailwindcss'
-import autoprefixer from 'autoprefixer'
+import { defineConfig } from 'vitepress';
+import { fileURLToPath, URL } from 'node:url';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Altus 4',
   description: 'AI-Enhanced Search Engine',
   base: '/docs/',
-  ignoreDeadLinks: true,
+  ignoreDeadLinks: false,
 
   // Configure Vite for VitePress
   vite: {
@@ -83,6 +83,9 @@ export default defineConfig({
       },
     ],
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/altus4/core' }],
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/altus4/core' },
+      { icon: 'globe', link: 'https://altus4.thavarshan.com' },
+    ],
   },
-})
+});

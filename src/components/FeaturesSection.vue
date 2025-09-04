@@ -176,7 +176,7 @@
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   Brain as BrainIcon,
   Zap as ZapIcon,
@@ -185,5 +185,5 @@ import {
   Code as CodeIcon,
   Rocket as RocketIcon,
   Check as CheckIcon,
-} from 'lucide-vue-next'
+} from 'lucide-vue-next';
 </script>

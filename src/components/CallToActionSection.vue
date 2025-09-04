@@ -126,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 import {
   Github as GitHubIcon,
   BookOpen as BookOpenIcon,
@@ -134,5 +134,5 @@ import {
   MessageCircle as MessageCircleIcon,
   Twitter as TwitterIcon,
   Mail as MailIcon,
-} from 'lucide-vue-next'
+} from 'lucide-vue-next';
 </script>
