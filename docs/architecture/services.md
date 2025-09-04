@@ -29,11 +29,11 @@ graph TB
 
 The service layer sits between the API layer (controllers and routes) and the data layer (databases and external APIs), providing:
 
-- __Business Logic Encapsulation__ - Core application logic separated from HTTP concerns
-- __Data Orchestration__ - Coordination between multiple data sources
-- __Transaction Management__ - Ensuring data consistency across operations
-- __Error Handling__ - Centralized error processing and recovery
-- __Caching Strategy__ - Intelligent caching and performance optimization
+- **Business Logic Encapsulation** - Core application logic separated from HTTP concerns
+- **Data Orchestration** - Coordination between multiple data sources
+- **Transaction Management** - Ensuring data consistency across operations
+- **Error Handling** - Centralized error processing and recovery
+- **Caching Strategy** - Intelligent caching and performance optimization
 
 ## Service Architecture Patterns
 
@@ -44,8 +44,8 @@ All services use constructor-based dependency injection for loose coupling and t
 ```typescript
 // Service Interface Definition
 interface ISearchService {
-  search(request: SearchRequest): Promise<SearchResponse>
-  getSuggestions(query: string): Promise<QuerySuggestion[]>
+  search(request: SearchRequest): Promise<SearchResponse>;
+  getSuggestions(query: string): Promise<QuerySuggestion[]>;
 }
 
 // Service Implementation
@@ -63,12 +63,12 @@ export class SearchService implements ISearchService {
 }
 ```
 
-__Benefits:__
+**Benefits:**
 
-- __Testability__: Easy to mock dependencies in unit tests
-- __Flexibility__: Can swap implementations without changing service code
-- __Separation of Concerns__: Each dependency handles its specific domain
-- __Configuration__: Dependencies can be configured externally
+- **Testability**: Easy to mock dependencies in unit tests
+- **Flexibility**: Can swap implementations without changing service code
+- **Separation of Concerns**: Each dependency handles its specific domain
+- **Configuration**: Dependencies can be configured externally
 
 ### 2. Service Orchestration Pattern
 
@@ -78,25 +78,25 @@ Complex operations are orchestrated across multiple services:
 export class SearchService {
   async search(request: SearchRequest): Promise<SearchResponse> {
     // 1. Check cache first
-    const cached = await this.cacheService.get(cacheKey)
-    if (cached) return cached
+    const cached = await this.cacheService.get(cacheKey);
+    if (cached) return cached;
 
     // 2. Process query with AI (if enabled)
-    const processedQuery = await this.aiService.optimizeQuery(request.query)
+    const processedQuery = await this.aiService.optimizeQuery(request.query);
 
     // 3. Execute searches across databases in parallel
     const searchPromises = request.databases.map(dbId =>
       this.databaseService.search(dbId, processedQuery)
-    )
-    const results = await Promise.allSettled(searchPromises)
+    );
+    const results = await Promise.allSettled(searchPromises);
 
     // 4. Aggregate and enhance results
-    const aggregated = this.aggregateResults(results)
-    const enhanced = await this.aiService.enhanceResults(aggregated)
+    const aggregated = this.aggregateResults(results);
+    const enhanced = await this.aiService.enhanceResults(aggregated);
 
     // 5. Cache and return
-    await this.cacheService.set(cacheKey, enhanced)
-    return enhanced
+    await this.cacheService.set(cacheKey, enhanced);
+    return enhanced;
   }
 }
 ```
@@ -109,16 +109,16 @@ Services implement circuit breakers for external dependencies:
 export class AIService {
   private circuitBreaker = new CircuitBreaker({
     failureThreshold: 5,
-    resetTimeout: 30000
-  })
+    resetTimeout: 30000,
+  });
 
   async processQuery(query: string): Promise<ProcessedQuery> {
     return this.circuitBreaker.execute(async () => {
       return await this.openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: query }]
-      })
-    })
+        messages: [{ role: 'user', content: query }],
+      });
+    });
   }
 }
 ```
@@ -127,9 +127,9 @@ export class AIService {
 
 ### 1. SearchService - The Orchestrator
 
-__Purpose__: Central coordinator for all search operations
+**Purpose**: Central coordinator for all search operations
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - Multi-database search orchestration
 - AI-powered query optimization
@@ -137,7 +137,7 @@ __Key Responsibilities:__
 - Caching strategy implementation
 - Analytics logging
 
-__Architecture:__
+**Architecture:**
 
 ```mermaid
 graph LR
@@ -152,29 +152,29 @@ graph LR
     US --> UserDB[(User Database)]
 ```
 
-__Key Methods:__
+**Key Methods:**
 
 ```typescript
 class SearchService {
   // Core search orchestration
-  async search(request: SearchRequest): Promise<SearchResponse>
+  async search(request: SearchRequest): Promise<SearchResponse>;
 
   // Search suggestions and autocomplete
-  async getSuggestions(query: string): Promise<QuerySuggestion[]>
+  async getSuggestions(query: string): Promise<QuerySuggestion[]>;
 
   // Query performance analysis
-  async analyzeQuery(query: string): Promise<QueryAnalysis>
+  async analyzeQuery(query: string): Promise<QueryAnalysis>;
 
   // User search history and trends
-  async getUserTrends(userId: string): Promise<TrendInsight[]>
+  async getUserTrends(userId: string): Promise<TrendInsight[]>;
 }
 ```
 
 ### 2. DatabaseService - Connection Manager
 
-__Purpose__: MySQL database connection management and query execution
+**Purpose**: MySQL database connection management and query execution
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - Connection pool management per user database
 - Secure credential storage and encryption
@@ -182,7 +182,7 @@ __Key Responsibilities:__
 - Query optimization and execution
 - Health monitoring and reconnection
 
-__Connection Pool Architecture:__
+**Connection Pool Architecture:**
 
 ```mermaid
 graph TB
@@ -196,30 +196,33 @@ graph TB
     CP3 --> DBN[(MySQL DB N)]
 ```
 
-__Key Methods:__
+**Key Methods:**
 
 ```typescript
 class DatabaseService {
   // Connection management
-  async addConnection(config: DatabaseConfig): Promise<void>
-  async removeConnection(connectionId: string): Promise<void>
-  async testConnection(config: DatabaseConfig): Promise<boolean>
+  async addConnection(config: DatabaseConfig): Promise<void>;
+  async removeConnection(connectionId: string): Promise<void>;
+  async testConnection(config: DatabaseConfig): Promise<boolean>;
 
   // Query execution
-  async executeFullTextSearch(dbId: string, query: string): Promise<SearchResult[]>
-  async executeQuery(dbId: string, sql: string, params: any[]): Promise<any[]>
+  async executeFullTextSearch(
+    dbId: string,
+    query: string
+  ): Promise<SearchResult[]>;
+  async executeQuery(dbId: string, sql: string, params: any[]): Promise<any[]>;
 
   // Schema operations
-  async discoverSchema(dbId: string): Promise<TableSchema[]>
-  async getTableInfo(dbId: string, tableName: string): Promise<TableInfo>
+  async discoverSchema(dbId: string): Promise<TableSchema[]>;
+  async getTableInfo(dbId: string, tableName: string): Promise<TableInfo>;
 }
 ```
 
 ### 3. AIService - Intelligence Layer
 
-__Purpose__: OpenAI integration for semantic search and query optimization
+**Purpose**: OpenAI integration for semantic search and query optimization
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - Query semantic analysis and optimization
 - Search result categorization and enhancement
@@ -227,7 +230,7 @@ __Key Responsibilities:__
 - Trend analysis and insights generation
 - Fallback handling for AI unavailability
 
-__AI Processing Pipeline:__
+**AI Processing Pipeline:**
 
 ```mermaid
 graph LR
@@ -241,29 +244,29 @@ graph LR
     SG --> Final[Final Response]
 ```
 
-__Key Methods:__
+**Key Methods:**
 
 ```typescript
 class AIService {
   // Query processing
-  async processSearchQuery(query: string): Promise<ProcessedQuery>
-  async optimizeQuery(query: string): Promise<string>
+  async processSearchQuery(query: string): Promise<ProcessedQuery>;
+  async optimizeQuery(query: string): Promise<string>;
 
   // Result enhancement
-  async categorizeResults(results: SearchResult[]): Promise<Category[]>
-  async enhanceResults(results: SearchResult[]): Promise<EnhancedResult[]>
+  async categorizeResults(results: SearchResult[]): Promise<Category[]>;
+  async enhanceResults(results: SearchResult[]): Promise<EnhancedResult[]>;
 
   // Suggestions and insights
-  async getQuerySuggestions(query: string): Promise<QuerySuggestion[]>
-  async generateInsights(data: AnalyticsData): Promise<AIInsight[]>
+  async getQuerySuggestions(query: string): Promise<QuerySuggestion[]>;
+  async generateInsights(data: AnalyticsData): Promise<AIInsight[]>;
 }
 ```
 
 ### 4. CacheService - Performance Layer
 
-__Purpose__: Redis-based caching and analytics storage
+**Purpose**: Redis-based caching and analytics storage
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - Multi-level caching (memory + Redis)
 - Search result caching with intelligent TTL
@@ -271,7 +274,7 @@ __Key Responsibilities:__
 - Popular queries and trending searches
 - Cache invalidation and warming strategies
 
-__Caching Architecture:__
+**Caching Architecture:**
 
 ```mermaid
 graph TB
@@ -287,31 +290,31 @@ graph TB
     Analytics --> Metrics[Performance Metrics]
 ```
 
-__Key Methods:__
+**Key Methods:**
 
 ```typescript
 class CacheService {
   // Basic caching operations
-  async get<T>(key: string): Promise<T | null>
-  async set<T>(key: string, value: T, ttl?: number): Promise<void>
-  async del(key: string): Promise<void>
+  async get<T>(key: string): Promise<T | null>;
+  async set<T>(key: string, value: T, ttl?: number): Promise<void>;
+  async del(key: string): Promise<void>;
 
   // Analytics operations
-  async logSearchAnalytics(data: SearchAnalytics): Promise<void>
-  async getPopularQueries(limit?: number): Promise<string[]>
-  async getTrendingSearches(period: string): Promise<TrendData[]>
+  async logSearchAnalytics(data: SearchAnalytics): Promise<void>;
+  async getPopularQueries(limit?: number): Promise<string[]>;
+  async getTrendingSearches(period: string): Promise<TrendData[]>;
 
   // Cache management
-  async invalidatePattern(pattern: string): Promise<void>
-  async warmCache(keys: string[]): Promise<void>
+  async invalidatePattern(pattern: string): Promise<void>;
+  async warmCache(keys: string[]): Promise<void>;
 }
 ```
 
 ### 5. UserService - Identity Management
 
-__Purpose__: User account management and authentication
+**Purpose**: User account management and authentication
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - User registration and profile management
 - Password hashing and authentication
@@ -319,31 +322,35 @@ __Key Responsibilities:__
 - Account lifecycle operations
 - Security audit logging
 
-__Key Methods:__
+**Key Methods:**
 
 ```typescript
 class UserService {
   // User management
-  async createUser(userData: CreateUserRequest): Promise<User>
-  async getUserById(userId: string): Promise<User | null>
-  async updateUser(userId: string, updates: UserUpdates): Promise<User>
-  async deleteUser(userId: string): Promise<void>
+  async createUser(userData: CreateUserRequest): Promise<User>;
+  async getUserById(userId: string): Promise<User | null>;
+  async updateUser(userId: string, updates: UserUpdates): Promise<User>;
+  async deleteUser(userId: string): Promise<void>;
 
   // Authentication
-  async authenticateUser(email: string, password: string): Promise<AuthResult>
-  async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<void>
+  async authenticateUser(email: string, password: string): Promise<AuthResult>;
+  async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<void>;
 
   // Authorization
-  async getUserPermissions(userId: string): Promise<Permission[]>
-  async hasPermission(userId: string, permission: string): Promise<boolean>
+  async getUserPermissions(userId: string): Promise<Permission[]>;
+  async hasPermission(userId: string, permission: string): Promise<boolean>;
 }
 ```
 
 ### 6. ApiKeyService - API Authentication
 
-__Purpose__: API key lifecycle management and validation
+**Purpose**: API key lifecycle management and validation
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - Secure API key generation and storage
 - API key validation and user context extraction
@@ -351,7 +358,7 @@ __Key Responsibilities:__
 - Usage tracking and analytics
 - Key rotation and revocation
 
-__API Key Architecture:__
+**API Key Architecture:**
 
 ```mermaid
 graph LR
@@ -364,23 +371,23 @@ graph LR
     UT --> Metrics[Usage Metrics]
 ```
 
-__Key Methods:__
+**Key Methods:**
 
 ```typescript
 class ApiKeyService {
   // Key lifecycle
-  async createApiKey(userId: string, config: ApiKeyConfig): Promise<ApiKey>
-  async revokeApiKey(keyId: string): Promise<void>
-  async rotateApiKey(keyId: string): Promise<ApiKey>
+  async createApiKey(userId: string, config: ApiKeyConfig): Promise<ApiKey>;
+  async revokeApiKey(keyId: string): Promise<void>;
+  async rotateApiKey(keyId: string): Promise<ApiKey>;
 
   // Validation and usage
-  async validateApiKey(key: string): Promise<ValidationResult | null>
-  async trackUsage(keyId: string, operation: string): Promise<void>
-  async getUsageStats(keyId: string): Promise<UsageStats>
+  async validateApiKey(key: string): Promise<ValidationResult | null>;
+  async trackUsage(keyId: string, operation: string): Promise<void>;
+  async getUsageStats(keyId: string): Promise<UsageStats>;
 
   // Management
-  async listApiKeys(userId: string): Promise<ApiKey[]>
-  async updateApiKey(keyId: string, updates: ApiKeyUpdates): Promise<ApiKey>
+  async listApiKeys(userId: string): Promise<ApiKey[]>;
+  async updateApiKey(keyId: string, updates: ApiKeyUpdates): Promise<ApiKey>;
 }
 ```
 
@@ -394,11 +401,11 @@ Most service interactions are synchronous for consistency:
 export class SearchService {
   async search(request: SearchRequest): Promise<SearchResponse> {
     // Synchronous calls ensure data consistency
-    const user = await this.userService.getUserById(request.userId)
-    const databases = await this.databaseService.getUserDatabases(user.id)
-    const results = await this.executeSearches(databases, request.query)
+    const user = await this.userService.getUserById(request.userId);
+    const databases = await this.databaseService.getUserDatabases(user.id);
+    const results = await this.executeSearches(databases, request.query);
 
-    return this.buildResponse(results)
+    return this.buildResponse(results);
   }
 }
 ```
@@ -410,14 +417,14 @@ Non-critical operations are handled asynchronously:
 ```typescript
 export class SearchService {
   async search(request: SearchRequest): Promise<SearchResponse> {
-    const response = await this.executeSearch(request)
+    const response = await this.executeSearch(request);
 
     // Fire-and-forget analytics logging
     this.logAnalytics(request, response).catch(error => {
-      this.logger.warn('Analytics logging failed:', error)
-    })
+      this.logger.warn('Analytics logging failed:', error);
+    });
 
-    return response
+    return response;
   }
 }
 ```
@@ -429,17 +436,17 @@ Some services use events for loose coupling:
 ```typescript
 export class SearchService extends EventEmitter {
   async search(request: SearchRequest): Promise<SearchResponse> {
-    const response = await this.executeSearch(request)
+    const response = await this.executeSearch(request);
 
     // Emit event for other services to handle
     this.emit('search.completed', {
       userId: request.userId,
       query: request.query,
       resultCount: response.totalCount,
-      executionTime: response.executionTime
-    })
+      executionTime: response.executionTime,
+    });
 
-    return response
+    return response;
   }
 }
 ```
@@ -454,18 +461,18 @@ Each service implements comprehensive error handling:
 export class DatabaseService {
   async executeQuery(dbId: string, sql: string): Promise<any[]> {
     try {
-      const pool = await this.getConnectionPool(dbId)
-      const [results] = await pool.execute(sql)
-      return results as any[]
+      const pool = await this.getConnectionPool(dbId);
+      const [results] = await pool.execute(sql);
+      return results as any[];
     } catch (error) {
       // Categorize and handle different error types
       if (error.code === 'ECONNREFUSED') {
-        throw new DatabaseConnectionError('Database connection failed', dbId)
+        throw new DatabaseConnectionError('Database connection failed', dbId);
       } else if (error.code === 'ER_SYNTAX_ERROR') {
-        throw new QuerySyntaxError('Invalid SQL syntax', sql)
+        throw new QuerySyntaxError('Invalid SQL syntax', sql);
       } else {
-        this.logger.error('Unexpected database error:', error)
-        throw new DatabaseError('Database operation failed')
+        this.logger.error('Unexpected database error:', error);
+        throw new DatabaseError('Database operation failed');
       }
     }
   }
@@ -481,16 +488,16 @@ export class AIService {
   async enhanceResults(results: SearchResult[]): Promise<EnhancedResult[]> {
     try {
       // Try AI enhancement first
-      return await this.openai.enhanceResults(results)
+      return await this.openai.enhanceResults(results);
     } catch (error) {
-      this.logger.warn('AI enhancement failed, using fallback:', error)
+      this.logger.warn('AI enhancement failed, using fallback:', error);
 
       // Fallback to basic enhancement
       return results.map(result => ({
         ...result,
         categories: this.basicCategorization(result),
-        confidence: 0.5
-      }))
+        confidence: 0.5,
+      }));
     }
   }
 }
@@ -502,26 +509,26 @@ Protect against cascading failures:
 
 ```typescript
 export class CircuitBreaker {
-  private failures = 0
-  private lastFailureTime?: Date
-  private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED'
+  private failures = 0;
+  private lastFailureTime?: Date;
+  private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
 
   async execute<T>(operation: () => Promise<T>): Promise<T> {
     if (this.state === 'OPEN') {
       if (this.shouldAttemptReset()) {
-        this.state = 'HALF_OPEN'
+        this.state = 'HALF_OPEN';
       } else {
-        throw new CircuitBreakerOpenError('Circuit breaker is open')
+        throw new CircuitBreakerOpenError('Circuit breaker is open');
       }
     }
 
     try {
-      const result = await operation()
-      this.onSuccess()
-      return result
+      const result = await operation();
+      this.onSuccess();
+      return result;
     } catch (error) {
-      this.onFailure()
-      throw error
+      this.onFailure();
+      throw error;
     }
   }
 }
@@ -535,7 +542,7 @@ Efficient database connection management:
 
 ```typescript
 export class DatabaseService {
-  private pools = new Map<string, mysql.Pool>()
+  private pools = new Map<string, mysql.Pool>();
 
   private createPool(config: DatabaseConfig): mysql.Pool {
     return mysql.createPool({
@@ -546,8 +553,8 @@ export class DatabaseService {
       connectionLimit: 10,
       acquireTimeout: 60000,
       timeout: 60000,
-      reconnect: true
-    })
+      reconnect: true,
+    });
   }
 }
 ```
@@ -561,18 +568,18 @@ export class CacheService {
   async get<T>(key: string): Promise<T | null> {
     // L1: Check memory cache first
     if (this.memoryCache.has(key)) {
-      return this.memoryCache.get(key)
+      return this.memoryCache.get(key);
     }
 
     // L2: Check Redis cache
-    const redisValue = await this.redis.get(key)
+    const redisValue = await this.redis.get(key);
     if (redisValue) {
-      const parsed = JSON.parse(redisValue)
-      this.memoryCache.set(key, parsed) // Populate L1 cache
-      return parsed
+      const parsed = JSON.parse(redisValue);
+      this.memoryCache.set(key, parsed); // Populate L1 cache
+      return parsed;
     }
 
-    return null
+    return null;
   }
 }
 ```
@@ -586,17 +593,17 @@ export class SearchService {
   async search(request: SearchRequest): Promise<SearchResponse> {
     // Execute searches in parallel
     const searchPromises = request.databases.map(async dbId => {
-      return this.databaseService.search(dbId, request.query)
-    })
+      return this.databaseService.search(dbId, request.query);
+    });
 
-    const results = await Promise.allSettled(searchPromises)
+    const results = await Promise.allSettled(searchPromises);
 
     // Process successful results, log failures
     const successful = results
       .filter(result => result.status === 'fulfilled')
-      .map(result => result.value)
+      .map(result => result.value);
 
-    return this.aggregateResults(successful)
+    return this.aggregateResults(successful);
   }
 }
 ```
@@ -607,78 +614,78 @@ export class SearchService {
 
 ```typescript
 describe('SearchService', () => {
-  let searchService: SearchService
-  let mockDatabaseService: jest.Mocked<DatabaseService>
-  let mockAIService: jest.Mocked<AIService>
+  let searchService: SearchService;
+  let mockDatabaseService: jest.Mocked<DatabaseService>;
+  let mockAIService: jest.Mocked<AIService>;
 
   beforeEach(() => {
     mockDatabaseService = {
       search: jest.fn(),
-      getUserDatabases: jest.fn()
-    } as any
+      getUserDatabases: jest.fn(),
+    } as any;
 
     mockAIService = {
       isAvailable: jest.fn(() => false),
-      enhanceResults: jest.fn()
-    } as any
+      enhanceResults: jest.fn(),
+    } as any;
 
     searchService = new SearchService(
       mockDatabaseService,
       mockAIService,
       mockCacheService
-    )
-  })
+    );
+  });
 
   it('should aggregate results from multiple databases', async () => {
     mockDatabaseService.search
       .mockResolvedValueOnce([{ id: '1', title: 'Result 1' }])
-      .mockResolvedValueOnce([{ id: '2', title: 'Result 2' }])
+      .mockResolvedValueOnce([{ id: '2', title: 'Result 2' }]);
 
     const result = await searchService.search({
       query: 'test',
       databases: ['db1', 'db2'],
-      userId: 'user1'
-    })
+      userId: 'user1',
+    });
 
-    expect(result.results).toHaveLength(2)
-    expect(mockDatabaseService.search).toHaveBeenCalledTimes(2)
-  })
-})
+    expect(result.results).toHaveLength(2);
+    expect(mockDatabaseService.search).toHaveBeenCalledTimes(2);
+  });
+});
 ```
 
 ### 2. Integration Testing
 
 ```typescript
 describe('SearchService Integration', () => {
-  let searchService: SearchService
-  let testDatabase: TestDatabase
+  let searchService: SearchService;
+  let testDatabase: TestDatabase;
 
   beforeAll(async () => {
-    testDatabase = await setupTestDatabase()
-    const databaseService = new DatabaseService()
-    const aiService = new AIService()
-    const cacheService = new CacheService()
+    testDatabase = await setupTestDatabase();
+    const databaseService = new DatabaseService();
+    const aiService = new AIService();
+    const cacheService = new CacheService();
 
-    searchService = new SearchService(databaseService, aiService, cacheService)
-  })
+    searchService = new SearchService(databaseService, aiService, cacheService);
+  });
 
   it('should perform end-to-end search', async () => {
     await testDatabase.seed({
       articles: [
-        { id: 1, title: 'MySQL Performance', content: 'Optimization tips...' }
-      ]
-    })
+        { id: 1, title: 'MySQL Performance', content: 'Optimization tips...' },
+      ],
+    });
 
     const result = await searchService.search({
       query: 'MySQL',
       databases: [testDatabase.id],
-      userId: 'test-user'
-    })
+      userId: 'test-user',
+    });
 
-    expect(result.results).toHaveLength(1)
-    expect(result.results[0].title).toBe('MySQL Performance')
-  })
-})
+    expect(result.results).toHaveLength(1);
+    expect(result.results[0].title).toBe('MySQL Performance');
+  });
+});
 ```
 
 ## Monitoring and Observability
@@ -687,21 +694,21 @@ describe('SearchService Integration', () => {
 
 ```typescript
 export class SearchService {
-  private metrics = new MetricsCollector()
+  private metrics = new MetricsCollector();
 
   async search(request: SearchRequest): Promise<SearchResponse> {
-    const startTime = Date.now()
+    const startTime = Date.now();
 
     try {
-      const result = await this.executeSearch(request)
+      const result = await this.executeSearch(request);
 
-      this.metrics.histogram('search.duration', Date.now() - startTime)
-      this.metrics.counter('search.success').increment()
+      this.metrics.histogram('search.duration', Date.now() - startTime);
+      this.metrics.counter('search.success').increment();
 
-      return result
+      return result;
     } catch (error) {
-      this.metrics.counter('search.error').increment()
-      throw error
+      this.metrics.counter('search.error').increment();
+      throw error;
     }
   }
 }
@@ -714,30 +721,34 @@ export class DatabaseService {
   async healthCheck(): Promise<HealthStatus> {
     const checks = await Promise.allSettled(
       Array.from(this.pools.entries()).map(async ([id, pool]) => {
-        const connection = await pool.getConnection()
-        await connection.ping()
-        connection.release()
-        return { id, status: 'healthy' }
+        const connection = await pool.getConnection();
+        await connection.ping();
+        connection.release();
+        return { id, status: 'healthy' };
       })
-    )
+    );
 
     return {
       service: 'DatabaseService',
-      status: checks.every(c => c.status === 'fulfilled') ? 'healthy' : 'degraded',
-      checks: checks.map(c => c.status === 'fulfilled' ? c.value : { error: c.reason })
-    }
+      status: checks.every(c => c.status === 'fulfilled')
+        ? 'healthy'
+        : 'degraded',
+      checks: checks.map(c =>
+        c.status === 'fulfilled' ? c.value : { error: c.reason }
+      ),
+    };
   }
 }
 ```
 
 ## Related Documentation
 
-- __[Database Service](../services/database-service.md)__ - Detailed DatabaseService documentation
-- __[Search Service](../services/search-service.md)__ - Comprehensive SearchService guide
-- __[AI Service](../services/ai-service.md)__ - AI integration patterns
-- __[Cache Service](../services/cache-service.md)__ - Caching strategies and implementation
-- __[Testing Guide](../testing/)__ - Service testing patterns and examples
+- **[Database Service](../services/database-service.md)** - Detailed DatabaseService documentation
+- **[Search Service](../services/search-service.md)** - Comprehensive SearchService guide
+- **[AI Service](../services/ai-service.md)** - AI integration patterns
+- **[Cache Service](../services/cache-service.md)** - Caching strategies and implementation
+- **[Testing Guide](../testing/)** - Service testing patterns and examples
 
 ---
 
-__The service layer is the foundation of Altus 4's reliability and performance, implementing robust patterns for scalability, maintainability, and observability.__
+**The service layer is the foundation of Altus 4's reliability and performance, implementing robust patterns for scalability, maintainability, and observability.**

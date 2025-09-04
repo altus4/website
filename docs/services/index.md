@@ -21,22 +21,22 @@ graph LR
 
 ### Service Principles
 
-1. __Single Responsibility__ - Each service has a focused purpose
-2. __Dependency Injection__ - Services receive dependencies via constructor
-3. __Interface-Based__ - Services implement clear interfaces
-4. __Error Handling__ - Comprehensive error handling with custom exceptions
-5. __Testability__ - Services are unit testable with mocked dependencies
+1. **Single Responsibility** - Each service has a focused purpose
+2. **Dependency Injection** - Services receive dependencies via constructor
+3. **Interface-Based** - Services implement clear interfaces
+4. **Error Handling** - Comprehensive error handling with custom exceptions
+5. **Testability** - Services are unit testable with mocked dependencies
 
 ## Service Overview
 
 | Service             | Purpose              | Dependencies                             | Key Features                                                |
 | ------------------- | -------------------- | ---------------------------------------- | ----------------------------------------------------------- |
-| __SearchService__   | Search orchestration | DatabaseService, AIService, CacheService | Multi-database search, AI enhancement, caching              |
-| __DatabaseService__ | MySQL operations     | mysql2/promise                           | Connection management, query execution, schema discovery    |
-| __AIService__       | AI/ML integration    | OpenAI API                               | Semantic search, query optimization, result categorization  |
-| __CacheService__    | Caching & analytics  | Redis/ioredis                            | Search caching, analytics storage, performance optimization |
-| __UserService__     | User management      | DatabaseService                          | User CRUD, password hashing, account management             |
-| __ApiKeyService__   | API key management   | DatabaseService                          | API key generation, validation, tiered permissions          |
+| **SearchService**   | Search orchestration | DatabaseService, AIService, CacheService | Multi-database search, AI enhancement, caching              |
+| **DatabaseService** | MySQL operations     | mysql2/promise                           | Connection management, query execution, schema discovery    |
+| **AIService**       | AI/ML integration    | OpenAI API                               | Semantic search, query optimization, result categorization  |
+| **CacheService**    | Caching & analytics  | Redis/ioredis                            | Search caching, analytics storage, performance optimization |
+| **UserService**     | User management      | DatabaseService                          | User CRUD, password hashing, account management             |
+| **ApiKeyService**   | API key management   | DatabaseService                          | API key generation, validation, tiered permissions          |
 
 ## Detailed Service Documentation
 
@@ -44,7 +44,7 @@ graph LR
 
 The core search orchestration engine that coordinates multi-database searches with AI enhancements.
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - Orchestrate searches across multiple MySQL databases
 - Integrate AI-powered semantic search and query optimization
@@ -52,7 +52,7 @@ __Key Responsibilities:__
 - Generate search suggestions and trend insights
 - Transform raw database results into structured search responses
 
-__Code Highlights:__
+**Code Highlights:**
 
 - Complex async/await orchestration
 - Advanced caching strategies
@@ -63,7 +63,7 @@ __Code Highlights:__
 
 MySQL database connection management and query execution service.
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - Manage MySQL connection pools for multiple databases
 - Execute full-text search queries with optimization
@@ -71,7 +71,7 @@ __Key Responsibilities:__
 - Handle connection testing and health monitoring
 - Encrypt and store database credentials securely
 
-__Code Highlights:__
+**Code Highlights:**
 
 - Connection pooling and lifecycle management
 - Dynamic query building and parameterization
@@ -82,7 +82,7 @@ __Code Highlights:__
 
 OpenAI integration service for AI-enhanced search capabilities.
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - Process queries with semantic understanding
 - Generate intelligent search suggestions
@@ -90,7 +90,7 @@ __Key Responsibilities:__
 - Provide query optimization recommendations
 - Generate search trend insights and analytics
 
-__Code Highlights:__
+**Code Highlights:**
 
 - OpenAI API integration patterns
 - Prompt engineering and response processing
@@ -101,7 +101,7 @@ __Code Highlights:__
 
 Redis-based caching and analytics service for performance optimization.
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - Cache search results for improved performance
 - Store and retrieve search analytics data
@@ -109,7 +109,7 @@ __Key Responsibilities:__
 - Track user search patterns and behaviors
 - Provide real-time performance metrics
 
-__Code Highlights:__
+**Code Highlights:**
 
 - Redis data structures and operations
 - Cache invalidation strategies
@@ -120,14 +120,14 @@ __Code Highlights:__
 
 User management service handling account lifecycle and basic authentication.
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - User registration and profile management
 - Password hashing and authentication
 - User permission and role management
 - Account lifecycle operations
 
-__Code Highlights:__
+**Code Highlights:**
 
 - bcrypt password hashing patterns
 - User data validation and sanitization
@@ -137,7 +137,7 @@ __Code Highlights:__
 
 API key management service for B2B authentication and authorization.
 
-__Key Responsibilities:__
+**Key Responsibilities:**
 
 - Generate secure API keys with proper formatting
 - Validate API keys and extract user context
@@ -145,7 +145,7 @@ __Key Responsibilities:__
 - Implement tiered rate limiting and permissions
 - Track API key usage and analytics
 
-__Code Highlights:__
+**Code Highlights:**
 
 - Secure key generation and hashing
 - Prefix-based key lookup optimization
@@ -174,11 +174,11 @@ Services use structured error handling with custom error types:
 
 ```typescript
 try {
-  const results = await this.databaseService.executeSearch(query)
-  return results
+  const results = await this.databaseService.executeSearch(query);
+  return results;
 } catch (error) {
-  logger.error('Search failed:', error)
-  throw new AppError('SEARCH_FAILED', 'Search operation failed', 500)
+  logger.error('Search failed:', error);
+  throw new AppError('SEARCH_FAILED', 'Search operation failed', 500);
 }
 ```
 
@@ -188,12 +188,12 @@ Complex operations use Promise.allSettled for graceful failure handling:
 
 ```typescript
 const searchPromises = databases.map(async dbId => {
-  return this.executeSearchOnDatabase(dbId, query, options)
-})
+  return this.executeSearchOnDatabase(dbId, query, options);
+});
 
-const results = await Promise.allSettled(searchPromises)
-const successful = results.filter(r => r.status === 'fulfilled')
-const failed = results.filter(r => r.status === 'rejected')
+const results = await Promise.allSettled(searchPromises);
+const successful = results.filter(r => r.status === 'fulfilled');
+const failed = results.filter(r => r.status === 'rejected');
 ```
 
 ### Caching Strategy
@@ -202,14 +202,14 @@ Services implement intelligent caching with TTL and invalidation:
 
 ```typescript
 // Check cache first
-const cacheKey = this.generateCacheKey(request)
-const cached = await this.cacheService.get(cacheKey)
-if (cached) return cached
+const cacheKey = this.generateCacheKey(request);
+const cached = await this.cacheService.get(cacheKey);
+if (cached) return cached;
 
 // Execute operation and cache result
-const result = await this.performOperation(request)
-await this.cacheService.set(cacheKey, result, 300) // 5 min TTL
-return result
+const result = await this.performOperation(request);
+await this.cacheService.set(cacheKey, result, 300); // 5 min TTL
+return result;
 ```
 
 ## Testing Services
@@ -220,27 +220,27 @@ Each service has comprehensive unit tests with mocked dependencies:
 
 ```typescript
 describe('SearchService', () => {
-  let searchService: SearchService
-  let mockDatabaseService: jest.Mocked<DatabaseService>
-  let mockAIService: jest.Mocked<AIService>
-  let mockCacheService: jest.Mocked<CacheService>
+  let searchService: SearchService;
+  let mockDatabaseService: jest.Mocked<DatabaseService>;
+  let mockAIService: jest.Mocked<AIService>;
+  let mockCacheService: jest.Mocked<CacheService>;
 
   beforeEach(() => {
-    mockDatabaseService = createMockDatabaseService()
-    mockAIService = createMockAIService()
-    mockCacheService = createMockCacheService()
+    mockDatabaseService = createMockDatabaseService();
+    mockAIService = createMockAIService();
+    mockCacheService = createMockCacheService();
 
     searchService = new SearchService(
       mockDatabaseService,
       mockAIService,
       mockCacheService
-    )
-  })
+    );
+  });
 
   it('should perform search successfully', async () => {
     // Test implementation
-  })
-})
+  });
+});
 ```
 
 ### Integration Testing
@@ -249,15 +249,15 @@ Services are tested with real dependencies in integration tests:
 
 ```typescript
 describe('SearchService Integration', () => {
-  let searchService: SearchService
-  let databaseService: DatabaseService
+  let searchService: SearchService;
+  let databaseService: DatabaseService;
 
   beforeAll(async () => {
     // Setup real database connection for integration testing
-    databaseService = new DatabaseService()
+    databaseService = new DatabaseService();
     // ... other real services
-  })
-})
+  });
+});
 ```
 
 ## Service Metrics
@@ -291,29 +291,29 @@ Services communicate through well-defined interfaces:
 export class SearchService {
   async search(request: SearchRequest): Promise<SearchResponse> {
     // 1. Check cache
-    const cached = await this.cacheService.get(cacheKey)
-    if (cached) return cached
+    const cached = await this.cacheService.get(cacheKey);
+    if (cached) return cached;
 
     // 2. Process with AI (if enabled)
-    let processedQuery = request.query
+    let processedQuery = request.query;
     if (request.searchMode === 'semantic') {
-      const aiResult = await this.aiService.processQuery(request.query)
-      processedQuery = aiResult.optimizedQuery
+      const aiResult = await this.aiService.processQuery(request.query);
+      processedQuery = aiResult.optimizedQuery;
     }
 
     // 3. Execute database searches
     const results = await this.databaseService.executeSearch(
       processedQuery,
       request.databases
-    )
+    );
 
     // 4. Enhance results with AI
-    const categorized = await this.aiService.categorizeResults(results)
+    const categorized = await this.aiService.categorizeResults(results);
 
     // 5. Cache and return
-    const response = { results: categorized /* ... */ }
-    await this.cacheService.set(cacheKey, response, ttl)
-    return response
+    const response = { results: categorized /* ... */ };
+    await this.cacheService.set(cacheKey, response, ttl);
+    return response;
   }
 }
 ```
@@ -322,17 +322,17 @@ export class SearchService {
 
 When adding a new service:
 
-1. __Create interface__ defining the service contract
-2. __Implement service class__ with proper dependency injection
-3. __Add comprehensive tests__ (unit and integration)
-4. __Document the service__ following this template
-5. __Update service registration__ in the IoC container
+1. **Create interface** defining the service contract
+2. **Implement service class** with proper dependency injection
+3. **Add comprehensive tests** (unit and integration)
+4. **Document the service** following this template
+5. **Update service registration** in the IoC container
 
 ### Service Template
 
 ```typescript
 export interface INewService {
-  methodName(params: ParamType): Promise<ReturnType>
+  methodName(params: ParamType): Promise<ReturnType>;
 }
 
 export class NewService implements INewService {
@@ -344,10 +344,10 @@ export class NewService implements INewService {
   async methodName(params: ParamType): Promise<ReturnType> {
     try {
       // Implementation
-      return result
+      return result;
     } catch (error) {
-      logger.error('Operation failed:', error)
-      throw new AppError('OPERATION_FAILED', error.message)
+      logger.error('Operation failed:', error);
+      throw new AppError('OPERATION_FAILED', error.message);
     }
   }
 }
@@ -355,7 +355,7 @@ export class NewService implements INewService {
 
 ---
 
-__Next Steps:__
+**Next Steps:**
 
 - [Deep dive into SearchService](./search-service.md)
 - [Understanding DatabaseService](./database-service.md)

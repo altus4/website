@@ -26,11 +26,11 @@ graph TD
 
 ### Available Metrics
 
-- __Search Performance__ - Response times, success rates, error patterns
-- __Usage Analytics__ - Search volume, popular queries, user patterns
-- __Database Health__ - Connection status, query performance, index utilization
-- __AI Insights__ - Query categorization, trend analysis, optimization suggestions
-- __Business Intelligence__ - User engagement, feature adoption, growth metrics
+- **Search Performance** - Response times, success rates, error patterns
+- **Usage Analytics** - Search volume, popular queries, user patterns
+- **Database Health** - Connection status, query performance, index utilization
+- **AI Insights** - Query categorization, trend analysis, optimization suggestions
+- **Business Intelligence** - User engagement, feature adoption, growth metrics
 
 ## Analytics Endpoints
 
@@ -38,21 +38,21 @@ graph TD
 
 Get a comprehensive dashboard view of your search analytics.
 
-__Endpoint__: `GET /api/analytics/dashboard`
+**Endpoint**: `GET /api/analytics/dashboard`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `period` - Time period: `hour`, `day`, `week`, `month` (default: `day`)
 - `databases` - Comma-separated database IDs to filter
 - `timezone` - Timezone for date aggregation (default: `UTC`)
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -136,16 +136,16 @@ __Response__:
 
 Get detailed search trend analysis over time.
 
-__Endpoint__: `GET /api/analytics/trends`
+**Endpoint**: `GET /api/analytics/trends`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `period` - `hour`, `day`, `week`, `month` (default: `week`)
 - `limit` - Number of data points (default: 100)
 - `databases` - Filter by specific databases
 - `groupBy` - Group results by: `query`, `category`, `database`
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -216,15 +216,15 @@ __Response__:
 
 Get detailed performance analytics including response times, error rates, and resource utilization.
 
-__Endpoint__: `GET /api/analytics/performance`
+**Endpoint**: `GET /api/analytics/performance`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `period` - Time period for analysis
 - `breakdown` - Breakdown by: `endpoint`, `database`, `searchMode`
 - `includeErrors` - Include error analysis (default: true)
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -302,16 +302,16 @@ __Response__:
 
 Get the most popular search queries with detailed analytics.
 
-__Endpoint__: `GET /api/analytics/popular-queries`
+**Endpoint**: `GET /api/analytics/popular-queries`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `limit` - Number of queries to return (default: 50)
 - `period` - Time period for popularity calculation
 - `minCount` - Minimum search count to include
 - `category` - Filter by query category
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -373,15 +373,15 @@ __Response__:
 
 Get AI-powered insights and recommendations based on your search patterns.
 
-__Endpoint__: `GET /api/analytics/insights`
+**Endpoint**: `GET /api/analytics/insights`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `type` - Insight type: `performance`, `usage`, `optimization`, `trends`
 - `databases` - Filter by specific databases
 - `includeRecommendations` - Include actionable recommendations
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -481,9 +481,9 @@ __Response__:
 
 Get comprehensive system-wide analytics and health metrics.
 
-__Endpoint__: `GET /api/analytics/overview`
+**Endpoint**: `GET /api/analytics/overview`
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -525,7 +525,7 @@ __Response__:
         "searchModes": {
           "natural": 0.605,
           "semantic": 0.285,
-          "boolean": 0.110
+          "boolean": 0.11
         },
         "aiUtilization": 0.67,
         "cacheEfficiency": 0.851
@@ -545,15 +545,15 @@ __Response__:
 
 Get detailed user activity and engagement metrics.
 
-__Endpoint__: `GET /api/analytics/user-activity`
+**Endpoint**: `GET /api/analytics/user-activity`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `segment` - User segment: `all`, `active`, `power`, `casual`
 - `period` - Analysis period
 - `includeDetails` - Include detailed user breakdown
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -620,9 +620,9 @@ __Response__:
 
 Define custom metrics for tracking specific KPIs.
 
-__Endpoint__: `POST /api/analytics/custom-metrics`
+**Endpoint**: `POST /api/analytics/custom-metrics`
 
-__Request Body__:
+**Request Body**:
 
 ```json
 {
@@ -646,16 +646,16 @@ __Request Body__:
 
 Export analytics data in various formats for external analysis.
 
-__Endpoint__: `GET /api/analytics/export`
+**Endpoint**: `GET /api/analytics/export`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `format` - Export format: `csv`, `json`, `xlsx`
 - `metrics` - Comma-separated list of metrics to include
 - `dateRange` - Date range for export
 - `granularity` - Data granularity: `hour`, `day`, `week`
 
-__Response__: File download or structured data based on format
+**Response**: File download or structured data based on format
 
 ## Code Examples
 
@@ -664,102 +664,105 @@ __Response__: File download or structured data based on format
 ```javascript
 class Altus4Analytics {
   constructor(apiKey) {
-    this.apiKey = apiKey
-    this.baseUrl = 'https://api.altus4.dev'
+    this.apiKey = apiKey;
+    this.baseUrl = 'https://api.altus4.dev';
     this.headers = {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    }
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    };
   }
 
   async getDashboard(period = 'day', databases = null) {
-    const params = new URLSearchParams({ period })
-    if (databases) params.append('databases', databases.join(','))
+    const params = new URLSearchParams({ period });
+    if (databases) params.append('databases', databases.join(','));
 
     const response = await fetch(
       `${this.baseUrl}/api/analytics/dashboard?${params}`,
       { headers: this.headers }
-    )
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   async getSearchTrends(options = {}) {
     const params = new URLSearchParams({
       period: options.period || 'week',
       limit: options.limit || 100,
-      ...options
-    })
+      ...options,
+    });
 
     const response = await fetch(
       `${this.baseUrl}/api/analytics/trends?${params}`,
       { headers: this.headers }
-    )
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   async getPopularQueries(limit = 50, category = null) {
-    const params = new URLSearchParams({ limit })
-    if (category) params.append('category', category)
+    const params = new URLSearchParams({ limit });
+    if (category) params.append('category', category);
 
     const response = await fetch(
       `${this.baseUrl}/api/analytics/popular-queries?${params}`,
       { headers: this.headers }
-    )
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   async getInsights(type = 'all') {
-    const params = new URLSearchParams({ type })
+    const params = new URLSearchParams({ type });
 
     const response = await fetch(
       `${this.baseUrl}/api/analytics/insights?${params}`,
       { headers: this.headers }
-    )
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   async getPerformanceMetrics(period = 'day') {
     const params = new URLSearchParams({
       period,
       breakdown: 'endpoint,database,searchMode',
-      includeErrors: true
-    })
+      includeErrors: true,
+    });
 
     const response = await fetch(
       `${this.baseUrl}/api/analytics/performance?${params}`,
       { headers: this.headers }
-    )
+    );
 
-    return await response.json()
+    return await response.json();
   }
 }
 
 // Usage
-const analytics = new Altus4Analytics('altus4_sk_live_abc123...')
+const analytics = new Altus4Analytics('altus4_sk_live_abc123...');
 
 // Get dashboard overview
-const dashboard = await analytics.getDashboard('week', ['db_abc123'])
-console.log('Total searches:', dashboard.data.dashboard.overview.totalSearches)
+const dashboard = await analytics.getDashboard('week', ['db_abc123']);
+console.log('Total searches:', dashboard.data.dashboard.overview.totalSearches);
 
 // Get trending searches
 const trends = await analytics.getSearchTrends({
   period: 'month',
-  groupBy: 'category'
-})
+  groupBy: 'category',
+});
 
 // Get AI insights
-const insights = await analytics.getInsights('performance')
+const insights = await analytics.getInsights('performance');
 insights.data.insights.performanceInsights.forEach(insight => {
-  console.log(`${insight.title}: ${insight.recommendation.action}`)
-})
+  console.log(`${insight.title}: ${insight.recommendation.action}`);
+});
 
 // Monitor performance
-const performance = await analytics.getPerformanceMetrics('day')
-console.log('Average response time:', performance.data.performance.overview.averageResponseTime)
+const performance = await analytics.getPerformanceMetrics('day');
+console.log(
+  'Average response time:',
+  performance.data.performance.overview.averageResponseTime
+);
 ```
 
 ### Python Analytics Dashboard
@@ -869,25 +872,25 @@ print(f"Cache Hit Rate: {report['cache_hit_rate']:.1%}")
 
 ### Performance Monitoring
 
-1. __Set Baselines__: Establish performance baselines for response times and success rates
-2. __Monitor Trends__: Track week-over-week and month-over-month changes
-3. __Alert Thresholds__: Set up alerts for degraded performance
-4. __Regular Reviews__: Schedule weekly analytics reviews
+1. **Set Baselines**: Establish performance baselines for response times and success rates
+2. **Monitor Trends**: Track week-over-week and month-over-month changes
+3. **Alert Thresholds**: Set up alerts for degraded performance
+4. **Regular Reviews**: Schedule weekly analytics reviews
 
 ### Data-Driven Optimization
 
-1. __Query Analysis__: Regularly review popular queries and optimize accordingly
-2. __Database Performance__: Monitor database-specific metrics and optimize slow queries
-3. __User Behavior__: Understand user patterns to improve search experience
-4. __A/B Testing__: Use analytics to measure impact of search improvements
+1. **Query Analysis**: Regularly review popular queries and optimize accordingly
+2. **Database Performance**: Monitor database-specific metrics and optimize slow queries
+3. **User Behavior**: Understand user patterns to improve search experience
+4. **A/B Testing**: Use analytics to measure impact of search improvements
 
 ### Reporting Strategy
 
-1. __Stakeholder Dashboards__: Create role-specific analytics dashboards
-2. __Automated Reports__: Set up scheduled reports for key metrics
-3. __Historical Analysis__: Maintain historical data for trend analysis
-4. __Data Export__: Regularly export data for deeper analysis
+1. **Stakeholder Dashboards**: Create role-specific analytics dashboards
+2. **Automated Reports**: Set up scheduled reports for key metrics
+3. **Historical Analysis**: Maintain historical data for trend analysis
+4. **Data Export**: Regularly export data for deeper analysis
 
 ---
 
-__Next Steps__: [Error Handling](./errors.md) | [Rate Limiting](./rate-limiting.md)
+**Next Steps**: [Error Handling](./errors.md) | [Rate Limiting](./rate-limiting.md)

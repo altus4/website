@@ -15,12 +15,12 @@ The UserService manages user accounts, authentication, and profile operations. I
 
 The UserService handles:
 
-- __User Registration__ - Secure user account creation with validation and verification
-- __Authentication__ - Password-based login with security measures
-- __Profile Management__ - User profile updates, preferences, and account settings
-- __Password Security__ - Secure password hashing, validation, and reset functionality
-- __Account Lifecycle__ - Account activation, deactivation, and deletion
-- __Audit Logging__ - Comprehensive logging of user actions for security and compliance
+- **User Registration** - Secure user account creation with validation and verification
+- **Authentication** - Password-based login with security measures
+- **Profile Management** - User profile updates, preferences, and account settings
+- **Password Security** - Secure password hashing, validation, and reset functionality
+- **Account Lifecycle** - Account activation, deactivation, and deletion
+- **Audit Logging** - Comprehensive logging of user actions for security and compliance
 
 ### Architecture
 
@@ -34,27 +34,34 @@ export class UserService {
   ) {}
 
   // Core User Methods
-  async createUser(userData: CreateUserRequest): Promise<User>
-  async getUserById(userId: string): Promise<User | null>
-  async getUserByEmail(email: string): Promise<User | null>
-  async updateUser(userId: string, updates: UpdateUserRequest): Promise<User>
-  async deleteUser(userId: string): Promise<void>
-  
+  async createUser(userData: CreateUserRequest): Promise<User>;
+  async getUserById(userId: string): Promise<User | null>;
+  async getUserByEmail(email: string): Promise<User | null>;
+  async updateUser(userId: string, updates: UpdateUserRequest): Promise<User>;
+  async deleteUser(userId: string): Promise<void>;
+
   // Authentication Methods
-  async authenticateUser(email: string, password: string): Promise<AuthResult>
-  async hashPassword(password: string): Promise<string>
-  async validatePassword(password: string, hash: string): Promise<boolean>
-  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void>
-  
+  async authenticateUser(email: string, password: string): Promise<AuthResult>;
+  async hashPassword(password: string): Promise<string>;
+  async validatePassword(password: string, hash: string): Promise<boolean>;
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string
+  ): Promise<void>;
+
   // Profile Management
-  async updateProfile(userId: string, profile: UserProfile): Promise<void>
-  async getProfile(userId: string): Promise<UserProfile | null>
-  async updatePreferences(userId: string, preferences: UserPreferences): Promise<void>
-  
+  async updateProfile(userId: string, profile: UserProfile): Promise<void>;
+  async getProfile(userId: string): Promise<UserProfile | null>;
+  async updatePreferences(
+    userId: string,
+    preferences: UserPreferences
+  ): Promise<void>;
+
   // Security Methods
-  async lockAccount(userId: string, reason: string): Promise<void>
-  async unlockAccount(userId: string): Promise<void>
-  async logSecurityEvent(userId: string, event: SecurityEvent): Promise<void>
+  async lockAccount(userId: string, reason: string): Promise<void>;
+  async unlockAccount(userId: string): Promise<void>;
+  async logSecurityEvent(userId: string, event: SecurityEvent): Promise<void>;
 }
 ```
 
@@ -115,23 +122,23 @@ interface UserSecurity {
 
 async createUser(userData: CreateUserRequest): Promise<User> {
   const startTime = Date.now()
-  
+
   try {
     // Validate user data
     await this.validateUserData(userData)
-    
+
     // Check if user already exists
     const existingUser = await this.getUserByEmail(userData.email)
     if (existingUser) {
       throw new AppError('USER_ALREADY_EXISTS', 'User with this email already exists')
     }
-    
+
     // Hash password securely
     const passwordHash = await this.hashPassword(userData.password)
-    
+
     // Generate user ID
     const userId = this.generateUserId()
-    
+
     // Create user object
     const user: User = {
       id: userId,
@@ -163,10 +170,10 @@ async createUser(userData: CreateUserRequest): Promise<User> {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-    
+
     // Save user to database
     await this.saveUser(user)
-    
+
     // Log user creation event
     await this.logSecurityEvent(userId, {
       type: 'user_created',
@@ -176,16 +183,16 @@ async createUser(userData: CreateUserRequest): Promise<User> {
         registrationSource: userData.metadata?.source || 'web'
       }
     })
-    
+
     const operationTime = Date.now() - startTime
     this.logger.info('User created successfully', {
       userId,
       email: userData.email,
       operationTime
     })
-    
+
     return user
-    
+
   } catch (error) {
     const operationTime = Date.now() - startTime
     this.logger.error('User creation failed', {
@@ -199,32 +206,32 @@ async createUser(userData: CreateUserRequest): Promise<User> {
 
 private async validateUserData(userData: CreateUserRequest): Promise<void> {
   const errors: string[] = []
-  
+
   // Email validation
   if (!userData.email || !this.isValidEmail(userData.email)) {
     errors.push('Invalid email address')
   }
-  
+
   // Password validation
   const passwordValidation = this.validatePasswordStrength(userData.password)
   if (!passwordValidation.valid) {
     errors.push(...passwordValidation.errors)
   }
-  
+
   // Name validation
   if (!userData.name || userData.name.trim().length < 2) {
     errors.push('Name must be at least 2 characters')
   }
-  
+
   if (userData.name.trim().length > 100) {
     errors.push('Name must be less than 100 characters')
   }
-  
+
   // Company validation (if provided)
   if (userData.company && userData.company.trim().length > 100) {
     errors.push('Company name must be less than 100 characters')
   }
-  
+
   if (errors.length > 0) {
     throw new AppError('VALIDATION_ERROR', `Validation failed: ${errors.join(', ')}`)
   }
@@ -237,40 +244,40 @@ private isValidEmail(email: string): boolean {
 
 private validatePasswordStrength(password: string): { valid: boolean; errors: string[] } {
   const errors: string[] = []
-  
+
   if (!password) {
     return { valid: false, errors: ['Password is required'] }
   }
-  
+
   if (password.length < 8) {
     errors.push('Password must be at least 8 characters')
   }
-  
+
   if (password.length > 128) {
     errors.push('Password must be less than 128 characters')
   }
-  
+
   if (!/[a-z]/.test(password)) {
     errors.push('Password must contain at least one lowercase letter')
   }
-  
+
   if (!/[A-Z]/.test(password)) {
     errors.push('Password must contain at least one uppercase letter')
   }
-  
+
   if (!/[0-9]/.test(password)) {
     errors.push('Password must contain at least one number')
   }
-  
+
   if (!/[^a-zA-Z0-9]/.test(password)) {
     errors.push('Password must contain at least one special character')
   }
-  
+
   // Check for common passwords
   if (this.isCommonPassword(password)) {
     errors.push('Password is too common, please choose a more unique password')
   }
-  
+
   return { valid: errors.length === 0, errors }
 }
 ```
@@ -315,7 +322,7 @@ enum SecurityEventType {
 
 async authenticateUser(email: string, password: string, metadata?: AuthMetadata): Promise<AuthResult> {
   const startTime = Date.now()
-  
+
   try {
     // Get user by email
     const user = await this.getUserByEmail(email)
@@ -326,7 +333,7 @@ async authenticateUser(email: string, password: string, metadata?: AuthMetadata)
         reason: 'Invalid email or password'
       }
     }
-    
+
     // Check account status
     if (!user.status.active) {
       await this.logFailedLogin(email, 'account_inactive', metadata)
@@ -335,7 +342,7 @@ async authenticateUser(email: string, password: string, metadata?: AuthMetadata)
         reason: 'Account is inactive'
       }
     }
-    
+
     if (user.status.locked) {
       await this.logFailedLogin(email, 'account_locked', metadata)
       return {
@@ -344,7 +351,7 @@ async authenticateUser(email: string, password: string, metadata?: AuthMetadata)
         lockoutRemaining: this.calculateLockoutRemaining(user)
       }
     }
-    
+
     // Check for rate limiting
     if (await this.isRateLimited(user.id, metadata?.ipAddress)) {
       await this.logFailedLogin(email, 'rate_limited', metadata)
@@ -353,7 +360,7 @@ async authenticateUser(email: string, password: string, metadata?: AuthMetadata)
         reason: 'Too many login attempts, please try again later'
       }
     }
-    
+
     // Validate password
     const validPassword = await this.validatePassword(password, user.security.passwordHash)
     if (!validPassword) {
@@ -363,7 +370,7 @@ async authenticateUser(email: string, password: string, metadata?: AuthMetadata)
         reason: 'Invalid email or password'
       }
     }
-    
+
     // Check if two-factor authentication is required
     if (user.security.twoFactorEnabled) {
       return {
@@ -372,22 +379,22 @@ async authenticateUser(email: string, password: string, metadata?: AuthMetadata)
         reason: 'Two-factor authentication required'
       }
     }
-    
+
     // Successful authentication
     await this.handleSuccessfulLogin(user, metadata)
-    
+
     const operationTime = Date.now() - startTime
     this.logger.info('User authenticated successfully', {
       userId: user.id,
       email: user.email,
       operationTime
     })
-    
+
     return {
       success: true,
       user: this.sanitizeUserForResponse(user)
     }
-    
+
   } catch (error) {
     const operationTime = Date.now() - startTime
     this.logger.error('Authentication failed', {
@@ -395,7 +402,7 @@ async authenticateUser(email: string, password: string, metadata?: AuthMetadata)
       email,
       operationTime
     })
-    
+
     return {
       success: false,
       reason: 'Authentication service error'
@@ -407,14 +414,14 @@ async hashPassword(password: string): Promise<string> {
   try {
     const saltRounds = this.config.security.bcryptRounds || 12
     const hash = await bcrypt.hash(password, saltRounds)
-    
+
     this.logger.debug('Password hashed successfully', {
       saltRounds,
       hashLength: hash.length
     })
-    
+
     return hash
-    
+
   } catch (error) {
     this.logger.error('Password hashing failed', { error })
     throw new AppError('PASSWORD_HASH_FAILED', 'Failed to hash password')
@@ -424,14 +431,14 @@ async hashPassword(password: string): Promise<string> {
 async validatePassword(password: string, hash: string): Promise<boolean> {
   try {
     const isValid = await bcrypt.compare(password, hash)
-    
+
     this.logger.debug('Password validation completed', {
       isValid,
       hashLength: hash.length
     })
-    
+
     return isValid
-    
+
   } catch (error) {
     this.logger.error('Password validation failed', { error })
     return false
@@ -442,16 +449,16 @@ private async handleFailedLogin(user: User, metadata?: AuthMetadata): Promise<vo
   // Increment failed login attempts
   user.security.failedLoginAttempts += 1
   user.security.lastFailedLoginAt = new Date()
-  
+
   // Lock account if too many failed attempts
   const maxAttempts = this.config.security.maxFailedLoginAttempts || 5
   if (user.security.failedLoginAttempts >= maxAttempts) {
     await this.lockAccount(user.id, 'Too many failed login attempts')
   }
-  
+
   // Update user security info
   await this.updateUserSecurity(user.id, user.security)
-  
+
   // Log security event
   await this.logSecurityEvent(user.id, {
     type: SecurityEventType.LOGIN_FAILED,
@@ -470,13 +477,13 @@ private async handleSuccessfulLogin(user: User, metadata?: AuthMetadata): Promis
   user.security.failedLoginAttempts = 0
   user.security.lastFailedLoginAt = undefined
   user.lastLoginAt = new Date()
-  
+
   // Update user info
   await this.updateUser(user.id, {
     lastLoginAt: user.lastLoginAt,
     security: user.security
   })
-  
+
   // Log security event
   await this.logSecurityEvent(user.id, {
     type: SecurityEventType.LOGIN_SUCCESS,
@@ -544,17 +551,17 @@ interface SearchPreferences {
 
 async updateProfile(userId: string, profileData: Partial<UserProfile>): Promise<void> {
   const startTime = Date.now()
-  
+
   try {
     // Get current user
     const user = await this.getUserById(userId)
     if (!user) {
       throw new AppError('USER_NOT_FOUND', 'User not found')
     }
-    
+
     // Validate profile data
     await this.validateProfileData(profileData)
-    
+
     // Update profile
     const updatedProfile: UserProfile = {
       ...user.profile,
@@ -562,19 +569,19 @@ async updateProfile(userId: string, profileData: Partial<UserProfile>): Promise<
       // Ensure email changes go through proper verification
       email: user.profile.email // Don't allow direct email changes
     }
-    
+
     // Handle special cases
     if (profileData.avatar) {
       updatedProfile.avatar = await this.processAvatarUpload(profileData.avatar)
     }
-    
+
     if (profileData.website) {
       updatedProfile.website = this.normalizeUrl(profileData.website)
     }
-    
+
     // Update user in database
     await this.updateUser(userId, { profile: updatedProfile })
-    
+
     // Log profile update
     await this.logSecurityEvent(userId, {
       type: SecurityEventType.PROFILE_UPDATED,
@@ -583,14 +590,14 @@ async updateProfile(userId: string, profileData: Partial<UserProfile>): Promise<
         updatedFields: Object.keys(profileData)
       }
     })
-    
+
     const operationTime = Date.now() - startTime
     this.logger.info('Profile updated successfully', {
       userId,
       updatedFields: Object.keys(profileData),
       operationTime
     })
-    
+
   } catch (error) {
     const operationTime = Date.now() - startTime
     this.logger.error('Profile update failed', {
@@ -609,21 +616,21 @@ async updatePreferences(userId: string, preferences: Partial<UserPreferences>): 
     if (!user) {
       throw new AppError('USER_NOT_FOUND', 'User not found')
     }
-    
+
     // Validate preferences
     await this.validatePreferences(preferences)
-    
+
     // Deep merge preferences
     const updatedPreferences: UserPreferences = this.deepMerge(user.preferences, preferences)
-    
+
     // Update user preferences
     await this.updateUser(userId, { preferences: updatedPreferences })
-    
+
     this.logger.info('User preferences updated', {
       userId,
       updatedPreferences: Object.keys(preferences)
     })
-    
+
   } catch (error) {
     this.logger.error('Preferences update failed', { error, userId })
     throw error
@@ -632,7 +639,7 @@ async updatePreferences(userId: string, preferences: Partial<UserPreferences>): 
 
 private async validateProfileData(profileData: Partial<UserProfile>): Promise<void> {
   const errors: string[] = []
-  
+
   if (profileData.name !== undefined) {
     if (!profileData.name || profileData.name.trim().length < 2) {
       errors.push('Name must be at least 2 characters')
@@ -641,21 +648,21 @@ private async validateProfileData(profileData: Partial<UserProfile>): Promise<vo
       errors.push('Name must be less than 100 characters')
     }
   }
-  
+
   if (profileData.bio !== undefined && profileData.bio.length > 500) {
     errors.push('Bio must be less than 500 characters')
   }
-  
+
   if (profileData.website !== undefined && profileData.website) {
     if (!this.isValidUrl(profileData.website)) {
       errors.push('Invalid website URL')
     }
   }
-  
+
   if (profileData.location !== undefined && profileData.location.length > 100) {
     errors.push('Location must be less than 100 characters')
   }
-  
+
   if (errors.length > 0) {
     throw new AppError('VALIDATION_ERROR', `Profile validation failed: ${errors.join(', ')}`)
   }
@@ -725,17 +732,17 @@ async lockAccount(userId: string, reason: string, duration?: number): Promise<vo
     if (!user) {
       throw new AppError('USER_NOT_FOUND', 'User not found')
     }
-    
+
     const lockDuration = duration || this.config.security.accountLockoutDuration || 1800000 // 30 minutes
     const lockExpiration = new Date(Date.now() + lockDuration)
-    
+
     // Update user status
     user.status.locked = true
     user.status.lockReason = reason
     user.status.lockedAt = new Date()
-    
+
     await this.updateUser(userId, { status: user.status })
-    
+
     // Schedule automatic unlock if duration is specified
     if (lockDuration > 0) {
       setTimeout(async () => {
@@ -746,7 +753,7 @@ async lockAccount(userId: string, reason: string, duration?: number): Promise<vo
         }
       }, lockDuration)
     }
-    
+
     // Log security event
     await this.logSecurityEvent(userId, {
       type: SecurityEventType.ACCOUNT_LOCKED,
@@ -756,14 +763,14 @@ async lockAccount(userId: string, reason: string, duration?: number): Promise<vo
         lockExpiration: lockExpiration.toISOString()
       }
     })
-    
+
     this.logger.warn('Account locked', {
       userId,
       reason,
       lockDuration,
       lockExpiration
     })
-    
+
   } catch (error) {
     this.logger.error('Failed to lock account', { error, userId, reason })
     throw error
@@ -776,31 +783,31 @@ async unlockAccount(userId: string): Promise<void> {
     if (!user) {
       throw new AppError('USER_NOT_FOUND', 'User not found')
     }
-    
+
     if (!user.status.locked) {
       return // Already unlocked
     }
-    
+
     // Reset security status
     user.status.locked = false
     user.status.lockReason = undefined
     user.status.lockedAt = undefined
     user.security.failedLoginAttempts = 0
     user.security.lastFailedLoginAt = undefined
-    
-    await this.updateUser(userId, { 
+
+    await this.updateUser(userId, {
       status: user.status,
       security: user.security
     })
-    
+
     // Log security event
     await this.logSecurityEvent(userId, {
       type: SecurityEventType.ACCOUNT_UNLOCKED,
       description: 'Account unlocked'
     })
-    
+
     this.logger.info('Account unlocked', { userId })
-    
+
   } catch (error) {
     this.logger.error('Failed to unlock account', { error, userId })
     throw error
@@ -808,8 +815,8 @@ async unlockAccount(userId: string): Promise<void> {
 }
 
 async changePassword(
-  userId: string, 
-  currentPassword: string, 
+  userId: string,
+  currentPassword: string,
   newPassword: string
 ): Promise<void> {
   try {
@@ -817,7 +824,7 @@ async changePassword(
     if (!user) {
       throw new AppError('USER_NOT_FOUND', 'User not found')
     }
-    
+
     // Verify current password
     const validPassword = await this.validatePassword(currentPassword, user.security.passwordHash)
     if (!validPassword) {
@@ -827,39 +834,39 @@ async changePassword(
       })
       throw new AppError('INVALID_PASSWORD', 'Current password is incorrect')
     }
-    
+
     // Validate new password
     const passwordValidation = this.validatePasswordStrength(newPassword)
     if (!passwordValidation.valid) {
       throw new AppError('VALIDATION_ERROR', `Password validation failed: ${passwordValidation.errors.join(', ')}`)
     }
-    
+
     // Check password history (prevent reuse)
     if (await this.isPasswordReused(userId, newPassword)) {
       throw new AppError('PASSWORD_REUSED', 'Cannot reuse recent passwords')
     }
-    
+
     // Hash new password
     const newPasswordHash = await this.hashPassword(newPassword)
-    
+
     // Update user security
     user.security.passwordHash = newPasswordHash
     user.security.passwordChangedAt = new Date()
     user.security.failedLoginAttempts = 0
-    
+
     await this.updateUser(userId, { security: user.security })
-    
+
     // Store password in history for reuse prevention
     await this.addPasswordToHistory(userId, newPasswordHash)
-    
+
     // Log security event
     await this.logSecurityEvent(userId, {
       type: SecurityEventType.PASSWORD_CHANGED,
       description: 'Password changed successfully'
     })
-    
+
     this.logger.info('Password changed successfully', { userId })
-    
+
   } catch (error) {
     this.logger.error('Password change failed', { error, userId })
     throw error
@@ -872,7 +879,7 @@ async deleteUser(userId: string, reason?: string): Promise<void> {
     if (!user) {
       throw new AppError('USER_NOT_FOUND', 'User not found')
     }
-    
+
     // Soft delete - mark as inactive and anonymize sensitive data
     const deletedUser = {
       ...user,
@@ -892,18 +899,18 @@ async deleteUser(userId: string, reason?: string): Promise<void> {
         avatar: null
       }
     }
-    
+
     await this.updateUser(userId, deletedUser)
-    
+
     // Log deletion event
     await this.logSecurityEvent(userId, {
       type: 'user_deleted',
       description: `User account deleted: ${reason || 'User request'}`,
       metadata: { reason }
     })
-    
+
     this.logger.info('User deleted', { userId, reason })
-    
+
   } catch (error) {
     this.logger.error('User deletion failed', { error, userId })
     throw error
@@ -943,22 +950,22 @@ async logSecurityEvent(userId: string, event: Omit<SecurityEvent, 'id' | 'userId
       timestamp: event.timestamp || new Date(),
       severity: this.determineSeverity(event.type)
     }
-    
+
     // Store in database
     await this.storeSecurityEvent(securityEvent)
-    
+
     // Alert on high/critical events
     if (securityEvent.severity === 'high' || securityEvent.severity === 'critical') {
       await this.alertSecurityTeam(securityEvent)
     }
-    
+
     this.logger.info('Security event logged', {
       eventId: securityEvent.id,
       userId,
       type: event.type,
       severity: securityEvent.severity
     })
-    
+
   } catch (error) {
     this.logger.error('Failed to log security event', { error, userId, eventType: event.type })
   }
@@ -975,12 +982,12 @@ private determineSeverity(eventType: SecurityEventType): 'low' | 'medium' | 'hig
     [SecurityEventType.PROFILE_UPDATED]: 'low',
     [SecurityEventType.PERMISSIONS_CHANGED]: 'high'
   }
-  
+
   return severityMap[eventType] || 'medium'
 }
 
 async getSecurityEvents(
-  userId: string, 
+  userId: string,
   options: {
     limit?: number
     offset?: number
@@ -993,9 +1000,9 @@ async getSecurityEvents(
     const query = this.buildSecurityEventQuery(userId, options)
     const events = await this.querySecurityEvents(query)
     const total = await this.countSecurityEvents(query)
-    
+
     return { events, total }
-    
+
   } catch (error) {
     this.logger.error('Failed to get security events', { error, userId })
     throw new AppError('SECURITY_EVENTS_RETRIEVAL_FAILED', error.message)
@@ -1009,93 +1016,100 @@ async getSecurityEvents(
 
 ```typescript
 describe('UserService', () => {
-  let userService: UserService
-  let mockDatabaseService: jest.Mocked<DatabaseService>
-  let mockEncryptionService: jest.Mocked<EncryptionService>
-  let mockLogger: jest.Mocked<Logger>
-  
+  let userService: UserService;
+  let mockDatabaseService: jest.Mocked<DatabaseService>;
+  let mockEncryptionService: jest.Mocked<EncryptionService>;
+  let mockLogger: jest.Mocked<Logger>;
+
   beforeEach(() => {
     mockDatabaseService = {
       query: jest.fn(),
-      transaction: jest.fn()
-    }
-    
+      transaction: jest.fn(),
+    };
+
     mockEncryptionService = {
       encrypt: jest.fn(),
-      decrypt: jest.fn()
-    }
-    
+      decrypt: jest.fn(),
+    };
+
     mockLogger = {
       info: jest.fn(),
       error: jest.fn(),
       debug: jest.fn(),
-      warn: jest.fn()
-    }
-    
+      warn: jest.fn(),
+    };
+
     userService = new UserService(
       mockDatabaseService,
       mockEncryptionService,
       mockLogger,
       testConfig
-    )
-  })
-  
+    );
+  });
+
   describe('createUser', () => {
     it('should create user with valid data', async () => {
       const userData: CreateUserRequest = {
         email: 'test@example.com',
         password: 'SecurePassword123!',
-        name: 'Test User'
-      }
-      
-      mockDatabaseService.query.mockResolvedValue([])
-      
-      const user = await userService.createUser(userData)
-      
-      expect(user).toHaveProperty('id')
-      expect(user.email).toBe(userData.email.toLowerCase())
-      expect(user.name).toBe(userData.name)
-      expect(user.status.active).toBe(true)
-    })
-    
+        name: 'Test User',
+      };
+
+      mockDatabaseService.query.mockResolvedValue([]);
+
+      const user = await userService.createUser(userData);
+
+      expect(user).toHaveProperty('id');
+      expect(user.email).toBe(userData.email.toLowerCase());
+      expect(user.name).toBe(userData.name);
+      expect(user.status.active).toBe(true);
+    });
+
     it('should throw error for duplicate email', async () => {
       const userData: CreateUserRequest = {
         email: 'test@example.com',
         password: 'SecurePassword123!',
-        name: 'Test User'
-      }
-      
-      mockDatabaseService.query.mockResolvedValue([{ id: 'existing-user' }])
-      
-      await expect(userService.createUser(userData))
-        .rejects.toThrow('USER_ALREADY_EXISTS')
-    })
-  })
-  
+        name: 'Test User',
+      };
+
+      mockDatabaseService.query.mockResolvedValue([{ id: 'existing-user' }]);
+
+      await expect(userService.createUser(userData)).rejects.toThrow(
+        'USER_ALREADY_EXISTS'
+      );
+    });
+  });
+
   describe('authenticateUser', () => {
     it('should authenticate user with valid credentials', async () => {
-      const mockUser = createMockUser()
-      mockDatabaseService.query.mockResolvedValue([mockUser])
-      jest.spyOn(userService, 'validatePassword').mockResolvedValue(true)
-      
-      const result = await userService.authenticateUser('test@example.com', 'password')
-      
-      expect(result.success).toBe(true)
-      expect(result.user).toBeDefined()
-    })
-    
+      const mockUser = createMockUser();
+      mockDatabaseService.query.mockResolvedValue([mockUser]);
+      jest.spyOn(userService, 'validatePassword').mockResolvedValue(true);
+
+      const result = await userService.authenticateUser(
+        'test@example.com',
+        'password'
+      );
+
+      expect(result.success).toBe(true);
+      expect(result.user).toBeDefined();
+    });
+
     it('should fail authentication for invalid password', async () => {
-      const mockUser = createMockUser()
-      mockDatabaseService.query.mockResolvedValue([mockUser])
-      jest.spyOn(userService, 'validatePassword').mockResolvedValue(false)
-      
-      const result = await userService.authenticateUser('test@example.com', 'wrongpassword')
-      
-      expect(result.success).toBe(false)
-      expect(result.reason).toBe('Invalid email or password')
-    })
-  })
-})
+      const mockUser = createMockUser();
+      mockDatabaseService.query.mockResolvedValue([mockUser]);
+      jest.spyOn(userService, 'validatePassword').mockResolvedValue(false);
+
+      const result = await userService.authenticateUser(
+        'test@example.com',
+        'wrongpassword'
+      );
+
+      expect(result.success).toBe(false);
+      expect(result.reason).toBe('Invalid email or password');
+    });
+  });
+});
 ```
 
 ## Configuration and Best Practices
@@ -1105,40 +1119,40 @@ describe('UserService', () => {
 ```typescript
 interface UserConfig {
   security: {
-    bcryptRounds: number
-    maxFailedLoginAttempts: number
-    accountLockoutDuration: number
-    passwordMinLength: number
-    passwordMaxAge: number
-    sessionTimeout: number
-    requireEmailVerification: boolean
-    enableTwoFactor: boolean
-  }
+    bcryptRounds: number;
+    maxFailedLoginAttempts: number;
+    accountLockoutDuration: number;
+    passwordMinLength: number;
+    passwordMaxAge: number;
+    sessionTimeout: number;
+    requireEmailVerification: boolean;
+    enableTwoFactor: boolean;
+  };
   validation: {
-    allowedEmailDomains?: string[]
-    blockedEmailDomains?: string[]
-    requireStrongPasswords: boolean
-    allowPasswordReset: boolean
-  }
+    allowedEmailDomains?: string[];
+    blockedEmailDomains?: string[];
+    requireStrongPasswords: boolean;
+    allowPasswordReset: boolean;
+  };
   features: {
-    enableRegistration: boolean
-    enableProfileUpdates: boolean
-    enableAccountDeletion: boolean
-    enableSecurityLogging: boolean
-  }
+    enableRegistration: boolean;
+    enableProfileUpdates: boolean;
+    enableAccountDeletion: boolean;
+    enableSecurityLogging: boolean;
+  };
 }
 ```
 
 ### Best Practices
 
-1. __Password Security__: Use strong hashing (bcrypt) with appropriate salt rounds
-2. __Input Validation__: Validate and sanitize all user inputs
-3. __Rate Limiting__: Implement login attempt rate limiting
-4. __Security Logging__: Log all security-relevant events
-5. __Account Lockout__: Implement progressive account lockout policies
-6. __Data Privacy__: Follow data protection regulations (GDPR, CCPA)
-7. __Session Management__: Implement secure session handling
+1. **Password Security**: Use strong hashing (bcrypt) with appropriate salt rounds
+2. **Input Validation**: Validate and sanitize all user inputs
+3. **Rate Limiting**: Implement login attempt rate limiting
+4. **Security Logging**: Log all security-relevant events
+5. **Account Lockout**: Implement progressive account lockout policies
+6. **Data Privacy**: Follow data protection regulations (GDPR, CCPA)
+7. **Session Management**: Implement secure session handling
 
 ---
 
-__The UserService provides secure and comprehensive user account management, forming the foundation for authentication and user experience in Altus 4.__
+**The UserService provides secure and comprehensive user account management, forming the foundation for authentication and user experience in Altus 4.**

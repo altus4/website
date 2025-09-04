@@ -15,15 +15,15 @@ Thank you for your interest in contributing to Altus 4! This guide will help you
 
 Before contributing, ensure you have:
 
-- __Node.js 18+__ with npm 8+
-- __MySQL 8.0+__ for database operations
-- __Redis 6.0+__ for caching
-- __Git__ for version control
-- __IDE__ with TypeScript support (VS Code recommended)
+- **Node.js 18+** with npm 8+
+- **MySQL 8.0+** for database operations
+- **Redis 6.0+** for caching
+- **Git** for version control
+- **IDE** with TypeScript support (VS Code recommended)
 
 ### Development Environment Setup
 
-1. __Fork the Repository__
+1. **Fork the Repository**
 
 ```bash
 # Fork the repository on GitHub, then clone your fork
@@ -34,7 +34,7 @@ cd altus4
 git remote add upstream https://github.com/altus4/core.git
 ```
 
-2. __Install Dependencies__
+2. **Install Dependencies**
 
 ```bash
 # Install project dependencies
@@ -44,7 +44,7 @@ npm install
 npm install -g typescript ts-node nodemon
 ```
 
-3. __Environment Configuration__
+3. **Environment Configuration**
 
 ```bash
 # Copy environment template
@@ -54,7 +54,7 @@ cp .env.example .env.development
 # Edit .env.development with your local settings
 ```
 
-4. __Database Setup__
+4. **Database Setup**
 
 ```bash
 # Create development database
@@ -66,7 +66,7 @@ mysql -u root -p -e "GRANT ALL PRIVILEGES ON altus4_dev.* TO 'altus4_dev'@'local
 npm run migrate:dev
 ```
 
-5. __Verify Setup__
+5. **Verify Setup**
 
 ```bash
 # Run tests to ensure everything is working
@@ -83,13 +83,13 @@ curl http://localhost:3000/health
 
 ### Branch Strategy
 
-We use __GitFlow__ with the following branch structure:
+We use **GitFlow** with the following branch structure:
 
-- __`main`__ - Production-ready code
-- __`develop`__ - Integration branch for features
-- __`feature/*`__ - Feature development branches
-- __`hotfix/*`__ - Critical production fixes
-- __`release/*`__ - Release preparation branches
+- **`main`** - Production-ready code
+- **`develop`** - Integration branch for features
+- **`feature/*`** - Feature development branches
+- **`hotfix/*`** - Critical production fixes
+- **`release/*`** - Release preparation branches
 
 ### Creating a Feature Branch
 
@@ -111,7 +111,7 @@ git push origin feature/your-feature-name
 
 ### Commit Message Format
 
-We follow __Conventional Commits__ specification:
+We follow **Conventional Commits** specification:
 
 ```
 type(scope): description
@@ -121,7 +121,7 @@ type(scope): description
 [optional footer]
 ```
 
-__Types:__
+**Types:**
 
 - `feat`: New feature
 - `fix`: Bug fix
@@ -133,7 +133,7 @@ __Types:__
 - `perf`: Performance improvements
 - `ci`: CI/CD changes
 
-__Examples:__
+**Examples:**
 
 ```bash
 feat(search): add AI-powered semantic search mode
@@ -150,10 +150,10 @@ refactor(database): improve connection pool management
 ```typescript
 // Use explicit types for public APIs
 interface SearchRequest {
-  query: string
-  databases: string[]
-  searchMode?: 'natural' | 'boolean' | 'semantic'
-  limit?: number
+  query: string;
+  databases: string[];
+  searchMode?: 'natural' | 'boolean' | 'semantic';
+  limit?: number;
 }
 
 // Use proper error handling
@@ -161,23 +161,23 @@ export class SearchService {
   async search(request: SearchRequest): Promise<SearchResponse> {
     try {
       // Validate input
-      this.validateRequest(request)
+      this.validateRequest(request);
 
       // Execute search
-      const results = await this.executeSearch(request)
+      const results = await this.executeSearch(request);
 
-      return { success: true, data: results }
+      return { success: true, data: results };
     } catch (error) {
-      this.logger.error('Search failed', { request, error })
-      throw new AppError('Search operation failed', 500)
+      this.logger.error('Search failed', { request, error });
+      throw new AppError('Search operation failed', 500);
     }
   }
 }
 
 // Use descriptive naming
 const isValidQuery = (query: string): boolean => {
-  return query.trim().length > 0 && query.length <= 1000
-}
+  return query.trim().length > 0 && query.length <= 1000;
+};
 ```
 
 #### Code Style
@@ -188,26 +188,28 @@ const searchResults = await searchService.search({
   query: 'mysql performance optimization',
   databases: ['tech-docs-db'],
   searchMode: 'semantic',
-  limit: 20
-})
+  limit: 20,
+});
 
 // Use meaningful variable names
-const authenticatedUser = await userService.getUserById(userId)
-const searchExecutionTime = Date.now() - startTime
+const authenticatedUser = await userService.getUserById(userId);
+const searchExecutionTime = Date.now() - startTime;
 
 // Prefer async/await over Promises
 // Good
 async function fetchUserData(userId: string): Promise<User> {
-  const user = await userRepository.findById(userId)
-  const profile = await profileService.getProfile(userId)
-  return { ...user, profile }
+  const user = await userRepository.findById(userId);
+  const profile = await profileService.getProfile(userId);
+  return { ...user, profile };
 }
 
 // Avoid
 function fetchUserDataBad(userId: string): Promise<User> {
-  return userRepository.findById(userId)
-    .then(user => profileService.getProfile(userId)
-      .then(profile => ({ ...user, profile })))
+  return userRepository
+    .findById(userId)
+    .then(user =>
+      profileService.getProfile(userId).then(profile => ({ ...user, profile }))
+    );
 }
 ```
 
@@ -220,34 +222,34 @@ All contributions must include appropriate tests:
 ```typescript
 // tests/unit/services/SearchService.test.ts
 describe('SearchService', () => {
-  let searchService: SearchService
-  let mockDatabaseService: jest.Mocked<DatabaseService>
+  let searchService: SearchService;
+  let mockDatabaseService: jest.Mocked<DatabaseService>;
 
   beforeEach(() => {
-    mockDatabaseService = createMockDatabaseService()
-    searchService = new SearchService(mockDatabaseService)
-  })
+    mockDatabaseService = createMockDatabaseService();
+    searchService = new SearchService(mockDatabaseService);
+  });
 
   it('should execute search with valid parameters', async () => {
     // Arrange
     const request = {
       query: 'test query',
       databases: ['db-1'],
-      userId: 'user-1'
-    }
+      userId: 'user-1',
+    };
 
     mockDatabaseService.executeFullTextSearch.mockResolvedValue([
-      { id: 1, title: 'Test Result', content: 'Test content' }
-    ])
+      { id: 1, title: 'Test Result', content: 'Test content' },
+    ]);
 
     // Act
-    const result = await searchService.search(request)
+    const result = await searchService.search(request);
 
     // Assert
-    expect(result.results).toHaveLength(1)
-    expect(result.results[0].data.title).toBe('Test Result')
-  })
-})
+    expect(result.results).toHaveLength(1);
+    expect(result.results[0].data.title).toBe('Test Result');
+  });
+});
 ```
 
 #### Integration Tests
@@ -261,21 +263,21 @@ describe('Search API', () => {
       .set('Authorization', `Bearer ${testApiKey}`)
       .send({
         query: 'mysql performance',
-        databases: [testDatabaseId]
+        databases: [testDatabaseId],
       })
-      .expect(200)
+      .expect(200);
 
-    expect(response.body.success).toBe(true)
-    expect(response.body.data.results).toBeInstanceOf(Array)
-  })
-})
+    expect(response.body.success).toBe(true);
+    expect(response.body.data.results).toBeInstanceOf(Array);
+  });
+});
 ```
 
 ### Documentation Requirements
 
 #### Code Documentation
 
-```typescript
+````typescript
 /**
  * Execute a full-text search across specified databases with AI enhancements.
  *
@@ -303,13 +305,13 @@ describe('Search API', () => {
 async search(request: SearchRequest): Promise<SearchResponse> {
   // Implementation
 }
-```
+````
 
 #### API Documentation
 
 Update API documentation when adding new endpoints:
 
-```markdown
+````markdown
 ## Search Endpoint
 
 Execute a search across connected databases.
@@ -317,6 +319,7 @@ Execute a search across connected databases.
 **Endpoint**: `POST /api/v1/search`
 
 **Request Body**:
+
 ```json
 {
   "query": "mysql performance optimization",
@@ -325,8 +328,9 @@ Execute a search across connected databases.
   "limit": 20
 }
 ```
+````
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -339,7 +343,7 @@ __Response__:
 }
 ```
 
-```
+````
 
 ## Pull Request Process
 
@@ -359,16 +363,16 @@ npm test
 
 # Check test coverage
 npm run test:coverage
-```
+````
 
-2. __Update Documentation__
+2. **Update Documentation**
 
 - Update relevant documentation files
 - Add JSDoc comments for new functions
 - Update API documentation if applicable
 - Add examples for new features
 
-3. __Verify Changes__
+3. **Verify Changes**
 
 ```bash
 # Build the project
@@ -383,31 +387,35 @@ npm run dev
 
 ### Submitting a Pull Request
 
-1. __Create Pull Request__
+1. **Create Pull Request**
 
 - Go to your fork on GitHub
 - Click "New Pull Request"
 - Select `develop` as the base branch
 - Provide a clear title and description
 
-2. __Pull Request Template__
+2. **Pull Request Template**
 
 ```markdown
 ## Description
+
 Brief description of changes made.
 
 ## Type of Change
+
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] Manual testing completed
 
 ## Checklist
+
 - [ ] Code follows project style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated
@@ -415,7 +423,7 @@ Brief description of changes made.
 - [ ] No new linting errors
 ```
 
-3. __Review Process__
+3. **Review Process**
 
 - Automated checks must pass (CI/CD)
 - At least one maintainer review required
@@ -426,19 +434,19 @@ Brief description of changes made.
 
 #### For Contributors
 
-- __Respond Promptly__: Address review feedback within 48 hours
-- __Be Open to Feedback__: Consider suggestions constructively
-- __Explain Decisions__: Provide context for implementation choices
-- __Keep PRs Focused__: One feature/fix per PR
-- __Update Documentation__: Ensure docs reflect changes
+- **Respond Promptly**: Address review feedback within 48 hours
+- **Be Open to Feedback**: Consider suggestions constructively
+- **Explain Decisions**: Provide context for implementation choices
+- **Keep PRs Focused**: One feature/fix per PR
+- **Update Documentation**: Ensure docs reflect changes
 
 #### For Reviewers
 
-- __Be Constructive__: Provide helpful, actionable feedback
-- __Focus on Code Quality__: Check for bugs, performance, maintainability
-- __Verify Tests__: Ensure adequate test coverage
-- __Check Documentation__: Verify docs are updated
-- __Consider Security__: Look for potential security issues
+- **Be Constructive**: Provide helpful, actionable feedback
+- **Focus on Code Quality**: Check for bugs, performance, maintainability
+- **Verify Tests**: Ensure adequate test coverage
+- **Check Documentation**: Verify docs are updated
+- **Consider Security**: Look for potential security issues
 
 ## Issue Reporting
 
@@ -451,6 +459,7 @@ Use the bug report template:
 Clear description of the bug.
 
 **Steps to Reproduce**
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
@@ -463,6 +472,7 @@ What you expected to happen.
 What actually happened.
 
 **Environment**
+
 - OS: [e.g. macOS 12.0]
 - Node.js version: [e.g. 18.17.0]
 - Altus 4 version: [e.g. 0.2.0]
@@ -498,19 +508,19 @@ Any other context or screenshots.
 
 ```typescript
 // Use efficient algorithms and data structures
-const resultMap = new Map<string, SearchResult>()
+const resultMap = new Map<string, SearchResult>();
 for (const result of results) {
-  resultMap.set(result.id, result)
+  resultMap.set(result.id, result);
 }
 
 // Avoid unnecessary database queries
-const userIds = results.map(r => r.userId)
-const users = await userService.getUsersByIds(userIds) // Batch query
+const userIds = results.map(r => r.userId);
+const users = await userService.getUsersByIds(userIds); // Batch query
 
 // Use appropriate caching
-const cacheKey = `search:${hash(request)}`
-const cached = await cache.get(cacheKey)
-if (cached) return cached
+const cacheKey = `search:${hash(request)}`;
+const cached = await cache.get(cacheKey);
+if (cached) return cached;
 ```
 
 ### Security Best Practices
@@ -519,33 +529,33 @@ if (cached) return cached
 // Always validate input
 const validateSearchRequest = (request: SearchRequest): void => {
   if (!request.query?.trim()) {
-    throw new ValidationError('Query is required')
+    throw new ValidationError('Query is required');
   }
 
   if (request.query.length > 1000) {
-    throw new ValidationError('Query too long')
+    throw new ValidationError('Query too long');
   }
 
   // Check for SQL injection patterns
-  const dangerousPatterns = [/union\s+select/i, /drop\s+table/i]
+  const dangerousPatterns = [/union\s+select/i, /drop\s+table/i];
   if (dangerousPatterns.some(pattern => pattern.test(request.query))) {
-    throw new ValidationError('Invalid query format')
+    throw new ValidationError('Invalid query format');
   }
-}
+};
 
 // Use parameterized queries
 const results = await connection.execute(
   'SELECT * FROM articles WHERE MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)',
   [query]
-)
+);
 
 // Sanitize output
 const sanitizeHtml = (text: string): string => {
   return text
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}
+    .replace(/"/g, '&quot;');
+};
 ```
 
 ### Error Handling
@@ -554,8 +564,8 @@ const sanitizeHtml = (text: string): string => {
 // Use specific error types
 export class ValidationError extends AppError {
   constructor(message: string, field?: string) {
-    super(message, 400, 'VALIDATION_ERROR')
-    this.field = field
+    super(message, 400, 'VALIDATION_ERROR');
+    this.field = field;
   }
 }
 
@@ -564,7 +574,7 @@ if (!databases.length) {
   throw new ValidationError(
     'At least one database must be specified for search',
     'databases'
-  )
+  );
 }
 
 // Log errors with context
@@ -572,8 +582,8 @@ this.logger.error('Search failed', {
   userId: request.userId,
   query: request.query,
   error: error.message,
-  stack: error.stack
-})
+  stack: error.stack,
+});
 ```
 
 ## Community Guidelines
@@ -582,41 +592,41 @@ this.logger.error('Search failed', {
 
 We are committed to providing a welcoming and inclusive environment:
 
-- __Be Respectful__: Treat everyone with respect and kindness
-- __Be Inclusive__: Welcome newcomers and help them learn
-- __Be Constructive__: Provide helpful feedback and suggestions
-- __Be Professional__: Maintain professional communication
-- __Be Patient__: Remember that everyone is learning
+- **Be Respectful**: Treat everyone with respect and kindness
+- **Be Inclusive**: Welcome newcomers and help them learn
+- **Be Constructive**: Provide helpful feedback and suggestions
+- **Be Professional**: Maintain professional communication
+- **Be Patient**: Remember that everyone is learning
 
 ### Communication Channels
 
-- __GitHub Issues__: Bug reports and feature requests
-- __GitHub Discussions__: General questions and discussions
-- __Pull Requests__: Code review and collaboration
-- __Documentation__: Contribute to docs and examples
+- **GitHub Issues**: Bug reports and feature requests
+- **GitHub Discussions**: General questions and discussions
+- **Pull Requests**: Code review and collaboration
+- **Documentation**: Contribute to docs and examples
 
 ### Recognition
 
 Contributors are recognized through:
 
-- __Contributors List__: Listed in README and documentation
-- __Release Notes__: Contributions mentioned in release notes
-- __Community Highlights__: Featured in community updates
+- **Contributors List**: Listed in README and documentation
+- **Release Notes**: Contributions mentioned in release notes
+- **Community Highlights**: Featured in community updates
 
 ## Getting Help
 
 ### Resources
 
-- __[Development Guide](./index.md)__ - Complete development setup
-- __[Testing Guide](./testing.md)__ - Testing strategies and examples
-- __[Code Standards](./standards.md)__ - Coding standards and best practices
-- __[API Documentation](../api/)__ - Complete API reference
+- **[Development Guide](./index.md)** - Complete development setup
+- **[Testing Guide](./testing.md)** - Testing strategies and examples
+- **[Code Standards](./standards.md)** - Coding standards and best practices
+- **[API Documentation](../api/)** - Complete API reference
 
 ### Support Channels
 
-- __GitHub Issues__: Technical questions and bug reports
-- __GitHub Discussions__: General questions and community support
-- __Documentation__: Comprehensive guides and examples
+- **GitHub Issues**: Technical questions and bug reports
+- **GitHub Discussions**: General questions and community support
+- **Documentation**: Comprehensive guides and examples
 
 ### Mentorship
 
@@ -629,4 +639,4 @@ New contributors can:
 
 ---
 
-__Thank you for contributing to Altus 4! Your contributions help make this project better for everyone. We appreciate your time and effort in improving the codebase, documentation, and community.__
+**Thank you for contributing to Altus 4! Your contributions help make this project better for everyone. We appreciate your time and effort in improving the codebase, documentation, and community.**

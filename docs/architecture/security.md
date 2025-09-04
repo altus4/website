@@ -55,11 +55,11 @@ graph TB
 
 ### Security Principles
 
-1. __Zero Trust Architecture__ - Never trust, always verify
-2. __Principle of Least Privilege__ - Minimal necessary permissions
-3. __Defense in Depth__ - Multiple security layers
-4. __Fail Secure__ - Secure defaults and failure modes
-5. __Security by Design__ - Built-in security from the ground up
+1. **Zero Trust Architecture** - Never trust, always verify
+2. **Principle of Least Privilege** - Minimal necessary permissions
+3. **Defense in Depth** - Multiple security layers
+4. **Fail Secure** - Secure defaults and failure modes
+5. **Security by Design** - Built-in security from the ground up
 
 ## Authentication System
 
@@ -83,17 +83,17 @@ Examples:
 export class ApiKeyService {
   async generateApiKey(environment: 'test' | 'live'): Promise<string> {
     // 1. Generate cryptographically secure random bytes
-    const randomBytes = crypto.randomBytes(32)
-    const randomString = randomBytes.toString('hex')
+    const randomBytes = crypto.randomBytes(32);
+    const randomString = randomBytes.toString('hex');
 
     // 2. Create formatted API key
-    const apiKey = `altus4_sk_${environment}_${randomString}`
+    const apiKey = `altus4_sk_${environment}_${randomString}`;
 
     // 3. Generate prefix for fast lookup
-    const prefix = apiKey.substring(0, 20) // "altus4_sk_live_abc12"
+    const prefix = apiKey.substring(0, 20); // "altus4_sk_live_abc12"
 
     // 4. Hash full key for secure storage
-    const keyHash = crypto.createHash('sha256').update(apiKey).digest('hex')
+    const keyHash = crypto.createHash('sha256').update(apiKey).digest('hex');
 
     // 5. Store only hash and prefix in database
     await this.storeApiKey({
@@ -101,9 +101,9 @@ export class ApiKeyService {
       keyHash,
       environment,
       // ... other metadata
-    })
+    });
 
-    return apiKey // Return only once to user
+    return apiKey; // Return only once to user
   }
 }
 ```
@@ -116,42 +116,43 @@ export class ApiKeyService {
     try {
       // 1. Validate key format
       if (!providedKey.startsWith('altus4_sk_')) {
-        return null
+        return null;
       }
 
       // 2. Extract prefix for fast lookup
-      const prefix = providedKey.substring(0, 20)
+      const prefix = providedKey.substring(0, 20);
 
       // 3. Hash provided key
-      const providedHash = crypto.createHash('sha256')
+      const providedHash = crypto
+        .createHash('sha256')
         .update(providedKey)
-        .digest('hex')
+        .digest('hex');
 
       // 4. Look up key by prefix (indexed lookup)
-      const storedKey = await this.getKeyByPrefix(prefix)
-      if (!storedKey) return null
+      const storedKey = await this.getKeyByPrefix(prefix);
+      if (!storedKey) return null;
 
       // 5. Constant-time hash comparison
       const isValid = crypto.timingSafeEqual(
         Buffer.from(storedKey.keyHash, 'hex'),
         Buffer.from(providedHash, 'hex')
-      )
+      );
 
-      if (!isValid) return null
+      if (!isValid) return null;
 
       // 6. Check key status and expiration
       if (!storedKey.isActive || this.isExpired(storedKey)) {
-        return null
+        return null;
       }
 
       // 7. Return validation result with user context
       return {
         apiKey: storedKey,
-        user: await this.getUserById(storedKey.userId)
-      }
+        user: await this.getUserById(storedKey.userId),
+      };
     } catch (error) {
-      this.logger.error('API key validation error:', error)
-      return null
+      this.logger.error('API key validation error:', error);
+      return null;
     }
   }
 }
@@ -159,13 +160,13 @@ export class ApiKeyService {
 
 #### Security Features
 
-1. __Secure Generation__: Cryptographically secure random number generation
-2. __Hash Storage__: Only SHA-256 hashes stored, never plaintext keys
-3. __Prefix Indexing__: Fast lookup without exposing full keys
-4. __Timing Attack Protection__: Constant-time comparisons
-5. __Environment Separation__: Test vs live key isolation
-6. __Expiration Support__: Optional key expiration dates
-7. __Usage Tracking__: Monitor for suspicious activity
+1. **Secure Generation**: Cryptographically secure random number generation
+2. **Hash Storage**: Only SHA-256 hashes stored, never plaintext keys
+3. **Prefix Indexing**: Fast lookup without exposing full keys
+4. **Timing Attack Protection**: Constant-time comparisons
+5. **Environment Separation**: Test vs live key isolation
+6. **Expiration Support**: Optional key expiration dates
+7. **Usage Tracking**: Monitor for suspicious activity
 
 ### Authentication Middleware
 
@@ -177,42 +178,46 @@ export const authenticateApiKey = async (
 ): Promise<void> => {
   try {
     // 1. Extract API key from Authorization header
-    const authHeader = req.headers.authorization
+    const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
-        error: { code: 'NO_API_KEY', message: 'Authorization header missing' }
-      })
+        error: { code: 'NO_API_KEY', message: 'Authorization header missing' },
+      });
     }
 
-    const apiKey = authHeader.substring(7) // Remove "Bearer "
+    const apiKey = authHeader.substring(7); // Remove "Bearer "
 
     // 2. Validate API key
-    const validation = await apiKeyService.validateApiKey(apiKey)
+    const validation = await apiKeyService.validateApiKey(apiKey);
     if (!validation) {
       return res.status(401).json({
         success: false,
-        error: { code: 'INVALID_API_KEY', message: 'Invalid or expired API key' }
-      })
+        error: {
+          code: 'INVALID_API_KEY',
+          message: 'Invalid or expired API key',
+        },
+      });
     }
 
     // 3. Add user context to request
-    req.user = validation.user
-    req.apiKey = validation.apiKey
+    req.user = validation.user;
+    req.apiKey = validation.apiKey;
 
     // 4. Update usage tracking (async)
-    apiKeyService.trackUsage(validation.apiKey.id, req.method, req.path)
-      .catch(error => logger.warn('Usage tracking failed:', error))
+    apiKeyService
+      .trackUsage(validation.apiKey.id, req.method, req.path)
+      .catch(error => logger.warn('Usage tracking failed:', error));
 
-    next()
+    next();
   } catch (error) {
-    logger.error('Authentication middleware error:', error)
+    logger.error('Authentication middleware error:', error);
     res.status(500).json({
       success: false,
-      error: { code: 'AUTH_ERROR', message: 'Authentication failed' }
-    })
+      error: { code: 'AUTH_ERROR', message: 'Authentication failed' },
+    });
   }
-}
+};
 ```
 
 ## Authorization System
@@ -225,38 +230,43 @@ Altus 4 uses a flexible permission-based authorization system:
 
 ```typescript
 interface ApiKey {
-  id: string
-  userId: string
-  permissions: Permission[]
-  rateLimitTier: 'free' | 'pro' | 'enterprise'
-  environment: 'test' | 'live'
+  id: string;
+  userId: string;
+  permissions: Permission[];
+  rateLimitTier: 'free' | 'pro' | 'enterprise';
+  environment: 'test' | 'live';
 }
 
 type Permission =
-  | 'search'           // Execute searches
-  | 'analytics'        // Access analytics data
-  | 'database:read'    // View database connections
-  | 'database:write'   // Manage database connections
-  | 'keys:read'        // View API keys
-  | 'keys:write'       // Manage API keys
-  | 'admin'            // Administrative access
+  | 'search' // Execute searches
+  | 'analytics' // Access analytics data
+  | 'database:read' // View database connections
+  | 'database:write' // Manage database connections
+  | 'keys:read' // View API keys
+  | 'keys:write' // Manage API keys
+  | 'admin'; // Administrative access
 ```
 
 #### Permission Enforcement
 
 ```typescript
 export const requirePermission = (permission: string) => {
-  return (req: ApiKeyAuthenticatedRequest, res: Response, next: NextFunction): void => {
+  return (
+    req: ApiKeyAuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ): void => {
     if (!req.apiKey) {
       return res.status(401).json({
         success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Authentication required' }
-      })
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+      });
     }
 
     // Check if user has required permission
-    const hasPermission = req.apiKey.permissions.includes(permission) ||
-                         req.apiKey.permissions.includes('admin')
+    const hasPermission =
+      req.apiKey.permissions.includes(permission) ||
+      req.apiKey.permissions.includes('admin');
 
     if (!hasPermission) {
       return res.status(403).json({
@@ -266,32 +276,36 @@ export const requirePermission = (permission: string) => {
           message: `Permission '${permission}' required`,
           details: {
             required: permission,
-            available: req.apiKey.permissions
-          }
-        }
-      })
+            available: req.apiKey.permissions,
+          },
+        },
+      });
     }
 
-    next()
-  }
-}
+    next();
+  };
+};
 ```
 
 #### Role-Based Access Control
 
 ```typescript
 export const requireRole = (role: 'admin' | 'user') => {
-  return (req: ApiKeyAuthenticatedRequest, res: Response, next: NextFunction): void => {
+  return (
+    req: ApiKeyAuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ): void => {
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Authentication required' }
-      })
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+      });
     }
 
     // Admin role has access to everything
     if (req.user.role === 'admin') {
-      return next()
+      return next();
     }
 
     // Check specific role requirement
@@ -301,32 +315,39 @@ export const requireRole = (role: 'admin' | 'user') => {
         error: {
           code: 'FORBIDDEN',
           message: `${role} role required`,
-          details: { required: role, current: req.user.role }
-        }
-      })
+          details: { required: role, current: req.user.role },
+        },
+      });
     }
 
-    next()
-  }
-}
+    next();
+  };
+};
 ```
 
 ### Resource-Level Authorization
 
 ```typescript
 export class DatabaseService {
-  async getUserDatabase(userId: string, databaseId: string): Promise<Database | null> {
+  async getUserDatabase(
+    userId: string,
+    databaseId: string
+  ): Promise<Database | null> {
     // Ensure user can only access their own databases
     const database = await this.databaseRepository.findOne({
       id: databaseId,
-      userId: userId // Critical: filter by user ID
-    })
+      userId: userId, // Critical: filter by user ID
+    });
 
     if (!database) {
-      throw new AppError('Database not found or access denied', 404, 'DATABASE_NOT_FOUND')
+      throw new AppError(
+        'Database not found or access denied',
+        404,
+        'DATABASE_NOT_FOUND'
+      );
     }
 
-    return database
+    return database;
   }
 }
 ```
@@ -339,11 +360,11 @@ Rate limits are enforced based on API key tiers:
 
 ```typescript
 interface RateLimitTier {
-  name: 'free' | 'pro' | 'enterprise'
-  requestsPerHour: number
-  requestsPerMinute: number
-  burstLimit: number
-  blockDuration: number // seconds
+  name: 'free' | 'pro' | 'enterprise';
+  requestsPerHour: number;
+  requestsPerMinute: number;
+  burstLimit: number;
+  blockDuration: number; // seconds
 }
 
 const RATE_LIMIT_TIERS: Record<string, RateLimitTier> = {
@@ -352,53 +373,56 @@ const RATE_LIMIT_TIERS: Record<string, RateLimitTier> = {
     requestsPerHour: 1000,
     requestsPerMinute: 50,
     burstLimit: 10,
-    blockDuration: 300 // 5 minutes
+    blockDuration: 300, // 5 minutes
   },
   pro: {
     name: 'pro',
     requestsPerHour: 10000,
     requestsPerMinute: 500,
     burstLimit: 50,
-    blockDuration: 60 // 1 minute
+    blockDuration: 60, // 1 minute
   },
   enterprise: {
     name: 'enterprise',
     requestsPerHour: 100000,
     requestsPerMinute: 5000,
     burstLimit: 200,
-    blockDuration: 30 // 30 seconds
-  }
-}
+    blockDuration: 30, // 30 seconds
+  },
+};
 ```
 
 ### Rate Limiting Implementation
 
 ```typescript
 export class RateLimiter {
-  private redis: Redis
+  private redis: Redis;
 
-  async checkRateLimit(apiKeyId: string, tier: string): Promise<RateLimitResult> {
-    const limits = RATE_LIMIT_TIERS[tier]
-    const now = Date.now()
-    const hourWindow = Math.floor(now / (60 * 60 * 1000))
-    const minuteWindow = Math.floor(now / (60 * 1000))
+  async checkRateLimit(
+    apiKeyId: string,
+    tier: string
+  ): Promise<RateLimitResult> {
+    const limits = RATE_LIMIT_TIERS[tier];
+    const now = Date.now();
+    const hourWindow = Math.floor(now / (60 * 60 * 1000));
+    const minuteWindow = Math.floor(now / (60 * 1000));
 
     // Use Redis pipeline for atomic operations
-    const pipeline = this.redis.pipeline()
+    const pipeline = this.redis.pipeline();
 
     // Check hourly limit
-    const hourKey = `rate_limit:${apiKeyId}:hour:${hourWindow}`
-    pipeline.incr(hourKey)
-    pipeline.expire(hourKey, 3600)
+    const hourKey = `rate_limit:${apiKeyId}:hour:${hourWindow}`;
+    pipeline.incr(hourKey);
+    pipeline.expire(hourKey, 3600);
 
     // Check minute limit
-    const minuteKey = `rate_limit:${apiKeyId}:minute:${minuteWindow}`
-    pipeline.incr(minuteKey)
-    pipeline.expire(minuteKey, 60)
+    const minuteKey = `rate_limit:${apiKeyId}:minute:${minuteWindow}`;
+    pipeline.incr(minuteKey);
+    pipeline.expire(minuteKey, 60);
 
-    const results = await pipeline.exec()
-    const hourlyCount = results[0][1] as number
-    const minuteCount = results[2][1] as number
+    const results = await pipeline.exec();
+    const hourlyCount = results[0][1] as number;
+    const minuteCount = results[2][1] as number;
 
     // Check limits
     if (hourlyCount > limits.requestsPerHour) {
@@ -406,8 +430,8 @@ export class RateLimiter {
         allowed: false,
         reason: 'hourly_limit_exceeded',
         resetTime: new Date((hourWindow + 1) * 60 * 60 * 1000),
-        remaining: 0
-      }
+        remaining: 0,
+      };
     }
 
     if (minuteCount > limits.requestsPerMinute) {
@@ -415,8 +439,8 @@ export class RateLimiter {
         allowed: false,
         reason: 'minute_limit_exceeded',
         resetTime: new Date((minuteWindow + 1) * 60 * 1000),
-        remaining: 0
-      }
+        remaining: 0,
+      };
     }
 
     return {
@@ -424,8 +448,8 @@ export class RateLimiter {
       remaining: Math.min(
         limits.requestsPerHour - hourlyCount,
         limits.requestsPerMinute - minuteCount
-      )
-    }
+      ),
+    };
   }
 }
 ```
@@ -434,27 +458,30 @@ export class RateLimiter {
 
 ```typescript
 export class AbuseDetector {
-  async detectSuspiciousActivity(apiKeyId: string, request: Request): Promise<boolean> {
+  async detectSuspiciousActivity(
+    apiKeyId: string,
+    request: Request
+  ): Promise<boolean> {
     const suspicious = await Promise.all([
       this.checkRapidFireRequests(apiKeyId),
       this.checkUnusualQueryPatterns(request.body?.query),
       this.checkIPReputation(request.ip),
-      this.checkUserAgentAnomalies(request.headers['user-agent'])
-    ])
+      this.checkUserAgentAnomalies(request.headers['user-agent']),
+    ]);
 
-    return suspicious.some(Boolean)
+    return suspicious.some(Boolean);
   }
 
   private async checkRapidFireRequests(apiKeyId: string): Promise<boolean> {
-    const key = `abuse:rapid_fire:${apiKeyId}`
-    const count = await this.redis.incr(key)
-    await this.redis.expire(key, 10) // 10 second window
+    const key = `abuse:rapid_fire:${apiKeyId}`;
+    const count = await this.redis.incr(key);
+    await this.redis.expire(key, 10); // 10 second window
 
-    return count > 50 // More than 50 requests in 10 seconds
+    return count > 50; // More than 50 requests in 10 seconds
   }
 
   private async checkUnusualQueryPatterns(query?: string): Promise<boolean> {
-    if (!query) return false
+    if (!query) return false;
 
     // Check for SQL injection attempts
     const sqlInjectionPatterns = [
@@ -462,10 +489,10 @@ export class AbuseDetector {
       /drop\s+table/i,
       /delete\s+from/i,
       /insert\s+into/i,
-      /update\s+set/i
-    ]
+      /update\s+set/i,
+    ];
 
-    return sqlInjectionPatterns.some(pattern => pattern.test(query))
+    return sqlInjectionPatterns.some(pattern => pattern.test(query));
   }
 }
 ```
@@ -478,66 +505,70 @@ export class AbuseDetector {
 
 ```typescript
 export class EncryptionService {
-  private readonly algorithm = 'aes-256-gcm'
-  private readonly keyDerivation = 'pbkdf2'
+  private readonly algorithm = 'aes-256-gcm';
+  private readonly keyDerivation = 'pbkdf2';
 
-  async encryptCredentials(credentials: DatabaseCredentials): Promise<EncryptedCredentials> {
+  async encryptCredentials(
+    credentials: DatabaseCredentials
+  ): Promise<EncryptedCredentials> {
     // Generate random salt and IV
-    const salt = crypto.randomBytes(32)
-    const iv = crypto.randomBytes(16)
+    const salt = crypto.randomBytes(32);
+    const iv = crypto.randomBytes(16);
 
     // Derive encryption key from master key + salt
     const key = crypto.pbkdf2Sync(
       process.env.ENCRYPTION_KEY!,
       salt,
       100000, // iterations
-      32,     // key length
+      32, // key length
       'sha256'
-    )
+    );
 
     // Encrypt credentials
-    const cipher = crypto.createCipher(this.algorithm, key, iv)
+    const cipher = crypto.createCipher(this.algorithm, key, iv);
     const encrypted = Buffer.concat([
       cipher.update(JSON.stringify(credentials), 'utf8'),
-      cipher.final()
-    ])
+      cipher.final(),
+    ]);
 
-    const authTag = cipher.getAuthTag()
+    const authTag = cipher.getAuthTag();
 
     return {
       encryptedData: encrypted.toString('base64'),
       salt: salt.toString('base64'),
       iv: iv.toString('base64'),
       authTag: authTag.toString('base64'),
-      algorithm: this.algorithm
-    }
+      algorithm: this.algorithm,
+    };
   }
 
-  async decryptCredentials(encrypted: EncryptedCredentials): Promise<DatabaseCredentials> {
+  async decryptCredentials(
+    encrypted: EncryptedCredentials
+  ): Promise<DatabaseCredentials> {
     // Reconstruct encryption key
-    const salt = Buffer.from(encrypted.salt, 'base64')
+    const salt = Buffer.from(encrypted.salt, 'base64');
     const key = crypto.pbkdf2Sync(
       process.env.ENCRYPTION_KEY!,
       salt,
       100000,
       32,
       'sha256'
-    )
+    );
 
     // Decrypt credentials
-    const iv = Buffer.from(encrypted.iv, 'base64')
-    const authTag = Buffer.from(encrypted.authTag, 'base64')
-    const encryptedData = Buffer.from(encrypted.encryptedData, 'base64')
+    const iv = Buffer.from(encrypted.iv, 'base64');
+    const authTag = Buffer.from(encrypted.authTag, 'base64');
+    const encryptedData = Buffer.from(encrypted.encryptedData, 'base64');
 
-    const decipher = crypto.createDecipher(encrypted.algorithm, key, iv)
-    decipher.setAuthTag(authTag)
+    const decipher = crypto.createDecipher(encrypted.algorithm, key, iv);
+    decipher.setAuthTag(authTag);
 
     const decrypted = Buffer.concat([
       decipher.update(encryptedData),
-      decipher.final()
-    ])
+      decipher.final(),
+    ]);
 
-    return JSON.parse(decrypted.toString('utf8'))
+    return JSON.parse(decrypted.toString('utf8'));
   }
 }
 ```
@@ -548,36 +579,36 @@ export class EncryptionService {
 export class UserService {
   async createUser(userData: CreateUserRequest): Promise<User> {
     // Hash password with bcrypt
-    const saltRounds = 12
-    const passwordHash = await bcrypt.hash(userData.password, saltRounds)
+    const saltRounds = 12;
+    const passwordHash = await bcrypt.hash(userData.password, saltRounds);
 
     // Never store plaintext passwords
     const user = await this.userRepository.create({
       ...userData,
       password: passwordHash, // Store only hash
       // Remove plaintext password from memory
-      plainPassword: undefined
-    })
+      plainPassword: undefined,
+    });
 
     // Remove sensitive data from response
-    const { password, ...safeUser } = user
-    return safeUser as User
+    const { password, ...safeUser } = user;
+    return safeUser as User;
   }
 
   async authenticateUser(email: string, password: string): Promise<AuthResult> {
-    const user = await this.userRepository.findByEmail(email)
+    const user = await this.userRepository.findByEmail(email);
     if (!user) {
       // Prevent timing attacks - always hash even if user not found
-      await bcrypt.hash(password, 12)
-      throw new AppError('Invalid credentials', 401, 'INVALID_CREDENTIALS')
+      await bcrypt.hash(password, 12);
+      throw new AppError('Invalid credentials', 401, 'INVALID_CREDENTIALS');
     }
 
-    const isValid = await bcrypt.compare(password, user.password)
+    const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
-      throw new AppError('Invalid credentials', 401, 'INVALID_CREDENTIALS')
+      throw new AppError('Invalid credentials', 401, 'INVALID_CREDENTIALS');
     }
 
-    return { user: this.sanitizeUser(user) }
+    return { user: this.sanitizeUser(user) };
   }
 }
 ```
@@ -599,12 +630,12 @@ const httpsOptions = {
     'ECDHE-RSA-AES128-GCM-SHA256',
     'ECDHE-RSA-AES256-GCM-SHA384',
     'ECDHE-RSA-AES128-SHA256',
-    'ECDHE-RSA-AES256-SHA384'
+    'ECDHE-RSA-AES256-SHA384',
   ].join(':'),
-  honorCipherOrder: true
-}
+  honorCipherOrder: true,
+};
 
-const server = https.createServer(httpsOptions, app)
+const server = https.createServer(httpsOptions, app);
 ```
 
 #### Database Connection Security
@@ -623,14 +654,14 @@ const secureConnectionConfig = {
     key: fs.readFileSync('/path/to/client-key.pem'),
     cert: fs.readFileSync('/path/to/client-cert.pem'),
     rejectUnauthorized: true,
-    verifyServerCertificate: true
+    verifyServerCertificate: true,
   },
 
   // Connection security
   connectTimeout: 60000,
   acquireTimeout: 60000,
-  timeout: 60000
-}
+  timeout: 60000,
+};
 ```
 
 ## Input Validation & Sanitization
@@ -640,7 +671,8 @@ const secureConnectionConfig = {
 ```typescript
 // Comprehensive input validation with Zod
 const searchRequestSchema = z.object({
-  query: z.string()
+  query: z
+    .string()
     .min(1, 'Query cannot be empty')
     .max(1000, 'Query too long')
     .refine(query => {
@@ -649,26 +681,23 @@ const searchRequestSchema = z.object({
         /union\s+select/i,
         /drop\s+table/i,
         /delete\s+from/i,
-        /insert\s+into/i
-      ]
-      return !dangerousPatterns.some(pattern => pattern.test(query))
+        /insert\s+into/i,
+      ];
+      return !dangerousPatterns.some(pattern => pattern.test(query));
     }, 'Query contains potentially dangerous patterns'),
 
-  databases: z.array(z.string().uuid())
-    .max(10, 'Too many databases selected'),
+  databases: z.array(z.string().uuid()).max(10, 'Too many databases selected'),
 
-  searchMode: z.enum(['natural', 'boolean', 'semantic'])
-    .default('natural'),
+  searchMode: z.enum(['natural', 'boolean', 'semantic']).default('natural'),
 
-  limit: z.number()
+  limit: z
+    .number()
     .min(1, 'Limit must be at least 1')
     .max(100, 'Limit cannot exceed 100')
     .default(20),
 
-  offset: z.number()
-    .min(0, 'Offset cannot be negative')
-    .default(0)
-})
+  offset: z.number().min(0, 'Offset cannot be negative').default(0),
+});
 ```
 
 ### SQL Injection Prevention
@@ -685,35 +714,37 @@ export class DatabaseService {
     // Always use parameterized queries
     const sanitizedTables = tables
       .filter(table => /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(table)) // Validate table names
-      .map(table => mysql.escapeId(table)) // Escape identifiers
+      .map(table => mysql.escapeId(table)); // Escape identifiers
 
     if (sanitizedTables.length === 0) {
-      throw new AppError('No valid tables specified', 400, 'INVALID_TABLES')
+      throw new AppError('No valid tables specified', 400, 'INVALID_TABLES');
     }
 
     // Build safe query with parameterized values
-    const searchQueries = sanitizedTables.map(table => `
+    const searchQueries = sanitizedTables.map(
+      table => `
       SELECT *, '${table}' as source_table,
              MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE) as relevance
       FROM ${table}
       WHERE MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)
-    `)
+    `
+    );
 
     const unionQuery = `
       (${searchQueries.join(') UNION ALL (')})
       ORDER BY relevance DESC
       LIMIT ? OFFSET ?
-    `
+    `;
 
     // Execute with parameterized values
     const params = [
       ...searchQueries.flatMap(() => [query, query]), // Two params per query
       limit,
-      offset
-    ]
+      offset,
+    ];
 
-    const [results] = await this.executeQuery(databaseId, unionQuery, params)
-    return results as SearchResult[]
+    const [results] = await this.executeQuery(databaseId, unionQuery, params);
+    return results as SearchResult[];
   }
 }
 ```
@@ -728,34 +759,34 @@ export class ResponseSanitizer {
       // Sanitize text fields that might be displayed in UI
       title: this.sanitizeHtml(result.title),
       snippet: this.sanitizeHtml(result.snippet),
-      data: this.sanitizeObject(result.data)
-    }))
+      data: this.sanitizeObject(result.data),
+    }));
   }
 
   private static sanitizeHtml(text: string): string {
-    if (!text) return text
+    if (!text) return text;
 
     return text
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#x27;')
-      .replace(/\//g, '&#x2F;')
+      .replace(/\//g, '&#x2F;');
   }
 
   private static sanitizeObject(obj: any): any {
     if (typeof obj === 'string') {
-      return this.sanitizeHtml(obj)
+      return this.sanitizeHtml(obj);
     } else if (Array.isArray(obj)) {
-      return obj.map(item => this.sanitizeObject(item))
+      return obj.map(item => this.sanitizeObject(item));
     } else if (obj && typeof obj === 'object') {
-      const sanitized: any = {}
+      const sanitized: any = {};
       for (const [key, value] of Object.entries(obj)) {
-        sanitized[key] = this.sanitizeObject(value)
+        sanitized[key] = this.sanitizeObject(value);
       }
-      return sanitized
+      return sanitized;
     }
-    return obj
+    return obj;
   }
 }
 ```
@@ -766,7 +797,7 @@ export class ResponseSanitizer {
 
 ```typescript
 export class SecurityLogger {
-  private logger: Logger
+  private logger: Logger;
 
   constructor() {
     this.logger = winston.createLogger({
@@ -780,21 +811,24 @@ export class SecurityLogger {
       transports: [
         new winston.transports.File({
           filename: 'logs/security.log',
-          level: 'warn' // Only log security events
+          level: 'warn', // Only log security events
         }),
         new winston.transports.Console({
-          format: winston.format.simple()
-        })
-      ]
-    })
+          format: winston.format.simple(),
+        }),
+      ],
+    });
   }
 
-  logAuthenticationAttempt(result: 'success' | 'failure', details: {
-    apiKey?: string
-    ip: string
-    userAgent: string
-    endpoint: string
-  }): void {
+  logAuthenticationAttempt(
+    result: 'success' | 'failure',
+    details: {
+      apiKey?: string;
+      ip: string;
+      userAgent: string;
+      endpoint: string;
+    }
+  ): void {
     this.logger.warn('Authentication attempt', {
       event: 'auth_attempt',
       result,
@@ -802,8 +836,8 @@ export class SecurityLogger {
       userAgent: details.userAgent,
       endpoint: details.endpoint,
       apiKeyPrefix: details.apiKey?.substring(0, 20),
-      timestamp: new Date().toISOString()
-    })
+      timestamp: new Date().toISOString(),
+    });
   }
 
   logSuspiciousActivity(type: string, details: any): void {
@@ -811,8 +845,8 @@ export class SecurityLogger {
       event: 'suspicious_activity',
       type,
       details,
-      timestamp: new Date().toISOString()
-    })
+      timestamp: new Date().toISOString(),
+    });
   }
 
   logRateLimitExceeded(apiKeyId: string, ip: string, tier: string): void {
@@ -821,8 +855,8 @@ export class SecurityLogger {
       apiKeyId,
       ip,
       tier,
-      timestamp: new Date().toISOString()
-    })
+      timestamp: new Date().toISOString(),
+    });
   }
 }
 ```
@@ -831,7 +865,11 @@ export class SecurityLogger {
 
 ```typescript
 export class AuditLogger {
-  async logDatabaseAccess(userId: string, databaseId: string, action: string): Promise<void> {
+  async logDatabaseAccess(
+    userId: string,
+    databaseId: string,
+    action: string
+  ): Promise<void> {
     await this.auditRepository.create({
       userId,
       resourceType: 'database',
@@ -839,11 +877,15 @@ export class AuditLogger {
       action,
       timestamp: new Date(),
       ip: this.getCurrentIP(),
-      userAgent: this.getCurrentUserAgent()
-    })
+      userAgent: this.getCurrentUserAgent(),
+    });
   }
 
-  async logApiKeyOperation(userId: string, keyId: string, operation: string): Promise<void> {
+  async logApiKeyOperation(
+    userId: string,
+    keyId: string,
+    operation: string
+  ): Promise<void> {
     await this.auditRepository.create({
       userId,
       resourceType: 'api_key',
@@ -851,8 +893,8 @@ export class AuditLogger {
       action: operation,
       timestamp: new Date(),
       ip: this.getCurrentIP(),
-      userAgent: this.getCurrentUserAgent()
-    })
+      userAgent: this.getCurrentUserAgent(),
+    });
   }
 }
 ```
@@ -863,59 +905,70 @@ export class AuditLogger {
 
 ```typescript
 // Helmet.js security headers configuration
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"],
-      fontSrc: ["'self'"],
-      objectSrc: ["'none'"],
-      mediaSrc: ["'self'"],
-      frameSrc: ["'none'"],
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        connectSrc: ["'self'"],
+        fontSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        mediaSrc: ["'self'"],
+        frameSrc: ["'none'"],
+      },
     },
-  },
-  crossOriginEmbedderPolicy: false,
-  hsts: {
-    maxAge: 31536000,
-    includeSubDomains: true,
-    preload: true
-  }
-}))
+    crossOriginEmbedderPolicy: false,
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true,
+    },
+  })
+);
 
 // Additional security headers
 app.use((req, res, next) => {
-  res.setHeader('X-API-Version', '1.0')
-  res.setHeader('X-Rate-Limit-Policy', 'tiered')
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
-  next()
-})
+  res.setHeader('X-API-Version', '1.0');
+  res.setHeader('X-Rate-Limit-Policy', 'tiered');
+  res.setHeader(
+    'Strict-Transport-Security',
+    'max-age=31536000; includeSubDomains'
+  );
+  next();
+});
 ```
 
 ### CORS Configuration
 
 ```typescript
 // Secure CORS configuration
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, etc.)
-    if (!origin) return callback(null, true)
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, etc.)
+      if (!origin) return callback(null, true);
 
-    // Check against allowed origins
-    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || []
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true)
-    }
+      // Check against allowed origins
+      const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
 
-    callback(new Error('Not allowed by CORS'))
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset']
-}))
+      callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    exposedHeaders: [
+      'X-RateLimit-Limit',
+      'X-RateLimit-Remaining',
+      'X-RateLimit-Reset',
+    ],
+  })
+);
 ```
 
 ## Incident Response
@@ -924,12 +977,15 @@ app.use(cors({
 
 ```typescript
 export class IncidentDetector {
-  async detectSecurityIncident(events: SecurityEvent[]): Promise<SecurityIncident | null> {
+  async detectSecurityIncident(
+    events: SecurityEvent[]
+  ): Promise<SecurityIncident | null> {
     // Multiple failed authentication attempts
-    const failedAuths = events.filter(e =>
-      e.type === 'auth_failure' &&
-      e.timestamp > new Date(Date.now() - 5 * 60 * 1000) // Last 5 minutes
-    )
+    const failedAuths = events.filter(
+      e =>
+        e.type === 'auth_failure' &&
+        e.timestamp > new Date(Date.now() - 5 * 60 * 1000) // Last 5 minutes
+    );
 
     if (failedAuths.length > 10) {
       return {
@@ -937,22 +993,22 @@ export class IncidentDetector {
         severity: 'high',
         description: 'Multiple failed authentication attempts detected',
         affectedResources: failedAuths.map(e => e.ip),
-        recommendedActions: ['block_ip', 'notify_admin']
-      }
+        recommendedActions: ['block_ip', 'notify_admin'],
+      };
     }
 
     // Unusual API usage patterns
-    const apiCalls = events.filter(e => e.type === 'api_call')
+    const apiCalls = events.filter(e => e.type === 'api_call');
     if (this.detectAnomalousUsage(apiCalls)) {
       return {
         type: 'anomalous_usage',
         severity: 'medium',
         description: 'Unusual API usage patterns detected',
-        recommendedActions: ['monitor', 'rate_limit']
-      }
+        recommendedActions: ['monitor', 'rate_limit'],
+      };
     }
 
-    return null
+    return null;
   }
 }
 ```
@@ -963,30 +1019,30 @@ export class IncidentDetector {
 export class IncidentResponse {
   async handleSecurityIncident(incident: SecurityIncident): Promise<void> {
     // Log incident
-    this.securityLogger.logIncident(incident)
+    this.securityLogger.logIncident(incident);
 
     // Execute automated responses
     for (const action of incident.recommendedActions) {
       switch (action) {
         case 'block_ip':
-          await this.blockSuspiciousIPs(incident.affectedResources)
-          break
+          await this.blockSuspiciousIPs(incident.affectedResources);
+          break;
         case 'rate_limit':
-          await this.enforceStrictRateLimit(incident.affectedResources)
-          break
+          await this.enforceStrictRateLimit(incident.affectedResources);
+          break;
         case 'notify_admin':
-          await this.notifyAdministrators(incident)
-          break
+          await this.notifyAdministrators(incident);
+          break;
         case 'revoke_keys':
-          await this.revokeCompromisedKeys(incident.affectedResources)
-          break
+          await this.revokeCompromisedKeys(incident.affectedResources);
+          break;
       }
     }
   }
 
   private async blockSuspiciousIPs(ips: string[]): Promise<void> {
     for (const ip of ips) {
-      await this.redis.setex(`blocked_ip:${ip}`, 3600, 'security_incident')
+      await this.redis.setex(`blocked_ip:${ip}`, 3600, 'security_incident');
     }
   }
 }
@@ -996,31 +1052,31 @@ export class IncidentResponse {
 
 ### Development Security
 
-1. __Secure Coding Practices__
+1. **Secure Coding Practices**
    - Input validation on all user inputs
    - Parameterized queries for database operations
    - Proper error handling without information disclosure
    - Secure random number generation
 
-2. __Dependency Management__
+2. **Dependency Management**
    - Regular security audits with `npm audit`
    - Automated dependency updates
    - Vulnerability scanning in CI/CD pipeline
 
-3. __Secret Management__
+3. **Secret Management**
    - Environment variables for sensitive configuration
    - No hardcoded secrets in source code
    - Secret rotation procedures
 
 ### Deployment Security
 
-1. __Infrastructure Security__
+1. **Infrastructure Security**
    - Network segmentation and firewalls
    - Regular security patches and updates
    - Intrusion detection systems
    - Encrypted storage and backups
 
-2. __Monitoring and Alerting__
+2. **Monitoring and Alerting**
    - Real-time security monitoring
    - Automated incident response
    - Regular security assessments
@@ -1028,11 +1084,11 @@ export class IncidentResponse {
 
 ## Related Documentation
 
-- __[API Authentication Guide](../api/authentication.md)__ - API key setup and usage
-- __[Database Security](./database.md#security-considerations)__ - Database security measures
-- __[Deployment Security](../deployment/production.md#security)__ - Production security setup
-- __[Rate Limiting](../api/rate-limiting.md)__ - Rate limiting implementation
+- **[API Authentication Guide](../api/authentication.md)** - API key setup and usage
+- **[Database Security](./database.md#security-considerations)** - Database security measures
+- **[Deployment Security](../deployment/production.md#security)** - Production security setup
+- **[Rate Limiting](../api/rate-limiting.md)** - Rate limiting implementation
 
 ---
 
-__Security is paramount in Altus 4's design, with multiple layers of protection ensuring data integrity, user privacy, and system reliability.__
+**Security is paramount in Altus 4's design, with multiple layers of protection ensuring data integrity, user privacy, and system reliability.**

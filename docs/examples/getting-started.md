@@ -99,7 +99,7 @@ Response:
 }
 ```
 
-__Important:__ Save this API key securely. You won't be able to see it again.
+**Important:** Save this API key securely. You won't be able to see it again.
 
 ## Step 3: Connect Your Database
 
@@ -155,10 +155,10 @@ Response:
       {
         "name": "articles",
         "columns": [
-          {"name": "id", "type": "int", "searchable": false},
-          {"name": "title", "type": "varchar", "searchable": true},
-          {"name": "content", "type": "text", "searchable": true},
-          {"name": "created_at", "type": "datetime", "searchable": false}
+          { "name": "id", "type": "int", "searchable": false },
+          { "name": "title", "type": "varchar", "searchable": true },
+          { "name": "content", "type": "text", "searchable": true },
+          { "name": "created_at", "type": "datetime", "searchable": false }
         ],
         "fulltextIndexes": [
           {
@@ -323,15 +323,15 @@ Search across blog posts, pages, and documentation:
 const searchResults = await fetch('/api/v1/search', {
   method: 'POST',
   headers: {
-    'Authorization': 'Bearer your-api-key',
-    'Content-Type': 'application/json'
+    Authorization: 'Bearer your-api-key',
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     query: userInput,
     databases: ['cms_db'],
     mode: 'natural',
-    limit: 20
-  })
+    limit: 20,
+  }),
 });
 ```
 
@@ -375,21 +375,21 @@ curl -X POST https://api.altus4.com/api/v1/search \
 
 ## Next Steps
 
-1. __Explore API Reference__: Check out the complete [API documentation](/api/search) for all available endpoints and options.
+1. **Explore API Reference**: Check out the complete [API documentation](/api/search) for all available endpoints and options.
 
-2. __Optimize Your Database__: Review our [setup guide](../setup/index.md) to improve search performance.
+2. **Optimize Your Database**: Review our [setup guide](../setup/index.md) to improve search performance.
 
-3. __Set up Monitoring__: Configure [monitoring and analytics](/deployment/monitoring) to track search performance and usage patterns.
+3. **Set up Monitoring**: Configure [monitoring and analytics](/deployment/monitoring) to track search performance and usage patterns.
 
-4. __Upgrade Your Plan__: Consider upgrading to Pro or Enterprise for advanced features like semantic search and higher rate limits.
+4. **Upgrade Your Plan**: Consider upgrading to Pro or Enterprise for advanced features like semantic search and higher rate limits.
 
-5. __Integration Examples__: See language-specific integration examples in our [SDK guide](./sdk.md).
+5. **Integration Examples**: See language-specific integration examples in our [SDK guide](./sdk.md).
 
 ## Troubleshooting
 
 ### Common Issues
 
-__Connection Refused__
+**Connection Refused**
 
 ```json
 {
@@ -403,7 +403,7 @@ __Connection Refused__
 
 Solution: Check your database credentials and network connectivity.
 
-__Rate Limit Exceeded__
+**Rate Limit Exceeded**
 
 ```json
 {
@@ -417,7 +417,7 @@ __Rate Limit Exceeded__
 
 Solution: Implement request throttling or upgrade your plan.
 
-__No Search Results__
+**No Search Results**
 
 - Ensure your database has FULLTEXT indexes
 - Check that the search query matches your content

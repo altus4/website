@@ -15,11 +15,11 @@ The DatabaseService is responsible for managing MySQL database connections, exec
 
 The DatabaseService handles:
 
-- __Connection Management__ - Secure MySQL connection pooling and lifecycle management
-- __Query Execution__ - Full-text search query execution with optimization
-- __Schema Discovery__ - Database schema introspection and metadata extraction
-- __Security__ - Credential encryption and secure connection handling
-- __Health Monitoring__ - Connection health checks and performance monitoring
+- **Connection Management** - Secure MySQL connection pooling and lifecycle management
+- **Query Execution** - Full-text search query execution with optimization
+- **Schema Discovery** - Database schema introspection and metadata extraction
+- **Security** - Credential encryption and secure connection handling
+- **Health Monitoring** - Connection health checks and performance monitoring
 
 ### Architecture
 
@@ -31,16 +31,21 @@ export class DatabaseService {
   ) {}
 
   // Core Methods
-  async addDatabase(userId: string, config: DatabaseConfig): Promise<Database>
-  async removeDatabase(userId: string, databaseId: string): Promise<void>
-  async testConnection(config: DatabaseConfig): Promise<ConnectionTestResult>
-  async executeSearch(databaseId: string, query: SearchQuery): Promise<SearchResult[]>
-  async discoverSchema(databaseId: string): Promise<DatabaseSchema>
-  
+  async addDatabase(userId: string, config: DatabaseConfig): Promise<Database>;
+  async removeDatabase(userId: string, databaseId: string): Promise<void>;
+  async testConnection(config: DatabaseConfig): Promise<ConnectionTestResult>;
+  async executeSearch(
+    databaseId: string,
+    query: SearchQuery
+  ): Promise<SearchResult[]>;
+  async discoverSchema(databaseId: string): Promise<DatabaseSchema>;
+
   // Connection Management
-  private async createConnection(config: DatabaseConfig): Promise<mysql.Connection>
-  private async getConnectionPool(databaseId: string): Promise<mysql.Pool>
-  private async releaseConnection(connection: mysql.Connection): Promise<void>
+  private async createConnection(
+    config: DatabaseConfig
+  ): Promise<mysql.Connection>;
+  private async getConnectionPool(databaseId: string): Promise<mysql.Pool>;
+  private async releaseConnection(connection: mysql.Connection): Promise<void>;
 }
 ```
 
@@ -76,14 +81,14 @@ async addDatabase(userId: string, config: DatabaseConfig): Promise<Database> {
   try {
     // Validate configuration
     this.validateDatabaseConfig(config)
-    
+
     // Test connection before saving
     await this.testConnection(config)
-    
+
     // Encrypt sensitive credentials
     const encryptedPassword = await this.encryptionService.encrypt(config.password)
     const encryptedSSL = config.ssl ? await this.encryptionService.encrypt(JSON.stringify(config.ssl)) : null
-    
+
     // Save to database
     const database = await this.saveDatabaseConfig({
       ...config,
@@ -94,18 +99,18 @@ async addDatabase(userId: string, config: DatabaseConfig): Promise<Database> {
       createdAt: new Date(),
       lastTested: new Date()
     })
-    
+
     // Initialize connection pool
     await this.initializeConnectionPool(database.id, config)
-    
+
     this.logger.info('Database added successfully', {
       userId,
       databaseId: database.id,
       name: config.name
     })
-    
+
     return database
-    
+
   } catch (error) {
     this.logger.error('Failed to add database', { error, userId, config: { ...config, password: '[REDACTED]' } })
     throw new AppError('DATABASE_ADD_FAILED', error.message)
@@ -152,10 +157,10 @@ private async initializeConnectionPool(databaseId: string, config: DatabaseConfi
       this.logger.debug('Connection removed from pool', { databaseId, connectionId: connection.threadId })
     }
   }
-  
+
   const pool = mysql.createPool(poolConfig)
   this.connectionPools.set(databaseId, pool)
-  
+
   // Test pool connectivity
   await this.testPoolConnection(pool)
 }
@@ -166,7 +171,7 @@ private async testPoolConnection(pool: mysql.Pool): Promise<void> {
       if (err) {
         return reject(new AppError('CONNECTION_POOL_ERROR', err.message))
       }
-      
+
       connection.ping((pingErr) => {
         connection.release()
         if (pingErr) {
@@ -204,36 +209,36 @@ interface SearchFilters {
 
 async executeSearch(databaseId: string, searchQuery: SearchQuery): Promise<SearchResult[]> {
   const startTime = Date.now()
-  
+
   try {
     const pool = await this.getConnectionPool(databaseId)
     const connection = await this.getConnection(pool)
-    
+
     // Build optimized search query
     const { sql, params } = this.buildSearchQuery(searchQuery)
-    
+
     this.logger.debug('Executing search query', {
       databaseId,
       sql: this.sanitizeQueryForLogging(sql),
       queryLength: searchQuery.query.length,
       tablesCount: searchQuery.tables.length
     })
-    
+
     // Execute query with timeout
     const results = await this.executeQueryWithTimeout(connection, sql, params, 30000)
-    
+
     // Process and enhance results
     const processedResults = await this.processSearchResults(results, searchQuery)
-    
+
     const executionTime = Date.now() - startTime
     this.logger.info('Search query completed', {
       databaseId,
       resultCount: processedResults.length,
       executionTime
     })
-    
+
     return processedResults
-    
+
   } catch (error) {
     const executionTime = Date.now() - startTime
     this.logger.error('Search query failed', {
@@ -248,12 +253,12 @@ async executeSearch(databaseId: string, searchQuery: SearchQuery): Promise<Searc
 
 private buildSearchQuery(searchQuery: SearchQuery): { sql: string; params: any[] } {
   const { query, tables, columns, limit, offset, mode, filters } = searchQuery
-  
+
   // Escape and sanitize inputs
   const escapedQuery = mysql.escape(query)
   const escapedTables = tables.map(table => mysql.escapeId(table))
   const escapedColumns = columns.map(col => mysql.escapeId(col))
-  
+
   // Build MATCH AGAINST clause based on mode
   let matchClause: string
   switch (mode) {
@@ -265,59 +270,59 @@ private buildSearchQuery(searchQuery: SearchQuery): { sql: string; params: any[]
       matchClause = `MATCH(${escapedColumns.join(',')}) AGAINST(${escapedQuery} IN NATURAL LANGUAGE MODE)`
       break
   }
-  
+
   // Build SELECT clause
   const selectColumns = [
     '*',
     `${matchClause} as relevance_score`
   ]
-  
+
   // Build WHERE clause
   const whereConditions = [matchClause]
-  
+
   // Add filters
   if (filters?.minScore) {
     whereConditions.push(`${matchClause} >= ${filters.minScore}`)
   }
-  
+
   if (filters?.dateRange) {
     // Assume created_at column exists
     whereConditions.push(`created_at BETWEEN ? AND ?`)
   }
-  
+
   if (filters?.exclude?.length) {
-    const excludeConditions = filters.exclude.map(term => 
+    const excludeConditions = filters.exclude.map(term =>
       `NOT (${escapedColumns.map(col => `${col} LIKE ?`).join(' OR ')})`
     )
     whereConditions.push(...excludeConditions)
   }
-  
+
   // Build query for each table
   const tableQueries = escapedTables.map(table => `
     SELECT ${selectColumns.join(', ')}, '${table}' as source_table
     FROM ${table}
     WHERE ${whereConditions.join(' AND ')}
   `)
-  
+
   // Combine with UNION and sort by relevance
   const sql = `
     ${tableQueries.join(' UNION ALL ')}
     ORDER BY relevance_score DESC
     LIMIT ${limit} OFFSET ${offset}
   `
-  
+
   // Build parameters
   const params: any[] = []
   if (filters?.dateRange) {
     params.push(filters.dateRange.from, filters.dateRange.to)
   }
-  
+
   if (filters?.exclude?.length) {
     filters.exclude.forEach(term => {
       columns.forEach(() => params.push(`%${term}%`))
     })
   }
-  
+
   return { sql, params }
 }
 ```
@@ -370,21 +375,21 @@ async discoverSchema(databaseId: string): Promise<DatabaseSchema> {
   try {
     const pool = await this.getConnectionPool(databaseId)
     const connection = await this.getConnection(pool)
-    
+
     // Get database information
     const dbInfo = await this.getDatabaseInfo(connection)
-    
+
     // Get all tables
     const tables = await this.getTablesInfo(connection)
-    
+
     // Get detailed schema for each table
     const tableSchemas = await Promise.all(
       tables.map(table => this.getTableSchema(connection, table.name))
     )
-    
+
     // Analyze search optimization opportunities
     const searchOptimizations = await this.analyzeSearchOptimizations(tableSchemas)
-    
+
     const schema: DatabaseSchema = {
       database: dbInfo.database,
       version: dbInfo.version,
@@ -393,15 +398,15 @@ async discoverSchema(databaseId: string): Promise<DatabaseSchema> {
       tables: tableSchemas,
       searchOptimizations
     }
-    
+
     this.logger.info('Schema discovery completed', {
       databaseId,
       tablesCount: tableSchemas.length,
       searchableTablesCount: tableSchemas.filter(t => t.searchable).length
     })
-    
+
     return schema
-    
+
   } catch (error) {
     this.logger.error('Schema discovery failed', { error, databaseId })
     throw new AppError('SCHEMA_DISCOVERY_FAILED', error.message)
@@ -411,56 +416,56 @@ async discoverSchema(databaseId: string): Promise<DatabaseSchema> {
 private async getTableSchema(connection: mysql.Connection, tableName: string): Promise<TableSchema> {
   // Get column information
   const columns = await this.queryDatabase(connection, `
-    SELECT 
+    SELECT
       COLUMN_NAME as name,
       DATA_TYPE as type,
       IS_NULLABLE = 'YES' as nullable,
       COLUMN_KEY as \`key\`,
       COLUMN_DEFAULT as \`default\`,
       EXTRA as extra
-    FROM INFORMATION_SCHEMA.COLUMNS 
+    FROM INFORMATION_SCHEMA.COLUMNS
     WHERE TABLE_NAME = ? AND TABLE_SCHEMA = DATABASE()
     ORDER BY ORDINAL_POSITION
   `, [tableName])
-  
+
   // Get index information
   const indexes = await this.queryDatabase(connection, `
-    SELECT 
+    SELECT
       INDEX_NAME as name,
       INDEX_TYPE as type,
       NOT NON_UNIQUE as unique,
       GROUP_CONCAT(COLUMN_NAME ORDER BY SEQ_IN_INDEX) as columns
-    FROM INFORMATION_SCHEMA.STATISTICS 
+    FROM INFORMATION_SCHEMA.STATISTICS
     WHERE TABLE_NAME = ? AND TABLE_SCHEMA = DATABASE()
     GROUP BY INDEX_NAME, INDEX_TYPE, NON_UNIQUE
   `, [tableName])
-  
+
   // Get table stats
   const tableStats = await this.queryDatabase(connection, `
-    SELECT 
+    SELECT
       ENGINE as engine,
       TABLE_ROWS as rowCount,
       ROUND(DATA_LENGTH/1024/1024, 2) as dataSizeMB,
       ROUND(INDEX_LENGTH/1024/1024, 2) as indexSizeMB
-    FROM INFORMATION_SCHEMA.TABLES 
+    FROM INFORMATION_SCHEMA.TABLES
     WHERE TABLE_NAME = ? AND TABLE_SCHEMA = DATABASE()
   `, [tableName])
-  
+
   const stats = tableStats[0] || {}
-  
+
   // Identify full-text searchable columns
   const fullTextIndexes = indexes.filter(idx => idx.type === 'FULLTEXT')
-  const fullTextColumns = fullTextIndexes.flatMap(idx => 
+  const fullTextColumns = fullTextIndexes.flatMap(idx =>
     idx.columns.split(',').map(col => col.trim())
   )
-  
+
   // Determine if table is searchable
-  const textColumns = columns.filter(col => 
-    ['text', 'mediumtext', 'longtext', 'varchar'].some(type => 
+  const textColumns = columns.filter(col =>
+    ['text', 'mediumtext', 'longtext', 'varchar'].some(type =>
       col.type.toLowerCase().includes(type)
     )
   )
-  
+
   return {
     name: tableName,
     engine: stats.engine || 'Unknown',
@@ -515,27 +520,27 @@ interface HealthMetrics {
 
 async checkConnectionHealth(databaseId: string): Promise<ConnectionHealth> {
   const startTime = Date.now()
-  
+
   try {
     const pool = await this.getConnectionPool(databaseId)
-    
+
     // Test basic connectivity
     const connection = await this.getConnection(pool)
-    
+
     // Execute health check query
     const healthQuery = 'SELECT 1 as health_check, NOW() as server_time'
     const result = await this.queryDatabase(connection, healthQuery)
-    
+
     connection.release()
-    
+
     const responseTime = Date.now() - startTime
-    
+
     // Get pool statistics
     const poolStats = this.getPoolStatistics(pool)
-    
+
     // Get performance metrics
     const metrics = await this.getPerformanceMetrics(databaseId)
-    
+
     const health: ConnectionHealth = {
       status: this.determineHealthStatus(responseTime, poolStats, metrics),
       responseTime,
@@ -546,18 +551,18 @@ async checkConnectionHealth(databaseId: string): Promise<ConnectionHealth> {
       lastError: null,
       metrics
     }
-    
+
     this.logger.debug('Health check completed', {
       databaseId,
       status: health.status,
       responseTime
     })
-    
+
     return health
-    
+
   } catch (error) {
     this.logger.error('Health check failed', { error, databaseId })
-    
+
     return {
       status: 'unhealthy',
       responseTime: Date.now() - startTime,
@@ -578,20 +583,20 @@ async checkConnectionHealth(databaseId: string): Promise<ConnectionHealth> {
 }
 
 private determineHealthStatus(
-  responseTime: number, 
-  poolStats: any, 
+  responseTime: number,
+  poolStats: any,
   metrics: HealthMetrics
 ): 'healthy' | 'degraded' | 'unhealthy' {
   // Unhealthy conditions
   if (responseTime > 5000) return 'unhealthy' // 5+ seconds
   if (poolStats.connectionUtilization > 0.9) return 'unhealthy' // >90% pool usage
   if (metrics.connectionErrors > 10) return 'unhealthy' // Too many errors
-  
+
   // Degraded conditions
   if (responseTime > 1000) return 'degraded' // 1+ seconds
   if (poolStats.connectionUtilization > 0.7) return 'degraded' // >70% pool usage
   if (metrics.slowQueries > 5) return 'degraded' // Slow queries
-  
+
   return 'healthy'
 }
 ```
@@ -610,7 +615,7 @@ export enum DatabaseErrorCodes {
   POOL_EXHAUSTED = 'CONNECTION_POOL_EXHAUSTED',
   TIMEOUT = 'DATABASE_TIMEOUT',
   AUTHENTICATION_FAILED = 'DATABASE_AUTH_FAILED',
-  SSL_ERROR = 'DATABASE_SSL_ERROR'
+  SSL_ERROR = 'DATABASE_SSL_ERROR',
 }
 
 class DatabaseError extends AppError {
@@ -622,8 +627,8 @@ class DatabaseError extends AppError {
   ) {
     super(code, message, 500, {
       databaseId,
-      originalError: originalError?.message
-    })
+      originalError: originalError?.message,
+    });
   }
 }
 ```
@@ -645,16 +650,16 @@ private async executeWithRetry<T>(
       if (attempt === maxRetries) {
         throw error
       }
-      
+
       // Check if error is retryable
       if (!this.isRetryableError(error)) {
         throw error
       }
-      
+
       // Exponential backoff
       const delay = backoffMs * Math.pow(2, attempt - 1)
       await this.sleep(delay)
-      
+
       this.logger.warn(`Database operation retry ${attempt}/${maxRetries}`, {
         error: error.message,
         nextAttemptIn: delay
@@ -666,13 +671,13 @@ private async executeWithRetry<T>(
 private isRetryableError(error: Error): boolean {
   const retryableErrors = [
     'ECONNRESET',
-    'ETIMEDOUT', 
+    'ETIMEDOUT',
     'ENOTFOUND',
     'ER_LOCK_WAIT_TIMEOUT',
     'ER_LOCK_DEADLOCK'
   ]
-  
-  return retryableErrors.some(code => 
+
+  return retryableErrors.some(code =>
     error.message.includes(code) || error.name === code
   )
 }
@@ -695,17 +700,17 @@ interface QueryOptimization {
 private optimizeQuery(sql: string, params: any[]): { sql: string; params: any[] } {
   // Remove unnecessary whitespace
   sql = sql.replace(/\s+/g, ' ').trim()
-  
+
   // Add query hints for full-text searches
   if (sql.includes('MATCH') && sql.includes('AGAINST')) {
     sql = sql.replace('SELECT', 'SELECT /*+ USE_INDEX(idx_fulltext) */')
   }
-  
+
   // Optimize LIMIT clauses
   if (sql.includes('LIMIT')) {
     sql = sql.replace(/LIMIT (\d+) OFFSET (\d+)/, 'LIMIT $2, $1')
   }
-  
+
   return { sql, params }
 }
 ```
@@ -726,7 +731,7 @@ interface PoolOptimization {
 private optimizeConnectionPool(databaseId: string, usage: PoolUsage): void {
   const pool = this.connectionPools.get(databaseId)
   if (!pool) return
-  
+
   const optimization: PoolOptimization = {
     connectionLimit: Math.min(usage.peakConnections * 1.5, 50),
     acquireTimeout: usage.averageResponseTime * 3,
@@ -734,11 +739,11 @@ private optimizeConnectionPool(databaseId: string, usage: PoolUsage): void {
     idleTimeout: 300000,
     reapInterval: 30000
   }
-  
+
   // Apply optimizations
   pool.config.connectionLimit = optimization.connectionLimit
   pool.config.acquireTimeout = optimization.acquireTimeout
-  
+
   this.logger.info('Connection pool optimized', {
     databaseId,
     optimization
@@ -752,26 +757,26 @@ private optimizeConnectionPool(databaseId: string, usage: PoolUsage): void {
 
 ```typescript
 describe('DatabaseService', () => {
-  let databaseService: DatabaseService
-  let mockEncryptionService: jest.Mocked<EncryptionService>
-  let mockLogger: jest.Mocked<Logger>
-  
+  let databaseService: DatabaseService;
+  let mockEncryptionService: jest.Mocked<EncryptionService>;
+  let mockLogger: jest.Mocked<Logger>;
+
   beforeEach(() => {
     mockEncryptionService = {
       encrypt: jest.fn(),
-      decrypt: jest.fn()
-    }
-    
+      decrypt: jest.fn(),
+    };
+
     mockLogger = {
       info: jest.fn(),
       error: jest.fn(),
       debug: jest.fn(),
-      warn: jest.fn()
-    }
-    
-    databaseService = new DatabaseService(mockEncryptionService, mockLogger)
-  })
-  
+      warn: jest.fn(),
+    };
+
+    databaseService = new DatabaseService(mockEncryptionService, mockLogger);
+  });
+
   describe('addDatabase', () => {
     it('should successfully add a database with valid configuration', async () => {
       const config: DatabaseConfig = {
@@ -780,18 +785,20 @@ describe('DatabaseService', () => {
         port: 3306,
         database: 'testdb',
         username: 'testuser',
-        password: 'testpass'
-      }
-      
-      mockEncryptionService.encrypt.mockResolvedValue('encrypted_password')
-      
-      const result = await databaseService.addDatabase('user123', config)
-      
-      expect(result).toHaveProperty('id')
-      expect(result.name).toBe(config.name)
-      expect(mockEncryptionService.encrypt).toHaveBeenCalledWith(config.password)
-    })
-    
+        password: 'testpass',
+      };
+
+      mockEncryptionService.encrypt.mockResolvedValue('encrypted_password');
+
+      const result = await databaseService.addDatabase('user123', config);
+
+      expect(result).toHaveProperty('id');
+      expect(result.name).toBe(config.name);
+      expect(mockEncryptionService.encrypt).toHaveBeenCalledWith(
+        config.password
+      );
+    });
+
     it('should throw error for invalid database configuration', async () => {
       const config: DatabaseConfig = {
         name: '',
@@ -799,14 +806,15 @@ describe('DatabaseService', () => {
         port: 3306,
         database: 'testdb',
         username: 'testuser',
-        password: 'testpass'
-      }
-      
-      await expect(databaseService.addDatabase('user123', config))
-        .rejects.toThrow('VALIDATION_ERROR')
-    })
-  })
-  
+        password: 'testpass',
+      };
+
+      await expect(
+        databaseService.addDatabase('user123', config)
+      ).rejects.toThrow('VALIDATION_ERROR');
+    });
+  });
+
   describe('executeSearch', () => {
     it('should execute search query and return results', async () => {
       const searchQuery: SearchQuery = {
@@ -815,56 +823,65 @@ describe('DatabaseService', () => {
         columns: ['title', 'content'],
         limit: 10,
         offset: 0,
-        mode: 'natural'
-      }
-      
+        mode: 'natural',
+      };
+
       // Mock database connection and query execution
       const mockResults = [
-        { id: 1, title: 'Test Article', content: 'Test content', relevance_score: 0.8 }
-      ]
-      
-      jest.spyOn(databaseService as any, 'executeQueryWithTimeout')
-        .mockResolvedValue(mockResults)
-      
-      const results = await databaseService.executeSearch('db123', searchQuery)
-      
-      expect(results).toHaveLength(1)
-      expect(results[0]).toHaveProperty('relevance_score')
-    })
-  })
-})
+        {
+          id: 1,
+          title: 'Test Article',
+          content: 'Test content',
+          relevance_score: 0.8,
+        },
+      ];
+
+      jest
+        .spyOn(databaseService as any, 'executeQueryWithTimeout')
+        .mockResolvedValue(mockResults);
+
+      const results = await databaseService.executeSearch('db123', searchQuery);
+
+      expect(results).toHaveLength(1);
+      expect(results[0]).toHaveProperty('relevance_score');
+    });
+  });
+});
 ```
 
 ### Integration Testing
 
 ```typescript
 describe('DatabaseService Integration', () => {
-  let databaseService: DatabaseService
-  let testDatabase: Database
-  
+  let databaseService: DatabaseService;
+  let testDatabase: Database;
+
   beforeAll(async () => {
     // Setup test database
-    testDatabase = await setupTestDatabase()
-    databaseService = new DatabaseService(new EncryptionService(), logger)
-  })
-  
+    testDatabase = await setupTestDatabase();
+    databaseService = new DatabaseService(new EncryptionService(), logger);
+  });
+
   afterAll(async () => {
-    await teardownTestDatabase(testDatabase)
-  })
-  
+    await teardownTestDatabase(testDatabase);
+  });
+
   it('should perform end-to-end database operations', async () => {
     // Add database
-    const database = await databaseService.addDatabase('testuser', testDbConfig)
-    expect(database.id).toBeDefined()
-    
+    const database = await databaseService.addDatabase(
+      'testuser',
+      testDbConfig
+    );
+    expect(database.id).toBeDefined();
+
     // Test connection
-    const connectionTest = await databaseService.testConnection(testDbConfig)
-    expect(connectionTest.status).toBe('success')
-    
+    const connectionTest = await databaseService.testConnection(testDbConfig);
+    expect(connectionTest.status).toBe('success');
+
     // Discover schema
-    const schema = await databaseService.discoverSchema(database.id)
-    expect(schema.tables.length).toBeGreaterThan(0)
-    
+    const schema = await databaseService.discoverSchema(database.id);
+    expect(schema.tables.length).toBeGreaterThan(0);
+
     // Execute search
     const searchResults = await databaseService.executeSearch(database.id, {
       query: 'test',
@@ -872,39 +889,39 @@ describe('DatabaseService Integration', () => {
       columns: ['content'],
       limit: 10,
       offset: 0,
-      mode: 'natural'
-    })
-    expect(searchResults).toBeDefined()
-  })
-})
+      mode: 'natural',
+    });
+    expect(searchResults).toBeDefined();
+  });
+});
 ```
 
 ## Best Practices
 
 ### Security Best Practices
 
-1. __Credential Encryption__: Always encrypt database passwords at rest
-2. __Connection Security__: Use SSL/TLS connections in production
-3. __SQL Injection Prevention__: Use parameterized queries exclusively
-4. __Access Control__: Validate user permissions before database operations
-5. __Audit Logging__: Log all database operations for security auditing
+1. **Credential Encryption**: Always encrypt database passwords at rest
+2. **Connection Security**: Use SSL/TLS connections in production
+3. **SQL Injection Prevention**: Use parameterized queries exclusively
+4. **Access Control**: Validate user permissions before database operations
+5. **Audit Logging**: Log all database operations for security auditing
 
 ### Performance Best Practices
 
-1. __Connection Pooling__: Use appropriate pool sizes based on database capacity
-2. __Query Optimization__: Analyze and optimize slow queries regularly
-3. __Index Strategy__: Ensure proper indexes for full-text search
-4. __Resource Monitoring__: Monitor database performance and connection health
-5. __Caching__: Implement query result caching where appropriate
+1. **Connection Pooling**: Use appropriate pool sizes based on database capacity
+2. **Query Optimization**: Analyze and optimize slow queries regularly
+3. **Index Strategy**: Ensure proper indexes for full-text search
+4. **Resource Monitoring**: Monitor database performance and connection health
+5. **Caching**: Implement query result caching where appropriate
 
 ### Operational Best Practices
 
-1. __Health Monitoring__: Regular health checks and alerting
-2. __Error Recovery__: Implement retry logic for transient failures
-3. __Resource Cleanup__: Proper connection and resource cleanup
-4. __Configuration Validation__: Validate all database configurations
-5. __Documentation__: Maintain clear documentation of database schemas
+1. **Health Monitoring**: Regular health checks and alerting
+2. **Error Recovery**: Implement retry logic for transient failures
+3. **Resource Cleanup**: Proper connection and resource cleanup
+4. **Configuration Validation**: Validate all database configurations
+5. **Documentation**: Maintain clear documentation of database schemas
 
 ---
 
-__The DatabaseService provides a robust foundation for MySQL database management in Altus 4, handling everything from secure connections to optimized query execution.__
+**The DatabaseService provides a robust foundation for MySQL database management in Altus 4, handling everything from secure connections to optimized query execution.**

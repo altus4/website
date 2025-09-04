@@ -47,11 +47,11 @@ constructor(
 }
 ```
 
-__Benefits:__
+**Benefits:**
 
-- __Testability__: Easy to mock dependencies in unit tests
-- __Flexibility__: Can swap implementations without changing the service
-- __Separation of Concerns__: Each dependency handles its specific domain
+- **Testability**: Easy to mock dependencies in unit tests
+- **Flexibility**: Can swap implementations without changing the service
+- **Separation of Concerns**: Each dependency handles its specific domain
 
 ### Orchestration Pattern
 
@@ -73,9 +73,9 @@ graph TD
 
 ### 1. `search(request: SearchRequest): Promise<SearchResponse>`
 
-__Purpose__: The main search orchestration method that coordinates all search operations.
+**Purpose**: The main search orchestration method that coordinates all search operations.
 
-__Flow Diagram__:
+**Flow Diagram**:
 
 ```mermaid
 graph LR
@@ -87,7 +87,7 @@ graph LR
     F --> G[Response]
 ```
 
-__Implementation Breakdown__:
+**Implementation Breakdown**:
 
 ```typescript
 public async search(request: SearchRequest): Promise<SearchResponse> {
@@ -171,17 +171,17 @@ public async search(request: SearchRequest): Promise<SearchResponse> {
 }
 ```
 
-__Key Design Decisions__:
+**Key Design Decisions**:
 
-1. __Cache-First Strategy__: Check cache before expensive operations
-2. __Graceful Failure Handling__: Use `Promise.allSettled` to handle partial failures
-3. __Parallel Execution__: Search multiple databases simultaneously for performance
-4. __AI Integration__: Optional semantic enhancement based on request mode
-5. __Comprehensive Logging__: Track performance and errors for monitoring
+1. **Cache-First Strategy**: Check cache before expensive operations
+2. **Graceful Failure Handling**: Use `Promise.allSettled` to handle partial failures
+3. **Parallel Execution**: Search multiple databases simultaneously for performance
+4. **AI Integration**: Optional semantic enhancement based on request mode
+5. **Comprehensive Logging**: Track performance and errors for monitoring
 
 ### 2. `executeSearchOnDatabase(databaseId, query, request)`
 
-__Purpose__: Execute search on a single database with result transformation.
+**Purpose**: Execute search on a single database with result transformation.
 
 ```typescript
 private async executeSearchOnDatabase(
@@ -218,7 +218,7 @@ private async executeSearchOnDatabase(
 }
 ```
 
-__Result Transformation__:
+**Result Transformation**:
 
 - Converts raw database rows to structured `SearchResult` objects
 - Generates unique IDs for each result
@@ -227,7 +227,7 @@ __Result Transformation__:
 
 ### 3. `getSearchSuggestions(request: SearchRequest)`
 
-__Purpose__: Generate intelligent search suggestions combining AI and popular queries.
+**Purpose**: Generate intelligent search suggestions combining AI and popular queries.
 
 ```typescript
 public async getSearchSuggestions(request: SearchRequest): Promise<QuerySuggestion[]> {
@@ -267,16 +267,16 @@ public async getSearchSuggestions(request: SearchRequest): Promise<QuerySuggesti
 }
 ```
 
-__Suggestion Sources__:
+**Suggestion Sources**:
 
-1. __AI Suggestions__: Semantic understanding and query expansion
-2. __Popular Queries__: Based on user search patterns and analytics
-3. __Deduplication__: Ensures unique suggestions with highest scores
-4. __Ranking__: Combines multiple scoring mechanisms
+1. **AI Suggestions**: Semantic understanding and query expansion
+2. **Popular Queries**: Based on user search patterns and analytics
+3. **Deduplication**: Ensures unique suggestions with highest scores
+4. **Ranking**: Combines multiple scoring mechanisms
 
 ### 4. `generateCacheKey(request: SearchRequest)`
 
-__Purpose__: Create deterministic cache keys for search requests.
+**Purpose**: Create deterministic cache keys for search requests.
 
 ```typescript
 private generateCacheKey(request: SearchRequest): string {
@@ -294,16 +294,16 @@ private generateCacheKey(request: SearchRequest): string {
 }
 ```
 
-__Key Properties__:
+**Key Properties**:
 
-- __Deterministic__: Same request always generates same key
-- __Normalized__: Case-insensitive, sorted arrays for consistency
-- __Compact__: Base64 encoding for Redis key efficiency
-- __Structured__: Includes all parameters affecting search results
+- **Deterministic**: Same request always generates same key
+- **Normalized**: Case-insensitive, sorted arrays for consistency
+- **Compact**: Base64 encoding for Redis key efficiency
+- **Structured**: Includes all parameters affecting search results
 
 ### 5. `calculateRelevanceScore(row, query)`
 
-__Purpose__: Calculate relevance scores for search results.
+**Purpose**: Calculate relevance scores for search results.
 
 ```typescript
 private calculateRelevanceScore(row: any, query: string): number {
@@ -337,16 +337,16 @@ private calculateRelevanceScore(row: any, query: string): number {
 }
 ```
 
-__Scoring Algorithm__:
+**Scoring Algorithm**:
 
-1. __Exact Phrase Matching__: Full query string found = 1.0 points
-2. __Term Matching__: Individual terms found = 0.3 points each
-3. __Field Weighting__: Title/name fields get 1.5x multiplier
-4. __Score Normalization__: Capped at 1.0 for consistency
+1. **Exact Phrase Matching**: Full query string found = 1.0 points
+2. **Term Matching**: Individual terms found = 0.3 points each
+3. **Field Weighting**: Title/name fields get 1.5x multiplier
+4. **Score Normalization**: Capped at 1.0 for consistency
 
 ### 6. `generateSnippet(row, query)`
 
-__Purpose__: Generate search snippets with highlighted matching terms.
+**Purpose**: Generate search snippets with highlighted matching terms.
 
 ```typescript
 private generateSnippet(row: any, query: string): string {
@@ -379,18 +379,18 @@ private generateSnippet(row: any, query: string): string {
 }
 ```
 
-__Snippet Logic__:
+**Snippet Logic**:
 
-1. __Relevance Priority__: Prefer fields containing search terms
-2. __Length Optimization__: Truncate at 200 characters
-3. __Fallback Strategy__: Use any text field if no matches
-4. __Future Enhancement__: Could add term highlighting
+1. **Relevance Priority**: Prefer fields containing search terms
+2. **Length Optimization**: Truncate at 200 characters
+3. **Fallback Strategy**: Use any text field if no matches
+4. **Future Enhancement**: Could add term highlighting
 
 ## Helper Methods
 
 ### `logSearchAnalytics(request, response)`
 
-__Purpose__: Log search performance and user behavior for analytics.
+**Purpose**: Log search performance and user behavior for analytics.
 
 ```typescript
 private async logSearchAnalytics(
@@ -415,7 +415,7 @@ private async logSearchAnalytics(
 }
 ```
 
-__Analytics Data__:
+**Analytics Data**:
 
 - User search patterns and preferences
 - Query performance metrics
@@ -425,7 +425,7 @@ __Analytics Data__:
 
 ### `generateCategories(results)`
 
-__Purpose__: Use AI to automatically categorize search results.
+**Purpose**: Use AI to automatically categorize search results.
 
 ```typescript
 private async generateCategories(results: SearchResult[]): Promise<Category[]> {
@@ -465,78 +465,78 @@ private async generateCategories(results: SearchResult[]): Promise<Category[]> {
 
 ```typescript
 describe('SearchService', () => {
-  let searchService: SearchService
-  let mockDatabaseService: jest.Mocked<DatabaseService>
-  let mockAIService: jest.Mocked<AIService>
-  let mockCacheService: jest.Mocked<CacheService>
+  let searchService: SearchService;
+  let mockDatabaseService: jest.Mocked<DatabaseService>;
+  let mockAIService: jest.Mocked<AIService>;
+  let mockCacheService: jest.Mocked<CacheService>;
 
   beforeEach(() => {
     mockDatabaseService = {
       executeFullTextSearch: jest.fn(),
       // ... other methods
-    }
+    };
 
     mockAIService = {
       isAvailable: jest.fn(() => false),
       processSearchQuery: jest.fn(),
       // ... other methods
-    }
+    };
 
     mockCacheService = {
       get: jest.fn(),
       set: jest.fn(),
       // ... other methods
-    }
+    };
 
     searchService = new SearchService(
       mockDatabaseService,
       mockAIService,
       mockCacheService
-    )
-  })
+    );
+  });
 
   it('should return cached results when available', async () => {
-    const mockResponse = { results: [], totalCount: 0 }
-    mockCacheService.get.mockResolvedValue(mockResponse)
+    const mockResponse = { results: [], totalCount: 0 };
+    mockCacheService.get.mockResolvedValue(mockResponse);
 
     const result = await searchService.search({
       query: 'test',
       userId: 'user1',
       databases: ['db1'],
-    })
+    });
 
-    expect(result).toBe(mockResponse)
-    expect(mockDatabaseService.executeFullTextSearch).not.toHaveBeenCalled()
-  })
-})
+    expect(result).toBe(mockResponse);
+    expect(mockDatabaseService.executeFullTextSearch).not.toHaveBeenCalled();
+  });
+});
 ```
 
 ### Integration Testing
 
 ```typescript
 describe('SearchService Integration', () => {
-  let searchService: SearchService
+  let searchService: SearchService;
 
   beforeAll(async () => {
     // Use real service instances for integration testing
-    const databaseService = new DatabaseService()
-    const aiService = new AIService()
-    const cacheService = new CacheService()
+    const databaseService = new DatabaseService();
+    const aiService = new AIService();
+    const cacheService = new CacheService();
 
-    searchService = new SearchService(databaseService, aiService, cacheService)
-  })
+    searchService = new SearchService(databaseService, aiService, cacheService);
+  });
 
   it('should perform end-to-end search', async () => {
     const result = await searchService.search({
       query: 'mysql optimization',
       userId: 'integration-test',
       databases: ['test-db'],
-    })
+    });
 
-    expect(result.results).toBeDefined()
-    expect(result.totalCount).toBeGreaterThanOrEqual(0)
-  })
-})
+    expect(result.results).toBeDefined();
+    expect(result.totalCount).toBeGreaterThanOrEqual(0);
+  });
+});
 ```
 
 ## Performance Optimizations
@@ -546,18 +546,18 @@ describe('SearchService Integration', () => {
 ```typescript
 // Execute searches in parallel rather than sequentially
 const searchPromises = databases.map(async dbId => {
-  return this.executeSearchOnDatabase(dbId, query, request)
-})
+  return this.executeSearchOnDatabase(dbId, query, request);
+});
 
-const results = await Promise.allSettled(searchPromises)
+const results = await Promise.allSettled(searchPromises);
 ```
 
 ### 2. Intelligent Caching Strategy
 
 ```typescript
 // Cache with appropriate TTL based on content type
-const ttl = request.includeAnalytics ? 60 : 300 // Analytics: 1min, Results: 5min
-await this.cacheService.set(cacheKey, response, ttl)
+const ttl = request.includeAnalytics ? 60 : 300; // Analytics: 1min, Results: 5min
+await this.cacheService.set(cacheKey, response, ttl);
 ```
 
 ### 3. Result Streaming for Large Sets
@@ -565,7 +565,7 @@ await this.cacheService.set(cacheKey, response, ttl)
 ```typescript
 // For large result sets, consider streaming responses
 if (totalResults > 10000) {
-  return this.streamSearchResults(request)
+  return this.streamSearchResults(request);
 }
 ```
 
@@ -582,7 +582,7 @@ const metrics = {
   databaseResponseTime: dbEndTime - dbStartTime,
   errorRate: failedRequests / totalRequests,
   concurrentSearches: activSearches.size,
-}
+};
 ```
 
 ### Error Monitoring
@@ -592,23 +592,23 @@ const metrics = {
 try {
   // Search logic
 } catch (error) {
-  const errorType = this.categorizeError(error)
-  logger.error(`Search failed [${errorType}]:`, error)
+  const errorType = this.categorizeError(error);
+  logger.error(`Search failed [${errorType}]:`, error);
 
   // Emit metrics for monitoring
-  this.metrics.increment(`search.errors.${errorType}`)
-  throw error
+  this.metrics.increment(`search.errors.${errorType}`);
+  throw error;
 }
 ```
 
 ## Related Documentation
 
-- __[DatabaseService](./database-service.md)__ - MySQL operations and connection management
-- __[AIService](./ai-service.md)__ - OpenAI integration and semantic enhancements
-- __[CacheService](./cache-service.md)__ - Redis caching and analytics storage
-- __[API Reference](../api/search.md)__ - Search endpoint documentation
-- __[Testing Guide](../testing/unit.md)__ - Service testing patterns
+- **[DatabaseService](./database-service.md)** - MySQL operations and connection management
+- **[AIService](./ai-service.md)** - OpenAI integration and semantic enhancements
+- **[CacheService](./cache-service.md)** - Redis caching and analytics storage
+- **[API Reference](../api/search.md)** - Search endpoint documentation
+- **[Testing Guide](../testing/unit.md)** - Service testing patterns
 
 ---
 
-__The SearchService is the heart of Altus 4's search capabilities, orchestrating complex operations while maintaining high performance and reliability through intelligent caching, parallel processing, and graceful error handling.__
+**The SearchService is the heart of Altus 4's search capabilities, orchestrating complex operations while maintaining high performance and reliability through intelligent caching, parallel processing, and graceful error handling.**

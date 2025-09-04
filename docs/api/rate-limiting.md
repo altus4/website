@@ -28,33 +28,33 @@ graph TD
 
 ### Rate Limiting Strategy
 
-- __Sliding Window__ - Uses Redis-based sliding window algorithm
-- __Per-API Key__ - Individual rate limiting per API key
-- __Tiered Limits__ - Different limits based on subscription tier
-- __Graceful Degradation__ - Informative error responses with upgrade suggestions
-- __Burst Handling__ - Short-term burst allowances within limits
+- **Sliding Window** - Uses Redis-based sliding window algorithm
+- **Per-API Key** - Individual rate limiting per API key
+- **Tiered Limits** - Different limits based on subscription tier
+- **Graceful Degradation** - Informative error responses with upgrade suggestions
+- **Burst Handling** - Short-term burst allowances within limits
 
 ## Rate Limit Tiers
 
 ### Tier Comparison
 
-| Tier | Requests/Hour | Burst Limit | Block Duration | Concurrent Connections | AI Requests/Hour |
-|------|---------------|-------------|----------------|----------------------|------------------|
-| __Free__ | 1,000 | 50 | 5 minutes | 3 | 100 |
-| __Pro__ | 10,000 | 200 | 5 minutes | 10 | 2,000 |
-| __Enterprise__ | 100,000 | 500 | 1 minute | 50 | 20,000 |
-| __Custom__ | Negotiable | Custom | 30 seconds | Unlimited | Custom |
+| Tier           | Requests/Hour | Burst Limit | Block Duration | Concurrent Connections | AI Requests/Hour |
+| -------------- | ------------- | ----------- | -------------- | ---------------------- | ---------------- |
+| **Free**       | 1,000         | 50          | 5 minutes      | 3                      | 100              |
+| **Pro**        | 10,000        | 200         | 5 minutes      | 10                     | 2,000            |
+| **Enterprise** | 100,000       | 500         | 1 minute       | 50                     | 20,000           |
+| **Custom**     | Negotiable    | Custom      | 30 seconds     | Unlimited              | Custom           |
 
 ### Authentication Endpoints
 
 Special rate limits for authentication and security:
 
-| Endpoint | Rate Limit | Duration | Notes |
-|----------|------------|----------|--------|
-| `POST /api/auth/register` | 5 per hour | Per IP | Prevents spam registration |
-| `POST /api/auth/login` | 10 per hour | Per IP | Brute force protection |
-| `POST /api/keys` | 20 per hour | Per API key | Prevents key abuse |
-| `POST /api/keys/:id/regenerate` | 5 per hour | Per API key | Security measure |
+| Endpoint                        | Rate Limit  | Duration    | Notes                      |
+| ------------------------------- | ----------- | ----------- | -------------------------- |
+| `POST /api/auth/register`       | 5 per hour  | Per IP      | Prevents spam registration |
+| `POST /api/auth/login`          | 10 per hour | Per IP      | Brute force protection     |
+| `POST /api/keys`                | 20 per hour | Per API key | Prevents key abuse         |
+| `POST /api/keys/:id/regenerate` | 5 per hour  | Per API key | Security measure           |
 
 ## Rate Limit Headers
 
@@ -72,14 +72,14 @@ X-RateLimit-Window: 3600
 
 ### Header Descriptions
 
-| Header | Description | Example |
-|--------|-------------|---------|
-| `X-RateLimit-Limit` | Maximum requests allowed in current window | `1000` |
-| `X-RateLimit-Remaining` | Requests remaining in current window | `847` |
-| `X-RateLimit-Reset` | When current window resets (ISO timestamp) | `2024-01-15T12:00:00Z` |
-| `X-RateLimit-Tier` | Current subscription tier | `Pro` |
-| `X-RateLimit-Window` | Window duration in seconds | `3600` |
-| `X-RateLimit-Retry-After` | Seconds to wait before retrying (when blocked) | `45` |
+| Header                    | Description                                    | Example                |
+| ------------------------- | ---------------------------------------------- | ---------------------- |
+| `X-RateLimit-Limit`       | Maximum requests allowed in current window     | `1000`                 |
+| `X-RateLimit-Remaining`   | Requests remaining in current window           | `847`                  |
+| `X-RateLimit-Reset`       | When current window resets (ISO timestamp)     | `2024-01-15T12:00:00Z` |
+| `X-RateLimit-Tier`        | Current subscription tier                      | `Pro`                  |
+| `X-RateLimit-Window`      | Window duration in seconds                     | `3600`                 |
+| `X-RateLimit-Retry-After` | Seconds to wait before retrying (when blocked) | `45`                   |
 
 ## Rate Limit Exceeded Response
 
@@ -128,15 +128,15 @@ Retry-After: 45
 
 Get current rate limit status without consuming a request:
 
-__Endpoint__: `GET /api/rate-limit/status`
+**Endpoint**: `GET /api/rate-limit/status`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -185,14 +185,14 @@ __Response__:
 
 ### Rate Limit Analytics
 
-__Endpoint__: `GET /api/rate-limit/analytics`
+**Endpoint**: `GET /api/rate-limit/analytics`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `period` - Analysis period: `hour`, `day`, `week` (default: `day`)
 - `includeBreakdown` - Include endpoint-specific breakdown
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -245,39 +245,39 @@ __Response__:
 ```javascript
 class RateLimitMonitor {
   constructor(apiKey) {
-    this.apiKey = apiKey
-    this.warningThreshold = 0.8 // 80% of limit
-    this.client = new Altus4Client(apiKey)
+    this.apiKey = apiKey;
+    this.warningThreshold = 0.8; // 80% of limit
+    this.client = new Altus4Client(apiKey);
   }
 
   async checkRateLimit() {
     try {
-      const status = await this.client.makeRequest('/api/rate-limit/status')
-      const { current, limits } = status.data.rateLimit
+      const status = await this.client.makeRequest('/api/rate-limit/status');
+      const { current, limits } = status.data.rateLimit;
 
-      const usagePercent = current.requests / limits.requestsPerHour
+      const usagePercent = current.requests / limits.requestsPerHour;
 
       if (usagePercent >= this.warningThreshold) {
-        this.handleHighUsage(usagePercent, current, limits)
+        this.handleHighUsage(usagePercent, current, limits);
       }
 
       return {
         usage: usagePercent,
         remaining: current.remaining,
-        resetTime: current.windowEnd
-      }
+        resetTime: current.windowEnd,
+      };
     } catch (error) {
-      console.error('Failed to check rate limit:', error)
-      throw error
+      console.error('Failed to check rate limit:', error);
+      throw error;
     }
   }
 
   handleHighUsage(usagePercent, current, limits) {
-    console.warn(`Rate limit usage at ${(usagePercent * 100).toFixed(1)}%`)
-    console.warn(`Remaining requests: ${current.remaining}`)
+    console.warn(`Rate limit usage at ${(usagePercent * 100).toFixed(1)}%`);
+    console.warn(`Remaining requests: ${current.remaining}`);
 
     // Implement throttling logic
-    this.enableThrottling()
+    this.enableThrottling();
   }
 
   enableThrottling() {
@@ -288,9 +288,9 @@ class RateLimitMonitor {
 }
 
 // Usage
-const monitor = new RateLimitMonitor('altus4_sk_live_abc123...')
-const status = await monitor.checkRateLimit()
-console.log(`Current usage: ${(status.usage * 100).toFixed(1)}%`)
+const monitor = new RateLimitMonitor('altus4_sk_live_abc123...');
+const status = await monitor.checkRateLimit();
+console.log(`Current usage: ${(status.usage * 100).toFixed(1)}%`);
 ```
 
 #### 2. Implement Request Queuing
@@ -371,77 +371,81 @@ const results = await Promise.all(promises)
 ```javascript
 class CachedClient {
   constructor(apiKey, cacheOptions = {}) {
-    this.client = new Altus4Client(apiKey)
-    this.cache = new Map()
-    this.defaultTTL = cacheOptions.defaultTTL || 300000 // 5 minutes
-    this.maxCacheSize = cacheOptions.maxSize || 100
+    this.client = new Altus4Client(apiKey);
+    this.cache = new Map();
+    this.defaultTTL = cacheOptions.defaultTTL || 300000; // 5 minutes
+    this.maxCacheSize = cacheOptions.maxSize || 100;
   }
 
   async cachedRequest(endpoint, options = {}, ttl = this.defaultTTL) {
-    const cacheKey = this.generateCacheKey(endpoint, options)
+    const cacheKey = this.generateCacheKey(endpoint, options);
 
     // Check cache first
-    const cached = this.cache.get(cacheKey)
+    const cached = this.cache.get(cacheKey);
     if (cached && Date.now() < cached.expiry) {
-      console.log('Cache hit for:', cacheKey)
-      return cached.data
+      console.log('Cache hit for:', cacheKey);
+      return cached.data;
     }
 
     // Make request
     try {
-      const result = await this.client.makeRequest(endpoint, options)
+      const result = await this.client.makeRequest(endpoint, options);
 
       // Cache the result
       this.cache.set(cacheKey, {
         data: result,
-        expiry: Date.now() + ttl
-      })
+        expiry: Date.now() + ttl,
+      });
 
       // Cleanup cache if too large
       if (this.cache.size > this.maxCacheSize) {
-        this.cleanupCache()
+        this.cleanupCache();
       }
 
-      return result
+      return result;
     } catch (error) {
       // Serve stale cache on rate limit if available
       if (error.isRateLimitError() && cached) {
-        console.log('Serving stale cache due to rate limit')
-        return cached.data
+        console.log('Serving stale cache due to rate limit');
+        return cached.data;
       }
-      throw error
+      throw error;
     }
   }
 
   generateCacheKey(endpoint, options) {
-    return `${endpoint}:${JSON.stringify(options)}`
+    return `${endpoint}:${JSON.stringify(options)}`;
   }
 
   cleanupCache() {
-    const entries = Array.from(this.cache.entries())
-    entries.sort((a, b) => a[1].expiry - b[1].expiry)
+    const entries = Array.from(this.cache.entries());
+    entries.sort((a, b) => a[1].expiry - b[1].expiry);
 
     // Remove oldest 10% of entries
-    const removeCount = Math.floor(entries.length * 0.1)
+    const removeCount = Math.floor(entries.length * 0.1);
     for (let i = 0; i < removeCount; i++) {
-      this.cache.delete(entries[i][0])
+      this.cache.delete(entries[i][0]);
     }
   }
 
   clearCache() {
-    this.cache.clear()
+    this.cache.clear();
   }
 }
 
 // Usage
 const cachedClient = new CachedClient('altus4_sk_live_abc123...', {
   defaultTTL: 600000, // 10 minutes
-  maxSize: 50
-})
+  maxSize: 50,
+});
 
 // Cached requests automatically
-const dashboard = await cachedClient.cachedRequest('/api/analytics/dashboard')
-const databases = await cachedClient.cachedRequest('/api/databases', {}, 1800000) // 30 min cache
+const dashboard = await cachedClient.cachedRequest('/api/analytics/dashboard');
+const databases = await cachedClient.cachedRequest(
+  '/api/databases',
+  {},
+  1800000
+); // 30 min cache
 ```
 
 ### Python Rate Limit Handling
@@ -573,14 +577,14 @@ Group multiple operations into single API calls where possible:
 
 ```javascript
 // Instead of multiple single searches
-const results1 = await client.search('query1', ['db1'])
-const results2 = await client.search('query2', ['db2'])
+const results1 = await client.search('query1', ['db1']);
+const results2 = await client.search('query2', ['db2']);
 
 // Use batch search (if available)
 const batchResults = await client.batchSearch([
   { query: 'query1', databases: ['db1'] },
-  { query: 'query2', databases: ['db2'] }
-])
+  { query: 'query2', databases: ['db2'] },
+]);
 ```
 
 ### 2. Smart Caching Strategy
@@ -589,11 +593,11 @@ Implement tiered caching with different TTLs:
 
 ```javascript
 const cacheConfig = {
-  'analytics/dashboard': 300000,    // 5 minutes
-  'databases': 1800000,             // 30 minutes
-  'search': 60000,                  // 1 minute
-  'popular-queries': 600000         // 10 minutes
-}
+  'analytics/dashboard': 300000, // 5 minutes
+  databases: 1800000, // 30 minutes
+  search: 60000, // 1 minute
+  'popular-queries': 600000, // 10 minutes
+};
 ```
 
 ### 3. Request Prioritization
@@ -603,19 +607,17 @@ Implement priority queues for different request types:
 ```javascript
 class PriorityQueue {
   constructor() {
-    this.high = []
-    this.medium = []
-    this.low = []
+    this.high = [];
+    this.medium = [];
+    this.low = [];
   }
 
   enqueue(request, priority = 'medium') {
-    this[priority].push(request)
+    this[priority].push(request);
   }
 
   dequeue() {
-    return this.high.shift() ||
-           this.medium.shift() ||
-           this.low.shift()
+    return this.high.shift() || this.medium.shift() || this.low.shift();
   }
 }
 ```
@@ -626,12 +628,12 @@ Move non-urgent operations to background:
 
 ```javascript
 // Urgent: User-initiated search
-await client.search(userQuery, databases)
+await client.search(userQuery, databases);
 
 // Background: Analytics update
 setTimeout(() => {
-  client.updateAnalytics().catch(console.error)
-}, 5000)
+  client.updateAnalytics().catch(console.error);
+}, 5000);
 ```
 
 ## Upgrading Rate Limits
@@ -648,14 +650,14 @@ Consider upgrading when:
 ### Tier Migration
 
 ```javascript
-const shouldUpgrade = await evaluateUpgradeNeed()
+const shouldUpgrade = await evaluateUpgradeNeed();
 if (shouldUpgrade.recommended) {
-  console.log(`Upgrade recommended: ${shouldUpgrade.reason}`)
-  console.log(`Suggested tier: ${shouldUpgrade.suggestedTier}`)
-  console.log(`Expected savings: ${shouldUpgrade.expectedSavings}ms/request`)
+  console.log(`Upgrade recommended: ${shouldUpgrade.reason}`);
+  console.log(`Suggested tier: ${shouldUpgrade.suggestedTier}`);
+  console.log(`Expected savings: ${shouldUpgrade.expectedSavings}ms/request`);
 }
 ```
 
 ---
 
-__This completes the comprehensive API documentation for Altus 4. All endpoints, authentication, error handling, and rate limiting are now thoroughly documented with practical examples and best practices.__
+**This completes the comprehensive API documentation for Altus 4. All endpoints, authentication, error handling, and rate limiting are now thoroughly documented with practical examples and best practices.**

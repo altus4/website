@@ -13,10 +13,10 @@ Altus 4 uses API key-based authentication for all service integration. This prov
 
 ### Authentication Flow
 
-1. __Register__ a new user account
-2. __Login__ to get a bootstrap JWT token (one-time use)
-3. __Create__ your first API key using the JWT token
-4. __Use API key__ for all subsequent requests
+1. **Register** a new user account
+2. **Login** to get a bootstrap JWT token (one-time use)
+3. **Create** your first API key using the JWT token
+4. **Use API key** for all subsequent requests
 
 ```mermaid
 graph TD
@@ -31,8 +31,8 @@ graph TD
 
 API keys follow a structured format for easy identification:
 
-- __Live Environment__: `altus4_sk_live_abc123def456...`
-- __Test Environment__: `altus4_sk_test_xyz789abc123...`
+- **Live Environment**: `altus4_sk_live_abc123def456...`
+- **Test Environment**: `altus4_sk_test_xyz789abc123...`
 
 The format includes:
 
@@ -47,15 +47,15 @@ The format includes:
 
 Register a new user account to begin the authentication process.
 
-__Endpoint__: `POST /api/auth/register`
+**Endpoint**: `POST /api/auth/register`
 
-__Headers__:
+**Headers**:
 
 ```http
 Content-Type: application/json
 ```
 
-__Request Body__:
+**Request Body**:
 
 ```json
 {
@@ -65,7 +65,7 @@ __Request Body__:
 }
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -83,7 +83,7 @@ __Response__:
 }
 ```
 
-__cURL Example__:
+**cURL Example**:
 
 ```bash
 curl -X POST https://api.altus4.dev/api/auth/register \
@@ -99,15 +99,15 @@ curl -X POST https://api.altus4.dev/api/auth/register \
 
 Login to receive a JWT token for API key creation. This JWT token should only be used to create your initial API key.
 
-__Endpoint__: `POST /api/auth/login`
+**Endpoint**: `POST /api/auth/login`
 
-__Headers__:
+**Headers**:
 
 ```http
 Content-Type: application/json
 ```
 
-__Request Body__:
+**Request Body**:
 
 ```json
 {
@@ -116,7 +116,7 @@ __Request Body__:
 }
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -136,7 +136,7 @@ __Response__:
 }
 ```
 
-__cURL Example__:
+**cURL Example**:
 
 ```bash
 curl -X POST https://api.altus4.dev/api/auth/login \
@@ -151,15 +151,15 @@ curl -X POST https://api.altus4.dev/api/auth/login \
 
 Create your first API key using the JWT token from login. This is a one-time setup process.
 
-__Endpoint__: `POST /api/management/setup`
+**Endpoint**: `POST /api/management/setup`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <JWT_TOKEN_FROM_LOGIN>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -178,7 +178,7 @@ __Response__:
 }
 ```
 
-__cURL Example__:
+**cURL Example**:
 
 ```bash
 curl -X POST https://api.altus4.dev/api/management/setup \
@@ -193,16 +193,16 @@ Once you have your initial API key, use it to manage additional keys and your ac
 
 Create additional API keys for different environments or use cases.
 
-__Endpoint__: `POST /api/keys`
+**Endpoint**: `POST /api/keys`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
-__Request Body__:
+**Request Body**:
 
 ```json
 {
@@ -213,7 +213,7 @@ __Request Body__:
 }
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -240,15 +240,15 @@ __Response__:
 
 Retrieve all API keys associated with your account.
 
-__Endpoint__: `GET /api/keys`
+**Endpoint**: `GET /api/keys`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -275,16 +275,16 @@ __Response__:
 
 Update an existing API key's name, tier, or permissions.
 
-__Endpoint__: `PUT /api/keys/:keyId`
+**Endpoint**: `PUT /api/keys/:keyId`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
-__Request Body__:
+**Request Body**:
 
 ```json
 {
@@ -298,15 +298,15 @@ __Request Body__:
 
 Permanently revoke an API key. This action cannot be undone.
 
-__Endpoint__: `DELETE /api/keys/:keyId`
+**Endpoint**: `DELETE /api/keys/:keyId`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -322,15 +322,15 @@ __Response__:
 
 Generate a new secret for an existing API key while maintaining the same ID and settings.
 
-__Endpoint__: `POST /api/keys/:keyId/regenerate`
+**Endpoint**: `POST /api/keys/:keyId/regenerate`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -351,20 +351,20 @@ __Response__:
 
 Get detailed usage statistics for a specific API key.
 
-__Endpoint__: `GET /api/keys/:keyId/usage`
+**Endpoint**: `GET /api/keys/:keyId/usage`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `period` - `hour`, `day`, `week`, `month` (default: `day`)
 - `limit` - Number of data points to return (default: 100)
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -406,22 +406,22 @@ Authorization: Bearer altus4_sk_live_abc123def456...
 ### JavaScript Example
 
 ```javascript
-const apiKey = 'altus4_sk_live_abc123def456...'
+const apiKey = 'altus4_sk_live_abc123def456...';
 
 const response = await fetch('https://api.altus4.dev/api/search', {
   method: 'POST',
   headers: {
-    'Authorization': `Bearer ${apiKey}`,
-    'Content-Type': 'application/json'
+    Authorization: `Bearer ${apiKey}`,
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     query: 'database optimization',
     databases: ['db-uuid-1'],
-    searchMode: 'semantic'
-  })
-})
+    searchMode: 'semantic',
+  }),
+});
 
-const data = await response.json()
+const data = await response.json();
 ```
 
 ### Python Example
@@ -451,24 +451,24 @@ data = response.json()
 
 ### Tier Comparison
 
-| Feature | Free | Pro | Enterprise |
-|---------|------|-----|------------|
-| Requests/Hour | 1,000 | 10,000 | 100,000 |
-| Rate Limit Block | 5 min | 5 min | 1 min |
-| Databases | 3 | 25 | Unlimited |
-| AI Features | Limited | Full | Full + Custom |
-| Analytics | Basic | Advanced | Full + Exports |
-| Support | Community | Email | Priority + Phone |
+| Feature          | Free      | Pro      | Enterprise       |
+| ---------------- | --------- | -------- | ---------------- |
+| Requests/Hour    | 1,000     | 10,000   | 100,000          |
+| Rate Limit Block | 5 min     | 5 min    | 1 min            |
+| Databases        | 3         | 25       | Unlimited        |
+| AI Features      | Limited   | Full     | Full + Custom    |
+| Analytics        | Basic     | Advanced | Full + Exports   |
+| Support          | Community | Email    | Priority + Phone |
 
 ### Permission Scopes
 
 API keys can be scoped with specific permissions:
 
-- __`search`__ - Execute search operations
-- __`database:read`__ - View database connections and schema
-- __`database:write`__ - Add, update, remove database connections
-- __`analytics`__ - Access analytics and insights data
-- __`admin`__ - Full account management (user management, billing)
+- **`search`** - Execute search operations
+- **`database:read`** - View database connections and schema
+- **`database:write`** - Add, update, remove database connections
+- **`analytics`** - Access analytics and insights data
+- **`admin`** - Full account management (user management, billing)
 
 Example permission combinations:
 
@@ -482,11 +482,11 @@ Example permission combinations:
 
 ### API Key Security
 
-1. __Store Securely__: Never commit API keys to version control
-2. __Use Environment Variables__: Store keys in environment variables
-3. __Rotate Regularly__: Regenerate keys periodically
-4. __Scope Appropriately__: Use minimal required permissions
-5. __Monitor Usage__: Regularly review API key usage statistics
+1. **Store Securely**: Never commit API keys to version control
+2. **Use Environment Variables**: Store keys in environment variables
+3. **Rotate Regularly**: Regenerate keys periodically
+4. **Scope Appropriately**: Use minimal required permissions
+5. **Monitor Usage**: Regularly review API key usage statistics
 
 ### Environment Separation
 
@@ -510,45 +510,45 @@ const makeApiRequest = async (endpoint, data) => {
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.ALTUS4_API_KEY}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${process.env.ALTUS4_API_KEY}`,
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
-    })
+      body: JSON.stringify(data),
+    });
 
     if (response.status === 401) {
-      throw new Error('Invalid or expired API key')
+      throw new Error('Invalid or expired API key');
     }
 
     if (response.status === 403) {
-      throw new Error('Insufficient permissions for this operation')
+      throw new Error('Insufficient permissions for this operation');
     }
 
-    return await response.json()
+    return await response.json();
   } catch (error) {
-    console.error('API request failed:', error.message)
-    throw error
+    console.error('API request failed:', error.message);
+    throw error;
   }
-}
+};
 ```
 
 ## Troubleshooting Authentication
 
 ### Common Issues
 
-__Invalid API Key (401)__:
+**Invalid API Key (401)**:
 
 - Verify API key format and prefix
 - Check if key has been revoked
 - Ensure key is for the correct environment
 
-__Insufficient Permissions (403)__:
+**Insufficient Permissions (403)**:
 
 - Review required permissions for the endpoint
 - Update API key permissions if needed
 - Check if tier supports the requested feature
 
-__Rate Limit Exceeded (429)__:
+**Rate Limit Exceeded (429)**:
 
 - Review current tier limits
 - Implement proper rate limiting in your application
@@ -578,4 +578,4 @@ Expected response:
 
 ---
 
-__Next Steps__: [Search Operations](./search.md) | [Database Management](./database.md)
+**Next Steps**: [Search Operations](./search.md) | [Database Management](./database.md)

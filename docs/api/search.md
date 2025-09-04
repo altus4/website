@@ -15,9 +15,9 @@ Altus 4 provides powerful search capabilities that enhance MySQL's native full-t
 
 Altus 4 supports three distinct search modes:
 
-- __Natural Language__ - Human-readable queries with automatic optimization
-- __Boolean__ - Traditional boolean operators (AND, OR, NOT) with MySQL syntax
-- __Semantic__ - AI-powered semantic search using OpenAI embeddings
+- **Natural Language** - Human-readable queries with automatic optimization
+- **Boolean** - Traditional boolean operators (AND, OR, NOT) with MySQL syntax
+- **Semantic** - AI-powered semantic search using OpenAI embeddings
 
 ### Search Architecture
 
@@ -43,16 +43,16 @@ graph TD
 
 Perform a search across one or more connected databases with comprehensive options.
 
-__Endpoint__: `POST /api/search`
+**Endpoint**: `POST /api/search`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
-__Request Body__:
+**Request Body**:
 
 ```json
 {
@@ -78,47 +78,47 @@ __Request Body__:
 }
 ```
 
-__Request Parameters__:
+**Request Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `query` | string | Yes | Search query (1-500 characters) |
-| `databases` | array | Yes | Array of database UUIDs to search |
-| `searchMode` | enum | No | `natural`, `boolean`, `semantic` (default: `natural`) |
-| `limit` | number | No | Max results per database (1-100, default: 20) |
-| `offset` | number | No | Results offset for pagination (default: 0) |
-| `filters` | object | No | Search filters and constraints |
-| `options` | object | No | Additional search options |
+| Parameter    | Type   | Required | Description                                           |
+| ------------ | ------ | -------- | ----------------------------------------------------- |
+| `query`      | string | Yes      | Search query (1-500 characters)                       |
+| `databases`  | array  | Yes      | Array of database UUIDs to search                     |
+| `searchMode` | enum   | No       | `natural`, `boolean`, `semantic` (default: `natural`) |
+| `limit`      | number | No       | Max results per database (1-100, default: 20)         |
+| `offset`     | number | No       | Results offset for pagination (default: 0)            |
+| `filters`    | object | No       | Search filters and constraints                        |
+| `options`    | object | No       | Additional search options                             |
 
-__Filters Object__:
+**Filters Object**:
 
 ```json
 {
-  "tables": ["table1", "table2"],           // Specific tables to search
-  "columns": ["title", "content", "tags"],  // Specific columns to search
+  "tables": ["table1", "table2"], // Specific tables to search
+  "columns": ["title", "content", "tags"], // Specific columns to search
   "dateRange": {
-    "from": "2024-01-01",                  // ISO date string
-    "to": "2024-12-31"                     // ISO date string
+    "from": "2024-01-01", // ISO date string
+    "to": "2024-12-31" // ISO date string
   },
-  "minScore": 0.5,                         // Minimum relevance score (0-1)
-  "exclude": ["archived", "deleted"]       // Values to exclude
+  "minScore": 0.5, // Minimum relevance score (0-1)
+  "exclude": ["archived", "deleted"] // Values to exclude
 }
 ```
 
-__Options Object__:
+**Options Object**:
 
 ```json
 {
-  "includeSchema": true,      // Include table/column metadata
-  "enableAI": true,          // Enable AI enhancements
-  "cacheResults": true,      // Cache results for performance
-  "returnMetadata": true,    // Include search metadata
-  "highlightMatches": true,  // Highlight search terms
-  "fuzzyMatching": false     // Enable fuzzy text matching
+  "includeSchema": true, // Include table/column metadata
+  "enableAI": true, // Enable AI enhancements
+  "cacheResults": true, // Cache results for performance
+  "returnMetadata": true, // Include search metadata
+  "highlightMatches": true, // Highlight search terms
+  "fuzzyMatching": false // Enable fuzzy text matching
 }
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -199,7 +199,7 @@ __Response__:
 
 Process human-readable queries with automatic optimization.
 
-__Example Request__:
+**Example Request**:
 
 ```json
 {
@@ -210,7 +210,7 @@ __Example Request__:
 }
 ```
 
-__Features__:
+**Features**:
 
 - Automatic query expansion and optimization
 - Synonym detection and matching
@@ -221,7 +221,7 @@ __Features__:
 
 Use traditional boolean operators for precise control.
 
-__Example Request__:
+**Example Request**:
 
 ```json
 {
@@ -232,7 +232,7 @@ __Example Request__:
 }
 ```
 
-__Supported Operators__:
+**Supported Operators**:
 
 - `AND` - Both terms must be present
 - `OR` - Either term can be present
@@ -241,7 +241,7 @@ __Supported Operators__:
 - `""` - Exact phrase matching
 - `*` - Wildcard matching
 
-__Boolean Query Examples__:
+**Boolean Query Examples**:
 
 ```bash
 # Exact phrase
@@ -267,7 +267,7 @@ optim* AND databas*
 
 AI-powered search using embeddings for concept matching.
 
-__Example Request__:
+**Example Request**:
 
 ```json
 {
@@ -280,7 +280,7 @@ __Example Request__:
 }
 ```
 
-__Features__:
+**Features**:
 
 - Concept-based matching beyond keywords
 - Understanding of context and intent
@@ -293,21 +293,21 @@ __Features__:
 
 Retrieve intelligent search suggestions based on query and context.
 
-__Endpoint__: `GET /api/search/suggestions`
+**Endpoint**: `GET /api/search/suggestions`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `q` - Partial query string
 - `databases` - Comma-separated database IDs
 - `limit` - Number of suggestions (default: 5, max: 20)
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -339,7 +339,7 @@ __Response__:
 }
 ```
 
-__cURL Example__:
+**cURL Example**:
 
 ```bash
 curl -X GET "https://api.altus4.dev/api/search/suggestions?q=database%20perf&databases=db_uuid_1&limit=5" \
@@ -352,9 +352,9 @@ curl -X GET "https://api.altus4.dev/api/search/suggestions?q=database%20perf&dat
 
 Get detailed performance analysis for a search query.
 
-__Endpoint__: `POST /api/search/analyze`
+**Endpoint**: `POST /api/search/analyze`
 
-__Request Body__:
+**Request Body**:
 
 ```json
 {
@@ -364,7 +364,7 @@ __Request Body__:
 }
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -402,9 +402,9 @@ __Response__:
 
 Retrieve user's search history with analytics.
 
-__Endpoint__: `GET /api/search/history`
+**Endpoint**: `GET /api/search/history`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `limit` - Number of history entries (default: 50, max: 500)
 - `offset` - Pagination offset
@@ -412,7 +412,7 @@ __Query Parameters__:
 - `to` - End date (ISO string)
 - `databases` - Filter by specific databases
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -448,14 +448,14 @@ __Response__:
 
 Get user's search trends and pattern insights.
 
-__Endpoint__: `GET /api/search/trends`
+**Endpoint**: `GET /api/search/trends`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `period` - `day`, `week`, `month` (default: `week`)
 - `databases` - Filter by specific databases
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -501,16 +501,16 @@ __Response__:
 ```javascript
 const altus4 = {
   apiKey: 'altus4_sk_live_abc123...',
-  baseUrl: 'https://api.altus4.dev'
-}
+  baseUrl: 'https://api.altus4.dev',
+};
 
 // Basic search
 const searchResults = async (query, databases) => {
   const response = await fetch(`${altus4.baseUrl}/api/search`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${altus4.apiKey}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${altus4.apiKey}`,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       query,
@@ -519,22 +519,22 @@ const searchResults = async (query, databases) => {
       limit: 20,
       options: {
         enableAI: true,
-        highlightMatches: true
-      }
-    })
-  })
+        highlightMatches: true,
+      },
+    }),
+  });
 
-  const data = await response.json()
-  return data.data.results
-}
+  const data = await response.json();
+  return data.data.results;
+};
 
 // Search with advanced options
-const advancedSearch = async (searchParams) => {
+const advancedSearch = async searchParams => {
   const response = await fetch(`${altus4.baseUrl}/api/search`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${altus4.apiKey}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${altus4.apiKey}`,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       query: searchParams.query,
@@ -544,24 +544,24 @@ const advancedSearch = async (searchParams) => {
       filters: {
         tables: searchParams.tables,
         dateRange: searchParams.dateRange,
-        minScore: 0.7
+        minScore: 0.7,
       },
       options: {
         enableAI: true,
         includeSchema: true,
-        highlightMatches: true
-      }
-    })
-  })
+        highlightMatches: true,
+      },
+    }),
+  });
 
-  return await response.json()
-}
+  return await response.json();
+};
 
 // Usage examples
-const results = await searchResults(
-  'database performance optimization',
-  ['db_uuid_1', 'db_uuid_2']
-)
+const results = await searchResults('database performance optimization', [
+  'db_uuid_1',
+  'db_uuid_2',
+]);
 
 const advancedResults = await advancedSearch({
   query: 'mysql indexing strategies',
@@ -571,9 +571,9 @@ const advancedResults = await advancedSearch({
   tables: ['articles', 'documentation'],
   dateRange: {
     from: '2024-01-01',
-    to: '2024-12-31'
-  }
-})
+    to: '2024-12-31',
+  },
+});
 ```
 
 ### Python
@@ -697,17 +697,17 @@ for result in results['data']['results']:
 
 ### Query Optimization
 
-1. __Use Specific Terms__: More specific queries yield better results
-2. __Leverage Search Modes__: Choose the right mode for your use case
-3. __Apply Filters__: Use filters to narrow down results effectively
-4. __Cache Results__: Enable caching for frequently used queries
+1. **Use Specific Terms**: More specific queries yield better results
+2. **Leverage Search Modes**: Choose the right mode for your use case
+3. **Apply Filters**: Use filters to narrow down results effectively
+4. **Cache Results**: Enable caching for frequently used queries
 
 ### Performance Tips
 
-1. __Limit Results__: Use appropriate limits to improve response times
-2. __Batch Databases__: Search multiple databases in a single request
-3. __Use Pagination__: Implement pagination for large result sets
-4. __Monitor Usage__: Track search performance and optimize accordingly
+1. **Limit Results**: Use appropriate limits to improve response times
+2. **Batch Databases**: Search multiple databases in a single request
+3. **Use Pagination**: Implement pagination for large result sets
+4. **Monitor Usage**: Track search performance and optimize accordingly
 
 ### Error Handling
 
@@ -717,27 +717,27 @@ const safeSearch = async (query, databases) => {
     const response = await fetch('/api/search', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query, databases })
-    })
+      body: JSON.stringify({ query, databases }),
+    });
 
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(`Search failed: ${error.error.message}`)
+      const error = await response.json();
+      throw new Error(`Search failed: ${error.error.message}`);
     }
 
-    return await response.json()
+    return await response.json();
   } catch (error) {
-    console.error('Search error:', error.message)
+    console.error('Search error:', error.message);
 
     // Fallback to cached results or simplified search
-    return await getFallbackResults(query)
+    return await getFallbackResults(query);
   }
-}
+};
 ```
 
 ---
 
-__Next Steps__: [Database Management](./database.md) | [Analytics & Insights](./analytics.md)
+**Next Steps**: [Database Management](./database.md) | [Analytics & Insights](./analytics.md)

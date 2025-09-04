@@ -13,9 +13,9 @@ This guide provides practical examples of basic search operations using Altus 4'
 
 Before running these examples, ensure you have:
 
-- __Altus 4 API Key__ - Get one from the [Quick Start Guide](../setup/quickstart.md)
-- __Database Connection__ - At least one connected MySQL database
-- __HTTP Client__ - cURL, Postman, or your preferred programming language
+- **Altus 4 API Key** - Get one from the [Quick Start Guide](../setup/quickstart.md)
+- **Database Connection** - At least one connected MySQL database
+- **HTTP Client** - cURL, Postman, or your preferred programming language
 
 ## Basic Search Request
 
@@ -35,7 +35,7 @@ curl -X POST https://api.altus4.com/api/v1/search \
   }'
 ```
 
-__Response:__
+**Response:**
 
 ```json
 {
@@ -74,23 +74,23 @@ Best for human-readable queries:
 
 ```javascript
 const searchRequest = {
-  query: "how to optimize database performance",
-  databases: ["db-uuid-1"],
-  searchMode: "natural",
-  limit: 20
-}
+  query: 'how to optimize database performance',
+  databases: ['db-uuid-1'],
+  searchMode: 'natural',
+  limit: 20,
+};
 
 const response = await fetch('https://api.altus4.com/api/v1/search', {
   method: 'POST',
   headers: {
-    'Authorization': `Bearer ${apiKey}`,
-    'Content-Type': 'application/json'
+    Authorization: `Bearer ${apiKey}`,
+    'Content-Type': 'application/json',
   },
-  body: JSON.stringify(searchRequest)
-})
+  body: JSON.stringify(searchRequest),
+});
 
-const results = await response.json()
-console.log(`Found ${results.data.totalCount} results`)
+const results = await response.json();
+console.log(`Found ${results.data.totalCount} results`);
 ```
 
 ### 2. Boolean Search
@@ -123,7 +123,7 @@ for result in results['data']['results']:
     print(f"Score: {result['relevanceScore']}")
 ```
 
-__Boolean Operators:__
+**Boolean Operators:**
 
 - `+word` - Must contain word
 - `-word` - Must not contain word
@@ -200,45 +200,47 @@ Handle large result sets with pagination:
 
 ```javascript
 async function searchWithPagination(query, databases, pageSize = 20) {
-  let allResults = []
-  let offset = 0
-  let hasMore = true
+  let allResults = [];
+  let offset = 0;
+  let hasMore = true;
 
   while (hasMore) {
     const response = await fetch('https://api.altus4.com/api/v1/search', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         query,
         databases,
         limit: pageSize,
-        offset: offset
-      })
-    })
+        offset: offset,
+      }),
+    });
 
-    const data = await response.json()
-    const results = data.data.results
+    const data = await response.json();
+    const results = data.data.results;
 
-    allResults.push(...results)
+    allResults.push(...results);
 
     // Check if there are more results
-    hasMore = results.length === pageSize
-    offset += pageSize
+    hasMore = results.length === pageSize;
+    offset += pageSize;
 
-    console.log(`Fetched ${results.length} results (total: ${allResults.length})`)
+    console.log(
+      `Fetched ${results.length} results (total: ${allResults.length})`
+    );
   }
 
-  return allResults
+  return allResults;
 }
 
 // Usage
-const allResults = await searchWithPagination(
-  "database optimization",
-  ["db-uuid-1", "db-uuid-2"]
-)
+const allResults = await searchWithPagination('database optimization', [
+  'db-uuid-1',
+  'db-uuid-2',
+]);
 ```
 
 ## Working with Results
@@ -289,21 +291,21 @@ function extractArticleData(searchResults) {
     preview: result.snippet,
     source: {
       database: result.database,
-      table: result.table
-    }
-  }))
+      table: result.table,
+    },
+  }));
 }
 
 // Usage
-const response = await searchAPI('database performance tuning')
-const articles = extractArticleData(response)
+const response = await searchAPI('database performance tuning');
+const articles = extractArticleData(response);
 
 articles.forEach(article => {
-  console.log(`${article.title} by ${article.author}`)
-  console.log(`Relevance: ${article.relevance}`)
-  console.log(`Preview: ${article.preview}`)
-  console.log('---')
-})
+  console.log(`${article.title} by ${article.author}`);
+  console.log(`Relevance: ${article.relevance}`);
+  console.log(`Preview: ${article.preview}`);
+  console.log('---');
+});
 ```
 
 ## Error Handling
@@ -391,18 +393,18 @@ except Exception as e:
 
 ```javascript
 // Good: Specific, focused queries
-const goodQuery = "mysql index optimization b-tree"
+const goodQuery = 'mysql index optimization b-tree';
 
 // Avoid: Overly broad queries
-const broadQuery = "database"
+const broadQuery = 'database';
 
 // Good: Use appropriate limits
 const searchRequest = {
   query: goodQuery,
-  databases: ["db-uuid-1"],
+  databases: ['db-uuid-1'],
   limit: 20, // Don't request more than you need
-  searchMode: "natural"
-}
+  searchMode: 'natural',
+};
 ```
 
 ### 2. Batch Multiple Searches
@@ -451,68 +453,69 @@ results = asyncio.run(batch_search(queries, ["db-uuid-1"], api_key))
 
 ```javascript
 class SearchCache {
-  constructor(ttl = 300000) { // 5 minutes default TTL
-    this.cache = new Map()
-    this.ttl = ttl
+  constructor(ttl = 300000) {
+    // 5 minutes default TTL
+    this.cache = new Map();
+    this.ttl = ttl;
   }
 
   generateKey(query, databases, options = {}) {
-    return JSON.stringify({ query, databases, ...options })
+    return JSON.stringify({ query, databases, ...options });
   }
 
   get(query, databases, options) {
-    const key = this.generateKey(query, databases, options)
-    const cached = this.cache.get(key)
+    const key = this.generateKey(query, databases, options);
+    const cached = this.cache.get(key);
 
     if (cached && Date.now() - cached.timestamp < this.ttl) {
-      return cached.data
+      return cached.data;
     }
 
-    return null
+    return null;
   }
 
   set(query, databases, options, data) {
-    const key = this.generateKey(query, databases, options)
+    const key = this.generateKey(query, databases, options);
     this.cache.set(key, {
       data,
-      timestamp: Date.now()
-    })
+      timestamp: Date.now(),
+    });
   }
 
   async search(query, databases, options = {}) {
     // Check cache first
-    const cached = this.get(query, databases, options)
+    const cached = this.get(query, databases, options);
     if (cached) {
-      console.log('Cache hit!')
-      return cached
+      console.log('Cache hit!');
+      return cached;
     }
 
     // Perform actual search
     const response = await fetch('https://api.altus4.com/api/v1/search', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         query,
         databases,
-        ...options
-      })
-    })
+        ...options,
+      }),
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
     // Cache the result
-    this.set(query, databases, options, data)
+    this.set(query, databases, options, data);
 
-    return data
+    return data;
   }
 }
 
 // Usage
-const searchCache = new SearchCache()
-const results = await searchCache.search("mysql performance", ["db-uuid-1"])
+const searchCache = new SearchCache();
+const results = await searchCache.search('mysql performance', ['db-uuid-1']);
 ```
 
 ## Common Use Cases
@@ -539,31 +542,31 @@ curl -X POST https://api.altus4.com/api/v1/search \
 async function searchProducts(searchTerm, category = null) {
   const searchRequest = {
     query: searchTerm,
-    databases: ["ecommerce_db"],
-    tables: ["products"],
-    searchMode: "natural",
-    limit: 50
-  }
+    databases: ['ecommerce_db'],
+    tables: ['products'],
+    searchMode: 'natural',
+    limit: 50,
+  };
 
   // Add category filter if specified
   if (category) {
-    searchRequest.filters = { category }
+    searchRequest.filters = { category };
   }
 
   const response = await fetch('https://api.altus4.com/api/v1/search', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(searchRequest)
-  })
+    body: JSON.stringify(searchRequest),
+  });
 
-  return await response.json()
+  return await response.json();
 }
 
 // Usage
-const laptops = await searchProducts("gaming laptop", "electronics")
+const laptops = await searchProducts('gaming laptop', 'electronics');
 ```
 
 ### 3. Documentation Search
@@ -591,27 +594,30 @@ help_results = search_documentation("how to reset password", "support_db")
 
 Now that you understand basic search operations, explore:
 
-- __[Advanced Queries](./advanced-queries.md)__ - Complex search patterns and filters
-- __[AI Integration](./ai-integration.md)__ - Leveraging semantic search capabilities
-- __[Multi-Database Search](./multi-database.md)__ - Searching across multiple databases
-- __[API Reference](../api/search.md)__ - Complete search API documentation
+- **[Advanced Queries](./advanced-queries.md)** - Complex search patterns and filters
+- **[AI Integration](./ai-integration.md)** - Leveraging semantic search capabilities
+- **[Multi-Database Search](./multi-database.md)** - Searching across multiple databases
+- **[API Reference](../api/search.md)** - Complete search API documentation
 
 ## Troubleshooting
 
 ### Common Issues
 
-__Empty Results__
+**Empty Results**
 
 ```javascript
 // Check if your database has FULLTEXT indexes
-const schemaResponse = await fetch(`https://api.altus4.com/api/v1/databases/${databaseId}/schema`, {
-  headers: { 'Authorization': `Bearer ${apiKey}` }
-})
-const schema = await schemaResponse.json()
-console.log('FULLTEXT indexes:', schema.data.fulltextIndexes)
+const schemaResponse = await fetch(
+  `https://api.altus4.com/api/v1/databases/${databaseId}/schema`,
+  {
+    headers: { Authorization: `Bearer ${apiKey}` },
+  }
+);
+const schema = await schemaResponse.json();
+console.log('FULLTEXT indexes:', schema.data.fulltextIndexes);
 ```
 
-__Slow Searches__
+**Slow Searches**
 
 ```bash
 # Use more specific queries
@@ -625,18 +631,18 @@ __Slow Searches__
 }
 ```
 
-__Authentication Errors__
+**Authentication Errors**
 
 ```javascript
 // Verify API key format
 if (!apiKey.startsWith('altus4_sk_')) {
-  console.error('Invalid API key format')
+  console.error('Invalid API key format');
 }
 
 // Check API key permissions
-console.log('API Key permissions:', req.apiKey.permissions)
+console.log('API Key permissions:', req.apiKey.permissions);
 ```
 
 ---
 
-__Ready for more advanced search techniques?__ Continue with [Advanced Queries](./advanced-queries.md) to learn complex search patterns and optimization strategies.
+**Ready for more advanced search techniques?** Continue with [Advanced Queries](./advanced-queries.md) to learn complex search patterns and optimization strategies.

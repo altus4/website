@@ -11,110 +11,110 @@ This section provides comprehensive guides for deploying Altus 4 in various envi
 
 For a quick production deployment:
 
-1. __[Production Deployment](./production.md)__ - Complete guide for production setup with MySQL, Redis, and NGINX
-2. __[Docker Deployment](./docker.md)__ - Containerized deployment with Docker and Docker Compose
-3. __[Monitoring Setup](./monitoring.md)__ - Comprehensive monitoring, logging, and alerting
+1. **[Production Deployment](./production.md)** - Complete guide for production setup with MySQL, Redis, and NGINX
+2. **[Docker Deployment](./docker.md)** - Containerized deployment with Docker and Docker Compose
+3. **[Monitoring Setup](./monitoring.md)** - Comprehensive monitoring, logging, and alerting
 
 ## Deployment Options
 
 ### Local Development
 
-- __[Local Setup](./local.md)__ - Setting up development environment
-- __Environment Configuration__ - Managing development vs production settings
-- __Database Setup__ - Local MySQL and Redis configuration
+- **[Local Setup](./local.md)** - Setting up development environment
+- **Environment Configuration** - Managing development vs production settings
+- **Database Setup** - Local MySQL and Redis configuration
 
 ### Production Environments
 
 #### Single Server Deployment
 
-- __Virtual Private Server (VPS)__ - Deploy on DigitalOcean, Linode, or AWS EC2
-- __Bare Metal__ - Deploy on dedicated servers
-- __Resource Requirements__ - CPU, memory, and storage considerations
+- **Virtual Private Server (VPS)** - Deploy on DigitalOcean, Linode, or AWS EC2
+- **Bare Metal** - Deploy on dedicated servers
+- **Resource Requirements** - CPU, memory, and storage considerations
 
 #### Containerized Deployment
 
-- __[Docker](./docker.md)__ - Single-node Docker deployment
-- __Docker Compose__ - Multi-container orchestration
-- __Container Security__ - Best practices for secure containers
+- **[Docker](./docker.md)** - Single-node Docker deployment
+- **Docker Compose** - Multi-container orchestration
+- **Container Security** - Best practices for secure containers
 
 #### Cloud Platforms
 
-- __AWS Deployment__ - EC2, RDS, ElastiCache configuration
-- __Google Cloud Platform__ - Compute Engine, Cloud SQL, Memorystore
-- __Microsoft Azure__ - Virtual Machines, Azure Database, Redis Cache
+- **AWS Deployment** - EC2, RDS, ElastiCache configuration
+- **Google Cloud Platform** - Compute Engine, Cloud SQL, Memorystore
+- **Microsoft Azure** - Virtual Machines, Azure Database, Redis Cache
 
 #### Orchestration Platforms
 
-- __Kubernetes__ - Container orchestration deployment (see [scaling guide](./scaling.md))
-- __Docker Swarm__ - Lightweight container orchestration
-- __Nomad__ - HashiCorp's container orchestration
+- **Kubernetes** - Container orchestration deployment (see [scaling guide](./scaling.md))
+- **Docker Swarm** - Lightweight container orchestration
+- **Nomad** - HashiCorp's container orchestration
 
 ### Scaling Strategies
 
 #### Horizontal Scaling
 
-- __Load Balancing__ - NGINX, HAProxy, and cloud load balancers (see [production guide](./production.md))
-- __[Auto-scaling](./scaling.md)__ - Automatic scaling based on metrics
-- __Database Scaling__ - Read replicas and database clustering
+- **Load Balancing** - NGINX, HAProxy, and cloud load balancers (see [production guide](./production.md))
+- **[Auto-scaling](./scaling.md)** - Automatic scaling based on metrics
+- **Database Scaling** - Read replicas and database clustering
 
 #### Performance Optimization
 
-- __Caching Strategies__ - Redis clustering and cache optimization
-- __Database Optimization__ - Query optimization and indexing
-- __CDN Integration__ - Content delivery network setup
+- **Caching Strategies** - Redis clustering and cache optimization
+- **Database Optimization** - Query optimization and indexing
+- **CDN Integration** - Content delivery network setup
 
 ## Security and Compliance
 
 ### Security Hardening
 
-- __Security Guide__ - Comprehensive security configuration (see [production guide](./production.md))
-- __SSL/TLS Setup__ - Certificate management and HTTPS configuration
-- __Firewall Configuration__ - Network security and access control
-- __API Security__ - Rate limiting, authentication, and authorization
+- **Security Guide** - Comprehensive security configuration (see [production guide](./production.md))
+- **SSL/TLS Setup** - Certificate management and HTTPS configuration
+- **Firewall Configuration** - Network security and access control
+- **API Security** - Rate limiting, authentication, and authorization
 
 ### Compliance
 
-- __Data Privacy__ - GDPR, CCPA compliance considerations
-- __Audit Logging__ - Comprehensive audit trail setup
-- __Backup and Recovery__ - Data protection and disaster recovery
+- **Data Privacy** - GDPR, CCPA compliance considerations
+- **Audit Logging** - Comprehensive audit trail setup
+- **Backup and Recovery** - Data protection and disaster recovery
 
 ## Monitoring and Observability
 
 ### Application Monitoring
 
-- __[Monitoring Setup](./monitoring.md)__ - Prometheus, Grafana, and alerting
-- __Performance Monitoring__ - Application metrics and profiling
-- __Error Tracking__ - Error monitoring and reporting
-- __Log Management__ - Centralized logging with ELK stack
+- **[Monitoring Setup](./monitoring.md)** - Prometheus, Grafana, and alerting
+- **Performance Monitoring** - Application metrics and profiling
+- **Error Tracking** - Error monitoring and reporting
+- **Log Management** - Centralized logging with ELK stack
 
 ### Infrastructure Monitoring
 
-- __System Metrics__ - CPU, memory, disk, and network monitoring
-- __Database Monitoring__ - MySQL performance and health monitoring
-- __Redis Monitoring__ - Cache performance and memory usage
-- __Network Monitoring__ - Traffic analysis and network health
+- **System Metrics** - CPU, memory, disk, and network monitoring
+- **Database Monitoring** - MySQL performance and health monitoring
+- **Redis Monitoring** - Cache performance and memory usage
+- **Network Monitoring** - Traffic analysis and network health
 
 ## Maintenance and Operations
 
 ### Regular Maintenance
 
-- __Update Procedures__ - Safe application and dependency updates
-- __Database Maintenance__ - Index optimization and cleanup
-- __Log Rotation__ - Managing log files and storage
-- __Health Checks__ - Automated health monitoring
+- **Update Procedures** - Safe application and dependency updates
+- **Database Maintenance** - Index optimization and cleanup
+- **Log Rotation** - Managing log files and storage
+- **Health Checks** - Automated health monitoring
 
 ### Backup and Recovery
 
-- __Backup Strategy__ - Automated backup procedures (see [production guide](./production.md))
-- __Disaster Recovery__ - Recovery procedures and testing
-- __Data Migration__ - Moving data between environments
+- **Backup Strategy** - Automated backup procedures (see [production guide](./production.md))
+- **Disaster Recovery** - Recovery procedures and testing
+- **Data Migration** - Moving data between environments
 
 ### Troubleshooting
 
-- __[Production Setup](./production.md)__ - Complete production deployment guide
-- __Performance Issues__ - Diagnosing and resolving performance problems
-- __Connection Issues__ - Database and Redis connectivity problems
-- __Memory Issues__ - Memory leaks and optimization
+- **[Production Setup](./production.md)** - Complete production deployment guide
+- **Performance Issues** - Diagnosing and resolving performance problems
+- **Connection Issues** - Database and Redis connectivity problems
+- **Memory Issues** - Memory leaks and optimization
 
 ## Environment-Specific Considerations
 
@@ -164,18 +164,18 @@ Before deploying to production, ensure you've completed:
 
 ### Documentation
 
-- __API Reference__ - Complete API documentation
-- __Configuration Reference__ - All configuration options
-- __Troubleshooting Guide__ - Common issues and solutions
+- **API Reference** - Complete API documentation
+- **Configuration Reference** - All configuration options
+- **Troubleshooting Guide** - Common issues and solutions
 
 ### Support Channels
 
-- __GitHub Issues__ - Bug reports and feature requests
-- __Discord Community__ - Real-time community support
-- __Professional Support__ - Enterprise support options
+- **GitHub Issues** - Bug reports and feature requests
+- **Discord Community** - Real-time community support
+- **Professional Support** - Enterprise support options
 
 ### Community Resources
 
-- __Example Configurations__ - Community-contributed configurations
-- __Best Practices__ - Community best practices and patterns
-- __Case Studies__ - Real-world deployment examples
+- **Example Configurations** - Community-contributed configurations
+- **Best Practices** - Community best practices and patterns
+- **Case Studies** - Real-world deployment examples

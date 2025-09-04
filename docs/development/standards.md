@@ -13,19 +13,19 @@ This document outlines the coding standards, style guidelines, and best practice
 
 ### 1. Code Quality Principles
 
-- __Readability First__: Code is read more often than it's written
-- __Consistency__: Follow established patterns throughout the codebase
-- __Simplicity__: Prefer simple, clear solutions over clever ones
-- __Documentation__: Code should be self-documenting with clear naming
-- __Testing__: All code must be thoroughly tested
+- **Readability First**: Code is read more often than it's written
+- **Consistency**: Follow established patterns throughout the codebase
+- **Simplicity**: Prefer simple, clear solutions over clever ones
+- **Documentation**: Code should be self-documenting with clear naming
+- **Testing**: All code must be thoroughly tested
 
 ### 2. SOLID Principles
 
-- __Single Responsibility__: Each class/function should have one reason to change
-- __Open/Closed__: Open for extension, closed for modification
-- __Liskov Substitution__: Derived classes must be substitutable for base classes
-- __Interface Segregation__: Clients shouldn't depend on interfaces they don't use
-- __Dependency Inversion__: Depend on abstractions, not concretions
+- **Single Responsibility**: Each class/function should have one reason to change
+- **Open/Closed**: Open for extension, closed for modification
+- **Liskov Substitution**: Derived classes must be substitutable for base classes
+- **Interface Segregation**: Clients shouldn't depend on interfaces they don't use
+- **Dependency Inversion**: Depend on abstractions, not concretions
 
 ## TypeScript Standards
 
@@ -49,10 +49,10 @@ src/
 // Classes: PascalCase
 class SearchService {
   // Private properties: underscore prefix
-  private _connectionPool: ConnectionPool
+  private _connectionPool: ConnectionPool;
 
   // Public properties: camelCase
-  public isConnected: boolean
+  public isConnected: boolean;
 
   // Methods: camelCase with descriptive names
   async executeFullTextSearch(query: string): Promise<SearchResult[]> {
@@ -67,19 +67,19 @@ class SearchService {
 
 // Interfaces: PascalCase with 'I' prefix for internal interfaces
 interface ISearchService {
-  search(query: string): Promise<SearchResult[]>
+  search(query: string): Promise<SearchResult[]>;
 }
 
 // Types: PascalCase
-type SearchMode = 'natural' | 'boolean' | 'semantic'
+type SearchMode = 'natural' | 'boolean' | 'semantic';
 
 // Constants: SCREAMING_SNAKE_CASE
-const MAX_SEARCH_RESULTS = 100
-const DEFAULT_TIMEOUT = 30000
+const MAX_SEARCH_RESULTS = 100;
+const DEFAULT_TIMEOUT = 30000;
 
 // Variables and functions: camelCase
-const searchResults = await searchService.executeSearch(query)
-const isValidQuery = validateSearchQuery(query)
+const searchResults = await searchService.executeSearch(query);
+const isValidQuery = validateSearchQuery(query);
 
 // File names: kebab-case
 // search-service.ts
@@ -92,43 +92,43 @@ const isValidQuery = validateSearchQuery(query)
 ```typescript
 // Always use explicit types for public APIs
 interface SearchRequest {
-  query: string
-  databases: string[]
-  searchMode?: SearchMode
-  limit?: number
-  offset?: number
+  query: string;
+  databases: string[];
+  searchMode?: SearchMode;
+  limit?: number;
+  offset?: number;
 }
 
 // Use strict typing for responses
 interface ApiResponse<T> {
-  success: boolean
-  data?: T
+  success: boolean;
+  data?: T;
   error?: {
-    code: string
-    message: string
-    details?: unknown
-  }
+    code: string;
+    message: string;
+    details?: unknown;
+  };
   meta: {
-    timestamp: Date
-    requestId: string
-    version: string
-  }
+    timestamp: Date;
+    requestId: string;
+    version: string;
+  };
 }
 
 // Use branded types for IDs to prevent mixing
-type UserId = string & { readonly brand: unique symbol }
-type DatabaseId = string & { readonly brand: unique symbol }
+type UserId = string & { readonly brand: unique symbol };
+type DatabaseId = string & { readonly brand: unique symbol };
 
 // Use discriminated unions for complex types
 type SearchResult =
   | { type: 'document'; content: string; title: string }
   | { type: 'image'; url: string; alt: string }
-  | { type: 'video'; url: string; duration: number }
+  | { type: 'video'; url: string; duration: number };
 
 // Use utility types appropriately
-type PartialSearchRequest = Partial<SearchRequest>
-type RequiredSearchRequest = Required<SearchRequest>
-type SearchRequestKeys = keyof SearchRequest
+type PartialSearchRequest = Partial<SearchRequest>;
+type RequiredSearchRequest = Required<SearchRequest>;
+type SearchRequestKeys = keyof SearchRequest;
 ```
 
 ### Error Handling
@@ -142,21 +142,27 @@ export class AppError extends Error {
     public code: string = 'INTERNAL_ERROR',
     public isOperational: boolean = true
   ) {
-    super(message)
-    this.name = this.constructor.name
-    Error.captureStackTrace(this, this.constructor)
+    super(message);
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
   }
 }
 
 export class ValidationError extends AppError {
-  constructor(message: string, public field?: string) {
-    super(message, 400, 'VALIDATION_ERROR')
+  constructor(
+    message: string,
+    public field?: string
+  ) {
+    super(message, 400, 'VALIDATION_ERROR');
   }
 }
 
 export class DatabaseError extends AppError {
-  constructor(message: string, public query?: string) {
-    super(message, 500, 'DATABASE_ERROR')
+  constructor(
+    message: string,
+    public query?: string
+  ) {
+    super(message, 500, 'DATABASE_ERROR');
   }
 }
 
@@ -165,43 +171,42 @@ export class SearchService {
   async search(request: SearchRequest): Promise<SearchResponse> {
     try {
       // Validate input
-      this.validateSearchRequest(request)
+      this.validateSearchRequest(request);
 
       // Execute search
-      const results = await this.executeSearch(request)
+      const results = await this.executeSearch(request);
 
       return {
         success: true,
-        data: results
-      }
+        data: results,
+      };
     } catch (error) {
       // Log error with context
       this.logger.error('Search failed', {
         request,
         error: error.message,
-        stack: error.stack
-      })
+        stack: error.stack,
+      });
 
       // Re-throw with proper error type
       if (error instanceof ValidationError) {
-        throw error
+        throw error;
       }
 
-      throw new AppError(
-        'Search operation failed',
-        500,
-        'SEARCH_ERROR'
-      )
+      throw new AppError('Search operation failed', 500, 'SEARCH_ERROR');
     }
   }
 
   private validateSearchRequest(request: SearchRequest): void {
     if (!request.query?.trim()) {
-      throw new ValidationError('Query cannot be empty', 'query')
+      throw new ValidationError('Query cannot be empty', 'query');
     }
 
     if (!request.databases?.length) {
-      throw new ValidationError('At least one database must be specified', 'databases')
+      throw new ValidationError(
+        'At least one database must be specified',
+        'databases'
+      );
     }
   }
 }
@@ -214,25 +219,27 @@ export class SearchService {
 // Good
 async function fetchUserData(userId: string): Promise<User> {
   try {
-    const user = await userRepository.findById(userId)
-    const profile = await profileService.getProfile(userId)
+    const user = await userRepository.findById(userId);
+    const profile = await profileService.getProfile(userId);
 
-    return { ...user, profile }
+    return { ...user, profile };
   } catch (error) {
-    logger.error('Failed to fetch user data', { userId, error })
-    throw error
+    logger.error('Failed to fetch user data', { userId, error });
+    throw error;
   }
 }
 
 // Avoid - using .then()/.catch()
 function fetchUserDataBad(userId: string): Promise<User> {
-  return userRepository.findById(userId)
-    .then(user => profileService.getProfile(userId)
-      .then(profile => ({ ...user, profile })))
+  return userRepository
+    .findById(userId)
+    .then(user =>
+      profileService.getProfile(userId).then(profile => ({ ...user, profile }))
+    )
     .catch(error => {
-      logger.error('Failed to fetch user data', { userId, error })
-      throw error
-    })
+      logger.error('Failed to fetch user data', { userId, error });
+      throw error;
+    });
 }
 
 // Handle concurrent operations properly
@@ -241,10 +248,10 @@ async function fetchMultipleResources(): Promise<CombinedData> {
   const [users, databases, analytics] = await Promise.all([
     userService.getAllUsers(),
     databaseService.getAllDatabases(),
-    analyticsService.getMetrics()
-  ])
+    analyticsService.getMetrics(),
+  ]);
 
-  return { users, databases, analytics }
+  return { users, databases, analytics };
 }
 
 // Use Promise.allSettled for operations that can fail independently
@@ -252,20 +259,23 @@ async function fetchWithPartialFailure(): Promise<PartialResults> {
   const results = await Promise.allSettled([
     riskyOperation1(),
     riskyOperation2(),
-    riskyOperation3()
-  ])
+    riskyOperation3(),
+  ]);
 
   const successful = results
-    .filter((result): result is PromiseFulfilledResult<any> =>
-      result.status === 'fulfilled')
-    .map(result => result.value)
+    .filter(
+      (result): result is PromiseFulfilledResult<any> =>
+        result.status === 'fulfilled'
+    )
+    .map(result => result.value);
 
   const failed = results
-    .filter((result): result is PromiseRejectedResult =>
-      result.status === 'rejected')
-    .map(result => result.reason)
+    .filter(
+      (result): result is PromiseRejectedResult => result.status === 'rejected'
+    )
+    .map(result => result.reason);
 
-  return { successful, failed }
+  return { successful, failed };
 }
 ```
 
@@ -298,24 +308,21 @@ export const UserQueries = {
     UPDATE users
     SET name = ?, email = ?, updated_at = NOW()
     WHERE id = ?
-  `
-} as const
+  `,
+} as const;
 
 // Use parameterized queries always
 export class UserRepository {
   async findById(id: string): Promise<User | null> {
-    const [rows] = await this.connection.execute(
-      UserQueries.findById,
-      [id]
-    )
+    const [rows] = await this.connection.execute(UserQueries.findById, [id]);
 
-    return rows.length > 0 ? this.mapRowToUser(rows[0]) : null
+    return rows.length > 0 ? this.mapRowToUser(rows[0]) : null;
   }
 
   // Never use string concatenation for queries
   // BAD - SQL injection risk
   async findByEmailBad(email: string): Promise<User | null> {
-    const query = `SELECT * FROM users WHERE email = '${email}'`
+    const query = `SELECT * FROM users WHERE email = '${email}'`;
     // This is vulnerable to SQL injection!
   }
 }
@@ -358,34 +365,37 @@ CHECK (email REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
 
 ```typescript
 // src/routes/search.ts
-import { Router } from 'express'
-import { SearchController } from '../controllers/SearchController'
-import { authenticateApiKey } from '../middleware/auth'
-import { validateSearchRequest } from '../middleware/validation'
-import { rateLimiter } from '../middleware/rateLimiter'
+import { Router } from 'express';
+import { SearchController } from '../controllers/SearchController';
+import { authenticateApiKey } from '../middleware/auth';
+import { validateSearchRequest } from '../middleware/validation';
+import { rateLimiter } from '../middleware/rateLimiter';
 
-const router = Router()
-const searchController = new SearchController()
+const router = Router();
+const searchController = new SearchController();
 
 // Apply middleware in logical order
-router.use(authenticateApiKey)
-router.use(rateLimiter)
+router.use(authenticateApiKey);
+router.use(rateLimiter);
 
 // Use descriptive route names and consistent patterns
-router.post('/search',
+router.post(
+  '/search',
   validateSearchRequest,
   searchController.search.bind(searchController)
-)
+);
 
-router.get('/search/suggestions',
+router.get(
+  '/search/suggestions',
   searchController.getSuggestions.bind(searchController)
-)
+);
 
-router.get('/search/history',
+router.get(
+  '/search/history',
   searchController.getHistory.bind(searchController)
-)
+);
 
-export { router as searchRoutes }
+export { router as searchRoutes };
 ```
 
 ### Controller Standards
@@ -400,22 +410,22 @@ export class SearchController {
 
   // Use consistent method signatures
   async search(req: ApiKeyAuthenticatedRequest, res: Response): Promise<void> {
-    const startTime = Date.now()
+    const startTime = Date.now();
 
     try {
       // Extract and validate request data
-      const searchRequest = this.extractSearchRequest(req)
+      const searchRequest = this.extractSearchRequest(req);
 
       // Execute business logic
-      const results = await this.searchService.search(searchRequest)
+      const results = await this.searchService.search(searchRequest);
 
       // Log successful operations
       this.logger.info('Search completed', {
         userId: req.user.id,
         query: searchRequest.query,
         resultCount: results.totalCount,
-        executionTime: Date.now() - startTime
-      })
+        executionTime: Date.now() - startTime,
+      });
 
       // Return consistent response format
       res.json({
@@ -425,11 +435,11 @@ export class SearchController {
           timestamp: new Date(),
           requestId: req.id,
           version: process.env.API_VERSION || '1.0.0',
-          executionTime: Date.now() - startTime
-        }
-      })
+          executionTime: Date.now() - startTime,
+        },
+      });
     } catch (error) {
-      this.handleError(error, req, res)
+      this.handleError(error, req, res);
     }
   }
 
@@ -440,8 +450,8 @@ export class SearchController {
       searchMode: req.body.searchMode || 'natural',
       limit: Math.min(req.body.limit || 20, 100),
       offset: req.body.offset || 0,
-      userId: req.user.id
-    }
+      userId: req.user.id,
+    };
   }
 
   private handleError(error: Error, req: Request, res: Response): void {
@@ -450,8 +460,8 @@ export class SearchController {
       error: error.message,
       stack: error.stack,
       userId: (req as any).user?.id,
-      body: req.body
-    })
+      body: req.body,
+    });
 
     // Return appropriate error response
     if (error instanceof ValidationError) {
@@ -460,25 +470,25 @@ export class SearchController {
         error: {
           code: error.code,
           message: error.message,
-          field: error.field
-        }
-      })
+          field: error.field,
+        },
+      });
     } else if (error instanceof AppError) {
       res.status(error.statusCode).json({
         success: false,
         error: {
           code: error.code,
-          message: error.message
-        }
-      })
+          message: error.message,
+        },
+      });
     } else {
       res.status(500).json({
         success: false,
         error: {
           code: 'INTERNAL_ERROR',
-          message: 'An unexpected error occurred'
-        }
-      })
+          message: 'An unexpected error occurred',
+        },
+      });
     }
   }
 }
@@ -506,48 +516,48 @@ tests/
 
 ```typescript
 // tests/unit/services/SearchService.test.ts
-import { SearchService } from '../../../src/services/SearchService'
-import { DatabaseService } from '../../../src/services/DatabaseService'
-import { AIService } from '../../../src/services/AIService'
-import { CacheService } from '../../../src/services/CacheService'
+import { SearchService } from '../../../src/services/SearchService';
+import { DatabaseService } from '../../../src/services/DatabaseService';
+import { AIService } from '../../../src/services/AIService';
+import { CacheService } from '../../../src/services/CacheService';
 
 describe('SearchService', () => {
-  let searchService: SearchService
-  let mockDatabaseService: jest.Mocked<DatabaseService>
-  let mockAIService: jest.Mocked<AIService>
-  let mockCacheService: jest.Mocked<CacheService>
+  let searchService: SearchService;
+  let mockDatabaseService: jest.Mocked<DatabaseService>;
+  let mockAIService: jest.Mocked<AIService>;
+  let mockCacheService: jest.Mocked<CacheService>;
 
   beforeEach(() => {
     // Create mocks
     mockDatabaseService = {
       executeFullTextSearch: jest.fn(),
       getUserDatabases: jest.fn(),
-      testConnection: jest.fn()
-    } as any
+      testConnection: jest.fn(),
+    } as any;
 
     mockAIService = {
       isAvailable: jest.fn(),
       processSearchQuery: jest.fn(),
-      enhanceResults: jest.fn()
-    } as any
+      enhanceResults: jest.fn(),
+    } as any;
 
     mockCacheService = {
       get: jest.fn(),
       set: jest.fn(),
-      del: jest.fn()
-    } as any
+      del: jest.fn(),
+    } as any;
 
     // Initialize service with mocks
     searchService = new SearchService(
       mockDatabaseService,
       mockAIService,
       mockCacheService
-    )
-  })
+    );
+  });
 
   afterEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   describe('search', () => {
     it('should return cached results when available', async () => {
@@ -555,47 +565,45 @@ describe('SearchService', () => {
       const searchRequest = {
         query: 'test query',
         databases: ['db1'],
-        userId: 'user1'
-      }
+        userId: 'user1',
+      };
       const cachedResults = {
         results: [{ id: '1', title: 'Cached Result' }],
-        totalCount: 1
-      }
+        totalCount: 1,
+      };
 
-      mockCacheService.get.mockResolvedValue(cachedResults)
+      mockCacheService.get.mockResolvedValue(cachedResults);
 
       // Act
-      const result = await searchService.search(searchRequest)
+      const result = await searchService.search(searchRequest);
 
       // Assert
-      expect(result).toBe(cachedResults)
+      expect(result).toBe(cachedResults);
       expect(mockCacheService.get).toHaveBeenCalledWith(
         expect.stringContaining('search:')
-      )
-      expect(mockDatabaseService.executeFullTextSearch).not.toHaveBeenCalled()
-    })
+      );
+      expect(mockDatabaseService.executeFullTextSearch).not.toHaveBeenCalled();
+    });
 
     it('should execute database search when cache miss', async () => {
       // Arrange
       const searchRequest = {
         query: 'test query',
         databases: ['db1'],
-        userId: 'user1'
-      }
-      const dbResults = [
-        { id: '1', title: 'DB Result', content: 'Content' }
-      ]
+        userId: 'user1',
+      };
+      const dbResults = [{ id: '1', title: 'DB Result', content: 'Content' }];
 
-      mockCacheService.get.mockResolvedValue(null)
-      mockDatabaseService.executeFullTextSearch.mockResolvedValue(dbResults)
-      mockAIService.isAvailable.mockReturnValue(false)
+      mockCacheService.get.mockResolvedValue(null);
+      mockDatabaseService.executeFullTextSearch.mockResolvedValue(dbResults);
+      mockAIService.isAvailable.mockReturnValue(false);
 
       // Act
-      const result = await searchService.search(searchRequest)
+      const result = await searchService.search(searchRequest);
 
       // Assert
-      expect(result.results).toHaveLength(1)
-      expect(result.results[0].data.title).toBe('DB Result')
+      expect(result.results).toHaveLength(1);
+      expect(result.results[0].data.title).toBe('DB Result');
       expect(mockDatabaseService.executeFullTextSearch).toHaveBeenCalledWith(
         'db1',
         'test query',
@@ -603,27 +611,28 @@ describe('SearchService', () => {
         undefined,
         20,
         0
-      )
-    })
+      );
+    });
 
     it('should handle database errors gracefully', async () => {
       // Arrange
       const searchRequest = {
         query: 'test query',
         databases: ['db1'],
-        userId: 'user1'
-      }
+        userId: 'user1',
+      };
 
-      mockCacheService.get.mockResolvedValue(null)
+      mockCacheService.get.mockResolvedValue(null);
       mockDatabaseService.executeFullTextSearch.mockRejectedValue(
         new Error('Database connection failed')
-      )
+      );
 
       // Act & Assert
-      await expect(searchService.search(searchRequest))
-        .rejects.toThrow('Search failed')
-    })
-  })
+      await expect(searchService.search(searchRequest)).rejects.toThrow(
+        'Search failed'
+      );
+    });
+  });
 
   describe('generateCacheKey', () => {
     it('should generate consistent cache keys', () => {
@@ -632,58 +641,58 @@ describe('SearchService', () => {
         query: 'test query',
         databases: ['db1', 'db2'],
         searchMode: 'natural' as const,
-        limit: 20
-      }
+        limit: 20,
+      };
       const request2 = {
         query: 'test query',
         databases: ['db2', 'db1'], // Different order
         searchMode: 'natural' as const,
-        limit: 20
-      }
+        limit: 20,
+      };
 
       // Act
-      const key1 = (searchService as any).generateCacheKey(request1)
-      const key2 = (searchService as any).generateCacheKey(request2)
+      const key1 = (searchService as any).generateCacheKey(request1);
+      const key2 = (searchService as any).generateCacheKey(request2);
 
       // Assert
-      expect(key1).toBe(key2) // Should be same despite different order
-      expect(key1).toMatch(/^search:/)
-    })
-  })
-})
+      expect(key1).toBe(key2); // Should be same despite different order
+      expect(key1).toMatch(/^search:/);
+    });
+  });
+});
 ```
 
 ### Integration Test Standards
 
 ```typescript
 // tests/integration/api/search.test.ts
-import request from 'supertest'
-import { app } from '../../../src/app'
-import { setupTestDatabase, cleanupTestDatabase } from '../../helpers/database'
-import { createTestUser, createTestApiKey } from '../../helpers/auth'
+import request from 'supertest';
+import { app } from '../../../src/app';
+import { setupTestDatabase, cleanupTestDatabase } from '../../helpers/database';
+import { createTestUser, createTestApiKey } from '../../helpers/auth';
 
 describe('Search API Integration', () => {
-  let testApiKey: string
-  let testDatabaseId: string
+  let testApiKey: string;
+  let testDatabaseId: string;
 
   beforeAll(async () => {
-    await setupTestDatabase()
+    await setupTestDatabase();
 
     const user = await createTestUser({
       email: 'test@example.com',
-      name: 'Test User'
-    })
+      name: 'Test User',
+    });
 
-    testApiKey = await createTestApiKey(user.id)
+    testApiKey = await createTestApiKey(user.id);
     testDatabaseId = await createTestDatabase({
       name: 'Test Database',
-      userId: user.id
-    })
-  })
+      userId: user.id,
+    });
+  });
 
   afterAll(async () => {
-    await cleanupTestDatabase()
-  })
+    await cleanupTestDatabase();
+  });
 
   describe('POST /api/search', () => {
     it('should return search results for valid request', async () => {
@@ -694,42 +703,42 @@ describe('Search API Integration', () => {
           query: 'test search',
           databases: [testDatabaseId],
           searchMode: 'natural',
-          limit: 10
+          limit: 10,
         })
-        .expect(200)
+        .expect(200);
 
       expect(response.body).toMatchObject({
         success: true,
         data: {
           results: expect.any(Array),
           totalCount: expect.any(Number),
-          executionTime: expect.any(Number)
+          executionTime: expect.any(Number),
         },
         meta: {
           timestamp: expect.any(String),
           requestId: expect.any(String),
-          version: expect.any(String)
-        }
-      })
-    })
+          version: expect.any(String),
+        },
+      });
+    });
 
     it('should return 401 for missing API key', async () => {
       const response = await request(app)
         .post('/api/search')
         .send({
           query: 'test search',
-          databases: [testDatabaseId]
+          databases: [testDatabaseId],
         })
-        .expect(401)
+        .expect(401);
 
       expect(response.body).toMatchObject({
         success: false,
         error: {
           code: 'NO_API_KEY',
-          message: expect.any(String)
-        }
-      })
-    })
+          message: expect.any(String),
+        },
+      });
+    });
 
     it('should return 400 for invalid request data', async () => {
       const response = await request(app)
@@ -737,27 +746,27 @@ describe('Search API Integration', () => {
         .set('Authorization', `Bearer ${testApiKey}`)
         .send({
           // Missing required query field
-          databases: [testDatabaseId]
+          databases: [testDatabaseId],
         })
-        .expect(400)
+        .expect(400);
 
       expect(response.body).toMatchObject({
         success: false,
         error: {
           code: 'VALIDATION_ERROR',
-          message: expect.stringContaining('query')
-        }
-      })
-    })
-  })
-})
+          message: expect.stringContaining('query'),
+        },
+      });
+    });
+  });
+});
 ```
 
 ## Documentation Standards
 
 ### Code Documentation
 
-```typescript
+````typescript
 /**
  * Service for executing full-text searches across multiple MySQL databases
  * with AI-powered enhancements and intelligent caching.
@@ -821,13 +830,13 @@ export class SearchService {
     // Implementation
   }
 }
-```
+````
 
 ### README Standards
 
 Each module should have a comprehensive README:
 
-```markdown
+````markdown
 # SearchService
 
 AI-enhanced full-text search service for MySQL databases.
@@ -849,15 +858,20 @@ The SearchService orchestrates searches across multiple MySQL databases with opt
 ### Basic Search
 
 ```typescript
-const searchService = new SearchService(databaseService, aiService, cacheService)
+const searchService = new SearchService(
+  databaseService,
+  aiService,
+  cacheService
+);
 
 const results = await searchService.search({
   query: 'mysql performance optimization',
   databases: ['tech-docs-db'],
   searchMode: 'natural',
-  limit: 20
-})
+  limit: 20,
+});
 ```
+````
 
 ### Advanced Search with AI
 
@@ -867,18 +881,18 @@ const results = await searchService.search({
   databases: ['docs-db', 'community-db'],
   searchMode: 'semantic', // AI-powered semantic search
   limit: 30,
-  includeAnalytics: true
-})
+  includeAnalytics: true,
+});
 ```
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `cacheEnabled` | boolean | `true` | Enable Redis caching |
-| `aiEnabled` | boolean | `true` | Enable AI enhancements |
-| `maxConcurrentSearches` | number | `5` | Max concurrent database searches |
-| `defaultTimeout` | number | `30000` | Default search timeout (ms) |
+| Option                  | Type    | Default | Description                      |
+| ----------------------- | ------- | ------- | -------------------------------- |
+| `cacheEnabled`          | boolean | `true`  | Enable Redis caching             |
+| `aiEnabled`             | boolean | `true`  | Enable AI enhancements           |
+| `maxConcurrentSearches` | number  | `5`     | Max concurrent database searches |
+| `defaultTimeout`        | number  | `30000` | Default search timeout (ms)      |
 
 ## Error Handling
 
@@ -912,7 +926,7 @@ npm run test:integration -- --grep "SearchService"
 - [AIService](../services/ai-service.md) - AI integration and enhancements
 - [CacheService](../services/cache-service.md) - Redis caching implementation
 
-```
+````
 
 ## Code Review Standards
 
@@ -960,7 +974,7 @@ npm run test:integration -- --grep "SearchService"
     ]
   }
 }
-```
+````
 
 ### Commit Message Format
 
@@ -972,7 +986,7 @@ type(scope): description
 [optional footer]
 ```
 
-__Types:__
+**Types:**
 
 - `feat`: New feature
 - `fix`: Bug fix
@@ -982,7 +996,7 @@ __Types:__
 - `test`: Test changes
 - `chore`: Build/tooling changes
 
-__Examples:__
+**Examples:**
 
 ```
 feat(search): add semantic search mode
@@ -995,11 +1009,11 @@ Closes #123
 
 ## Related Documentation
 
-- __[Development Guide](./index.md)__ - Complete development setup
-- __[Git Workflow](./git-workflow.md)__ - Git branching and workflow
-- __[Testing Guide](../testing/)__ - Testing strategies and patterns
-- __[API Documentation](../api/)__ - API design standards
+- **[Development Guide](./index.md)** - Complete development setup
+- **[Git Workflow](./git-workflow.md)** - Git branching and workflow
+- **[Testing Guide](../testing/)** - Testing strategies and patterns
+- **[API Documentation](../api/)** - API design standards
 
 ---
 
-__Following these standards ensures code quality, maintainability, and consistency across the Altus 4 codebase. All contributors must adhere to these guidelines.__
+**Following these standards ensures code quality, maintainability, and consistency across the Altus 4 codebase. All contributors must adhere to these guidelines.**

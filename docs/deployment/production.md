@@ -19,12 +19,12 @@ graph TD
     B --> C[Database Cluster<br/>MySQL Master/Replica]
     B --> D[Cache Cluster<br/>Redis Cluster]
     B --> E[External Services<br/>OpenAI API]
-    
+
     F[Monitoring<br/>Prometheus + Grafana] --> B
     G[Logging<br/>ELK Stack] --> B
     H[Backup<br/>Automated Backups] --> C
     I[CDN<br/>Static Assets] --> A
-    
+
     style A fill:#e1f5fe
     style B fill:#f3e5f5
     style C fill:#e8f5e8
@@ -33,32 +33,32 @@ graph TD
 
 ### Infrastructure Components
 
-| Component | Purpose | Minimum Specs | Recommended Specs |
-|-----------|---------|----------------|-------------------|
-| __Application Server__ | Altus 4 API | 2 vCPU, 4GB RAM | 4 vCPU, 8GB RAM |
-| __Database Server__ | MySQL Primary | 2 vCPU, 8GB RAM | 4 vCPU, 16GB RAM |
-| __Cache Server__ | Redis Cluster | 2 vCPU, 4GB RAM | 4 vCPU, 8GB RAM |
-| __Load Balancer__ | Traffic Distribution | 1 vCPU, 2GB RAM | 2 vCPU, 4GB RAM |
+| Component              | Purpose              | Minimum Specs   | Recommended Specs |
+| ---------------------- | -------------------- | --------------- | ----------------- |
+| **Application Server** | Altus 4 API          | 2 vCPU, 4GB RAM | 4 vCPU, 8GB RAM   |
+| **Database Server**    | MySQL Primary        | 2 vCPU, 8GB RAM | 4 vCPU, 16GB RAM  |
+| **Cache Server**       | Redis Cluster        | 2 vCPU, 4GB RAM | 4 vCPU, 8GB RAM   |
+| **Load Balancer**      | Traffic Distribution | 1 vCPU, 2GB RAM | 2 vCPU, 4GB RAM   |
 
 ## Pre-Production Checklist
 
 ### Infrastructure Requirements
 
-- [ ] __Compute Resources__: Adequate CPU, memory, and storage
-- [ ] __Network Security__: Firewall rules, VPC configuration
-- [ ] __Domain Setup__: SSL certificates, DNS configuration
-- [ ] __External Services__: OpenAI API access, third-party integrations
-- [ ] __Backup Strategy__: Database and configuration backups
-- [ ] __Monitoring__: Logging, metrics, alerting setup
+- [ ] **Compute Resources**: Adequate CPU, memory, and storage
+- [ ] **Network Security**: Firewall rules, VPC configuration
+- [ ] **Domain Setup**: SSL certificates, DNS configuration
+- [ ] **External Services**: OpenAI API access, third-party integrations
+- [ ] **Backup Strategy**: Database and configuration backups
+- [ ] **Monitoring**: Logging, metrics, alerting setup
 
 ### Security Requirements
 
-- [ ] __SSL/TLS Certificates__: Valid certificates for all domains
-- [ ] __Database Security__: Encrypted connections, strong passwords
-- [ ] __API Security__: Rate limiting, authentication verification
-- [ ] __Network Security__: Firewall rules, VPN access
-- [ ] __Secrets Management__: Secure environment variable storage
-- [ ] __Access Control__: SSH keys, user permissions
+- [ ] **SSL/TLS Certificates**: Valid certificates for all domains
+- [ ] **Database Security**: Encrypted connections, strong passwords
+- [ ] **API Security**: Rate limiting, authentication verification
+- [ ] **Network Security**: Firewall rules, VPN access
+- [ ] **Secrets Management**: Secure environment variable storage
+- [ ] **Access Control**: SSH keys, user permissions
 
 ## Environment Setup
 
@@ -66,7 +66,7 @@ graph TD
 
 #### Operating System Configuration
 
-__Ubuntu 20.04/22.04 LTS (Recommended):__
+**Ubuntu 20.04/22.04 LTS (Recommended):**
 
 ```bash
 # Update system packages
@@ -134,7 +134,7 @@ sudo apt install mysql-server-8.0 -y
 sudo mysql_secure_installation
 ```
 
-__MySQL Configuration (`/etc/mysql/mysql.conf.d/mysqld.cnf`):__
+**MySQL Configuration (`/etc/mysql/mysql.conf.d/mysqld.cnf`):**
 
 ```ini
 [mysqld]
@@ -442,32 +442,32 @@ module.exports = {
       exec_mode: 'cluster',
       env: {
         NODE_ENV: 'production',
-        PORT: 3000
+        PORT: 3000,
       },
       env_file: '/opt/altus4/.env.production',
-      
+
       // Memory and CPU limits
       max_memory_restart: '1G',
       node_args: '--max-old-space-size=1024',
-      
+
       // Logging
       out_file: '/var/log/altus4/app.log',
       error_file: '/var/log/altus4/error.log',
       log_file: '/var/log/altus4/combined.log',
       time: true,
-      
+
       // Restart behavior
       watch: false,
       ignore_watch: ['node_modules', 'logs'],
       max_restarts: 10,
       min_uptime: '10s',
-      
+
       // Health monitoring
       health_check_grace_period: 3000,
-      health_check_fatal_exceptions: true
-    }
-  ]
-}
+      health_check_fatal_exceptions: true,
+    },
+  ],
+};
 ```
 
 #### PM2 Process Management
@@ -522,7 +522,7 @@ server {
 server {
     listen 443 ssl http2;
     server_name api.yourdomain.com;
-    
+
     # SSL configuration
     ssl_certificate /path/to/ssl/certificate.pem;
     ssl_certificate_key /path/to/ssl/private.key;
@@ -531,28 +531,28 @@ server {
     ssl_prefer_server_ciphers off;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
-    
+
     # Security headers
     add_header X-Frame-Options DENY;
     add_header X-Content-Type-Options nosniff;
     add_header X-XSS-Protection "1; mode=block";
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    
+
     # Gzip compression
     gzip on;
     gzip_vary on;
     gzip_min_length 1024;
     gzip_types application/json application/javascript text/css text/javascript text/plain text/xml;
-    
+
     # Request size limits
     client_max_body_size 10M;
     client_body_buffer_size 128k;
-    
+
     # Timeouts
     proxy_connect_timeout 5s;
     proxy_send_timeout 60s;
     proxy_read_timeout 60s;
-    
+
     # Health check endpoint (no rate limiting)
     location /health {
         access_log off;
@@ -562,51 +562,51 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
-    
+
     # Authentication endpoints (strict rate limiting)
     location ~ ^/api/auth/(login|register) {
         limit_req zone=altus4_auth burst=5 nodelay;
         limit_req_status 429;
-        
+
         proxy_pass http://altus4_backend;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        
+
         # Authentication-specific headers
         proxy_set_header X-Request-ID $request_id;
     }
-    
+
     # API endpoints (moderate rate limiting)
     location /api/ {
         limit_req zone=altus4_api burst=20 nodelay;
         limit_req_status 429;
-        
+
         proxy_pass http://altus4_backend;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Request-ID $request_id;
-        
+
         # Enable proxy buffering for better performance
         proxy_buffering on;
         proxy_buffer_size 4k;
         proxy_buffers 8 4k;
-        
+
         # Handle WebSocket upgrades if needed
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
     }
-    
+
     # Error pages
     error_page 502 503 504 /50x.html;
     location = /50x.html {
         root /var/www/html;
     }
-    
+
     # Logging
     access_log /var/log/nginx/altus4_access.log;
     error_log /var/log/nginx/altus4_error.log;
@@ -743,8 +743,8 @@ pm2 start app.js --node-args="--prof --logfile=v8.log"
 ```sql
 -- Performance monitoring queries
 -- Check slow queries
-SELECT * FROM performance_schema.events_statements_summary_by_digest 
-WHERE DIGEST_TEXT LIKE '%your_table%' 
+SELECT * FROM performance_schema.events_statements_summary_by_digest
+WHERE DIGEST_TEXT LIKE '%your_table%'
 ORDER BY AVG_TIMER_WAIT DESC LIMIT 10;
 
 -- Monitor index usage
@@ -859,18 +859,18 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Deploy to production server
-      uses: appleboy/ssh-action@v0.1.5
-      with:
-        host: ${{ secrets.PROD_HOST }}
-        username: ${{ secrets.PROD_USER }}
-        key: ${{ secrets.PROD_SSH_KEY }}
-        script: |
-          cd /opt/altus4
-          git fetch --tags
-          ./scripts/deploy.sh ${{ github.ref_name }}
+      - name: Deploy to production server
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script: |
+            cd /opt/altus4
+            git fetch --tags
+            ./scripts/deploy.sh ${{ github.ref_name }}
 ```
 
 ### Deployment Checklist
@@ -944,4 +944,4 @@ redis-cli slowlog get 10
 
 ---
 
-__This production deployment guide provides enterprise-grade setup procedures for reliable, secure, and performant Altus 4 deployments.__
+**This production deployment guide provides enterprise-grade setup procedures for reliable, secure, and performant Altus 4 deployments.**

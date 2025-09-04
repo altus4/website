@@ -41,10 +41,10 @@
   },
   "MD047": false,
   "MD049": {
-    "style": "underscore"
+    "style": "asterisk"
   },
   "MD050": {
-    "style": "underscore"
+    "style": "asterisk"
   },
   "MD051": false
 }

@@ -37,7 +37,7 @@ curl -X POST https://api.altus4.com/api/v1/search \
   }'
 ```
 
-__Response includes results from all databases:__
+**Response includes results from all databases:**
 
 ```json
 {
@@ -81,12 +81,12 @@ Assign different weights to databases based on content quality or relevance:
 ```javascript
 class WeightedMultiDatabaseSearch {
   constructor(apiKey) {
-    this.apiKey = apiKey
-    this.databaseWeights = new Map()
+    this.apiKey = apiKey;
+    this.databaseWeights = new Map();
   }
 
   setDatabaseWeight(databaseId, weight) {
-    this.databaseWeights.set(databaseId, weight)
+    this.databaseWeights.set(databaseId, weight);
   }
 
   async weightedSearch(query, databases, options = {}) {
@@ -95,51 +95,51 @@ class WeightedMultiDatabaseSearch {
       const response = await fetch('https://api.altus4.com/api/v1/search', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           query,
           databases: [dbId],
           searchMode: options.searchMode || 'natural',
-          limit: options.limit || 50
-        })
-      })
+          limit: options.limit || 50,
+        }),
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       // Apply database weight to results
-      const weight = this.databaseWeights.get(dbId) || 1.0
+      const weight = this.databaseWeights.get(dbId) || 1.0;
       if (data.success && data.data.results) {
         data.data.results.forEach(result => {
-          result.originalRelevance = result.relevanceScore
-          result.relevanceScore = result.relevanceScore * weight
-          result.databaseWeight = weight
-        })
+          result.originalRelevance = result.relevanceScore;
+          result.relevanceScore = result.relevanceScore * weight;
+          result.databaseWeight = weight;
+        });
       }
 
-      return data
-    })
+      return data;
+    });
 
-    const results = await Promise.allSettled(searchPromises)
-    return this.aggregateWeightedResults(results)
+    const results = await Promise.allSettled(searchPromises);
+    return this.aggregateWeightedResults(results);
   }
 
   aggregateWeightedResults(results) {
-    const allResults = []
-    let totalExecutionTime = 0
-    let successfulDatabases = 0
+    const allResults = [];
+    let totalExecutionTime = 0;
+    let successfulDatabases = 0;
 
     results.forEach(result => {
       if (result.status === 'fulfilled' && result.value.success) {
-        allResults.push(...result.value.data.results)
-        totalExecutionTime += result.value.data.executionTime
-        successfulDatabases++
+        allResults.push(...result.value.data.results);
+        totalExecutionTime += result.value.data.executionTime;
+        successfulDatabases++;
       }
-    })
+    });
 
     // Sort by weighted relevance
-    allResults.sort((a, b) => b.relevanceScore - a.relevanceScore)
+    allResults.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
     return {
       success: true,
@@ -148,25 +148,25 @@ class WeightedMultiDatabaseSearch {
         totalCount: allResults.length,
         executionTime: totalExecutionTime,
         databasesSearched: successfulDatabases,
-        aggregationStrategy: 'weighted_relevance'
-      }
-    }
+        aggregationStrategy: 'weighted_relevance',
+      },
+    };
   }
 }
 
 // Usage
-const searcher = new WeightedMultiDatabaseSearch(apiKey)
+const searcher = new WeightedMultiDatabaseSearch(apiKey);
 
 // Set database weights
-searcher.setDatabaseWeight('primary_docs_db', 1.5)    // Highest quality
-searcher.setDatabaseWeight('community_db', 1.0)       // Standard weight
-searcher.setDatabaseWeight('legacy_docs_db', 0.7)     // Lower priority
+searcher.setDatabaseWeight('primary_docs_db', 1.5); // Highest quality
+searcher.setDatabaseWeight('community_db', 1.0); // Standard weight
+searcher.setDatabaseWeight('legacy_docs_db', 0.7); // Lower priority
 
 const results = await searcher.weightedSearch(
   'mysql performance tuning',
   ['primary_docs_db', 'community_db', 'legacy_docs_db'],
   { searchMode: 'semantic', limit: 20 }
-)
+);
 ```
 
 ### Database-Specific Query Optimization
@@ -388,35 +388,35 @@ Merge results from multiple databases with deduplication and ranking:
 ```javascript
 class IntelligentResultAggregator {
   constructor(apiKey) {
-    this.apiKey = apiKey
+    this.apiKey = apiKey;
   }
 
   async aggregateWithDeduplication(searchResults, options = {}) {
     const {
       deduplicationStrategy = 'content_similarity',
       rankingStrategy = 'hybrid',
-      maxResults = 50
-    } = options
+      maxResults = 50,
+    } = options;
 
     // Flatten all results
     const allResults = searchResults.flatMap(result =>
       result.success ? result.data.results : []
-    )
+    );
 
     // Apply deduplication
     const deduplicatedResults = await this.deduplicateResults(
       allResults,
       deduplicationStrategy
-    )
+    );
 
     // Apply intelligent ranking
     const rankedResults = await this.rankResults(
       deduplicatedResults,
       rankingStrategy
-    )
+    );
 
     // Apply result limit
-    const finalResults = rankedResults.slice(0, maxResults)
+    const finalResults = rankedResults.slice(0, maxResults);
 
     return {
       success: true,
@@ -425,36 +425,40 @@ class IntelligentResultAggregator {
         totalCount: finalResults.length,
         originalCount: allResults.length,
         deduplicationApplied: allResults.length !== deduplicatedResults.length,
-        rankingStrategy
-      }
-    }
+        rankingStrategy,
+      },
+    };
   }
 
   async deduplicateResults(results, strategy) {
     switch (strategy) {
       case 'content_similarity':
-        return await this.deduplicateBySimilarity(results)
+        return await this.deduplicateBySimilarity(results);
       case 'exact_match':
-        return this.deduplicateByExactMatch(results)
+        return this.deduplicateByExactMatch(results);
       case 'title_match':
-        return this.deduplicateByTitle(results)
+        return this.deduplicateByTitle(results);
       default:
-        return results
+        return results;
     }
   }
 
   async deduplicateBySimilarity(results) {
-    const uniqueResults = []
-    const similarityThreshold = 0.8
+    const uniqueResults = [];
+    const similarityThreshold = 0.8;
 
     for (const result of results) {
-      const isDuplicate = await this.checkSimilarity(result, uniqueResults, similarityThreshold)
+      const isDuplicate = await this.checkSimilarity(
+        result,
+        uniqueResults,
+        similarityThreshold
+      );
       if (!isDuplicate) {
-        uniqueResults.push(result)
+        uniqueResults.push(result);
       }
     }
 
-    return uniqueResults
+    return uniqueResults;
   }
 
   async checkSimilarity(newResult, existingResults, threshold) {
@@ -462,173 +466,185 @@ class IntelligentResultAggregator {
       const similarity = await this.calculateContentSimilarity(
         newResult.data.title + ' ' + newResult.snippet,
         existing.data.title + ' ' + existing.snippet
-      )
+      );
 
       if (similarity > threshold) {
         // Keep the result with higher relevance
         if (newResult.relevanceScore > existing.relevanceScore) {
-          const index = existingResults.indexOf(existing)
-          existingResults[index] = newResult
+          const index = existingResults.indexOf(existing);
+          existingResults[index] = newResult;
         }
-        return true
+        return true;
       }
     }
-    return false
+    return false;
   }
 
   async calculateContentSimilarity(text1, text2) {
     // Simple similarity calculation - in production, use more sophisticated methods
-    const words1 = new Set(text1.toLowerCase().split(/\s+/))
-    const words2 = new Set(text2.toLowerCase().split(/\s+/))
+    const words1 = new Set(text1.toLowerCase().split(/\s+/));
+    const words2 = new Set(text2.toLowerCase().split(/\s+/));
 
-    const intersection = new Set([...words1].filter(x => words2.has(x)))
-    const union = new Set([...words1, ...words2])
+    const intersection = new Set([...words1].filter(x => words2.has(x)));
+    const union = new Set([...words1, ...words2]);
 
-    return intersection.size / union.size // Jaccard similarity
+    return intersection.size / union.size; // Jaccard similarity
   }
 
   deduplicateByExactMatch(results) {
-    const seen = new Set()
+    const seen = new Set();
     return results.filter(result => {
-      const key = `${result.data.title}-${result.database}-${result.table}`
+      const key = `${result.data.title}-${result.database}-${result.table}`;
       if (seen.has(key)) {
-        return false
+        return false;
       }
-      seen.add(key)
-      return true
-    })
+      seen.add(key);
+      return true;
+    });
   }
 
   deduplicateByTitle(results) {
-    const titleMap = new Map()
+    const titleMap = new Map();
 
     results.forEach(result => {
-      const title = result.data.title?.toLowerCase()
-      if (!title) return
+      const title = result.data.title?.toLowerCase();
+      if (!title) return;
 
-      if (!titleMap.has(title) || result.relevanceScore > titleMap.get(title).relevanceScore) {
-        titleMap.set(title, result)
+      if (
+        !titleMap.has(title) ||
+        result.relevanceScore > titleMap.get(title).relevanceScore
+      ) {
+        titleMap.set(title, result);
       }
-    })
+    });
 
-    return Array.from(titleMap.values())
+    return Array.from(titleMap.values());
   }
 
   async rankResults(results, strategy) {
     switch (strategy) {
       case 'relevance_only':
-        return results.sort((a, b) => b.relevanceScore - a.relevanceScore)
+        return results.sort((a, b) => b.relevanceScore - a.relevanceScore);
       case 'database_priority':
-        return this.rankByDatabasePriority(results)
+        return this.rankByDatabasePriority(results);
       case 'hybrid':
-        return await this.hybridRanking(results)
+        return await this.hybridRanking(results);
       case 'freshness':
-        return this.rankByFreshness(results)
+        return this.rankByFreshness(results);
       default:
-        return results
+        return results;
     }
   }
 
   rankByDatabasePriority(results) {
     const databasePriority = {
-      'primary_docs_db': 3,
-      'official_docs_db': 2,
-      'community_db': 1,
-      'legacy_db': 0
-    }
+      primary_docs_db: 3,
+      official_docs_db: 2,
+      community_db: 1,
+      legacy_db: 0,
+    };
 
     return results.sort((a, b) => {
-      const priorityA = databasePriority[a.database] || 0
-      const priorityB = databasePriority[b.database] || 0
+      const priorityA = databasePriority[a.database] || 0;
+      const priorityB = databasePriority[b.database] || 0;
 
       if (priorityA !== priorityB) {
-        return priorityB - priorityA
+        return priorityB - priorityA;
       }
 
-      return b.relevanceScore - a.relevanceScore
-    })
+      return b.relevanceScore - a.relevanceScore;
+    });
   }
 
   async hybridRanking(results) {
     // Combine multiple ranking factors
-    return results.map(result => {
-      const relevanceScore = result.relevanceScore * 0.4
-      const databaseScore = this.getDatabaseScore(result.database) * 0.3
-      const freshnessScore = this.getFreshnessScore(result.data.updated_at) * 0.2
-      const engagementScore = this.getEngagementScore(result.data) * 0.1
+    return results
+      .map(result => {
+        const relevanceScore = result.relevanceScore * 0.4;
+        const databaseScore = this.getDatabaseScore(result.database) * 0.3;
+        const freshnessScore =
+          this.getFreshnessScore(result.data.updated_at) * 0.2;
+        const engagementScore = this.getEngagementScore(result.data) * 0.1;
 
-      result.hybridScore = relevanceScore + databaseScore + freshnessScore + engagementScore
-      return result
-    }).sort((a, b) => b.hybridScore - a.hybridScore)
+        result.hybridScore =
+          relevanceScore + databaseScore + freshnessScore + engagementScore;
+        return result;
+      })
+      .sort((a, b) => b.hybridScore - a.hybridScore);
   }
 
   getDatabaseScore(database) {
     const scores = {
-      'primary_docs_db': 1.0,
-      'official_docs_db': 0.8,
-      'community_db': 0.6,
-      'legacy_db': 0.3
-    }
-    return scores[database] || 0.5
+      primary_docs_db: 1.0,
+      official_docs_db: 0.8,
+      community_db: 0.6,
+      legacy_db: 0.3,
+    };
+    return scores[database] || 0.5;
   }
 
   getFreshnessScore(updatedAt) {
-    if (!updatedAt) return 0
+    if (!updatedAt) return 0;
 
-    const now = new Date()
-    const updated = new Date(updatedAt)
-    const daysDiff = (now - updated) / (1000 * 60 * 60 * 24)
+    const now = new Date();
+    const updated = new Date(updatedAt);
+    const daysDiff = (now - updated) / (1000 * 60 * 60 * 24);
 
     // Fresher content gets higher score
-    return Math.max(0, 1 - (daysDiff / 365)) // Decay over a year
+    return Math.max(0, 1 - daysDiff / 365); // Decay over a year
   }
 
   getEngagementScore(data) {
     // Calculate engagement based on available metrics
-    const views = data.view_count || 0
-    const likes = data.like_count || 0
-    const comments = data.comment_count || 0
+    const views = data.view_count || 0;
+    const likes = data.like_count || 0;
+    const comments = data.comment_count || 0;
 
-    return Math.min(1, (views * 0.001 + likes * 0.01 + comments * 0.1))
+    return Math.min(1, views * 0.001 + likes * 0.01 + comments * 0.1);
   }
 }
 
 // Usage
-const aggregator = new IntelligentResultAggregator(apiKey)
+const aggregator = new IntelligentResultAggregator(apiKey);
 
 // Execute multiple searches
 const searchPromises = [
   fetch('https://api.altus4.com/api/v1/search', {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${apiKey}` },
+    headers: { Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
       query: 'database optimization',
       databases: ['primary_docs_db'],
-      limit: 20
-    })
+      limit: 20,
+    }),
   }).then(r => r.json()),
 
   fetch('https://api.altus4.com/api/v1/search', {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${apiKey}` },
+    headers: { Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
       query: 'database optimization',
       databases: ['community_db'],
-      limit: 15
-    })
-  }).then(r => r.json())
-]
+      limit: 15,
+    }),
+  }).then(r => r.json()),
+];
 
-const searchResults = await Promise.all(searchPromises)
+const searchResults = await Promise.all(searchPromises);
 
 // Aggregate with intelligent deduplication and ranking
-const aggregatedResults = await aggregator.aggregateWithDeduplication(searchResults, {
-  deduplicationStrategy: 'content_similarity',
-  rankingStrategy: 'hybrid',
-  maxResults: 30
-})
+const aggregatedResults = await aggregator.aggregateWithDeduplication(
+  searchResults,
+  {
+    deduplicationStrategy: 'content_similarity',
+    rankingStrategy: 'hybrid',
+    maxResults: 30,
+  }
+);
 
-console.log(`Aggregated ${aggregatedResults.data.totalCount} unique results from ${aggregatedResults.data.originalCount} total results`)
+console.log(
+  `Aggregated ${aggregatedResults.data.totalCount} unique results from ${aggregatedResults.data.originalCount} total results`
+);
 ```
 
 ## Performance Optimization
@@ -863,70 +879,73 @@ Choose databases intelligently based on query context:
 ```javascript
 class SmartDatabaseSelector {
   constructor(apiKey) {
-    this.apiKey = apiKey
-    this.databaseProfiles = new Map()
+    this.apiKey = apiKey;
+    this.databaseProfiles = new Map();
   }
 
   async selectOptimalDatabases(query, availableDatabases, maxDatabases = 5) {
     // Analyze query to determine optimal database selection
-    const queryAnalysis = await this.analyzeQuery(query)
+    const queryAnalysis = await this.analyzeQuery(query);
 
     // Score databases based on query relevance
     const databaseScores = await Promise.all(
       availableDatabases.map(async dbId => {
-        const profile = await this.getDatabaseProfile(dbId)
-        const score = this.calculateDatabaseRelevance(queryAnalysis, profile)
-        return { databaseId: dbId, score, profile }
+        const profile = await this.getDatabaseProfile(dbId);
+        const score = this.calculateDatabaseRelevance(queryAnalysis, profile);
+        return { databaseId: dbId, score, profile };
       })
-    )
+    );
 
     // Select top databases
     return databaseScores
       .sort((a, b) => b.score - a.score)
       .slice(0, maxDatabases)
-      .map(item => item.databaseId)
+      .map(item => item.databaseId);
   }
 
   async analyzeQuery(query) {
     // Simple query analysis - in production, use more sophisticated NLP
-    const keywords = query.toLowerCase().split(/\s+/)
-    const categories = []
+    const keywords = query.toLowerCase().split(/\s+/);
+    const categories = [];
 
     if (keywords.some(word => ['api', 'endpoint', 'rest'].includes(word))) {
-      categories.push('api_documentation')
+      categories.push('api_documentation');
     }
 
     if (keywords.some(word => ['tutorial', 'guide', 'how'].includes(word))) {
-      categories.push('tutorials')
+      categories.push('tutorials');
     }
 
-    if (keywords.some(word => ['error', 'bug', 'issue', 'problem'].includes(word))) {
-      categories.push('troubleshooting')
+    if (
+      keywords.some(word => ['error', 'bug', 'issue', 'problem'].includes(word))
+    ) {
+      categories.push('troubleshooting');
     }
 
-    return { keywords, categories, complexity: keywords.length }
+    return { keywords, categories, complexity: keywords.length };
   }
 
   calculateDatabaseRelevance(queryAnalysis, databaseProfile) {
-    let score = 0
+    let score = 0;
 
     // Category matching
     const categoryOverlap = queryAnalysis.categories.filter(cat =>
       databaseProfile.categories.includes(cat)
-    ).length
-    score += categoryOverlap * 0.4
+    ).length;
+    score += categoryOverlap * 0.4;
 
     // Content freshness
-    const daysSinceUpdate = (Date.now() - databaseProfile.lastUpdated) / (1000 * 60 * 60 * 24)
-    score += Math.max(0, 1 - daysSinceUpdate / 365) * 0.3
+    const daysSinceUpdate =
+      (Date.now() - databaseProfile.lastUpdated) / (1000 * 60 * 60 * 24);
+    score += Math.max(0, 1 - daysSinceUpdate / 365) * 0.3;
 
     // Database size (more content = higher chance of relevant results)
-    score += Math.min(1, databaseProfile.documentCount / 10000) * 0.2
+    score += Math.min(1, databaseProfile.documentCount / 10000) * 0.2;
 
     // Quality score
-    score += databaseProfile.qualityScore * 0.1
+    score += databaseProfile.qualityScore * 0.1;
 
-    return score
+    return score;
   }
 }
 ```
@@ -1013,10 +1032,10 @@ class ResilientMultiDatabaseSearch:
 
 You've mastered multi-database search strategies! Continue exploring:
 
-- __[SDK Usage](./sdk.md)__ - Official SDKs with multi-database support
-- __[Performance Guide](../testing/performance.md)__ - Advanced optimization techniques
-- __[API Reference](../api/search.md)__ - Complete multi-database API documentation
+- **[SDK Usage](./sdk.md)** - Official SDKs with multi-database support
+- **[Performance Guide](../testing/performance.md)** - Advanced optimization techniques
+- **[API Reference](../api/search.md)** - Complete multi-database API documentation
 
 ---
 
-__Multi-database search unlocks the full potential of federated search across your entire data ecosystem. Use these patterns to build comprehensive search experiences.__
+**Multi-database search unlocks the full potential of federated search across your entire data ecosystem. Use these patterns to build comprehensive search experiences.**

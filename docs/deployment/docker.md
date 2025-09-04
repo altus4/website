@@ -20,7 +20,7 @@ graph TD
     B --> D[Redis Container<br/>Cache]
     E[Prometheus Container<br/>Monitoring] --> B
     F[Grafana Container<br/>Visualization] --> E
-    
+
     style A fill:#e1f5fe
     style B fill:#f3e5f5
     style C fill:#e8f5e8
@@ -29,11 +29,11 @@ graph TD
 
 ### Container Benefits
 
-- __Consistency__: Same environment across development, staging, and production
-- __Isolation__: Each service runs in its own container
-- __Scalability__: Easy horizontal scaling with container orchestration
-- __Portability__: Deploy anywhere Docker is supported
-- __Resource Efficiency__: Better resource utilization than VMs
+- **Consistency**: Same environment across development, staging, and production
+- **Isolation**: Each service runs in its own container
+- **Scalability**: Easy horizontal scaling with container orchestration
+- **Portability**: Deploy anywhere Docker is supported
+- **Resource Efficiency**: Better resource utilization than VMs
 
 ## Dockerfile Configuration
 
@@ -198,7 +198,7 @@ version: '3.8'
 services:
   # Application service
   app:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
       target: production
@@ -241,7 +241,7 @@ services:
           cpus: '0.5'
           memory: 512M
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -267,7 +267,7 @@ services:
     networks:
       - altus4_network
     ports:
-      - "3306:3306"
+      - '3306:3306'
     deploy:
       resources:
         limits:
@@ -277,7 +277,17 @@ services:
           cpus: '0.5'
           memory: 1G
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=$$(cat /run/secrets/mysql_root_password)"]
+      test:
+        [
+          'CMD',
+          'mysqladmin',
+          'ping',
+          '-h',
+          'localhost',
+          '-u',
+          'root',
+          '--password=$$(cat /run/secrets/mysql_root_password)',
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -306,7 +316,7 @@ services:
     networks:
       - altus4_network
     ports:
-      - "6379:6379"
+      - '6379:6379'
     deploy:
       resources:
         limits:
@@ -316,7 +326,14 @@ services:
           cpus: '0.25'
           memory: 256M
     healthcheck:
-      test: ["CMD", "redis-cli", "--pass", "$$(cat /run/secrets/redis_password)", "ping"]
+      test:
+        [
+          'CMD',
+          'redis-cli',
+          '--pass',
+          '$$(cat /run/secrets/redis_password)',
+          'ping',
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -335,8 +352,8 @@ services:
     depends_on:
       - app
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - nginx_config:/etc/nginx/conf.d
       - nginx_logs:/var/log/nginx
@@ -349,7 +366,7 @@ services:
           cpus: '1.0'
           memory: 512M
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      test: ['CMD', 'curl', '-f', 'http://localhost/health']
       interval: 30s
       timeout: 5s
       retries: 3
@@ -371,7 +388,7 @@ services:
     networks:
       - altus4_network
     ports:
-      - "9090:9090"
+      - '9090:9090'
     deploy:
       resources:
         limits:
@@ -395,7 +412,7 @@ services:
     networks:
       - altus4_network
     ports:
-      - "3001:3000"
+      - '3001:3000'
     deploy:
       resources:
         limits:
@@ -463,7 +480,7 @@ version: '3.8'
 
 services:
   app:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.dev
     container_name: altus4_app_dev
@@ -471,8 +488,8 @@ services:
       - .:/app
       - /app/node_modules
     ports:
-      - "3000:3000"
-      - "9229:9229"  # Debug port
+      - '3000:3000'
+      - '9229:9229' # Debug port
     environment:
       - NODE_ENV=development
       - DEBUG=*
@@ -494,7 +511,7 @@ services:
       - MYSQL_USER=altus4_user
       - MYSQL_PASSWORD=devpassword
     ports:
-      - "3306:3306"
+      - '3306:3306'
     volumes:
       - mysql_dev_data:/var/lib/mysql
     networks:
@@ -504,7 +521,7 @@ services:
     image: redis:7-alpine
     container_name: altus4_redis_dev
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis_dev_data:/data
     networks:
@@ -550,12 +567,12 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        
+
         # Timeouts
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
-        
+
         # Buffer settings
         proxy_buffer_size 4k;
         proxy_buffers 8 4k;
@@ -885,7 +902,7 @@ services:
     read_only: true
     tmpfs:
       - /tmp:noexec,nosuid,size=100m
-    user: "1001:1001"
+    user: '1001:1001'
 ```
 
 ### Network Security
@@ -911,11 +928,11 @@ networks:
 services:
   app:
     logging:
-      driver: "json-file"
+      driver: 'json-file'
       options:
-        max-size: "10m"
-        max-file: "3"
-        labels: "service=altus4,environment=production"
+        max-size: '10m'
+        max-file: '3'
+        labels: 'service=altus4,environment=production'
 ```
 
 ### Health Checks
@@ -924,7 +941,7 @@ services:
 services:
   app:
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -993,4 +1010,4 @@ docker-compose -f docker-compose.prod.yml exec app \
 
 ---
 
-__This Docker deployment guide provides comprehensive containerization strategies for reliable, scalable, and secure Altus 4 deployments using modern container orchestration practices.__
+**This Docker deployment guide provides comprehensive containerization strategies for reliable, scalable, and secure Altus 4 deployments using modern container orchestration practices.**

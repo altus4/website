@@ -23,7 +23,7 @@ graph TD
     B --> G[Grafana<br/>Metrics Visualization]
     B --> H[AlertManager<br/>Alert Routing]
     H --> I[Notification Channels<br/>Slack, Email, PagerDuty]
-    
+
     style A fill:#e1f5fe
     style B fill:#f3e5f5
     style G fill:#e8f5e8
@@ -32,14 +32,14 @@ graph TD
 
 ### Observability Components
 
-| Component | Purpose | Technology | Port |
-|-----------|---------|------------|------|
-| __Metrics Collection__ | Application & system metrics | Prometheus | 9090 |
-| __Metrics Visualization__ | Dashboards and graphs | Grafana | 3000 |
-| __Log Aggregation__ | Centralized logging | ELK Stack | 9200 |
-| __Application Monitoring__ | APM and tracing | Jaeger/Zipkin | 16686 |
-| __Alerting__ | Proactive notifications | AlertManager | 9093 |
-| __Uptime Monitoring__ | External health checks | Blackbox Exporter | 9115 |
+| Component                  | Purpose                      | Technology        | Port  |
+| -------------------------- | ---------------------------- | ----------------- | ----- |
+| **Metrics Collection**     | Application & system metrics | Prometheus        | 9090  |
+| **Metrics Visualization**  | Dashboards and graphs        | Grafana           | 3000  |
+| **Log Aggregation**        | Centralized logging          | ELK Stack         | 9200  |
+| **Application Monitoring** | APM and tracing              | Jaeger/Zipkin     | 16686 |
+| **Alerting**               | Proactive notifications      | AlertManager      | 9093  |
+| **Uptime Monitoring**      | External health checks       | Blackbox Exporter | 9115  |
 
 ## Application Metrics Integration
 
@@ -63,75 +63,75 @@ export const httpRequestDuration = new client.Histogram({
   name: 'http_request_duration_seconds',
   help: 'Duration of HTTP requests in seconds',
   labelNames: ['method', 'route', 'status_code'],
-  buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10]
+  buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10],
 });
 
 export const httpRequestsTotal = new client.Counter({
   name: 'http_requests_total',
   help: 'Total number of HTTP requests',
-  labelNames: ['method', 'route', 'status_code']
+  labelNames: ['method', 'route', 'status_code'],
 });
 
 export const searchRequestsTotal = new client.Counter({
   name: 'search_requests_total',
   help: 'Total number of search requests',
-  labelNames: ['search_mode', 'database_id', 'status']
+  labelNames: ['search_mode', 'database_id', 'status'],
 });
 
 export const searchDuration = new client.Histogram({
   name: 'search_duration_seconds',
   help: 'Duration of search operations in seconds',
   labelNames: ['search_mode', 'database_id'],
-  buckets: [0.1, 0.5, 1, 2, 5, 10, 30]
+  buckets: [0.1, 0.5, 1, 2, 5, 10, 30],
 });
 
 export const databaseConnectionsActive = new client.Gauge({
   name: 'database_connections_active',
   help: 'Number of active database connections',
-  labelNames: ['database_id']
+  labelNames: ['database_id'],
 });
 
 export const databaseQueryDuration = new client.Histogram({
   name: 'database_query_duration_seconds',
   help: 'Duration of database queries in seconds',
   labelNames: ['database_id', 'query_type'],
-  buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5]
+  buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5],
 });
 
 export const cacheHitRate = new client.Gauge({
   name: 'cache_hit_rate',
   help: 'Cache hit rate percentage',
-  labelNames: ['cache_type']
+  labelNames: ['cache_type'],
 });
 
 export const cacheOperations = new client.Counter({
   name: 'cache_operations_total',
   help: 'Total number of cache operations',
-  labelNames: ['operation', 'cache_type', 'status']
+  labelNames: ['operation', 'cache_type', 'status'],
 });
 
 export const aiRequestsTotal = new client.Counter({
   name: 'ai_requests_total',
   help: 'Total number of AI service requests',
-  labelNames: ['operation', 'model', 'status']
+  labelNames: ['operation', 'model', 'status'],
 });
 
 export const aiRequestDuration = new client.Histogram({
   name: 'ai_request_duration_seconds',
   help: 'Duration of AI service requests in seconds',
   labelNames: ['operation', 'model'],
-  buckets: [0.5, 1, 2, 5, 10, 30, 60]
+  buckets: [0.5, 1, 2, 5, 10, 30, 60],
 });
 
 export const userSessionsActive = new client.Gauge({
   name: 'user_sessions_active',
-  help: 'Number of active user sessions'
+  help: 'Number of active user sessions',
 });
 
 export const apiKeyUsage = new client.Counter({
   name: 'api_key_usage_total',
   help: 'Total API key usage',
-  labelNames: ['key_tier', 'endpoint', 'status']
+  labelNames: ['key_tier', 'endpoint', 'status'],
 });
 
 // Register all metrics
@@ -163,28 +163,32 @@ interface MetricsRequest extends Request {
   startTime?: number;
 }
 
-export const metricsMiddleware = (req: MetricsRequest, res: Response, next: NextFunction) => {
+export const metricsMiddleware = (
+  req: MetricsRequest,
+  res: Response,
+  next: NextFunction
+) => {
   req.startTime = Date.now();
-  
+
   // Capture the end function
   const originalSend = res.send;
-  
-  res.send = function(data) {
+
+  res.send = function (data) {
     const duration = (Date.now() - (req.startTime || 0)) / 1000;
     const route = req.route ? req.route.path : req.path;
-    
+
     // Record metrics
     httpRequestDuration
       .labels(req.method, route, res.statusCode.toString())
       .observe(duration);
-    
+
     httpRequestsTotal
       .labels(req.method, route, res.statusCode.toString())
       .inc();
-    
+
     return originalSend.call(this, data);
   };
-  
+
   next();
 };
 ```
@@ -225,24 +229,30 @@ export class SearchService {
     const startTime = Date.now();
     const labels = {
       search_mode: query.mode,
-      database_id: query.databases[0] || 'unknown'
+      database_id: query.databases[0] || 'unknown',
     };
-    
+
     try {
       const results = await this.performSearch(query);
-      
+
       // Record success metrics
-      searchRequestsTotal.labels(labels.search_mode, labels.database_id, 'success').inc();
-      
+      searchRequestsTotal
+        .labels(labels.search_mode, labels.database_id, 'success')
+        .inc();
+
       return results;
     } catch (error) {
       // Record failure metrics
-      searchRequestsTotal.labels(labels.search_mode, labels.database_id, 'error').inc();
+      searchRequestsTotal
+        .labels(labels.search_mode, labels.database_id, 'error')
+        .inc();
       throw error;
     } finally {
       // Record duration
       const duration = (Date.now() - startTime) / 1000;
-      searchDuration.labels(labels.search_mode, labels.database_id).observe(duration);
+      searchDuration
+        .labels(labels.search_mode, labels.database_id)
+        .observe(duration);
     }
   }
 }
@@ -263,7 +273,7 @@ global:
     replica: 'prometheus-1'
 
 rule_files:
-  - "rules/*.yml"
+  - 'rules/*.yml'
 
 scrape_configs:
   # Altus 4 application metrics
@@ -306,8 +316,8 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
       - targets:
-        - https://api.yourdomain.com/health
-        - https://api.yourdomain.com/api/search
+          - https://api.yourdomain.com/health
+          - https://api.yourdomain.com/api/search
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -320,7 +330,7 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-          - localhost:9093
+            - localhost:9093
 
 storage:
   tsdb:
@@ -346,8 +356,8 @@ groups:
           severity: warning
           service: altus4
         annotations:
-          summary: "High error rate detected"
-          description: "Error rate is {{ $value | humanizePercentage }} for {{ $labels.instance }}"
+          summary: 'High error rate detected'
+          description: 'Error rate is {{ $value | humanizePercentage }} for {{ $labels.instance }}'
 
       # High response time
       - alert: HighResponseTime
@@ -357,8 +367,8 @@ groups:
           severity: warning
           service: altus4
         annotations:
-          summary: "High response time detected"
-          description: "95th percentile response time is {{ $value }}s for {{ $labels.instance }}"
+          summary: 'High response time detected'
+          description: '95th percentile response time is {{ $value }}s for {{ $labels.instance }}'
 
       # Search service down
       - alert: SearchServiceDown
@@ -368,8 +378,8 @@ groups:
           severity: critical
           service: altus4
         annotations:
-          summary: "Altus 4 application is down"
-          description: "The Altus 4 application has been down for more than 1 minute"
+          summary: 'Altus 4 application is down'
+          description: 'The Altus 4 application has been down for more than 1 minute'
 
       # Database connection issues
       - alert: DatabaseConnectionHigh
@@ -379,8 +389,8 @@ groups:
           severity: warning
           service: database
         annotations:
-          summary: "High database connection usage"
-          description: "Database connection usage is {{ $value }} for {{ $labels.database_id }}"
+          summary: 'High database connection usage'
+          description: 'Database connection usage is {{ $value }} for {{ $labels.database_id }}'
 
       # Search performance degradation
       - alert: SearchPerformanceDegradation
@@ -390,8 +400,8 @@ groups:
           severity: warning
           service: search
         annotations:
-          summary: "Search performance degradation"
-          description: "95th percentile search time is {{ $value }}s for {{ $labels.search_mode }}"
+          summary: 'Search performance degradation'
+          description: '95th percentile search time is {{ $value }}s for {{ $labels.search_mode }}'
 
       # AI service issues
       - alert: AIServiceHighFailureRate
@@ -401,8 +411,8 @@ groups:
           severity: warning
           service: ai
         annotations:
-          summary: "AI service high failure rate"
-          description: "AI service failure rate is {{ $value | humanizePercentage }}"
+          summary: 'AI service high failure rate'
+          description: 'AI service failure rate is {{ $value | humanizePercentage }}'
 
       # Cache hit rate low
       - alert: CacheHitRateLow
@@ -412,8 +422,8 @@ groups:
           severity: warning
           service: cache
         annotations:
-          summary: "Low cache hit rate"
-          description: "Cache hit rate is {{ $value | humanizePercentage }} for {{ $labels.cache_type }}"
+          summary: 'Low cache hit rate'
+          description: 'Cache hit rate is {{ $value | humanizePercentage }} for {{ $labels.cache_type }}'
 
   - name: altus4-infrastructure
     interval: 30s
@@ -426,8 +436,8 @@ groups:
           severity: warning
           service: infrastructure
         annotations:
-          summary: "High CPU usage"
-          description: "CPU usage is {{ $value }}% on {{ $labels.instance }}"
+          summary: 'High CPU usage'
+          description: 'CPU usage is {{ $value }}% on {{ $labels.instance }}'
 
       # High memory usage
       - alert: HighMemoryUsage
@@ -437,8 +447,8 @@ groups:
           severity: warning
           service: infrastructure
         annotations:
-          summary: "High memory usage"
-          description: "Memory usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}"
+          summary: 'High memory usage'
+          description: 'Memory usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}'
 
       # Disk space low
       - alert: DiskSpaceLow
@@ -448,8 +458,8 @@ groups:
           severity: critical
           service: infrastructure
         annotations:
-          summary: "Low disk space"
-          description: "Disk space is {{ $value | humanizePercentage }} available on {{ $labels.instance }}"
+          summary: 'Low disk space'
+          description: 'Disk space is {{ $value | humanizePercentage }} available on {{ $labels.instance }}'
 ```
 
 ## AlertManager Configuration
@@ -477,13 +487,13 @@ route:
         severity: critical
       receiver: 'pagerduty'
       continue: true
-    
+
     # Application alerts go to Slack
     - match:
         service: altus4
       receiver: 'slack-altus4'
       continue: true
-    
+
     # Infrastructure alerts go to ops team
     - match:
         service: infrastructure
@@ -678,7 +688,7 @@ const levels = {
   warn: 1,
   info: 2,
   http: 3,
-  debug: 4
+  debug: 4,
 };
 
 // Define colors for each level
@@ -687,7 +697,7 @@ const colors = {
   warn: 'yellow',
   info: 'green',
   http: 'magenta',
-  debug: 'white'
+  debug: 'white',
 };
 
 winston.addColors(colors);
@@ -697,28 +707,28 @@ const logFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
   winston.format.errors({ stack: true }),
   winston.format.json(),
-  winston.format.printf((info) => {
+  winston.format.printf(info => {
     const { timestamp, level, message, ...extra } = info;
-    
+
     const logObject = {
       timestamp,
       level,
       message,
       service: 'altus4',
       environment: process.env.NODE_ENV || 'development',
-      ...extra
+      ...extra,
     };
-    
+
     // Add request ID if available
     if (info.requestId) {
       logObject.requestId = info.requestId;
     }
-    
+
     // Add user ID if available
     if (info.userId) {
       logObject.userId = info.userId;
     }
-    
+
     return JSON.stringify(logObject);
   })
 );
@@ -730,21 +740,21 @@ const transports = [
     format: winston.format.combine(
       winston.format.colorize(),
       winston.format.simple()
-    )
+    ),
   }),
-  
+
   // File transport for all logs
   new winston.transports.File({
     filename: path.join(process.cwd(), 'logs', 'combined.log'),
-    format: logFormat
+    format: logFormat,
   }),
-  
+
   // Separate file for errors
   new winston.transports.File({
     filename: path.join(process.cwd(), 'logs', 'error.log'),
     level: 'error',
-    format: logFormat
-  })
+    format: logFormat,
+  }),
 ];
 
 // Add HTTP transport for centralized logging in production
@@ -754,7 +764,7 @@ if (process.env.NODE_ENV === 'production' && process.env.LOG_HTTP_URL) {
       host: process.env.LOG_HTTP_HOST,
       port: parseInt(process.env.LOG_HTTP_PORT || '80'),
       path: process.env.LOG_HTTP_PATH || '/logs',
-      format: logFormat
+      format: logFormat,
     })
   );
 }
@@ -765,28 +775,34 @@ const logger = winston.createLogger({
   levels,
   format: logFormat,
   transports,
-  exitOnError: false
+  exitOnError: false,
 });
 
 // Add request context middleware
 export const addRequestContext = (req: any, res: any, next: any) => {
-  req.requestId = req.headers['x-request-id'] || 
+  req.requestId =
+    req.headers['x-request-id'] ||
     `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  
+
   // Add request ID to response headers
   res.setHeader('X-Request-ID', req.requestId);
-  
+
   next();
 };
 
 // Logger with context
 export const createContextLogger = (context: Record<string, any>) => {
   return {
-    error: (message: string, meta?: any) => logger.error(message, { ...context, ...meta }),
-    warn: (message: string, meta?: any) => logger.warn(message, { ...context, ...meta }),
-    info: (message: string, meta?: any) => logger.info(message, { ...context, ...meta }),
-    http: (message: string, meta?: any) => logger.http(message, { ...context, ...meta }),
-    debug: (message: string, meta?: any) => logger.debug(message, { ...context, ...meta })
+    error: (message: string, meta?: any) =>
+      logger.error(message, { ...context, ...meta }),
+    warn: (message: string, meta?: any) =>
+      logger.warn(message, { ...context, ...meta }),
+    info: (message: string, meta?: any) =>
+      logger.info(message, { ...context, ...meta }),
+    http: (message: string, meta?: any) =>
+      logger.http(message, { ...context, ...meta }),
+    debug: (message: string, meta?: any) =>
+      logger.debug(message, { ...context, ...meta }),
   };
 };
 
@@ -807,41 +823,45 @@ interface LoggedRequest extends Request {
   logger?: any;
 }
 
-export const requestLoggingMiddleware = (req: LoggedRequest, res: Response, next: NextFunction) => {
+export const requestLoggingMiddleware = (
+  req: LoggedRequest,
+  res: Response,
+  next: NextFunction
+) => {
   req.startTime = Date.now();
-  
+
   // Create request-specific logger
   req.logger = createContextLogger({
     requestId: req.requestId,
     method: req.method,
     url: req.url,
     userAgent: req.get('User-Agent'),
-    ip: req.ip
+    ip: req.ip,
   });
-  
+
   // Log incoming request
   req.logger.http('Incoming request', {
     method: req.method,
     url: req.url,
     headers: req.headers,
     query: req.query,
-    body: req.body
+    body: req.body,
   });
-  
+
   // Capture response
   const originalSend = res.send;
-  res.send = function(data) {
+  res.send = function (data) {
     const duration = Date.now() - (req.startTime || 0);
-    
+
     req.logger.http('Request completed', {
       statusCode: res.statusCode,
       duration,
-      responseSize: Buffer.byteLength(data)
+      responseSize: Buffer.byteLength(data),
     });
-    
+
     return originalSend.call(this, data);
   };
-  
+
   next();
 };
 ```
@@ -886,7 +906,7 @@ input {
   beats {
     port => 5044
   }
-  
+
   http {
     port => 8080
     codec => json
@@ -901,7 +921,7 @@ filter {
         source => "message"
       }
     }
-    
+
     # Extract timestamp
     if [timestamp] {
       date {
@@ -909,20 +929,20 @@ filter {
         target => "@timestamp"
       }
     }
-    
+
     # Add tags for different log types
     if [level] == "error" {
       mutate {
         add_tag => [ "error", "alert" ]
       }
     }
-    
+
     if [message] =~ /search/ {
       mutate {
         add_tag => [ "search" ]
       }
     }
-    
+
     if [message] =~ /database/ {
       mutate {
         add_tag => [ "database" ]
@@ -939,7 +959,7 @@ output {
     template_pattern => "altus4-*"
     template => "/usr/share/logstash/templates/altus4-template.json"
   }
-  
+
   # Output to stdout for debugging
   stdout {
     codec => rubydebug
@@ -953,29 +973,29 @@ Create `config/filebeat/filebeat.yml`:
 
 ```yaml
 filebeat.inputs:
-- type: log
-  enabled: true
-  paths:
-    - /var/log/altus4/*.log
-  fields:
-    service: altus4
-    environment: production
-  fields_under_root: true
-  multiline.pattern: '^{'
-  multiline.negate: true
-  multiline.match: after
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/altus4/*.log
+    fields:
+      service: altus4
+      environment: production
+    fields_under_root: true
+    multiline.pattern: '^{'
+    multiline.negate: true
+    multiline.match: after
 
-- type: log
-  enabled: true
-  paths:
-    - /var/log/nginx/*.log
-  fields:
-    service: nginx
-    logtype: access
-  fields_under_root: true
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/nginx/*.log
+    fields:
+      service: nginx
+      logtype: access
+    fields_under_root: true
 
 output.logstash:
-  hosts: ["localhost:5044"]
+  hosts: ['localhost:5044']
 
 processors:
   - add_host_metadata:
@@ -1012,7 +1032,7 @@ router.get('/health', async (req, res) => {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    version: process.env.npm_package_version || '1.0.0'
+    version: process.env.npm_package_version || '1.0.0',
   });
 });
 
@@ -1023,7 +1043,7 @@ router.get('/health/detailed', async (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     version: process.env.npm_package_version || '1.0.0',
-    checks: {}
+    checks: {},
   };
 
   // Database health check
@@ -1032,12 +1052,12 @@ router.get('/health/detailed', async (req, res) => {
     health.checks.database = {
       status: dbHealth.status,
       responseTime: dbHealth.responseTime,
-      details: dbHealth.details
+      details: dbHealth.details,
     };
   } catch (error) {
     health.checks.database = {
       status: 'unhealthy',
-      error: error.message
+      error: error.message,
     };
     health.status = 'degraded';
   }
@@ -1047,12 +1067,12 @@ router.get('/health/detailed', async (req, res) => {
     const cacheHealth = await CacheService.healthCheck();
     health.checks.cache = {
       status: cacheHealth.status,
-      responseTime: cacheHealth.responseTime
+      responseTime: cacheHealth.responseTime,
     };
   } catch (error) {
     health.checks.cache = {
       status: 'unhealthy',
-      error: error.message
+      error: error.message,
     };
     health.status = 'degraded';
   }
@@ -1062,12 +1082,12 @@ router.get('/health/detailed', async (req, res) => {
     const aiHealth = await AIService.healthCheck();
     health.checks.ai = {
       status: aiHealth.status,
-      responseTime: aiHealth.responseTime
+      responseTime: aiHealth.responseTime,
     };
   } catch (error) {
     health.checks.ai = {
       status: 'unhealthy',
-      error: error.message
+      error: error.message,
     };
     health.status = 'degraded';
   }

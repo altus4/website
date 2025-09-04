@@ -13,11 +13,11 @@ This guide demonstrates how to use official Altus 4 SDKs to integrate search fun
 
 Currently, Altus 4 provides SDKs for:
 
-- __JavaScript/TypeScript__ - For Node.js and browser applications
-- __Python__ - For Python 3.8+ applications
-- __Go__ - For Go 1.19+ applications
-- __Java__ - For Java 11+ applications
-- __PHP__ - For PHP 8.0+ applications
+- **JavaScript/TypeScript** - For Node.js and browser applications
+- **Python** - For Python 3.8+ applications
+- **Go** - For Go 1.19+ applications
+- **Java** - For Java 11+ applications
+- **PHP** - For PHP 8.0+ applications
 
 ## JavaScript/TypeScript SDK
 
@@ -32,15 +32,15 @@ yarn add @altus4/sdk
 ### Basic Usage
 
 ```typescript
-import { Altus4Client } from '@altus4/sdk'
+import { Altus4Client } from '@altus4/sdk';
 
 // Initialize client
 const client = new Altus4Client({
   apiKey: 'altus4_sk_live_abc123def456...',
   baseUrl: 'https://api.altus4.com', // Optional, defaults to production
   timeout: 30000, // Optional, 30 second timeout
-  retries: 3 // Optional, retry failed requests
-})
+  retries: 3, // Optional, retry failed requests
+});
 
 // Basic search
 async function basicSearch() {
@@ -49,18 +49,18 @@ async function basicSearch() {
       query: 'mysql performance optimization',
       databases: ['tech-docs-db'],
       searchMode: 'semantic',
-      limit: 20
-    })
+      limit: 20,
+    });
 
-    console.log(`Found ${results.totalCount} results`)
+    console.log(`Found ${results.totalCount} results`);
     results.results.forEach(result => {
-      console.log(`- ${result.data.title} (${result.relevanceScore})`)
-    })
+      console.log(`- ${result.data.title} (${result.relevanceScore})`);
+    });
 
-    return results
+    return results;
   } catch (error) {
-    console.error('Search failed:', error.message)
-    throw error
+    console.error('Search failed:', error.message);
+    throw error;
   }
 }
 ```
@@ -68,10 +68,10 @@ async function basicSearch() {
 ### Advanced Features
 
 ```typescript
-import { Altus4Client, SearchMode, ApiError } from '@altus4/sdk'
+import { Altus4Client, SearchMode, ApiError } from '@altus4/sdk';
 
 class AdvancedSearchService {
-  private client: Altus4Client
+  private client: Altus4Client;
 
   constructor(apiKey: string) {
     this.client = new Altus4Client({
@@ -81,15 +81,15 @@ class AdvancedSearchService {
       // Custom retry configuration
       retryConfig: {
         retries: 5,
-        retryDelay: (attempt) => Math.pow(2, attempt) * 1000, // Exponential backoff
-        retryCondition: (error) => error.status >= 500 || error.status === 429
-      }
-    })
+        retryDelay: attempt => Math.pow(2, attempt) * 1000, // Exponential backoff
+        retryCondition: error => error.status >= 500 || error.status === 429,
+      },
+    });
   }
 
   async searchWithFallback(query: string, databases: string[]) {
     // Try semantic search first, fallback to natural language
-    const searchModes: SearchMode[] = ['semantic', 'natural', 'boolean']
+    const searchModes: SearchMode[] = ['semantic', 'natural', 'boolean'];
 
     for (const mode of searchModes) {
       try {
@@ -97,179 +97,183 @@ class AdvancedSearchService {
           query,
           databases,
           searchMode: mode,
-          limit: 25
-        })
+          limit: 25,
+        });
 
         if (results.totalCount > 0) {
-          return { ...results, searchMode: mode }
+          return { ...results, searchMode: mode };
         }
       } catch (error) {
         if (error instanceof ApiError && error.status === 429) {
           // Rate limited, wait and retry
-          await this.waitForRateLimit(error)
-          continue
+          await this.waitForRateLimit(error);
+          continue;
         }
 
-        console.warn(`Search with ${mode} mode failed:`, error.message)
+        console.warn(`Search with ${mode} mode failed:`, error.message);
       }
     }
 
-    throw new Error('All search modes failed')
+    throw new Error('All search modes failed');
   }
 
   async searchWithAnalytics(query: string, databases: string[]) {
     const [searchResults, suggestions, trends] = await Promise.allSettled([
       this.client.search({ query, databases, limit: 20 }),
       this.client.getSearchSuggestions({ query, databases }),
-      this.client.getUserTrends({ period: '7d' })
-    ])
+      this.client.getUserTrends({ period: '7d' }),
+    ]);
 
     return {
-      results: searchResults.status === 'fulfilled' ? searchResults.value : null,
+      results:
+        searchResults.status === 'fulfilled' ? searchResults.value : null,
       suggestions: suggestions.status === 'fulfilled' ? suggestions.value : [],
       trends: trends.status === 'fulfilled' ? trends.value : null,
       errors: [searchResults, suggestions, trends]
         .filter(result => result.status === 'rejected')
-        .map(result => result.reason)
-    }
+        .map(result => result.reason),
+    };
   }
 
   async batchSearch(queries: string[], databases: string[]) {
     // Execute multiple searches concurrently
     const searchPromises = queries.map(query =>
-      this.client.search({
-        query,
-        databases,
-        searchMode: 'semantic',
-        limit: 10
-      }).catch(error => ({ error: error.message, query }))
-    )
+      this.client
+        .search({
+          query,
+          databases,
+          searchMode: 'semantic',
+          limit: 10,
+        })
+        .catch(error => ({ error: error.message, query }))
+    );
 
-    const results = await Promise.all(searchPromises)
+    const results = await Promise.all(searchPromises);
 
     return {
       successful: results.filter(result => !result.error),
       failed: results.filter(result => result.error),
-      totalQueries: queries.length
-    }
+      totalQueries: queries.length,
+    };
   }
 
   private async waitForRateLimit(error: ApiError) {
-    const resetTime = error.headers?.['x-ratelimit-reset']
+    const resetTime = error.headers?.['x-ratelimit-reset'];
     if (resetTime) {
-      const waitTime = new Date(resetTime).getTime() - Date.now()
-      if (waitTime > 0 && waitTime < 60000) { // Wait max 1 minute
-        await new Promise(resolve => setTimeout(resolve, waitTime))
+      const waitTime = new Date(resetTime).getTime() - Date.now();
+      if (waitTime > 0 && waitTime < 60000) {
+        // Wait max 1 minute
+        await new Promise(resolve => setTimeout(resolve, waitTime));
       }
     }
   }
 }
 
 // Usage
-const searchService = new AdvancedSearchService(process.env.ALTUS4_API_KEY!)
+const searchService = new AdvancedSearchService(process.env.ALTUS4_API_KEY!);
 
 // Search with fallback modes
 const results = await searchService.searchWithFallback(
   'database performance issues',
   ['docs-db', 'community-db']
-)
+);
 
 // Search with analytics
 const analyticsResults = await searchService.searchWithAnalytics(
   'mysql optimization',
   ['tech-docs-db']
-)
+);
 
 // Batch search
 const batchResults = await searchService.batchSearch(
   ['mysql performance', 'database indexing', 'query optimization'],
   ['docs-db']
-)
+);
 ```
 
 ### React Integration
 
 ```tsx
-import React, { useState, useCallback, useEffect } from 'react'
-import { Altus4Client } from '@altus4/sdk'
-import type { SearchResult, SearchResponse } from '@altus4/sdk'
+import React, { useState, useCallback, useEffect } from 'react';
+import { Altus4Client } from '@altus4/sdk';
+import type { SearchResult, SearchResponse } from '@altus4/sdk';
 
 const client = new Altus4Client({
-  apiKey: process.env.REACT_APP_ALTUS4_API_KEY!
-})
+  apiKey: process.env.REACT_APP_ALTUS4_API_KEY!,
+});
 
 interface SearchComponentProps {
-  databases: string[]
-  placeholder?: string
+  databases: string[];
+  placeholder?: string;
 }
 
 export const SearchComponent: React.FC<SearchComponentProps> = ({
   databases,
-  placeholder = "Search..."
+  placeholder = 'Search...',
 }) => {
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState<SearchResult[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   // Debounced search
   const debouncedSearch = useCallback(
     debounce(async (searchQuery: string) => {
       if (!searchQuery.trim()) {
-        setResults([])
-        return
+        setResults([]);
+        return;
       }
 
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
       try {
         const response = await client.search({
           query: searchQuery,
           databases,
           searchMode: 'semantic',
-          limit: 20
-        })
+          limit: 20,
+        });
 
-        setResults(response.results)
+        setResults(response.results);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Search failed')
-        setResults([])
+        setError(err instanceof Error ? err.message : 'Search failed');
+        setResults([]);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }, 300),
     [databases]
-  )
+  );
 
   // Get suggestions as user types
   const getSuggestions = useCallback(
     debounce(async (searchQuery: string) => {
       if (searchQuery.length < 2) {
-        setSuggestions([])
-        return
+        setSuggestions([]);
+        return;
       }
 
       try {
         const response = await client.getSearchSuggestions({
           query: searchQuery,
           databases,
-          limit: 5
-        })
+          limit: 5,
+        });
 
-        setSuggestions(response.suggestions.map(s => s.text))
+        setSuggestions(response.suggestions.map(s => s.text));
       } catch (err) {
-        console.warn('Failed to get suggestions:', err)
+        console.warn('Failed to get suggestions:', err);
       }
     }, 150),
     [databases]
-  )
+  );
 
   useEffect(() => {
-    debouncedSearch(query)
-    getSuggestions(query)
-  }, [query, debouncedSearch, getSuggestions])
+    debouncedSearch(query);
+    getSuggestions(query);
+  }, [query, debouncedSearch, getSuggestions]);
 
   return (
     <div className="search-component">
@@ -277,7 +281,7 @@ export const SearchComponent: React.FC<SearchComponentProps> = ({
         <input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={e => setQuery(e.target.value)}
           placeholder={placeholder}
           className="search-input"
         />
@@ -299,14 +303,10 @@ export const SearchComponent: React.FC<SearchComponentProps> = ({
 
       {loading && <div className="loading">Searching...</div>}
 
-      {error && (
-        <div className="error">
-          Error: {error}
-        </div>
-      )}
+      {error && <div className="error">Error: {error}</div>}
 
       <div className="results">
-        {results.map((result) => (
+        {results.map(result => (
           <div key={result.id} className="result-item">
             <h3>{result.data.title}</h3>
             <p>{result.snippet}</p>
@@ -318,19 +318,19 @@ export const SearchComponent: React.FC<SearchComponentProps> = ({
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 // Utility function
 function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout
+  let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => func(...args), wait)
-  }
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
 }
 ```
 
@@ -983,24 +983,24 @@ Implement comprehensive error handling across all SDKs:
 
 ```typescript
 // TypeScript
-import { ApiError, RateLimitError, ValidationError } from '@altus4/sdk'
+import { ApiError, RateLimitError, ValidationError } from '@altus4/sdk';
 
 try {
-  const results = await client.search({ query, databases })
+  const results = await client.search({ query, databases });
 } catch (error) {
   if (error instanceof RateLimitError) {
     // Wait and retry
-    await new Promise(resolve => setTimeout(resolve, error.retryAfter * 1000))
+    await new Promise(resolve => setTimeout(resolve, error.retryAfter * 1000));
     // Retry logic here
   } else if (error instanceof ValidationError) {
     // Handle validation errors
-    console.error('Invalid request:', error.details)
+    console.error('Invalid request:', error.details);
   } else if (error instanceof ApiError) {
     // Handle API errors
-    console.error('API error:', error.status, error.message)
+    console.error('API error:', error.status, error.message);
   } else {
     // Handle unexpected errors
-    console.error('Unexpected error:', error)
+    console.error('Unexpected error:', error);
   }
 }
 ```
@@ -1072,52 +1072,52 @@ Test SDK integration properly:
 
 ```typescript
 // TypeScript - Testing with mocks
-import { Altus4Client } from '@altus4/sdk'
-import { jest } from '@jest/globals'
+import { Altus4Client } from '@altus4/sdk';
+import { jest } from '@jest/globals';
 
 // Mock the SDK for testing
-jest.mock('@altus4/sdk')
+jest.mock('@altus4/sdk');
 
 const mockClient = {
   search: jest.fn(),
-  getSearchSuggestions: jest.fn()
-} as jest.Mocked<Altus4Client>
+  getSearchSuggestions: jest.fn(),
+} as jest.Mocked<Altus4Client>;
 
 describe('SearchService', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   it('should handle search results', async () => {
     const mockResults = {
       results: [{ id: '1', data: { title: 'Test' }, relevanceScore: 0.9 }],
-      totalCount: 1
-    }
+      totalCount: 1,
+    };
 
-    mockClient.search.mockResolvedValue(mockResults)
+    mockClient.search.mockResolvedValue(mockResults);
 
-    const service = new SearchService(mockClient)
-    const results = await service.search('test query', ['db1'])
+    const service = new SearchService(mockClient);
+    const results = await service.search('test query', ['db1']);
 
-    expect(results.totalCount).toBe(1)
+    expect(results.totalCount).toBe(1);
     expect(mockClient.search).toHaveBeenCalledWith({
       query: 'test query',
       databases: ['db1'],
       searchMode: 'semantic',
-      limit: 20
-    })
-  })
-})
+      limit: 20,
+    });
+  });
+});
 ```
 
 ## Next Steps
 
 You've learned how to use Altus 4 SDKs effectively! Continue exploring:
 
-- __[API Reference](../api/)__ - Complete API documentation
-- __[Performance Guide](../testing/performance.md)__ - SDK optimization techniques
-- __[Examples Repository](https://github.com/altus4/examples)__ - More SDK examples
+- **[API Reference](../api/)** - Complete API documentation
+- **[Performance Guide](../testing/performance.md)** - SDK optimization techniques
+- **[Examples Repository](https://github.com/altus4/examples)** - More SDK examples
 
 ---
 
-__Official SDKs provide the best developer experience with type safety, error handling, and performance optimizations. Choose the SDK for your preferred language and start building!__
+**Official SDKs provide the best developer experience with type safety, error handling, and performance optimizations. Choose the SDK for your preferred language and start building!**

@@ -11,7 +11,7 @@ This guide demonstrates how to leverage Altus 4's AI-powered features including 
 
 ## Prerequisites
 
-- __OpenAI API Key__ configured in your Altus 4 instance
+- **OpenAI API Key** configured in your Altus 4 instance
 - Understanding of [Basic Search](./basic-search.md) concepts
 - API key with `search` and `analytics` permissions
 
@@ -27,53 +27,53 @@ const searchModes = [
   {
     mode: 'natural',
     query: 'mysql performance',
-    description: 'Traditional keyword matching'
+    description: 'Traditional keyword matching',
   },
   {
     mode: 'semantic',
     query: 'improve database speed',
-    description: 'AI understands "speed" relates to "performance"'
+    description: 'AI understands "speed" relates to "performance"',
   },
   {
     mode: 'semantic',
     query: 'how to make queries faster',
-    description: 'Natural language understanding'
-  }
-]
+    description: 'Natural language understanding',
+  },
+];
 
 async function compareSearchModes(apiKey, databases) {
-  const results = {}
+  const results = {};
 
   for (const config of searchModes) {
     const response = await fetch('https://api.altus4.com/api/v1/search', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         query: config.query,
         databases,
         searchMode: config.mode,
-        limit: 10
-      })
-    })
+        limit: 10,
+      }),
+    });
 
-    const data = await response.json()
+    const data = await response.json();
     results[config.mode] = {
       query: config.query,
       resultCount: data.data?.totalCount || 0,
       topResult: data.data?.results[0]?.data?.title || 'No results',
-      executionTime: data.data?.executionTime || 0
-    }
+      executionTime: data.data?.executionTime || 0,
+    };
   }
 
-  return results
+  return results;
 }
 
 // Usage
-const comparison = await compareSearchModes(apiKey, ['tech_docs_db'])
-console.log('Search mode comparison:', comparison)
+const comparison = await compareSearchModes(apiKey, ['tech_docs_db']);
+console.log('Search mode comparison:', comparison);
 ```
 
 ### Semantic Query Expansion
@@ -186,7 +186,7 @@ curl -X POST https://api.altus4.com/api/v1/search/optimize \
   }'
 ```
 
-__Response:__
+**Response:**
 
 ```json
 {
@@ -224,67 +224,73 @@ __Response:__
 ```javascript
 class QueryIntelligenceEngine {
   constructor(apiKey) {
-    this.apiKey = apiKey
-    this.queryHistory = []
+    this.apiKey = apiKey;
+    this.queryHistory = [];
   }
 
   async analyzeQueryIntent(query, context = {}) {
-    const response = await fetch('https://api.altus4.com/api/v1/ai/analyze-intent', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        query,
-        context,
-        includeConfidence: true,
-        includeSuggestions: true
-      })
-    })
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/ai/analyze-intent',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          context,
+          includeConfidence: true,
+          includeSuggestions: true,
+        }),
+      }
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   async optimizeForDomain(query, domain, databases) {
     // Domain-specific optimization (e.g., 'technical', 'ecommerce', 'support')
-    const optimization = await fetch('https://api.altus4.com/api/v1/ai/optimize-domain', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        query,
-        domain,
-        databases,
-        includeTerminology: true
-      })
-    })
+    const optimization = await fetch(
+      'https://api.altus4.com/api/v1/ai/optimize-domain',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          domain,
+          databases,
+          includeTerminology: true,
+        }),
+      }
+    );
 
-    const optimizationData = await optimization.json()
+    const optimizationData = await optimization.json();
 
     // Execute optimized search
     const searchResponse = await fetch('https://api.altus4.com/api/v1/search', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         query: optimizationData.data.optimizedQuery,
         databases,
         searchMode: 'semantic',
-        limit: 20
-      })
-    })
+        limit: 20,
+      }),
+    });
 
-    const searchData = await searchResponse.json()
+    const searchData = await searchResponse.json();
 
     return {
       optimization: optimizationData.data,
-      results: searchData.data
-    }
+      results: searchData.data,
+    };
   }
 
   async learnFromFeedback(query, results, userFeedback) {
@@ -292,8 +298,8 @@ class QueryIntelligenceEngine {
     await fetch('https://api.altus4.com/api/v1/ai/feedback', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         query,
@@ -302,52 +308,55 @@ class QueryIntelligenceEngine {
           relevanceRating: userFeedback.relevance, // 1-5
           clickedResults: userFeedback.clicked,
           queryIntent: userFeedback.intent,
-          suggestions: userFeedback.suggestions
-        }
-      })
-    })
+          suggestions: userFeedback.suggestions,
+        },
+      }),
+    });
   }
 
   async getPersonalizedSuggestions(userId, recentQueries) {
-    const response = await fetch('https://api.altus4.com/api/v1/ai/personalized-suggestions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        userId,
-        recentQueries,
-        includeTopics: true,
-        includeRelated: true
-      })
-    })
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/ai/personalized-suggestions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          recentQueries,
+          includeTopics: true,
+          includeRelated: true,
+        }),
+      }
+    );
 
-    return await response.json()
+    return await response.json();
   }
 }
 
 // Usage examples
-const queryEngine = new QueryIntelligenceEngine(apiKey)
+const queryEngine = new QueryIntelligenceEngine(apiKey);
 
 // Analyze query intent
 const intentAnalysis = await queryEngine.analyzeQueryIntent(
-  "how to fix slow database",
-  { userRole: "developer", previousQueries: ["mysql optimization"] }
-)
+  'how to fix slow database',
+  { userRole: 'developer', previousQueries: ['mysql optimization'] }
+);
 
-console.log('Query intent:', intentAnalysis.data.intent)
-console.log('Confidence:', intentAnalysis.data.confidence)
+console.log('Query intent:', intentAnalysis.data.intent);
+console.log('Confidence:', intentAnalysis.data.confidence);
 
 // Domain-specific optimization
 const techOptimization = await queryEngine.optimizeForDomain(
-  "performance issues",
-  "technical",
-  ["tech_docs_db"]
-)
+  'performance issues',
+  'technical',
+  ['tech_docs_db']
+);
 
-console.log('Optimized query:', techOptimization.optimization.optimizedQuery)
-console.log('Domain terms added:', techOptimization.optimization.domainTerms)
+console.log('Optimized query:', techOptimization.optimization.optimizedQuery);
+console.log('Domain terms added:', techOptimization.optimization.domainTerms);
 ```
 
 ## Intelligent Result Categorization
@@ -528,156 +537,169 @@ categorized, facets, filtered = await categorization_examples()
 ```javascript
 class SmartSuggestionEngine {
   constructor(apiKey) {
-    this.apiKey = apiKey
-    this.userContext = {}
+    this.apiKey = apiKey;
+    this.userContext = {};
   }
 
   async getSmartSuggestions(partialQuery, context = {}) {
-    const response = await fetch('https://api.altus4.com/api/v1/search/suggestions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        query: partialQuery,
-        context: {
-          ...this.userContext,
-          ...context
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/search/suggestions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
         },
-        suggestionTypes: [
-          'completion',      // Auto-complete current query
-          'related',         // Related queries
-          'trending',        // Popular queries
-          'corrected',       // Spelling corrections
-          'semantic'         // Semantically similar queries
-        ],
-        limit: 10
-      })
-    })
+        body: JSON.stringify({
+          query: partialQuery,
+          context: {
+            ...this.userContext,
+            ...context,
+          },
+          suggestionTypes: [
+            'completion', // Auto-complete current query
+            'related', // Related queries
+            'trending', // Popular queries
+            'corrected', // Spelling corrections
+            'semantic', // Semantically similar queries
+          ],
+          limit: 10,
+        }),
+      }
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   async getQueryCorrections(query) {
-    const response = await fetch('https://api.altus4.com/api/v1/ai/spell-check', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        query,
-        includeSuggestions: true,
-        contextAware: true
-      })
-    })
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/ai/spell-check',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          includeSuggestions: true,
+          contextAware: true,
+        }),
+      }
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   async getTrendingSuggestions(timeframe = '7d', category = null) {
     const params = new URLSearchParams({
       timeframe,
-      limit: '10'
-    })
+      limit: '10',
+    });
 
     if (category) {
-      params.append('category', category)
+      params.append('category', category);
     }
 
-    const response = await fetch(`https://api.altus4.com/api/v1/analytics/trending-queries?${params}`, {
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`
+    const response = await fetch(
+      `https://api.altus4.com/api/v1/analytics/trending-queries?${params}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+        },
       }
-    })
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   updateUserContext(context) {
-    this.userContext = { ...this.userContext, ...context }
+    this.userContext = { ...this.userContext, ...context };
   }
 
   async buildSearchInterface(containerId) {
-    const container = document.getElementById(containerId)
+    const container = document.getElementById(containerId);
 
     // Create search input with real-time suggestions
-    const searchInput = document.createElement('input')
-    searchInput.type = 'text'
-    searchInput.placeholder = 'Search with AI assistance...'
-    searchInput.className = 'ai-search-input'
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.placeholder = 'Search with AI assistance...';
+    searchInput.className = 'ai-search-input';
 
-    const suggestionsContainer = document.createElement('div')
-    suggestionsContainer.className = 'suggestions-container'
+    const suggestionsContainer = document.createElement('div');
+    suggestionsContainer.className = 'suggestions-container';
 
     // Real-time suggestion handling
-    let suggestionTimeout
-    searchInput.addEventListener('input', async (e) => {
-      clearTimeout(suggestionTimeout)
+    let suggestionTimeout;
+    searchInput.addEventListener('input', async e => {
+      clearTimeout(suggestionTimeout);
 
       if (e.target.value.length < 2) {
-        suggestionsContainer.innerHTML = ''
-        return
+        suggestionsContainer.innerHTML = '';
+        return;
       }
 
       suggestionTimeout = setTimeout(async () => {
-        const suggestions = await this.getSmartSuggestions(e.target.value)
-        this.renderSuggestions(suggestions, suggestionsContainer)
-      }, 300) // Debounce
-    })
+        const suggestions = await this.getSmartSuggestions(e.target.value);
+        this.renderSuggestions(suggestions, suggestionsContainer);
+      }, 300); // Debounce
+    });
 
-    container.appendChild(searchInput)
-    container.appendChild(suggestionsContainer)
+    container.appendChild(searchInput);
+    container.appendChild(suggestionsContainer);
 
-    return { searchInput, suggestionsContainer }
+    return { searchInput, suggestionsContainer };
   }
 
   renderSuggestions(suggestions, container) {
-    container.innerHTML = ''
+    container.innerHTML = '';
 
-    if (!suggestions.data?.suggestions) return
+    if (!suggestions.data?.suggestions) return;
 
     suggestions.data.suggestions.forEach(suggestion => {
-      const suggestionElement = document.createElement('div')
-      suggestionElement.className = `suggestion suggestion-${suggestion.type}`
+      const suggestionElement = document.createElement('div');
+      suggestionElement.className = `suggestion suggestion-${suggestion.type}`;
       suggestionElement.innerHTML = `
         <span class="suggestion-text">${suggestion.text}</span>
         <span class="suggestion-type">${suggestion.type}</span>
         <span class="suggestion-score">${Math.round(suggestion.score * 100)}%</span>
-      `
+      `;
 
       suggestionElement.addEventListener('click', () => {
-        document.querySelector('.ai-search-input').value = suggestion.text
-        container.innerHTML = ''
-      })
+        document.querySelector('.ai-search-input').value = suggestion.text;
+        container.innerHTML = '';
+      });
 
-      container.appendChild(suggestionElement)
-    })
+      container.appendChild(suggestionElement);
+    });
   }
 }
 
 // Usage
-const suggestionEngine = new SmartSuggestionEngine(apiKey)
+const suggestionEngine = new SmartSuggestionEngine(apiKey);
 
 // Set user context for better suggestions
 suggestionEngine.updateUserContext({
   role: 'developer',
   interests: ['database', 'performance', 'optimization'],
-  recentQueries: ['mysql indexing', 'query performance']
-})
+  recentQueries: ['mysql indexing', 'query performance'],
+});
 
 // Get suggestions for partial query
-const suggestions = await suggestionEngine.getSmartSuggestions('mysql perf')
-console.log('Smart suggestions:', suggestions.data.suggestions)
+const suggestions = await suggestionEngine.getSmartSuggestions('mysql perf');
+console.log('Smart suggestions:', suggestions.data.suggestions);
 
 // Check for spelling corrections
-const corrections = await suggestionEngine.getQueryCorrections('databse performace')
-console.log('Corrections:', corrections.data.corrections)
+const corrections =
+  await suggestionEngine.getQueryCorrections('databse performace');
+console.log('Corrections:', corrections.data.corrections);
 
 // Get trending queries
-const trending = await suggestionEngine.getTrendingSuggestions('7d', 'database')
-console.log('Trending:', trending.data.queries)
+const trending = await suggestionEngine.getTrendingSuggestions(
+  '7d',
+  'database'
+);
+console.log('Trending:', trending.data.queries);
 ```
 
 ## AI-Enhanced Analytics
@@ -867,67 +889,72 @@ Always implement fallbacks when AI services are unavailable:
 ```javascript
 class RobustAISearch {
   constructor(apiKey) {
-    this.apiKey = apiKey
-    this.aiAvailable = true
+    this.apiKey = apiKey;
+    this.aiAvailable = true;
   }
 
   async search(query, databases, options = {}) {
     try {
       // Try AI-enhanced search first
       if (this.aiAvailable && options.useAI !== false) {
-        return await this.aiEnhancedSearch(query, databases, options)
+        return await this.aiEnhancedSearch(query, databases, options);
       }
     } catch (error) {
-      console.warn('AI search failed, falling back to standard search:', error)
-      this.aiAvailable = false
+      console.warn('AI search failed, falling back to standard search:', error);
+      this.aiAvailable = false;
 
       // Retry AI after 5 minutes
-      setTimeout(() => { this.aiAvailable = true }, 5 * 60 * 1000)
+      setTimeout(
+        () => {
+          this.aiAvailable = true;
+        },
+        5 * 60 * 1000
+      );
     }
 
     // Fallback to standard search
-    return await this.standardSearch(query, databases, options)
+    return await this.standardSearch(query, databases, options);
   }
 
   async aiEnhancedSearch(query, databases, options) {
     const response = await fetch('https://api.altus4.com/api/v1/search', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         query,
         databases,
         searchMode: 'semantic',
         includeAnalytics: true,
-        ...options
-      })
-    })
+        ...options,
+      }),
+    });
 
     if (!response.ok) {
-      throw new Error(`AI search failed: ${response.status}`)
+      throw new Error(`AI search failed: ${response.status}`);
     }
 
-    return await response.json()
+    return await response.json();
   }
 
   async standardSearch(query, databases, options) {
     const response = await fetch('https://api.altus4.com/api/v1/search', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         query,
         databases,
         searchMode: 'natural', // Fallback to natural language mode
-        ...options
-      })
-    })
+        ...options,
+      }),
+    });
 
-    return await response.json()
+    return await response.json();
   }
 }
 ```
@@ -980,48 +1007,48 @@ Optimize AI usage to manage costs:
 ```javascript
 class CostOptimizedAI {
   constructor(apiKey, budget = { daily: 100, monthly: 2000 }) {
-    this.apiKey = apiKey
-    this.budget = budget
-    this.usage = { daily: 0, monthly: 0 }
+    this.apiKey = apiKey;
+    this.budget = budget;
+    this.usage = { daily: 0, monthly: 0 };
   }
 
   async smartSearch(query, databases, options = {}) {
     // Check if we should use AI based on budget and query complexity
-    const shouldUseAI = this.shouldUseAI(query, options)
+    const shouldUseAI = this.shouldUseAI(query, options);
 
     if (shouldUseAI) {
-      const result = await this.aiSearch(query, databases, options)
-      this.trackUsage('ai_search', this.estimateCost(query, result))
-      return result
+      const result = await this.aiSearch(query, databases, options);
+      this.trackUsage('ai_search', this.estimateCost(query, result));
+      return result;
     } else {
-      return await this.standardSearch(query, databases, options)
+      return await this.standardSearch(query, databases, options);
     }
   }
 
   shouldUseAI(query, options) {
     // Don't use AI if over budget
-    if (this.usage.daily >= this.budget.daily) return false
+    if (this.usage.daily >= this.budget.daily) return false;
 
     // Use AI for complex queries
-    if (query.length > 50 || options.searchMode === 'semantic') return true
+    if (query.length > 50 || options.searchMode === 'semantic') return true;
 
     // Use AI for important searches
-    if (options.priority === 'high') return true
+    if (options.priority === 'high') return true;
 
     // Use AI sparingly for simple queries
-    return Math.random() < 0.3 // 30% of simple queries
+    return Math.random() < 0.3; // 30% of simple queries
   }
 
   estimateCost(query, result) {
     // Estimate cost based on query complexity and result processing
-    const baseTokens = query.length / 4 // Rough token estimation
-    const resultTokens = (result.data?.results?.length || 0) * 50
-    return (baseTokens + resultTokens) * 0.0001 // Rough cost per token
+    const baseTokens = query.length / 4; // Rough token estimation
+    const resultTokens = (result.data?.results?.length || 0) * 50;
+    return (baseTokens + resultTokens) * 0.0001; // Rough cost per token
   }
 
   trackUsage(operation, cost) {
-    this.usage.daily += cost
-    this.usage.monthly += cost
+    this.usage.daily += cost;
+    this.usage.monthly += cost;
   }
 }
 ```
@@ -1030,11 +1057,11 @@ class CostOptimizedAI {
 
 You've mastered AI integration with Altus 4! Continue exploring:
 
-- __[Multi-Database Search](./multi-database.md)__ - Advanced federation with AI
-- __[SDK Usage](./sdk.md)__ - Official SDKs with AI features
-- __[API Reference](../api/search.md)__ - Complete AI endpoint documentation
-- __[Performance Guide](../testing/performance.md)__ - Optimizing AI-enhanced searches
+- **[Multi-Database Search](./multi-database.md)** - Advanced federation with AI
+- **[SDK Usage](./sdk.md)** - Official SDKs with AI features
+- **[API Reference](../api/search.md)** - Complete AI endpoint documentation
+- **[Performance Guide](../testing/performance.md)** - Optimizing AI-enhanced searches
 
 ---
 
-__AI integration transforms search from keyword matching to intelligent understanding. Experiment with these features to create truly smart search experiences.__
+**AI integration transforms search from keyword matching to intelligent understanding. Experiment with these features to create truly smart search experiences.**

@@ -15,15 +15,15 @@ This guide covers everything developers need to know to contribute effectively t
 
 Before contributing to Altus 4, ensure you have:
 
-- __Node.js 18+__ with npm 8+
-- __MySQL 8.0+__ for database operations
-- __Redis 6.0+__ for caching
-- __Git__ for version control
-- __IDE__ with TypeScript support (VS Code recommended)
+- **Node.js 18+** with npm 8+
+- **MySQL 8.0+** for database operations
+- **Redis 6.0+** for caching
+- **Git** for version control
+- **IDE** with TypeScript support (VS Code recommended)
 
 ### Development Environment Setup
 
-1. __Fork and Clone the Repository__
+1. **Fork and Clone the Repository**
 
 ```bash
 # Fork the repository on GitHub, then clone your fork
@@ -34,7 +34,7 @@ cd altus4
 git remote add upstream https://github.com/original/altus4.git
 ```
 
-1. __Install Dependencies__
+1. **Install Dependencies**
 
 ```bash
 # Install all dependencies
@@ -44,7 +44,7 @@ npm install
 npm run type-check
 ```
 
-1. __Configure Environment__
+1. **Configure Environment**
 
 ```bash
 # Copy development environment template
@@ -54,7 +54,7 @@ cp .env.example .env.development
 # Use different ports/databases for development
 ```
 
-1. __Setup Development Database__
+1. **Setup Development Database**
 
 ```sql
 -- Create development database
@@ -70,7 +70,7 @@ GRANT ALL PRIVILEGES ON altus4_test.* TO 'altus4_dev'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-1. __Run Database Migrations__
+1. **Run Database Migrations**
 
 ```bash
 # Apply all migrations to development database
@@ -80,7 +80,7 @@ npm run migrate
 npm run migrate:status
 ```
 
-1. __Start Development Server__
+1. **Start Development Server**
 
 ```bash
 # Start in development mode with hot reload
@@ -186,17 +186,17 @@ npm run format
 
 ### Code Organization Principles
 
-1. __Single Responsibility__: Each class/function has one clear purpose
-2. __Dependency Injection__: Use constructor injection for dependencies
-3. __Interface Segregation__: Prefer small, focused interfaces
-4. __DRY (Don't Repeat Yourself)__: Extract common functionality
-5. __SOLID Principles__: Follow object-oriented design principles
+1. **Single Responsibility**: Each class/function has one clear purpose
+2. **Dependency Injection**: Use constructor injection for dependencies
+3. **Interface Segregation**: Prefer small, focused interfaces
+4. **DRY (Don't Repeat Yourself)**: Extract common functionality
+5. **SOLID Principles**: Follow object-oriented design principles
 
 ## Development Workflow
 
 ### Git Workflow
 
-We follow the __GitHub Flow__ with feature branches:
+We follow the **GitHub Flow** with feature branches:
 
 ```bash
 # Always start from latest main
@@ -218,7 +218,7 @@ git push origin feature/search-optimization
 
 ### Commit Message Format
 
-We follow the __Conventional Commits__ specification:
+We follow the **Conventional Commits** specification:
 
 ```text
 <type>[optional scope]: <description>
@@ -228,7 +228,7 @@ We follow the __Conventional Commits__ specification:
 [optional footer]
 ```
 
-__Types:__
+**Types:**
 
 - `feat`: New feature
 - `fix`: Bug fix
@@ -238,7 +238,7 @@ __Types:__
 - `test`: Adding or modifying tests
 - `chore`: Maintenance tasks
 
-__Examples:__
+**Examples:**
 
 ```bash
 feat(search): add semantic search capability
@@ -261,13 +261,13 @@ refactor(database): optimize connection pooling
 
 ### Feature Development Process
 
-1. __Planning & Design__
+1. **Planning & Design**
    - Create or reference GitHub issue
    - Design API endpoints if needed
    - Plan database schema changes
    - Consider performance implications
 
-2. __Implementation Steps__
+2. **Implementation Steps**
    - Add TypeScript types
    - Implement service layer
    - Add controller methods
@@ -275,7 +275,7 @@ refactor(database): optimize connection pooling
    - Add middleware if needed
    - Write comprehensive tests
 
-3. __Testing & Documentation__
+3. **Testing & Documentation**
    - Unit tests for new services
    - Integration tests for new endpoints
    - Update API documentation
@@ -283,29 +283,32 @@ refactor(database): optimize connection pooling
 
 ### Example: Adding a New Service
 
-1. __Define TypeScript Interface__
+1. **Define TypeScript Interface**
 
 ```typescript
 // src/types/index.ts
 export interface IAnalyticsService {
-  generateReport(userId: string, dateRange: DateRange): Promise<AnalyticsReport>
-  getUserMetrics(userId: string): Promise<UserMetrics>
+  generateReport(
+    userId: string,
+    dateRange: DateRange
+  ): Promise<AnalyticsReport>;
+  getUserMetrics(userId: string): Promise<UserMetrics>;
 }
 
 export interface AnalyticsReport {
-  searchCount: number
-  averageResponseTime: number
-  popularQueries: string[]
-  trends: TrendData[]
+  searchCount: number;
+  averageResponseTime: number;
+  popularQueries: string[];
+  trends: TrendData[];
 }
 ```
 
-1. __Implement Service Class__
+1. **Implement Service Class**
 
 ```typescript
 // src/services/AnalyticsService.ts
-import { IAnalyticsService } from '@/types'
-import { logger } from '@/utils/logger'
+import { IAnalyticsService } from '@/types';
+import { logger } from '@/utils/logger';
 
 export class AnalyticsService implements IAnalyticsService {
   constructor(
@@ -318,24 +321,24 @@ export class AnalyticsService implements IAnalyticsService {
     dateRange: DateRange
   ): Promise<AnalyticsReport> {
     try {
-      logger.info(`Generating analytics report for user ${userId}`)
+      logger.info(`Generating analytics report for user ${userId}`);
 
       // Implementation here
-      const searchCount = await this.getSearchCount(userId, dateRange)
+      const searchCount = await this.getSearchCount(userId, dateRange);
       const averageResponseTime = await this.getAverageResponseTime(
         userId,
         dateRange
-      )
+      );
 
       return {
         searchCount,
         averageResponseTime,
         popularQueries: [],
         trends: [],
-      }
+      };
     } catch (error) {
-      logger.error('Failed to generate analytics report:', error)
-      throw new AppError('ANALYTICS_ERROR', 'Failed to generate report')
+      logger.error('Failed to generate analytics report:', error);
+      throw new AppError('ANALYTICS_ERROR', 'Failed to generate report');
     }
   }
 
@@ -344,30 +347,30 @@ export class AnalyticsService implements IAnalyticsService {
     dateRange: DateRange
   ): Promise<number> {
     // Implementation
-    return 0
+    return 0;
   }
 }
 ```
 
-1. __Add Controller Methods__
+1. **Add Controller Methods**
 
 ```typescript
 // src/controllers/AnalyticsController.ts
-import { Request, Response } from 'express'
-import { AnalyticsService } from '@/services/AnalyticsService'
+import { Request, Response } from 'express';
+import { AnalyticsService } from '@/services/AnalyticsService';
 
 export class AnalyticsController {
   constructor(private analyticsService: AnalyticsService) {}
 
   generateReport = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { userId } = req.user!
-      const { startDate, endDate } = req.query
+      const { userId } = req.user!;
+      const { startDate, endDate } = req.query;
 
       const report = await this.analyticsService.generateReport(userId, {
         startDate: new Date(startDate as string),
         endDate: new Date(endDate as string),
-      })
+      });
 
       res.json({
         success: true,
@@ -376,33 +379,33 @@ export class AnalyticsController {
           timestamp: new Date(),
           requestId: req.id,
         },
-      })
+      });
     } catch (error) {
-      throw error // Let error middleware handle it
+      throw error; // Let error middleware handle it
     }
-  }
+  };
 }
 ```
 
-1. __Add API Routes__
+1. **Add API Routes**
 
 ```typescript
 // src/routes/analytics.ts
-import { Router } from 'express'
-import { z } from 'zod'
-import { AnalyticsController } from '@/controllers/AnalyticsController'
-import { authenticateApiKey, requirePermission } from '@/middleware/apiKeyAuth'
-import { validateRequest } from '@/middleware/validation'
+import { Router } from 'express';
+import { z } from 'zod';
+import { AnalyticsController } from '@/controllers/AnalyticsController';
+import { authenticateApiKey, requirePermission } from '@/middleware/apiKeyAuth';
+import { validateRequest } from '@/middleware/validation';
 
-const router = Router()
-const analyticsController = new AnalyticsController()
+const router = Router();
+const analyticsController = new AnalyticsController();
 
 const generateReportSchema = z.object({
   query: z.object({
     startDate: z.string().datetime(),
     endDate: z.string().datetime(),
   }),
-})
+});
 
 router.get(
   '/report',
@@ -410,51 +413,51 @@ router.get(
   requirePermission('analytics'),
   validateRequest(generateReportSchema),
   analyticsController.generateReport
-)
+);
 
-export default router
+export default router;
 ```
 
-1. __Write Tests__
+1. **Write Tests**
 
 ```typescript
 // src/services/AnalyticsService.test.ts
-import { AnalyticsService } from './AnalyticsService'
+import { AnalyticsService } from './AnalyticsService';
 
 describe('AnalyticsService', () => {
-  let analyticsService: AnalyticsService
-  let mockCacheService: jest.Mocked<CacheService>
-  let mockDatabaseService: jest.Mocked<DatabaseService>
+  let analyticsService: AnalyticsService;
+  let mockCacheService: jest.Mocked<CacheService>;
+  let mockDatabaseService: jest.Mocked<DatabaseService>;
 
   beforeEach(() => {
-    mockCacheService = createMockCacheService()
-    mockDatabaseService = createMockDatabaseService()
+    mockCacheService = createMockCacheService();
+    mockDatabaseService = createMockDatabaseService();
 
     analyticsService = new AnalyticsService(
       mockCacheService,
       mockDatabaseService
-    )
-  })
+    );
+  });
 
   describe('generateReport', () => {
     it('should generate analytics report successfully', async () => {
       const report = await analyticsService.generateReport('user1', {
         startDate: new Date('2024-01-01'),
         endDate: new Date('2024-01-31'),
-      })
+      });
 
-      expect(report).toBeDefined()
-      expect(report.searchCount).toBeGreaterThanOrEqual(0)
-    })
-  })
-})
+      expect(report).toBeDefined();
+      expect(report.searchCount).toBeGreaterThanOrEqual(0);
+    });
+  });
+});
 ```
 
 ## Debugging
 
 ### Development Debugging
 
-__VS Code Launch Configuration:__
+**VS Code Launch Configuration:**
 
 ```json
 // .vscode/launch.json
@@ -488,7 +491,7 @@ __VS Code Launch Configuration:__
 }
 ```
 
-__Debug Commands:__
+**Debug Commands:**
 
 ```bash
 # Debug with Node.js inspector
@@ -510,13 +513,13 @@ node --inspect src/index.ts
 Use structured logging for debugging:
 
 ```typescript
-import { logger } from '@/utils/logger'
+import { logger } from '@/utils/logger';
 
 // Different log levels
-logger.debug('Detailed debugging info')
-logger.info('General information')
-logger.warn('Warning conditions')
-logger.error('Error conditions')
+logger.debug('Detailed debugging info');
+logger.info('General information');
+logger.warn('Warning conditions');
+logger.error('Error conditions');
 
 // Structured logging with context
 logger.info('User search request', {
@@ -524,7 +527,7 @@ logger.info('User search request', {
   query: 'database optimization',
   searchMode: 'semantic',
   duration: 150,
-})
+});
 
 // Error logging with stack trace
 try {
@@ -534,7 +537,7 @@ try {
     error: error.message,
     stack: error.stack,
     context: { userId, requestId },
-  })
+  });
 }
 ```
 
@@ -542,12 +545,12 @@ try {
 
 ### Database Optimization
 
-1. __Use Connection Pooling__
+1. **Use Connection Pooling**
 
 ```typescript
 // Proper connection management
 export class DatabaseService {
-  private pool: Pool
+  private pool: Pool;
 
   constructor() {
     this.pool = mysql.createPool({
@@ -555,27 +558,27 @@ export class DatabaseService {
       connectionLimit: 10,
       acquireTimeout: 60000,
       timeout: 60000,
-    })
+    });
   }
 }
 ```
 
-1. __Optimize Queries__
+1. **Optimize Queries**
 
 ```typescript
 // Use prepared statements
-const query = 'SELECT * FROM users WHERE id = ? AND status = ?'
-const [rows] = await connection.execute(query, [userId, 'active'])
+const query = 'SELECT * FROM users WHERE id = ? AND status = ?';
+const [rows] = await connection.execute(query, [userId, 'active']);
 
 // Avoid SELECT *
-const query = 'SELECT id, name, email FROM users WHERE id = ?'
+const query = 'SELECT id, name, email FROM users WHERE id = ?';
 
 // Use appropriate indexes
 // CREATE INDEX idx_user_email ON users(email);
 // CREATE FULLTEXT INDEX idx_content_search ON articles(title, content);
 ```
 
-1. __Implement Caching Strategies__
+1. **Implement Caching Strategies**
 
 ```typescript
 // Multi-level caching
@@ -602,7 +605,7 @@ async getCachedData(key: string): Promise<any> {
 
 ### Memory Management
 
-1. __Avoid Memory Leaks__
+1. **Avoid Memory Leaks**
 
 ```typescript
 // Properly close connections
@@ -620,18 +623,18 @@ const timer = setInterval(() => {}, 1000);
 clearInterval(timer);
 ```
 
-1. __Monitor Memory Usage__
+1. **Monitor Memory Usage**
 
 ```typescript
 // Memory usage monitoring
 setInterval(() => {
-  const memUsage = process.memoryUsage()
+  const memUsage = process.memoryUsage();
   logger.info('Memory usage', {
     rss: Math.round(memUsage.rss / 1024 / 1024) + ' MB',
     heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024) + ' MB',
     heapTotal: Math.round(memUsage.heapTotal / 1024 / 1024) + ' MB',
-  })
-}, 60000) // Every minute
+  });
+}, 60000); // Every minute
 ```
 
 ## Error Handling
@@ -647,22 +650,22 @@ export class AppError extends Error {
     public statusCode: number = 500,
     public details?: any
   ) {
-    super(message)
-    this.name = 'AppError'
-    Error.captureStackTrace(this, this.constructor)
+    super(message);
+    this.name = 'AppError';
+    Error.captureStackTrace(this, this.constructor);
   }
 }
 
 // Specific error types
 export class ValidationError extends AppError {
   constructor(message: string, details?: any) {
-    super('VALIDATION_ERROR', message, 400, details)
+    super('VALIDATION_ERROR', message, 400, details);
   }
 }
 
 export class NotFoundError extends AppError {
   constructor(resource: string) {
-    super('NOT_FOUND', `${resource} not found`, 404)
+    super('NOT_FOUND', `${resource} not found`, 404);
   }
 }
 ```
@@ -676,20 +679,20 @@ export class SearchService {
     try {
       // Validate input
       if (!request.query?.trim()) {
-        throw new ValidationError('Search query cannot be empty')
+        throw new ValidationError('Search query cannot be empty');
       }
 
       // Perform search
-      const results = await this.executeSearch(request)
-      return results
+      const results = await this.executeSearch(request);
+      return results;
     } catch (error) {
       if (error instanceof AppError) {
-        throw error // Re-throw known errors
+        throw error; // Re-throw known errors
       }
 
       // Log unexpected errors
-      logger.error('Unexpected search error:', error)
-      throw new AppError('SEARCH_FAILED', 'Search operation failed')
+      logger.error('Unexpected search error:', error);
+      throw new AppError('SEARCH_FAILED', 'Search operation failed');
     }
   }
 }
@@ -697,10 +700,10 @@ export class SearchService {
 // Controller error handling (let middleware handle)
 export class SearchController {
   search = async (req: Request, res: Response): Promise<void> => {
-    const results = await this.searchService.search(req.body)
-    res.json({ success: true, data: results })
+    const results = await this.searchService.search(req.body);
+    res.json({ success: true, data: results });
     // Don't catch errors here - let error middleware handle them
-  }
+  };
 }
 ```
 
@@ -715,7 +718,7 @@ const searchSchema = z.object({
   databases: z.array(z.string().uuid()),
   searchMode: z.enum(['natural', 'boolean', 'semantic']).default('natural'),
   limit: z.number().min(1).max(100).default(20),
-})
+});
 
 // Use in middleware
 export const validateRequest = (schema: z.ZodSchema) => {
@@ -725,18 +728,18 @@ export const validateRequest = (schema: z.ZodSchema) => {
         body: req.body,
         query: req.query,
         params: req.params,
-      })
+      });
 
-      req.body = validated.body || req.body
-      req.query = validated.query || req.query
-      req.params = validated.params || req.params
+      req.body = validated.body || req.body;
+      req.query = validated.query || req.query;
+      req.params = validated.params || req.params;
 
-      next()
+      next();
     } catch (error) {
-      throw new ValidationError('Invalid request data', error.errors)
+      throw new ValidationError('Invalid request data', error.errors);
     }
-  }
-}
+  };
+};
 ```
 
 ### SQL Injection Prevention
@@ -749,9 +752,9 @@ const query = `
   WHERE MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)
   AND category = ?
   LIMIT ?
-`
+`;
 
-const [rows] = await connection.execute(query, [searchTerm, category, limit])
+const [rows] = await connection.execute(query, [searchTerm, category, limit]);
 
 // Never concatenate user input
 // BAD: `SELECT * FROM users WHERE id = ${userId}`
@@ -768,53 +771,53 @@ export const authenticateApiKey = async (
   next: NextFunction
 ) => {
   try {
-    const authHeader = req.headers.authorization
+    const authHeader = req.headers.authorization;
     if (!authHeader) {
-      throw new AppError('NO_API_KEY', 'Authorization header missing', 401)
+      throw new AppError('NO_API_KEY', 'Authorization header missing', 401);
     }
 
-    const parts = authHeader.split(' ')
+    const parts = authHeader.split(' ');
     if (parts.length !== 2 || parts[0] !== 'Bearer') {
       throw new AppError(
         'INVALID_AUTH_FORMAT',
         'Authorization header must be in format: Bearer <api_key>',
         401
-      )
+      );
     }
 
-    const apiKey = parts[1]
+    const apiKey = parts[1];
     if (!apiKey.startsWith('altus4_sk_')) {
       throw new AppError(
         'INVALID_API_KEY_FORMAT',
         'API key must start with altus4_sk_',
         401
-      )
+      );
     }
 
-    const result = await apiKeyService.validateApiKey(apiKey)
+    const result = await apiKeyService.validateApiKey(apiKey);
     if (!result) {
-      throw new AppError('INVALID_API_KEY', 'Invalid or expired API key', 401)
+      throw new AppError('INVALID_API_KEY', 'Invalid or expired API key', 401);
     }
 
-    const clientIp = req.ip || req.connection?.remoteAddress || 'unknown'
-    await apiKeyService.updateLastUsedIp(result.apiKey.id, clientIp)
+    const clientIp = req.ip || req.connection?.remoteAddress || 'unknown';
+    await apiKeyService.updateLastUsedIp(result.apiKey.id, clientIp);
 
-    req.user = result.user
-    req.apiKey = result.apiKey
-    next()
+    req.user = result.user;
+    req.apiKey = result.apiKey;
+    next();
   } catch (error) {
     if (error instanceof AppError) {
-      throw error
+      throw error;
     }
-    throw new AppError('AUTH_ERROR', 'Authentication failed', 401)
+    throw new AppError('AUTH_ERROR', 'Authentication failed', 401);
   }
-}
+};
 
 // Permission-based authorization for API keys
 export const requirePermission = (permission: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.apiKey) {
-      throw new AppError('UNAUTHORIZED', 'Authentication required', 401)
+      throw new AppError('UNAUTHORIZED', 'Authentication required', 401);
     }
 
     if (!req.apiKey.permissions.includes(permission)) {
@@ -826,28 +829,28 @@ export const requirePermission = (permission: string) => {
           required: permission,
           available: req.apiKey.permissions,
         }
-      )
+      );
     }
-    next()
-  }
-}
+    next();
+  };
+};
 
 // Role-based authorization
 export const requireRole = (role: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
-      throw new AppError('UNAUTHORIZED', 'Authentication required', 401)
+      throw new AppError('UNAUTHORIZED', 'Authentication required', 401);
     }
 
     if (req.user.role !== 'admin' && req.user.role !== role) {
       throw new AppError('FORBIDDEN', `${role} role required`, 403, {
         required: role,
         current: req.user.role,
-      })
+      });
     }
-    next()
-  }
-}
+    next();
+  };
+};
 ```
 
 ## Testing Guidelines
@@ -859,61 +862,61 @@ describe('ServiceName', () => {
   // Setup and teardown
   beforeEach(() => {
     // Initialize test environment
-  })
+  });
 
   afterEach(() => {
     // Clean up after each test
-  })
+  });
 
   describe('methodName', () => {
     it('should handle success case correctly', async () => {
       // Arrange
       const input = {
         /* test data */
-      }
+      };
       const expected = {
         /* expected result */
-      }
+      };
 
       // Act
-      const result = await service.methodName(input)
+      const result = await service.methodName(input);
 
       // Assert
-      expect(result).toEqual(expected)
-    })
+      expect(result).toEqual(expected);
+    });
 
     it('should handle error case gracefully', async () => {
       // Arrange
       const invalidInput = {
         /* invalid data */
-      }
+      };
 
       // Act & Assert
       await expect(service.methodName(invalidInput)).rejects.toThrow(
         'Expected error message'
-      )
-    })
-  })
-})
+      );
+    });
+  });
+});
 ```
 
 ### Mocking External Dependencies
 
 ```typescript
 // Mock external services
-jest.mock('@/services/AIService')
-jest.mock('openai')
+jest.mock('@/services/AIService');
+jest.mock('openai');
 
 // Create typed mocks
 const mockAIService = {
   isAvailable: jest.fn(),
   processSearchQuery: jest.fn(),
-} as jest.Mocked<AIService>
+} as jest.Mocked<AIService>;
 
 // Mock with implementation
 mockAIService.processSearchQuery.mockImplementation(async query => {
-  return { optimizedQuery: query, confidence: 0.95 }
-})
+  return { optimizedQuery: query, confidence: 0.95 };
+});
 ```
 
 ## Documentation Standards
@@ -976,20 +979,20 @@ Update OpenAPI specification for new endpoints:
 
 ### Before Submitting
 
-1. __Code Quality Checklist__
+1. **Code Quality Checklist**
    - [ ] Code follows style guidelines
    - [ ] All tests pass
    - [ ] Test coverage meets requirements
    - [ ] No linting errors
    - [ ] Documentation updated
 
-2. __Testing Checklist__
+2. **Testing Checklist**
    - [ ] Unit tests for new functionality
    - [ ] Integration tests for new endpoints
    - [ ] Manual testing completed
    - [ ] Edge cases considered
 
-3. __Documentation Checklist__
+3. **Documentation Checklist**
    - [ ] Code comments added
    - [ ] API documentation updated
    - [ ] README updated if needed
@@ -1025,10 +1028,10 @@ Brief description of changes made.
 
 ### Review Process
 
-1. __Automated Checks__ - CI pipeline runs tests and linting
-2. __Peer Review__ - At least one team member reviews the code
-3. __Integration Testing__ - Changes tested in staging environment
-4. __Approval__ - Maintainer approves and merges
+1. **Automated Checks** - CI pipeline runs tests and linting
+2. **Peer Review** - At least one team member reviews the code
+3. **Integration Testing** - Changes tested in staging environment
+4. **Approval** - Maintainer approves and merges
 
 ## Release Process
 
@@ -1036,9 +1039,9 @@ Brief description of changes made.
 
 We follow [SemVer](https://semver.org/):
 
-- __MAJOR__: Breaking changes (1.0.0 → 2.0.0)
-- __MINOR__: New features (1.0.0 → 1.1.0)
-- __PATCH__: Bug fixes (1.0.0 → 1.0.1)
+- **MAJOR**: Breaking changes (1.0.0 → 2.0.0)
+- **MINOR**: New features (1.0.0 → 1.1.0)
+- **PATCH**: Bug fixes (1.0.0 → 1.0.1)
 
 ### Release Workflow
 
@@ -1069,10 +1072,10 @@ npm run deploy:production
 
 ### Getting Help
 
-- __Documentation__: Start with this guide and API docs
-- __GitHub Issues__: Report bugs and request features
-- __Discussions__: Ask questions and share ideas
-- __Discord__: Real-time community chat (link in README)
+- **Documentation**: Start with this guide and API docs
+- **GitHub Issues**: Report bugs and request features
+- **Discussions**: Ask questions and share ideas
+- **Discord**: Real-time community chat (link in README)
 
 ### Contributing Guidelines
 
@@ -1084,4 +1087,4 @@ npm run deploy:production
 
 ---
 
-__Thank you for contributing to Altus 4! Your efforts help make MySQL search intelligent and accessible for everyone.__
+**Thank you for contributing to Altus 4! Your efforts help make MySQL search intelligent and accessible for everyone.**

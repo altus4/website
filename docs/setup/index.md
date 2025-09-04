@@ -40,51 +40,51 @@ Visit `http://localhost:3000/health` to verify the installation.
 
 #### Minimum Requirements
 
-- __Node.js__: Version 18.0 or higher
-- __npm__: Version 8.0 or higher
-- __MySQL__: Version 8.0 or higher
-- __Redis__: Version 6.0 or higher
-- __Memory__: 2GB RAM
-- __Storage__: 1GB available disk space
+- **Node.js**: Version 18.0 or higher
+- **npm**: Version 8.0 or higher
+- **MySQL**: Version 8.0 or higher
+- **Redis**: Version 6.0 or higher
+- **Memory**: 2GB RAM
+- **Storage**: 1GB available disk space
 
 #### Recommended Requirements
 
-- __Node.js__: Version 20.0 or higher
-- __Memory__: 4GB RAM or more
-- __Storage__: 5GB available disk space
-- __CPU__: 2+ cores for better performance
+- **Node.js**: Version 20.0 or higher
+- **Memory**: 4GB RAM or more
+- **Storage**: 5GB available disk space
+- **CPU**: 2+ cores for better performance
 
 #### Operating System Support
 
-- __Linux__: Ubuntu 20.04+, CentOS 8+, Debian 11+
-- __macOS__: macOS 12+ (Monterey)
-- __Windows__: Windows 10/11 with WSL2
+- **Linux**: Ubuntu 20.04+, CentOS 8+, Debian 11+
+- **macOS**: macOS 12+ (Monterey)
+- **Windows**: Windows 10/11 with WSL2
 
 ### Step 1: Install Prerequisites
 
 #### Node.js Installation
 
-__macOS (using Homebrew):__
+**macOS (using Homebrew):**
 
 ```bash
 brew install node@20
 ```
 
-__Ubuntu/Debian:__
+**Ubuntu/Debian:**
 
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
 
-__Windows:__
+**Windows:**
 Download from [nodejs.org](https://nodejs.org) or use Chocolatey:
 
 ```powershell
 choco install nodejs
 ```
 
-__Verify installation:__
+**Verify installation:**
 
 ```bash
 node --version  # Should be 18.0.0 or higher
@@ -93,14 +93,14 @@ npm --version   # Should be 8.0.0 or higher
 
 #### MySQL Installation
 
-__macOS:__
+**macOS:**
 
 ```bash
 brew install mysql@8.0
 brew services start mysql
 ```
 
-__Ubuntu/Debian:__
+**Ubuntu/Debian:**
 
 ```bash
 sudo apt update
@@ -109,10 +109,10 @@ sudo systemctl start mysql
 sudo systemctl enable mysql
 ```
 
-__Windows:__
+**Windows:**
 Download from [MySQL website](https://dev.mysql.com/downloads/installer/) and follow the installer.
 
-__Secure MySQL installation:__
+**Secure MySQL installation:**
 
 ```bash
 sudo mysql_secure_installation
@@ -120,14 +120,14 @@ sudo mysql_secure_installation
 
 #### Redis Installation
 
-__macOS:__
+**macOS:**
 
 ```bash
 brew install redis
 brew services start redis
 ```
 
-__Ubuntu/Debian:__
+**Ubuntu/Debian:**
 
 ```bash
 sudo apt install redis-server
@@ -135,7 +135,7 @@ sudo systemctl start redis-server
 sudo systemctl enable redis-server
 ```
 
-__Windows:__
+**Windows:**
 Use WSL2 or Docker:
 
 ```bash
@@ -143,7 +143,7 @@ Use WSL2 or Docker:
 docker run -d --name redis -p 6379:6379 redis:7-alpine
 ```
 
-__Verify Redis:__
+**Verify Redis:**
 
 ```bash
 redis-cli ping
@@ -189,7 +189,7 @@ Altus 4 includes a migration system for managing database schema changes automat
 
 #### Migration System Overview
 
-- __Migration files__ are stored in the `migrations/` directory
+- **Migration files** are stored in the `migrations/` directory
 - Each migration has an `up` script (e.g., `001_create_users_table.up.sql`) and a `down` script (e.g., `001_create_users_table.down.sql`)
 - The migration tool uses your environment variables for database connectivity
 - Migrations are applied in order based on their numeric prefix
@@ -226,11 +226,11 @@ Set these in your `.env` file, and the migration script will automatically load 
 
 #### Migration Best Practices
 
-1. __Always run migrations after cloning__ the repository
-2. __Check migration status__ before applying: `npm run migrate:status`
-3. __Backup your database__ before running migrations in production
-4. __Test migrations__ in development first
-5. __Never modify existing migration files__ - create new ones instead
+1. **Always run migrations after cloning** the repository
+2. **Check migration status** before applying: `npm run migrate:status`
+3. **Backup your database** before running migrations in production
+4. **Test migrations** in development first
+5. **Never modify existing migration files** - create new ones instead
 
 #### Manual Migration Script Usage
 
@@ -583,9 +583,9 @@ npm run migrate:status  # Show migration status
 
 #### 1. Database Connection Errors
 
-__Error:__ `Access denied for user 'altus4_user'@'localhost'`
+**Error:** `Access denied for user 'altus4_user'@'localhost'`
 
-__Solutions:__
+**Solutions:**
 
 ```sql
 -- Check user exists
@@ -604,9 +604,9 @@ FLUSH PRIVILEGES;
 
 #### 2. Redis Connection Issues
 
-__Error:__ `Redis connection failed: ECONNREFUSED`
+**Error:** `Redis connection failed: ECONNREFUSED`
 
-__Solutions:__
+**Solutions:**
 
 ```bash
 # Check Redis status
@@ -624,9 +624,9 @@ redis-cli -h localhost -p 6379 ping
 
 #### 3. Port Already in Use
 
-__Error:__ `EADDRINUSE: address already in use :::3000`
+**Error:** `EADDRINUSE: address already in use :::3000`
 
-__Solutions:__
+**Solutions:**
 
 ```bash
 # Find process using port 3000
@@ -641,9 +641,9 @@ PORT=3001
 
 #### 4. OpenAI API Issues
 
-__Error:__ `Invalid API key` or rate limit errors
+**Error:** `Invalid API key` or rate limit errors
 
-__Solutions:__
+**Solutions:**
 
 - Verify API key in OpenAI dashboard
 - Check API usage and billing
@@ -652,9 +652,9 @@ __Solutions:__
 
 #### 5. Full-text Search Not Working
 
-__Error:__ Search returns no results despite data existing
+**Error:** Search returns no results despite data existing
 
-__Solutions:__
+**Solutions:**
 
 ```sql
 -- Check if FULLTEXT indexes exist
@@ -674,7 +674,7 @@ SHOW VARIABLES LIKE 'ft_%';
 
 #### 1. Slow Search Responses
 
-__Diagnostics:__
+**Diagnostics:**
 
 ```bash
 # Enable query logging
@@ -687,7 +687,7 @@ redis-cli --latency
 mysqladmin -u root -p processlist
 ```
 
-__Solutions:__
+**Solutions:**
 
 - Add proper database indexes
 - Optimize MySQL configuration
@@ -696,7 +696,7 @@ __Solutions:__
 
 #### 2. High Memory Usage
 
-__Diagnostics:__
+**Diagnostics:**
 
 ```bash
 # Monitor memory usage
@@ -706,7 +706,7 @@ node --inspect server.js
 npm run test:memory
 ```
 
-__Solutions:__
+**Solutions:**
 
 - Implement connection pooling
 - Add garbage collection tuning
@@ -756,10 +756,10 @@ See [Production Deployment Guide](../deployment/production.md) for detailed prod
 
 After successful installation:
 
-1. __Read the API Documentation__: [API Reference](../api/)
-2. __Explore Examples__: [Code Examples](../examples/)
-3. __Understand the Architecture__: [Architecture Guide](../architecture/)
-4. __Contributing__: [Development Guide](../development/)
+1. **Read the API Documentation**: [API Reference](../api/)
+2. **Explore Examples**: [Code Examples](../examples/)
+3. **Understand the Architecture**: [Architecture Guide](../architecture/)
+4. **Contributing**: [Development Guide](../development/)
 
 ## Support
 
@@ -772,4 +772,4 @@ If you encounter issues not covered in this guide:
 
 ---
 
-__Congratulations! You now have Altus 4 running and ready to enhance your MySQL search capabilities with AI-powered features.__
+**Congratulations! You now have Altus 4 running and ready to enhance your MySQL search capabilities with AI-powered features.**

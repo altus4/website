@@ -31,11 +31,11 @@ graph TB
 
 ### Testing Principles
 
-1. __Fast Feedback__: Tests should run quickly to enable rapid development
-2. __Reliability__: Tests should be deterministic and not flaky
-3. __Isolation__: Tests should not depend on external services or other tests
-4. __Maintainability__: Tests should be easy to understand and modify
-5. __Coverage__: Critical paths must have comprehensive test coverage
+1. **Fast Feedback**: Tests should run quickly to enable rapid development
+2. **Reliability**: Tests should be deterministic and not flaky
+3. **Isolation**: Tests should not depend on external services or other tests
+4. **Maintainability**: Tests should be easy to understand and modify
+5. **Coverage**: Critical paths must have comprehensive test coverage
 
 ## Test Organization
 
@@ -80,19 +80,22 @@ tests/
 
 ```typescript
 // tests/unit/services/SearchService.test.ts
-import { SearchService } from '@/services/SearchService'
-import { createMockDatabaseService, createMockAIService } from '../../helpers/mocks'
+import { SearchService } from '@/services/SearchService';
+import {
+  createMockDatabaseService,
+  createMockAIService,
+} from '../../helpers/mocks';
 
 describe('SearchService', () => {
-  let searchService: SearchService
-  let mockDatabaseService: jest.Mocked<DatabaseService>
-  let mockAIService: jest.Mocked<AIService>
+  let searchService: SearchService;
+  let mockDatabaseService: jest.Mocked<DatabaseService>;
+  let mockAIService: jest.Mocked<AIService>;
 
   beforeEach(() => {
-    mockDatabaseService = createMockDatabaseService()
-    mockAIService = createMockAIService()
-    searchService = new SearchService(mockDatabaseService, mockAIService)
-  })
+    mockDatabaseService = createMockDatabaseService();
+    mockAIService = createMockAIService();
+    searchService = new SearchService(mockDatabaseService, mockAIService);
+  });
 
   describe('search functionality', () => {
     it('should execute search with proper parameters', async () => {
@@ -100,20 +103,22 @@ describe('SearchService', () => {
       const searchRequest = {
         query: 'mysql performance',
         databases: ['db-1'],
-        userId: 'user-1'
-      }
+        userId: 'user-1',
+      };
 
       const expectedResults = [
-        { id: '1', title: 'MySQL Guide', relevanceScore: 0.9 }
-      ]
+        { id: '1', title: 'MySQL Guide', relevanceScore: 0.9 },
+      ];
 
-      mockDatabaseService.executeFullTextSearch.mockResolvedValue(expectedResults)
+      mockDatabaseService.executeFullTextSearch.mockResolvedValue(
+        expectedResults
+      );
 
       // Act
-      const result = await searchService.search(searchRequest)
+      const result = await searchService.search(searchRequest);
 
       // Assert
-      expect(result.results).toHaveLength(1)
+      expect(result.results).toHaveLength(1);
       expect(mockDatabaseService.executeFullTextSearch).toHaveBeenCalledWith(
         'db-1',
         'mysql performance',
@@ -121,84 +126,85 @@ describe('SearchService', () => {
         undefined,
         20,
         0
-      )
-    })
+      );
+    });
 
     it('should handle database failures gracefully', async () => {
       // Test error handling scenarios
       const searchRequest = {
         query: 'test query',
         databases: ['failing-db'],
-        userId: 'user-1'
-      }
+        userId: 'user-1',
+      };
 
       mockDatabaseService.executeFullTextSearch.mockRejectedValue(
         new Error('Database connection failed')
-      )
+      );
 
-      await expect(searchService.search(searchRequest))
-        .rejects.toThrow('Search failed')
-    })
-  })
-})
+      await expect(searchService.search(searchRequest)).rejects.toThrow(
+        'Search failed'
+      );
+    });
+  });
+});
 ```
 
 ### Controller Testing
 
 ```typescript
 // tests/unit/controllers/SearchController.test.ts
-import { SearchController } from '@/controllers/SearchController'
-import { Request, Response } from 'express'
-import { createMockSearchService } from '../../helpers/mocks'
+import { SearchController } from '@/controllers/SearchController';
+import { Request, Response } from 'express';
+import { createMockSearchService } from '../../helpers/mocks';
 
 describe('SearchController', () => {
-  let controller: SearchController
-  let mockSearchService: jest.Mocked<SearchService>
-  let mockRequest: Partial<Request>
-  let mockResponse: Partial<Response>
+  let controller: SearchController;
+  let mockSearchService: jest.Mocked<SearchService>;
+  let mockRequest: Partial<Request>;
+  let mockResponse: Partial<Response>;
 
   beforeEach(() => {
-    mockSearchService = createMockSearchService()
-    controller = new SearchController(mockSearchService)
+    mockSearchService = createMockSearchService();
+    controller = new SearchController(mockSearchService);
 
     mockRequest = {
       body: {},
       user: { id: 'user-1' },
-      apiKey: { id: 'key-1', permissions: ['search'] }
-    }
+      apiKey: { id: 'key-1', permissions: ['search'] },
+    };
 
     mockResponse = {
       json: jest.fn(),
-      status: jest.fn().mockReturnThis()
-    }
-  })
+      status: jest.fn().mockReturnThis(),
+    };
+  });
 
   it('should return search results for valid request', async () => {
     // Test controller logic
     mockRequest.body = {
       query: 'test query',
-      databases: ['db-1']
-    }
+      databases: ['db-1'],
+    };
 
     const mockResults = {
       results: [{ id: '1', title: 'Test Result' }],
-      totalCount: 1
-    }
+      totalCount: 1,
+    };
 
-    mockSearchService.search.mockResolvedValue(mockResults)
+    mockSearchService.search.mockResolvedValue(mockResults);
 
-    await controller.search(mockRequest as Request, mockResponse as Response)
+    await controller.search(mockRequest as Request, mockResponse as Response);
 
     expect(mockResponse.json).toHaveBeenCalledWith({
       success: true,
       data: mockResults,
       meta: expect.objectContaining({
         timestamp: expect.any(Date),
-        requestId: expect.any(String)
-      })
-    })
-  })
-})
+        requestId: expect.any(String),
+      }),
+    });
+  });
+});
 ```
 
 ## Integration Testing Strategy
@@ -207,26 +213,26 @@ describe('SearchController', () => {
 
 ```typescript
 // tests/integration/api/search.test.ts
-import request from 'supertest'
-import { app } from '@/app'
-import { setupTestDatabase, cleanupTestDatabase } from '../../helpers/database'
-import { createTestUser, createTestApiKey } from '../../helpers/auth'
+import request from 'supertest';
+import { app } from '@/app';
+import { setupTestDatabase, cleanupTestDatabase } from '../../helpers/database';
+import { createTestUser, createTestApiKey } from '../../helpers/auth';
 
 describe('Search API Integration', () => {
-  let testApiKey: string
-  let testDatabaseId: string
+  let testApiKey: string;
+  let testDatabaseId: string;
 
   beforeAll(async () => {
-    await setupTestDatabase()
+    await setupTestDatabase();
 
-    const user = await createTestUser()
-    testApiKey = await createTestApiKey(user.id)
-    testDatabaseId = await createTestDatabase(user.id)
-  })
+    const user = await createTestUser();
+    testApiKey = await createTestApiKey(user.id);
+    testDatabaseId = await createTestDatabase(user.id);
+  });
 
   afterAll(async () => {
-    await cleanupTestDatabase()
-  })
+    await cleanupTestDatabase();
+  });
 
   describe('POST /api/v1/search', () => {
     it('should return search results', async () => {
@@ -236,25 +242,25 @@ describe('Search API Integration', () => {
         .send({
           query: 'test search',
           databases: [testDatabaseId],
-          limit: 10
+          limit: 10,
         })
-        .expect(200)
+        .expect(200);
 
       expect(response.body).toMatchObject({
         success: true,
         data: {
           results: expect.any(Array),
-          totalCount: expect.any(Number)
-        }
-      })
-    })
+          totalCount: expect.any(Number),
+        },
+      });
+    });
 
     it('should handle authentication errors', async () => {
       await request(app)
         .post('/api/v1/search')
         .send({ query: 'test' })
-        .expect(401)
-    })
+        .expect(401);
+    });
 
     it('should validate request parameters', async () => {
       const response = await request(app)
@@ -262,34 +268,34 @@ describe('Search API Integration', () => {
         .set('Authorization', `Bearer ${testApiKey}`)
         .send({
           // Missing required query parameter
-          databases: [testDatabaseId]
+          databases: [testDatabaseId],
         })
-        .expect(400)
+        .expect(400);
 
-      expect(response.body.error.code).toBe('VALIDATION_ERROR')
-    })
-  })
-})
+      expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    });
+  });
+});
 ```
 
 ### Database Integration Tests
 
 ```typescript
 // tests/integration/database/SearchRepository.test.ts
-import { DatabaseService } from '@/services/DatabaseService'
-import { setupTestDatabase, seedTestData } from '../../helpers/database'
+import { DatabaseService } from '@/services/DatabaseService';
+import { setupTestDatabase, seedTestData } from '../../helpers/database';
 
 describe('Database Integration', () => {
-  let databaseService: DatabaseService
+  let databaseService: DatabaseService;
 
   beforeAll(async () => {
-    await setupTestDatabase()
-    databaseService = new DatabaseService()
-  })
+    await setupTestDatabase();
+    databaseService = new DatabaseService();
+  });
 
   beforeEach(async () => {
-    await seedTestData()
-  })
+    await seedTestData();
+  });
 
   it('should execute full-text search queries', async () => {
     const results = await databaseService.executeFullTextSearch(
@@ -299,25 +305,25 @@ describe('Database Integration', () => {
       ['title', 'content'],
       20,
       0
-    )
+    );
 
-    expect(results).toBeInstanceOf(Array)
-    expect(results.length).toBeGreaterThan(0)
-    expect(results[0]).toHaveProperty('title')
-    expect(results[0]).toHaveProperty('content')
-  })
+    expect(results).toBeInstanceOf(Array);
+    expect(results.length).toBeGreaterThan(0);
+    expect(results[0]).toHaveProperty('title');
+    expect(results[0]).toHaveProperty('content');
+  });
 
   it('should handle connection failures', async () => {
     const invalidDbService = new DatabaseService({
       host: 'invalid-host',
-      port: 9999
-    })
+      port: 9999,
+    });
 
     await expect(
       invalidDbService.executeFullTextSearch('invalid', 'query', [], [], 10, 0)
-    ).rejects.toThrow('Database connection failed')
-  })
-})
+    ).rejects.toThrow('Database connection failed');
+  });
+});
 ```
 
 ## Performance Testing
@@ -326,90 +332,94 @@ describe('Database Integration', () => {
 
 ```typescript
 // tests/performance/load/search-load.test.ts
-import { performance } from 'perf_hooks'
-import { SearchService } from '@/services/SearchService'
-import { createMockDependencies } from '../../helpers/mocks'
+import { performance } from 'perf_hooks';
+import { SearchService } from '@/services/SearchService';
+import { createMockDependencies } from '../../helpers/mocks';
 
 describe('Search Performance', () => {
-  let searchService: SearchService
+  let searchService: SearchService;
 
   beforeAll(() => {
-    const { databaseService, aiService, cacheService } = createMockDependencies()
-    searchService = new SearchService(databaseService, aiService, cacheService)
-  })
+    const { databaseService, aiService, cacheService } =
+      createMockDependencies();
+    searchService = new SearchService(databaseService, aiService, cacheService);
+  });
 
   it('should handle concurrent searches efficiently', async () => {
-    const concurrentRequests = 100
-    const searchRequests = Array.from({ length: concurrentRequests }, (_, i) => ({
-      query: `test query ${i}`,
-      databases: ['test-db'],
-      userId: `user-${i}`
-    }))
+    const concurrentRequests = 100;
+    const searchRequests = Array.from(
+      { length: concurrentRequests },
+      (_, i) => ({
+        query: `test query ${i}`,
+        databases: ['test-db'],
+        userId: `user-${i}`,
+      })
+    );
 
-    const startTime = performance.now()
+    const startTime = performance.now();
 
     const results = await Promise.all(
       searchRequests.map(request => searchService.search(request))
-    )
+    );
 
-    const endTime = performance.now()
-    const totalTime = endTime - startTime
-    const averageTime = totalTime / concurrentRequests
+    const endTime = performance.now();
+    const totalTime = endTime - startTime;
+    const averageTime = totalTime / concurrentRequests;
 
-    expect(results).toHaveLength(concurrentRequests)
-    expect(averageTime).toBeLessThan(100) // Average response time < 100ms
-    expect(totalTime).toBeLessThan(5000) // Total time < 5 seconds
-  })
+    expect(results).toHaveLength(concurrentRequests);
+    expect(averageTime).toBeLessThan(100); // Average response time < 100ms
+    expect(totalTime).toBeLessThan(5000); // Total time < 5 seconds
+  });
 
   it('should maintain performance under memory pressure', async () => {
     // Test memory usage and performance degradation
     const largeDataSet = Array.from({ length: 10000 }, (_, i) => ({
       id: i,
       title: `Large dataset item ${i}`,
-      content: 'x'.repeat(1000) // 1KB of content per item
-    }))
+      content: 'x'.repeat(1000), // 1KB of content per item
+    }));
 
-    const startMemory = process.memoryUsage().heapUsed
-    const startTime = performance.now()
+    const startMemory = process.memoryUsage().heapUsed;
+    const startTime = performance.now();
 
     // Process large dataset
     for (let i = 0; i < 1000; i++) {
       await searchService.search({
         query: 'test query',
         databases: ['large-db'],
-        userId: 'performance-test-user'
-      })
+        userId: 'performance-test-user',
+      });
     }
 
-    const endTime = performance.now()
-    const endMemory = process.memoryUsage().heapUsed
+    const endTime = performance.now();
+    const endMemory = process.memoryUsage().heapUsed;
 
-    const memoryIncrease = (endMemory - startMemory) / 1024 / 1024 // MB
-    const averageTime = (endTime - startTime) / 1000
+    const memoryIncrease = (endMemory - startMemory) / 1024 / 1024; // MB
+    const averageTime = (endTime - startTime) / 1000;
 
-    expect(memoryIncrease).toBeLessThan(100) // Memory increase < 100MB
-    expect(averageTime).toBeLessThan(50) // Average time < 50ms
-  })
-})
+    expect(memoryIncrease).toBeLessThan(100); // Memory increase < 100MB
+    expect(averageTime).toBeLessThan(50); // Average time < 50ms
+  });
+});
 ```
 
 ### Stress Testing
 
 ```typescript
 // tests/performance/stress/api-stress.test.ts
-import request from 'supertest'
-import { app } from '@/app'
-import { performance } from 'perf_hooks'
+import request from 'supertest';
+import { app } from '@/app';
+import { performance } from 'perf_hooks';
 
 describe('API Stress Testing', () => {
-  const API_KEY = process.env.TEST_API_KEY
+  const API_KEY = process.env.TEST_API_KEY;
 
   it('should handle high request volume', async () => {
-    const requestCount = 1000
-    const concurrency = 50
-    const batches = requestCount / concurrency
+    const requestCount = 1000;
+    const concurrency = 50;
+    const batches = requestCount / concurrency;
 
-    const results = []
+    const results = [];
 
     for (let batch = 0; batch < batches; batch++) {
       const batchPromises = Array.from({ length: concurrency }, () =>
@@ -419,22 +429,22 @@ describe('API Stress Testing', () => {
           .send({
             query: 'stress test query',
             databases: ['test-db'],
-            limit: 10
+            limit: 10,
           })
-      )
+      );
 
-      const batchResults = await Promise.allSettled(batchPromises)
-      results.push(...batchResults)
+      const batchResults = await Promise.allSettled(batchPromises);
+      results.push(...batchResults);
     }
 
-    const successful = results.filter(r => r.status === 'fulfilled').length
-    const failed = results.filter(r => r.status === 'rejected').length
-    const successRate = (successful / requestCount) * 100
+    const successful = results.filter(r => r.status === 'fulfilled').length;
+    const failed = results.filter(r => r.status === 'rejected').length;
+    const successRate = (successful / requestCount) * 100;
 
-    expect(successRate).toBeGreaterThan(95) // 95% success rate
-    expect(failed).toBeLessThan(requestCount * 0.05) // Less than 5% failures
-  })
-})
+    expect(successRate).toBeGreaterThan(95); // 95% success rate
+    expect(failed).toBeLessThan(requestCount * 0.05); // Less than 5% failures
+  });
+});
 ```
 
 ## Test Data Management
@@ -449,8 +459,8 @@ export const searchFixtures = {
       id: 'user-1',
       email: 'test@example.com',
       name: 'Test User',
-      role: 'user'
-    }
+      role: 'user',
+    },
   ],
 
   apiKeys: [
@@ -459,8 +469,8 @@ export const searchFixtures = {
       userId: 'user-1',
       keyPrefix: 'altus4_sk_test_abc123',
       permissions: ['search', 'analytics'],
-      environment: 'test'
-    }
+      environment: 'test',
+    },
   ],
 
   databases: [
@@ -469,8 +479,8 @@ export const searchFixtures = {
       userId: 'user-1',
       name: 'Test Database',
       host: 'localhost',
-      database: 'test_db'
-    }
+      database: 'test_db',
+    },
   ],
 
   searchResults: [
@@ -479,30 +489,30 @@ export const searchFixtures = {
       title: 'MySQL Performance Optimization',
       content: 'Complete guide to optimizing MySQL performance...',
       author: 'Database Expert',
-      published_at: '2024-01-15T10:00:00Z'
-    }
-  ]
-}
+      published_at: '2024-01-15T10:00:00Z',
+    },
+  ],
+};
 
 // Database seeding helper
 export async function seedTestData(connection: Connection) {
   // Clear existing data
-  await connection.query('DELETE FROM searches')
-  await connection.query('DELETE FROM databases')
-  await connection.query('DELETE FROM api_keys')
-  await connection.query('DELETE FROM users')
+  await connection.query('DELETE FROM searches');
+  await connection.query('DELETE FROM databases');
+  await connection.query('DELETE FROM api_keys');
+  await connection.query('DELETE FROM users');
 
   // Insert test data
   for (const user of searchFixtures.users) {
-    await connection.query('INSERT INTO users SET ?', user)
+    await connection.query('INSERT INTO users SET ?', user);
   }
 
   for (const apiKey of searchFixtures.apiKeys) {
-    await connection.query('INSERT INTO api_keys SET ?', apiKey)
+    await connection.query('INSERT INTO api_keys SET ?', apiKey);
   }
 
   for (const database of searchFixtures.databases) {
-    await connection.query('INSERT INTO databases SET ?', database)
+    await connection.query('INSERT INTO databases SET ?', database);
   }
 }
 ```
@@ -655,23 +665,23 @@ module.exports = {
       branches: 90,
       functions: 90,
       lines: 90,
-      statements: 90
+      statements: 90,
     },
     // Critical components require higher coverage
     'src/services/SearchService.ts': {
       branches: 95,
       functions: 95,
       lines: 95,
-      statements: 95
+      statements: 95,
     },
     'src/services/DatabaseService.ts': {
       branches: 95,
       functions: 95,
       lines: 95,
-      statements: 95
-    }
-  }
-}
+      statements: 95,
+    },
+  },
+};
 ```
 
 ### Performance Benchmarks
@@ -684,21 +694,21 @@ export const performanceBenchmarks = {
     p95ResponseTime: 300, // ms
     p99ResponseTime: 500, // ms
     throughput: 1000, // requests per second
-    errorRate: 0.01 // 1% error rate
+    errorRate: 0.01, // 1% error rate
   },
 
   database: {
     connectionTime: 50, // ms
     queryTime: 100, // ms
-    poolUtilization: 0.8 // 80% max utilization
+    poolUtilization: 0.8, // 80% max utilization
   },
 
   cache: {
     hitRate: 0.85, // 85% cache hit rate
     responseTime: 5, // ms
-    memoryUsage: 100 // MB max
-  }
-}
+    memoryUsage: 100, // MB max
+  },
+};
 ```
 
 ## Test Reporting & Analytics
@@ -715,14 +725,14 @@ class CustomTestReporter {
       failedTests: results.numFailedTests,
       coverage: results.coverageMap?.getCoverageSummary(),
       duration: results.runTime,
-      timestamp: new Date().toISOString()
-    }
+      timestamp: new Date().toISOString(),
+    };
 
     // Send to monitoring system
-    this.sendToMonitoring(summary)
+    this.sendToMonitoring(summary);
 
     // Generate detailed report
-    this.generateDetailedReport(results)
+    this.generateDetailedReport(results);
   }
 
   private sendToMonitoring(summary: TestSummary) {
@@ -739,31 +749,31 @@ class CustomTestReporter {
 
 ### Testing Guidelines
 
-1. __Write Tests First__: Follow TDD when possible
-2. __Test Behavior, Not Implementation__: Focus on what the code does, not how
-3. __Keep Tests Simple__: Each test should verify one specific behavior
-4. __Use Descriptive Names__: Test names should clearly describe the scenario
-5. __Maintain Test Independence__: Tests should not depend on each other
-6. __Mock External Dependencies__: Isolate the code under test
-7. __Test Edge Cases__: Include boundary conditions and error scenarios
-8. __Keep Tests Fast__: Unit tests should run in milliseconds
-9. __Regular Test Maintenance__: Update tests when code changes
-10. __Monitor Test Quality__: Track coverage, flakiness, and performance
+1. **Write Tests First**: Follow TDD when possible
+2. **Test Behavior, Not Implementation**: Focus on what the code does, not how
+3. **Keep Tests Simple**: Each test should verify one specific behavior
+4. **Use Descriptive Names**: Test names should clearly describe the scenario
+5. **Maintain Test Independence**: Tests should not depend on each other
+6. **Mock External Dependencies**: Isolate the code under test
+7. **Test Edge Cases**: Include boundary conditions and error scenarios
+8. **Keep Tests Fast**: Unit tests should run in milliseconds
+9. **Regular Test Maintenance**: Update tests when code changes
+10. **Monitor Test Quality**: Track coverage, flakiness, and performance
 
 ### Quality Metrics
 
-- __Code Coverage__: Minimum 90% for critical components
-- __Test Performance__: Unit tests < 1ms, Integration tests < 100ms
-- __Test Reliability__: < 1% flaky test rate
-- __Maintenance__: Tests updated within same PR as code changes
+- **Code Coverage**: Minimum 90% for critical components
+- **Test Performance**: Unit tests < 1ms, Integration tests < 100ms
+- **Test Reliability**: < 1% flaky test rate
+- **Maintenance**: Tests updated within same PR as code changes
 
 ## Related Documentation
 
-- __[Unit Testing Guide](../testing/unit.md)__ - Detailed unit testing patterns
-- __[Integration Testing Guide](../testing/integration.md)__ - Integration testing strategies
-- __[Performance Testing Guide](../testing/performance.md)__ - Performance testing implementation
-- __[Development Standards](../development/standards.md)__ - Code quality standards
+- **[Unit Testing Guide](../testing/unit.md)** - Detailed unit testing patterns
+- **[Integration Testing Guide](../testing/integration.md)** - Integration testing strategies
+- **[Performance Testing Guide](../testing/performance.md)** - Performance testing implementation
+- **[Development Standards](../development/standards.md)** - Code quality standards
 
 ---
 
-__A comprehensive testing strategy ensures Altus 4's reliability, performance, and maintainability. Follow these guidelines to build a robust test suite that supports confident development and deployment.__
+**A comprehensive testing strategy ensures Altus 4's reliability, performance, and maintainability. Follow these guidelines to build a robust test suite that supports confident development and deployment.**

@@ -29,11 +29,11 @@ graph TD
 
 ### Security Features
 
-- __Credential Encryption__ - All database credentials encrypted at rest
-- __Connection Pooling__ - Efficient connection management with configurable limits
-- __Access Control__ - Database connections scoped to user accounts
-- __SSL Support__ - Secure connections with SSL/TLS encryption
-- __Network Security__ - IP allowlisting and VPC support
+- **Credential Encryption** - All database credentials encrypted at rest
+- **Connection Pooling** - Efficient connection management with configurable limits
+- **Access Control** - Database connections scoped to user accounts
+- **SSL Support** - Secure connections with SSL/TLS encryption
+- **Network Security** - IP allowlisting and VPC support
 
 ## Database Endpoints
 
@@ -41,16 +41,16 @@ graph TD
 
 Connect a new MySQL database to your Altus 4 account.
 
-__Endpoint__: `POST /api/databases`
+**Endpoint**: `POST /api/databases`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
-__Request Body__:
+**Request Body**:
 
 ```json
 {
@@ -81,45 +81,45 @@ __Request Body__:
 }
 ```
 
-__Request Parameters__:
+**Request Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `name` | string | Yes | Friendly name for the database (1-100 chars) |
-| `host` | string | Yes | Database server hostname or IP address |
-| `port` | number | No | Port number (default: 3306) |
-| `database` | string | Yes | Database name |
-| `username` | string | Yes | MySQL username |
-| `password` | string | Yes | MySQL password |
-| `ssl` | object | No | SSL/TLS configuration |
-| `connectionOptions` | object | No | Advanced connection settings |
-| `searchOptions` | object | No | Search-specific configuration |
+| Parameter           | Type   | Required | Description                                  |
+| ------------------- | ------ | -------- | -------------------------------------------- |
+| `name`              | string | Yes      | Friendly name for the database (1-100 chars) |
+| `host`              | string | Yes      | Database server hostname or IP address       |
+| `port`              | number | No       | Port number (default: 3306)                  |
+| `database`          | string | Yes      | Database name                                |
+| `username`          | string | Yes      | MySQL username                               |
+| `password`          | string | Yes      | MySQL password                               |
+| `ssl`               | object | No       | SSL/TLS configuration                        |
+| `connectionOptions` | object | No       | Advanced connection settings                 |
+| `searchOptions`     | object | No       | Search-specific configuration                |
 
-__SSL Configuration__:
+**SSL Configuration**:
 
 ```json
 {
-  "enabled": true,                    // Enable SSL/TLS
-  "rejectUnauthorized": true,        // Verify server certificates
+  "enabled": true, // Enable SSL/TLS
+  "rejectUnauthorized": true, // Verify server certificates
   "ca": "certificate_authority_cert", // CA certificate (PEM format)
-  "cert": "client_certificate",      // Client certificate (optional)
-  "key": "private_key"              // Client private key (optional)
+  "cert": "client_certificate", // Client certificate (optional)
+  "key": "private_key" // Client private key (optional)
 }
 ```
 
-__Connection Options__:
+**Connection Options**:
 
 ```json
 {
-  "connectionLimit": 10,       // Max concurrent connections
-  "acquireTimeout": 60000,     // Connection acquisition timeout (ms)
-  "timeout": 60000,           // Query timeout (ms)
-  "charset": "utf8mb4",       // Character set
-  "timezone": "UTC"           // Timezone for date operations
+  "connectionLimit": 10, // Max concurrent connections
+  "acquireTimeout": 60000, // Connection acquisition timeout (ms)
+  "timeout": 60000, // Query timeout (ms)
+  "charset": "utf8mb4", // Character set
+  "timezone": "UTC" // Timezone for date operations
 }
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -154,7 +154,7 @@ __Response__:
 }
 ```
 
-__cURL Example__:
+**cURL Example**:
 
 ```bash
 curl -X POST https://api.altus4.dev/api/databases \
@@ -177,22 +177,22 @@ curl -X POST https://api.altus4.dev/api/databases \
 
 Retrieve all database connections associated with your account.
 
-__Endpoint__: `GET /api/databases`
+**Endpoint**: `GET /api/databases`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `limit` - Number of databases to return (1-100, default: 50)
 - `offset` - Pagination offset (default: 0)
 - `status` - Filter by status: `connected`, `disconnected`, `error`
 - `search` - Search database names
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -232,15 +232,15 @@ __Response__:
 
 Retrieve detailed information about a specific database connection.
 
-__Endpoint__: `GET /api/databases/:databaseId`
+**Endpoint**: `GET /api/databases/:databaseId`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -306,16 +306,16 @@ __Response__:
 
 Update an existing database connection's settings.
 
-__Endpoint__: `PUT /api/databases/:databaseId`
+**Endpoint**: `PUT /api/databases/:databaseId`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
-__Request Body__:
+**Request Body**:
 
 ```json
 {
@@ -331,7 +331,7 @@ __Request Body__:
 }
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -352,15 +352,15 @@ __Response__:
 
 Remove a database connection from your account.
 
-__Endpoint__: `DELETE /api/databases/:databaseId`
+**Endpoint**: `DELETE /api/databases/:databaseId`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -372,7 +372,7 @@ __Response__:
 }
 ```
 
-__Note__: Removing a database connection will:
+**Note**: Removing a database connection will:
 
 - Immediately close all active connections
 - Clear cached search results for that database
@@ -385,15 +385,15 @@ __Note__: Removing a database connection will:
 
 Test connectivity to a specific database.
 
-__Endpoint__: `POST /api/databases/:databaseId/test`
+**Endpoint**: `POST /api/databases/:databaseId/test`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -415,7 +415,7 @@ __Response__:
 }
 ```
 
-__Error Response__:
+**Error Response**:
 
 ```json
 {
@@ -436,15 +436,15 @@ __Error Response__:
 
 Get real-time connection health status.
 
-__Endpoint__: `GET /api/databases/:databaseId/status`
+**Endpoint**: `GET /api/databases/:databaseId/status`
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -484,21 +484,21 @@ __Response__:
 
 Discover the database schema including tables, columns, and indexes.
 
-__Endpoint__: `GET /api/databases/:databaseId/schema`
+**Endpoint**: `GET /api/databases/:databaseId/schema`
 
-__Query Parameters__:
+**Query Parameters**:
 
 - `tables` - Comma-separated list of specific tables to include
 - `includeData` - Include sample data for each table (default: false)
 - `includeIndexes` - Include detailed index information (default: true)
 
-__Headers__:
+**Headers**:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-__Response__:
+**Response**:
 
 ```json
 {
@@ -605,7 +605,7 @@ __Response__:
 }
 ```
 
-__cURL Example__:
+**cURL Example**:
 
 ```bash
 curl -X GET "https://api.altus4.dev/api/databases/db_abc123def456/schema?includeData=true&tables=articles,posts" \
@@ -619,71 +619,77 @@ curl -X GET "https://api.altus4.dev/api/databases/db_abc123def456/schema?include
 ```javascript
 class Altus4DatabaseManager {
   constructor(apiKey) {
-    this.apiKey = apiKey
-    this.baseUrl = 'https://api.altus4.dev'
+    this.apiKey = apiKey;
+    this.baseUrl = 'https://api.altus4.dev';
     this.headers = {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    }
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    };
   }
 
   async addDatabase(config) {
     const response = await fetch(`${this.baseUrl}/api/databases`, {
       method: 'POST',
       headers: this.headers,
-      body: JSON.stringify(config)
-    })
+      body: JSON.stringify(config),
+    });
 
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(`Failed to add database: ${error.error.message}`)
+      const error = await response.json();
+      throw new Error(`Failed to add database: ${error.error.message}`);
     }
 
-    return await response.json()
+    return await response.json();
   }
 
   async listDatabases(options = {}) {
-    const params = new URLSearchParams(options)
+    const params = new URLSearchParams(options);
     const response = await fetch(`${this.baseUrl}/api/databases?${params}`, {
-      headers: this.headers
-    })
+      headers: this.headers,
+    });
 
-    return await response.json()
+    return await response.json();
   }
 
   async testConnection(databaseId) {
-    const response = await fetch(`${this.baseUrl}/api/databases/${databaseId}/test`, {
-      method: 'POST',
-      headers: this.headers
-    })
+    const response = await fetch(
+      `${this.baseUrl}/api/databases/${databaseId}/test`,
+      {
+        method: 'POST',
+        headers: this.headers,
+      }
+    );
 
-    const result = await response.json()
-    return result.success
+    const result = await response.json();
+    return result.success;
   }
 
   async getSchema(databaseId, options = {}) {
-    const params = new URLSearchParams(options)
+    const params = new URLSearchParams(options);
     const response = await fetch(
       `${this.baseUrl}/api/databases/${databaseId}/schema?${params}`,
       { headers: this.headers }
-    )
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   async updateDatabase(databaseId, updates) {
-    const response = await fetch(`${this.baseUrl}/api/databases/${databaseId}`, {
-      method: 'PUT',
-      headers: this.headers,
-      body: JSON.stringify(updates)
-    })
+    const response = await fetch(
+      `${this.baseUrl}/api/databases/${databaseId}`,
+      {
+        method: 'PUT',
+        headers: this.headers,
+        body: JSON.stringify(updates),
+      }
+    );
 
-    return await response.json()
+    return await response.json();
   }
 }
 
 // Usage
-const dbManager = new Altus4DatabaseManager('altus4_sk_live_abc123...')
+const dbManager = new Altus4DatabaseManager('altus4_sk_live_abc123...');
 
 // Add a new database
 const newDb = await dbManager.addDatabase({
@@ -692,20 +698,20 @@ const newDb = await dbManager.addDatabase({
   database: 'myapp',
   username: 'user',
   password: 'password',
-  ssl: { enabled: true }
-})
+  ssl: { enabled: true },
+});
 
 // Test connection
-const isConnected = await dbManager.testConnection(newDb.data.database.id)
-console.log('Database connected:', isConnected)
+const isConnected = await dbManager.testConnection(newDb.data.database.id);
+console.log('Database connected:', isConnected);
 
 // Get schema information
 const schema = await dbManager.getSchema(newDb.data.database.id, {
   includeData: true,
-  includeIndexes: true
-})
+  includeIndexes: true,
+});
 
-console.log('Found tables:', schema.data.schema.tables.length)
+console.log('Found tables:', schema.data.schema.tables.length);
 ```
 
 ### Python
@@ -844,19 +850,19 @@ print(f"Active connections: {health['connection']['activeConnections']}")
 
 ### Security Recommendations
 
-1. __Use Dedicated Users__: Create specific MySQL users for Altus 4 with minimal required permissions
-2. __Enable SSL/TLS__: Always use encrypted connections in production
-3. __Network Security__: Use VPC, private networks, or IP allowlisting
-4. __Regular Rotation__: Rotate database passwords regularly
-5. __Monitor Access__: Review connection logs and usage patterns
+1. **Use Dedicated Users**: Create specific MySQL users for Altus 4 with minimal required permissions
+2. **Enable SSL/TLS**: Always use encrypted connections in production
+3. **Network Security**: Use VPC, private networks, or IP allowlisting
+4. **Regular Rotation**: Rotate database passwords regularly
+5. **Monitor Access**: Review connection logs and usage patterns
 
 ### Performance Optimization
 
-1. __Connection Pooling__: Configure appropriate connection limits based on your database capacity
-2. __Index Strategy__: Ensure FULLTEXT indexes exist on searchable columns
-3. __Query Optimization__: Review slow query logs and optimize problematic queries
-4. __Resource Monitoring__: Monitor database CPU, memory, and disk usage
-5. __Schema Design__: Design tables with search performance in mind
+1. **Connection Pooling**: Configure appropriate connection limits based on your database capacity
+2. **Index Strategy**: Ensure FULLTEXT indexes exist on searchable columns
+3. **Query Optimization**: Review slow query logs and optimize problematic queries
+4. **Resource Monitoring**: Monitor database CPU, memory, and disk usage
+5. **Schema Design**: Design tables with search performance in mind
 
 ### Recommended MySQL User Permissions
 
@@ -878,4 +884,4 @@ FLUSH PRIVILEGES;
 
 ---
 
-__Next Steps__: [Analytics & Insights](./analytics.md) | [Error Handling](./errors.md)
+**Next Steps**: [Analytics & Insights](./analytics.md) | [Error Handling](./errors.md)

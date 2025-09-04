@@ -11,11 +11,11 @@ This guide walks you through setting up Altus 4 for local development on your ma
 
 ### System Requirements
 
-- __Node.js__: Version 18 or higher
-- __npm__: Version 9 or higher (comes with Node.js)
-- __Git__: For version control
-- __MySQL__: Version 8.0 or higher
-- __Redis__: Version 6.0 or higher (optional but recommended)
+- **Node.js**: Version 18 or higher
+- **npm**: Version 9 or higher (comes with Node.js)
+- **Git**: For version control
+- **MySQL**: Version 8.0 or higher
+- **Redis**: Version 6.0 or higher (optional but recommended)
 
 ### Platform-Specific Installation
 
@@ -461,14 +461,14 @@ describe('SearchService', () => {
     searchService = new SearchService({
       database: mockDatabaseService,
       cache: mockCacheService,
-      ai: mockAIService
+      ai: mockAIService,
     });
   });
 
   it('should perform natural language search', async () => {
     const results = await searchService.search({
       query: 'machine learning',
-      mode: 'natural'
+      mode: 'natural',
     });
 
     expect(results).toHaveLength(10);
@@ -552,8 +552,8 @@ npx tsc --noEmit src/services/search.service.ts
 
 Once your local development environment is set up:
 
-1. __Explore the Codebase__: Familiarize yourself with the service architecture
-2. __Run the Test Suite__: Understand the testing patterns
-3. __Make a Small Change__: Try adding a new API endpoint
-4. __Read the API Documentation__: Understand the external interface
-5. __Check Out Examples__: See how to integrate with the API
+1. **Explore the Codebase**: Familiarize yourself with the service architecture
+2. **Run the Test Suite**: Understand the testing patterns
+3. **Make a Small Change**: Try adding a new API endpoint
+4. **Read the API Documentation**: Understand the external interface
+5. **Check Out Examples**: See how to integrate with the API

@@ -34,7 +34,7 @@ curl -X POST https://api.altus4.com/api/v1/search \
   }'
 ```
 
-__Query Breakdown:__
+**Query Breakdown:**
 
 - `+(mysql database)` - Must contain either "mysql" OR "database"
 - `+(performance optimization)` - Must contain either "performance" OR "optimization"
@@ -46,45 +46,48 @@ __Query Breakdown:__
 ```javascript
 const advancedBooleanQueries = [
   {
-    name: "Exact phrase with context",
+    name: 'Exact phrase with context',
     query: '"database optimization" +(mysql postgresql)',
-    description: "Exact phrase 'database optimization' with either mysql or postgresql"
+    description:
+      "Exact phrase 'database optimization' with either mysql or postgresql",
   },
   {
-    name: "Word proximity",
+    name: 'Word proximity',
     query: 'performance NEAR/5 optimization',
-    description: "Words 'performance' and 'optimization' within 5 words of each other"
+    description:
+      "Words 'performance' and 'optimization' within 5 words of each other",
   },
   {
-    name: "Wildcard matching",
+    name: 'Wildcard matching',
     query: 'optim* +database -slow*',
-    description: "Words starting with 'optim', must have 'database', exclude words starting with 'slow'"
-  }
-]
+    description:
+      "Words starting with 'optim', must have 'database', exclude words starting with 'slow'",
+  },
+];
 
 async function executeAdvancedSearch(queryConfig) {
   const response = await fetch('https://api.altus4.com/api/v1/search', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       query: queryConfig.query,
-      databases: ["tech_db"],
-      searchMode: "boolean",
-      limit: 20
-    })
-  })
+      databases: ['tech_db'],
+      searchMode: 'boolean',
+      limit: 20,
+    }),
+  });
 
-  const results = await response.json()
-  console.log(`${queryConfig.name}: ${results.data.totalCount} results`)
-  return results
+  const results = await response.json();
+  console.log(`${queryConfig.name}: ${results.data.totalCount} results`);
+  return results;
 }
 
 // Execute all advanced queries
 for (const queryConfig of advancedBooleanQueries) {
-  await executeAdvancedSearch(queryConfig)
+  await executeAdvancedSearch(queryConfig);
 }
 ```
 
@@ -240,16 +243,19 @@ asyncio.run(main())
 ```javascript
 class DatabaseOptimizer {
   constructor(apiKey) {
-    this.apiKey = apiKey
-    this.databaseProfiles = new Map()
+    this.apiKey = apiKey;
+    this.databaseProfiles = new Map();
   }
 
   async profileDatabase(databaseId) {
     // Get database schema information
-    const schemaResponse = await fetch(`https://api.altus4.com/api/v1/databases/${databaseId}/schema`, {
-      headers: { 'Authorization': `Bearer ${this.apiKey}` }
-    })
-    const schema = await schemaResponse.json()
+    const schemaResponse = await fetch(
+      `https://api.altus4.com/api/v1/databases/${databaseId}/schema`,
+      {
+        headers: { Authorization: `Bearer ${this.apiKey}` },
+      }
+    );
+    const schema = await schemaResponse.json();
 
     // Analyze table structures and indexes
     const profile = {
@@ -258,48 +264,55 @@ class DatabaseOptimizer {
         name: table.name,
         fulltextColumns: table.fulltextIndexes.flatMap(idx => idx.columns),
         estimatedRows: table.estimatedRows,
-        searchWeight: this.calculateTableWeight(table)
+        searchWeight: this.calculateTableWeight(table),
       })),
-      totalRows: schema.data.tables.reduce((sum, table) => sum + table.estimatedRows, 0),
-      lastProfiled: new Date()
-    }
+      totalRows: schema.data.tables.reduce(
+        (sum, table) => sum + table.estimatedRows,
+        0
+      ),
+      lastProfiled: new Date(),
+    };
 
-    this.databaseProfiles.set(databaseId, profile)
-    return profile
+    this.databaseProfiles.set(databaseId, profile);
+    return profile;
   }
 
   calculateTableWeight(table) {
     // Weight tables based on size and index quality
-    const sizeWeight = Math.log10(table.estimatedRows + 1) / 10
-    const indexWeight = table.fulltextIndexes.length * 0.2
-    return Math.min(sizeWeight + indexWeight, 2.0)
+    const sizeWeight = Math.log10(table.estimatedRows + 1) / 10;
+    const indexWeight = table.fulltextIndexes.length * 0.2;
+    return Math.min(sizeWeight + indexWeight, 2.0);
   }
 
   async optimizedSearch(query, databaseIds, options = {}) {
     // Profile databases if not already done
     for (const dbId of databaseIds) {
       if (!this.databaseProfiles.has(dbId)) {
-        await this.profileDatabase(dbId)
+        await this.profileDatabase(dbId);
       }
     }
 
     // Create optimized search strategy for each database
     const searchPromises = databaseIds.map(async dbId => {
-      const profile = this.databaseProfiles.get(dbId)
-      const optimizedRequest = this.createOptimizedRequest(query, profile, options)
+      const profile = this.databaseProfiles.get(dbId);
+      const optimizedRequest = this.createOptimizedRequest(
+        query,
+        profile,
+        options
+      );
 
       return fetch('https://api.altus4.com/api/v1/search', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(optimizedRequest)
-      }).then(r => r.json())
-    })
+        body: JSON.stringify(optimizedRequest),
+      }).then(r => r.json());
+    });
 
-    const results = await Promise.allSettled(searchPromises)
-    return this.mergeOptimizedResults(results, databaseIds)
+    const results = await Promise.allSettled(searchPromises);
+    return this.mergeOptimizedResults(results, databaseIds);
   }
 
   createOptimizedRequest(query, profile, options) {
@@ -308,26 +321,26 @@ class DatabaseOptimizer {
       query,
       databases: [profile.databaseId],
       searchMode: options.searchMode || 'natural',
-      limit: Math.min(options.limit || 20, 100)
-    }
+      limit: Math.min(options.limit || 20, 100),
+    };
 
     // Focus on tables with good FULLTEXT indexes
     const goodTables = profile.tables
       .filter(table => table.fulltextColumns.length > 0)
       .sort((a, b) => b.searchWeight - a.searchWeight)
       .slice(0, 5) // Top 5 tables
-      .map(table => table.name)
+      .map(table => table.name);
 
     if (goodTables.length > 0) {
-      request.tables = goodTables
+      request.tables = goodTables;
     }
 
     // Adjust limit based on database size
     if (profile.totalRows > 1000000) {
-      request.limit = Math.min(request.limit, 50) // Limit for large databases
+      request.limit = Math.min(request.limit, 50); // Limit for large databases
     }
 
-    return request
+    return request;
   }
 
   mergeOptimizedResults(results, databaseIds) {
@@ -337,33 +350,33 @@ class DatabaseOptimizer {
         results: [],
         totalCount: 0,
         executionTime: 0,
-        optimizationApplied: true
-      }
-    }
+        optimizationApplied: true,
+      },
+    };
 
     results.forEach((result, index) => {
       if (result.status === 'fulfilled' && result.value.success) {
-        const data = result.value.data
-        merged.data.results.push(...data.results)
-        merged.data.totalCount += data.totalCount
-        merged.data.executionTime += data.executionTime
+        const data = result.value.data;
+        merged.data.results.push(...data.results);
+        merged.data.totalCount += data.totalCount;
+        merged.data.executionTime += data.executionTime;
       }
-    })
+    });
 
     // Sort by relevance
-    merged.data.results.sort((a, b) => b.relevanceScore - a.relevanceScore)
+    merged.data.results.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
-    return merged
+    return merged;
   }
 }
 
 // Usage
-const optimizer = new DatabaseOptimizer(apiKey)
+const optimizer = new DatabaseOptimizer(apiKey);
 const results = await optimizer.optimizedSearch(
-  "mysql performance tuning",
-  ["db1", "db2", "db3"],
-  { searchMode: "semantic", limit: 30 }
-)
+  'mysql performance tuning',
+  ['db1', 'db2', 'db3'],
+  { searchMode: 'semantic', limit: 30 }
+);
 ```
 
 ## Advanced Filtering and Faceting
@@ -523,12 +536,12 @@ blog_results, product_results = await advanced_filtering_examples()
 ```javascript
 class SearchPerformanceAnalyzer {
   constructor(apiKey) {
-    this.apiKey = apiKey
-    this.performanceHistory = []
+    this.apiKey = apiKey;
+    this.performanceHistory = [];
   }
 
   async analyzeQuery(query, databases, options = {}) {
-    const startTime = Date.now()
+    const startTime = Date.now();
 
     // Execute search with analysis
     const searchRequest = {
@@ -536,20 +549,23 @@ class SearchPerformanceAnalyzer {
       databases,
       includeAnalytics: true,
       includeQueryAnalysis: true,
-      ...options
-    }
+      ...options,
+    };
 
-    const response = await fetch('https://api.altus4.com/api/v1/search/analyze', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(searchRequest)
-    })
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/search/analyze',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(searchRequest),
+      }
+    );
 
-    const result = await response.json()
-    const totalTime = Date.now() - startTime
+    const result = await response.json();
+    const totalTime = Date.now() - startTime;
 
     // Store performance data
     const performanceData = {
@@ -559,113 +575,123 @@ class SearchPerformanceAnalyzer {
       totalTime,
       resultCount: result.data?.totalCount || 0,
       timestamp: new Date(),
-      analysis: result.data?.queryAnalysis
-    }
+      analysis: result.data?.queryAnalysis,
+    };
 
-    this.performanceHistory.push(performanceData)
+    this.performanceHistory.push(performanceData);
 
     return {
       ...result,
-      performanceData
-    }
+      performanceData,
+    };
   }
 
   getPerformanceInsights() {
-    if (this.performanceHistory.length === 0) return null
+    if (this.performanceHistory.length === 0) return null;
 
-    const avgExecutionTime = this.performanceHistory.reduce(
-      (sum, item) => sum + item.executionTime, 0
-    ) / this.performanceHistory.length
+    const avgExecutionTime =
+      this.performanceHistory.reduce(
+        (sum, item) => sum + item.executionTime,
+        0
+      ) / this.performanceHistory.length;
 
     const slowQueries = this.performanceHistory
       .filter(item => item.executionTime > avgExecutionTime * 2)
-      .sort((a, b) => b.executionTime - a.executionTime)
+      .sort((a, b) => b.executionTime - a.executionTime);
 
     const fastQueries = this.performanceHistory
       .filter(item => item.executionTime < avgExecutionTime * 0.5)
-      .sort((a, b) => a.executionTime - b.executionTime)
+      .sort((a, b) => a.executionTime - b.executionTime);
 
     return {
       totalQueries: this.performanceHistory.length,
       averageExecutionTime: Math.round(avgExecutionTime),
       slowQueries: slowQueries.slice(0, 5),
       fastQueries: fastQueries.slice(0, 5),
-      recommendations: this.generateRecommendations(slowQueries)
-    }
+      recommendations: this.generateRecommendations(slowQueries),
+    };
   }
 
   generateRecommendations(slowQueries) {
-    const recommendations = []
+    const recommendations = [];
 
     // Analyze slow queries for patterns
-    const longQueries = slowQueries.filter(q => q.query.length > 100)
+    const longQueries = slowQueries.filter(q => q.query.length > 100);
     if (longQueries.length > 0) {
       recommendations.push({
         type: 'query_length',
         message: 'Consider shortening very long queries for better performance',
-        examples: longQueries.slice(0, 2).map(q => q.query.substring(0, 50) + '...')
-      })
+        examples: longQueries
+          .slice(0, 2)
+          .map(q => q.query.substring(0, 50) + '...'),
+      });
     }
 
-    const broadQueries = slowQueries.filter(q =>
-      q.query.split(' ').length < 3 && q.resultCount > 1000
-    )
+    const broadQueries = slowQueries.filter(
+      q => q.query.split(' ').length < 3 && q.resultCount > 1000
+    );
     if (broadQueries.length > 0) {
       recommendations.push({
         type: 'query_specificity',
-        message: 'Add more specific terms to broad queries that return many results',
-        examples: broadQueries.slice(0, 2).map(q => q.query)
-      })
+        message:
+          'Add more specific terms to broad queries that return many results',
+        examples: broadQueries.slice(0, 2).map(q => q.query),
+      });
     }
 
-    return recommendations
+    return recommendations;
   }
 
   async optimizeQuery(originalQuery, databases) {
     // Get AI-powered query optimization suggestions
-    const response = await fetch('https://api.altus4.com/api/v1/search/optimize', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        query: originalQuery,
-        databases,
-        includeAlternatives: true
-      })
-    })
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/search/optimize',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: originalQuery,
+          databases,
+          includeAlternatives: true,
+        }),
+      }
+    );
 
-    return await response.json()
+    return await response.json();
   }
 }
 
 // Usage
-const analyzer = new SearchPerformanceAnalyzer(apiKey)
+const analyzer = new SearchPerformanceAnalyzer(apiKey);
 
 // Analyze multiple queries
 const queries = [
-  "mysql performance optimization",
-  "database",
-  "how to improve query speed in mysql database management system",
-  "index btree"
-]
+  'mysql performance optimization',
+  'database',
+  'how to improve query speed in mysql database management system',
+  'index btree',
+];
 
 for (const query of queries) {
-  const result = await analyzer.analyzeQuery(query, ["tech_db"])
-  console.log(`Query: "${query}" took ${result.performanceData.executionTime}ms`)
+  const result = await analyzer.analyzeQuery(query, ['tech_db']);
+  console.log(
+    `Query: "${query}" took ${result.performanceData.executionTime}ms`
+  );
 }
 
 // Get insights
-const insights = analyzer.getPerformanceInsights()
-console.log('Performance Insights:', insights)
+const insights = analyzer.getPerformanceInsights();
+console.log('Performance Insights:', insights);
 
 // Optimize a slow query
 const optimization = await analyzer.optimizeQuery(
-  "how to improve query speed in mysql database management system",
-  ["tech_db"]
-)
-console.log('Optimization suggestions:', optimization.data.suggestions)
+  'how to improve query speed in mysql database management system',
+  ['tech_db']
+);
+console.log('Optimization suggestions:', optimization.data.suggestions);
 ```
 
 ### Caching Strategies
@@ -844,69 +870,72 @@ print(f"Cache hit rate: {stats['hit_rate']}%")
 ```javascript
 class SearchResultEnhancer {
   constructor(apiKey) {
-    this.apiKey = apiKey
+    this.apiKey = apiKey;
   }
 
   async enhanceResults(searchResults, enhancementOptions = {}) {
-    const enhancements = []
+    const enhancements = [];
 
     // Add semantic categorization
     if (enhancementOptions.categorize !== false) {
-      enhancements.push(this.addSemanticCategories(searchResults))
+      enhancements.push(this.addSemanticCategories(searchResults));
     }
 
     // Add relevance explanations
     if (enhancementOptions.explainRelevance) {
-      enhancements.push(this.addRelevanceExplanations(searchResults))
+      enhancements.push(this.addRelevanceExplanations(searchResults));
     }
 
     // Add related suggestions
     if (enhancementOptions.relatedSuggestions) {
-      enhancements.push(this.addRelatedSuggestions(searchResults))
+      enhancements.push(this.addRelatedSuggestions(searchResults));
     }
 
     // Add content summaries
     if (enhancementOptions.summarize) {
-      enhancements.push(this.addContentSummaries(searchResults))
+      enhancements.push(this.addContentSummaries(searchResults));
     }
 
-    const enhancedResults = await Promise.all(enhancements)
+    const enhancedResults = await Promise.all(enhancements);
 
     // Merge all enhancements
-    return this.mergeEnhancements(searchResults, enhancedResults)
+    return this.mergeEnhancements(searchResults, enhancedResults);
   }
 
   async addSemanticCategories(searchResults) {
-    const response = await fetch('https://api.altus4.com/api/v1/search/categorize', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        results: searchResults.data.results.slice(0, 20), // Limit for API efficiency
-        categoryTypes: ['topic', 'content_type', 'difficulty_level']
-      })
-    })
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/search/categorize',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          results: searchResults.data.results.slice(0, 20), // Limit for API efficiency
+          categoryTypes: ['topic', 'content_type', 'difficulty_level'],
+        }),
+      }
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   async addRelevanceExplanations(searchResults) {
     const explanations = searchResults.data.results.map(result => {
-      const factors = []
+      const factors = [];
 
       // Analyze relevance factors
       if (result.relevanceScore > 0.8) {
-        factors.push("High keyword match in title or content")
+        factors.push('High keyword match in title or content');
       }
 
       if (result.matchedColumns.includes('title')) {
-        factors.push("Query terms found in title")
+        factors.push('Query terms found in title');
       }
 
       if (result.snippet && result.snippet.length > 100) {
-        factors.push("Substantial content match")
+        factors.push('Substantial content match');
       }
 
       return {
@@ -915,157 +944,171 @@ class SearchResultEnhancer {
         scoreBreakdown: {
           keywordMatch: Math.min(result.relevanceScore * 0.6, 0.6),
           titleBoost: result.matchedColumns.includes('title') ? 0.2 : 0,
-          contentDepth: Math.min(result.relevanceScore * 0.2, 0.2)
-        }
-      }
-    })
+          contentDepth: Math.min(result.relevanceScore * 0.2, 0.2),
+        },
+      };
+    });
 
-    return { explanations }
+    return { explanations };
   }
 
   async addRelatedSuggestions(searchResults) {
     // Extract key terms from top results
-    const topResults = searchResults.data.results.slice(0, 5)
-    const keyTerms = this.extractKeyTerms(topResults)
+    const topResults = searchResults.data.results.slice(0, 5);
+    const keyTerms = this.extractKeyTerms(topResults);
 
-    const response = await fetch('https://api.altus4.com/api/v1/search/suggestions', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`
-      },
-      params: {
-        query: keyTerms.join(' '),
-        type: 'related',
-        limit: 5
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/search/suggestions',
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+        },
+        params: {
+          query: keyTerms.join(' '),
+          type: 'related',
+          limit: 5,
+        },
       }
-    })
+    );
 
-    return await response.json()
+    return await response.json();
   }
 
   extractKeyTerms(results) {
-    const termFrequency = new Map()
+    const termFrequency = new Map();
 
     results.forEach(result => {
-      const text = `${result.data.title || ''} ${result.snippet || ''}`.toLowerCase()
-      const words = text.match(/\b\w{4,}\b/g) || [] // Words with 4+ characters
+      const text =
+        `${result.data.title || ''} ${result.snippet || ''}`.toLowerCase();
+      const words = text.match(/\b\w{4,}\b/g) || []; // Words with 4+ characters
 
       words.forEach(word => {
-        termFrequency.set(word, (termFrequency.get(word) || 0) + 1)
-      })
-    })
+        termFrequency.set(word, (termFrequency.get(word) || 0) + 1);
+      });
+    });
 
     // Return top terms
     return Array.from(termFrequency.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 10)
-      .map(([term]) => term)
+      .map(([term]) => term);
   }
 
   async addContentSummaries(searchResults) {
     const summaries = await Promise.all(
       searchResults.data.results.slice(0, 10).map(async result => {
         if (!result.data.content || result.data.content.length < 200) {
-          return { resultId: result.id, summary: result.snippet }
+          return { resultId: result.id, summary: result.snippet };
         }
 
         // Use AI to generate summary
-        const response = await fetch('https://api.altus4.com/api/v1/ai/summarize', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${this.apiKey}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            text: result.data.content,
-            maxLength: 150,
-            style: 'informative'
-          })
-        })
+        const response = await fetch(
+          'https://api.altus4.com/api/v1/ai/summarize',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${this.apiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              text: result.data.content,
+              maxLength: 150,
+              style: 'informative',
+            }),
+          }
+        );
 
-        const summaryData = await response.json()
+        const summaryData = await response.json();
         return {
           resultId: result.id,
-          summary: summaryData.data?.summary || result.snippet
-        }
+          summary: summaryData.data?.summary || result.snippet,
+        };
       })
-    )
+    );
 
-    return { summaries }
+    return { summaries };
   }
 
   mergeEnhancements(originalResults, enhancements) {
-    const enhanced = JSON.parse(JSON.stringify(originalResults)) // Deep copy
+    const enhanced = JSON.parse(JSON.stringify(originalResults)); // Deep copy
 
     enhancements.forEach(enhancement => {
       if (enhancement.explanations) {
         enhancement.explanations.forEach(explanation => {
-          const result = enhanced.data.results.find(r => r.id === explanation.resultId)
+          const result = enhanced.data.results.find(
+            r => r.id === explanation.resultId
+          );
           if (result) {
-            result.relevanceExplanation = explanation
+            result.relevanceExplanation = explanation;
           }
-        })
+        });
       }
 
       if (enhancement.summaries) {
         enhancement.summaries.forEach(summary => {
-          const result = enhanced.data.results.find(r => r.id === summary.resultId)
+          const result = enhanced.data.results.find(
+            r => r.id === summary.resultId
+          );
           if (result) {
-            result.aiSummary = summary.summary
+            result.aiSummary = summary.summary;
           }
-        })
+        });
       }
 
       if (enhancement.data?.categories) {
-        enhanced.data.categories = enhancement.data.categories
+        enhanced.data.categories = enhancement.data.categories;
       }
 
       if (enhancement.data?.suggestions) {
-        enhanced.data.relatedSuggestions = enhancement.data.suggestions
+        enhanced.data.relatedSuggestions = enhancement.data.suggestions;
       }
-    })
+    });
 
-    return enhanced
+    return enhanced;
   }
 }
 
 // Usage
-const enhancer = new SearchResultEnhancer(apiKey)
+const enhancer = new SearchResultEnhancer(apiKey);
 
 // Perform search and enhance results
 const searchResults = await fetch('https://api.altus4.com/api/v1/search', {
   method: 'POST',
   headers: {
-    'Authorization': `Bearer ${apiKey}`,
-    'Content-Type': 'application/json'
+    Authorization: `Bearer ${apiKey}`,
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    query: "database performance optimization",
-    databases: ["tech_db"],
-    limit: 20
-  })
-}).then(r => r.json())
+    query: 'database performance optimization',
+    databases: ['tech_db'],
+    limit: 20,
+  }),
+}).then(r => r.json());
 
 // Enhance the results
 const enhancedResults = await enhancer.enhanceResults(searchResults, {
   categorize: true,
   explainRelevance: true,
   relatedSuggestions: true,
-  summarize: true
-})
+  summarize: true,
+});
 
-console.log('Enhanced results with AI categorization and summaries:', enhancedResults)
+console.log(
+  'Enhanced results with AI categorization and summaries:',
+  enhancedResults
+);
 ```
 
 ## Next Steps
 
 You've mastered advanced query techniques! Continue exploring:
 
-- __[AI Integration](./ai-integration.md)__ - Leverage semantic search and AI enhancements
-- __[Multi-Database Search](./multi-database.md)__ - Advanced federation strategies
-- __[SDK Usage](./sdk.md)__ - Using official SDKs for your language
-- __[API Reference](../api/search.md)__ - Complete API documentation
+- **[AI Integration](./ai-integration.md)** - Leverage semantic search and AI enhancements
+- **[Multi-Database Search](./multi-database.md)** - Advanced federation strategies
+- **[SDK Usage](./sdk.md)** - Using official SDKs for your language
+- **[API Reference](../api/search.md)** - Complete API documentation
 
 ---
 
-__Advanced queries unlock the full power of Altus 4's search capabilities. Experiment with these patterns to build sophisticated search experiences.__
+**Advanced queries unlock the full power of Altus 4's search capabilities. Experiment with these patterns to build sophisticated search experiences.**

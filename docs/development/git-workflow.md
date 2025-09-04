@@ -23,13 +23,13 @@ npm run commit:configure-signing
 
 If you prefer manual setup:
 
-1. __Generate GPG Key__ (choose option 9 - ECC sign and encrypt)
+1. **Generate GPG Key** (choose option 9 - ECC sign and encrypt)
 
    ```bash
    gpg --full-generate-key
    ```
 
-2. __Configure Git__
+2. **Configure Git**
 
    ```bash
    # Get your key ID
@@ -41,7 +41,7 @@ If you prefer manual setup:
    git config --global tag.gpgsign true
    ```
 
-3. __Add to GitHub__
+3. **Add to GitHub**
 
    ```bash
    # Export public key
@@ -51,52 +51,52 @@ If you prefer manual setup:
 
 ### Why ECC (Option 9)?
 
-- __Modern & Future-Proof__: Industry standard with better performance
-- __Smaller Keys__: 256-bit ECC ≈ 3072-bit RSA security
-- __GitHub Support__: Fully supported with efficient handling
-- __NSA Suite B__: Approved security standard
+- **Modern & Future-Proof**: Industry standard with better performance
+- **Smaller Keys**: 256-bit ECC ≈ 3072-bit RSA security
+- **GitHub Support**: Fully supported with efficient handling
+- **NSA Suite B**: Approved security standard
 
-## 🪝 __Git Hooks__
+## 🪝 **Git Hooks**
 
 ### Pre-Commit Hook
 
 Runs comprehensive checks before allowing commits:
 
-1. __Security Audit__: `npm audit --audit-level=high`
-2. __Lint & Format__: `lint-staged` with ESLint and Prettier
-3. __Type Checking__: TypeScript compilation check
-4. __Build Verification__: Ensures project compiles
-5. __Test Suite__: Full test suite execution
-6. __Package Integrity__: Dependency consistency check
-7. __Documentation__: Markdown linting
-8. __GPG Configuration__: Verify signing setup
+1. **Security Audit**: `npm audit --audit-level=high`
+2. **Lint & Format**: `lint-staged` with ESLint and Prettier
+3. **Type Checking**: TypeScript compilation check
+4. **Build Verification**: Ensures project compiles
+5. **Test Suite**: Full test suite execution
+6. **Package Integrity**: Dependency consistency check
+7. **Documentation**: Markdown linting
+8. **GPG Configuration**: Verify signing setup
 
 ### Commit Message Hook
 
 Validates commit messages for:
 
-- __Conventional Commits__ format validation
-- __GPG Signing__ status check
-- __Sensitive Information__ detection
-- __Format Examples__ and helpful error messages
+- **Conventional Commits** format validation
+- **GPG Signing** status check
+- **Sensitive Information** detection
+- **Format Examples** and helpful error messages
 
 ### Post-Commit Hook
 
 Verifies commit integrity:
 
-- __GPG Signature__ verification
-- __Commit Format__ validation
-- __Branch Protection__ warnings
-- __Commit Summary__ display
+- **GPG Signature** verification
+- **Commit Format** validation
+- **Branch Protection** warnings
+- **Commit Summary** display
 
 ### Pre-Push Hook
 
 Prevents pushing problematic commits:
 
-- __GPG Signature__ verification for all commits being pushed
-- __Security Audit__ final check
-- __Interactive Prompts__ for unsigned commits or security issues
-- __Protected Branch__ detection (main/master)
+- **GPG Signature** verification for all commits being pushed
+- **Security Audit** final check
+- **Interactive Prompts** for unsigned commits or security issues
+- **Protected Branch** detection (main/master)
 
 ## Available Commands
 
@@ -135,7 +135,7 @@ npm run commit:configure-signing
 
 ## Commit Message Format
 
-We use __Conventional Commits__ for consistency:
+We use **Conventional Commits** for consistency:
 
 ```text
 <type>[optional scope]: <description>
@@ -171,17 +171,17 @@ test: add unit tests for ApiKeyService
 
 ### Before Each Commit
 
-1. __Automated Checks__: Pre-commit hook runs all quality checks
-2. __Message Validation__: Commit message format verification
-3. __GPG Signing__: Automatic signing if configured
-4. __Post-Verification__: Immediate verification of commit integrity
+1. **Automated Checks**: Pre-commit hook runs all quality checks
+2. **Message Validation**: Commit message format verification
+3. **GPG Signing**: Automatic signing if configured
+4. **Post-Verification**: Immediate verification of commit integrity
 
 ### Before Each Push
 
-1. __Commit Analysis__: All commits in push are analyzed
-2. __GPG Verification__: Ensures all commits are signed
-3. __Security Check__: Final security audit
-4. __Interactive Prompts__: User confirmation for any issues
+1. **Commit Analysis**: All commits in push are analyzed
+2. **GPG Verification**: Ensures all commits are signed
+3. **Security Check**: Final security audit
+4. **Interactive Prompts**: User confirmation for any issues
 
 ### Manual Verification
 
@@ -196,7 +196,7 @@ npm run hooks:test
 git verify-commit <commit-hash>
 ```
 
-## 🚨 __Troubleshooting__
+## 🚨 **Troubleshooting**
 
 ### GPG Issues
 
@@ -230,44 +230,44 @@ chmod +x .husky/*
 
 If hooks are too slow:
 
-1. __Skip Hooks__ (emergency only): `git commit --no-verify`
-2. __Optimize Tests__: Use `--bail` for faster failure
-3. __Cache Dependencies__: Ensure node_modules is cached
+1. **Skip Hooks** (emergency only): `git commit --no-verify`
+2. **Optimize Tests**: Use `--bail` for faster failure
+3. **Cache Dependencies**: Ensure node_modules is cached
 
 ## Best Practices
 
 ### For Developers
 
-1. __Set up GPG signing__ immediately after cloning
-2. __Use conventional commits__ for all commits
-3. __Run verification__ before important pushes
-4. __Keep commits small__ for faster hook execution
-5. __Fix issues promptly__ rather than skipping verification
+1. **Set up GPG signing** immediately after cloning
+2. **Use conventional commits** for all commits
+3. **Run verification** before important pushes
+4. **Keep commits small** for faster hook execution
+5. **Fix issues promptly** rather than skipping verification
 
 ### For Maintainers
 
-1. __Enforce branch protection__ on main/master
-2. __Require signed commits__ for sensitive operations
-3. __Regular security audits__ using provided commands
-4. __Monitor hook performance__ and optimize as needed
-5. __Update verification tools__ regularly
+1. **Enforce branch protection** on main/master
+2. **Require signed commits** for sensitive operations
+3. **Regular security audits** using provided commands
+4. **Monitor hook performance** and optimize as needed
+5. **Update verification tools** regularly
 
 ## Security Features
 
-- __GPG Commit Signing__: Cryptographic verification of commit authorship
-- __Security Auditing__: Automatic vulnerability detection
-- __Sensitive Data Detection__: Prevents secrets in commit messages
-- __Interactive Prompts__: User confirmation for security issues
-- __Branch Protection__: Warnings for direct commits to protected branches
+- **GPG Commit Signing**: Cryptographic verification of commit authorship
+- **Security Auditing**: Automatic vulnerability detection
+- **Sensitive Data Detection**: Prevents secrets in commit messages
+- **Interactive Prompts**: User confirmation for security issues
+- **Branch Protection**: Warnings for direct commits to protected branches
 
 ## Metrics and Reporting
 
 The verification system provides detailed reporting:
 
-- __Commit Analysis__: Percentage of signed commits
-- __Format Compliance__: Conventional commit adherence
-- __Security Status__: Vulnerability counts and severity
-- __Performance Metrics__: Hook execution times
-- __Compliance Reports__: Detailed verification summaries
+- **Commit Analysis**: Percentage of signed commits
+- **Format Compliance**: Conventional commit adherence
+- **Security Status**: Vulnerability counts and severity
+- **Performance Metrics**: Hook execution times
+- **Compliance Reports**: Detailed verification summaries
 
 This comprehensive verification system ensures that all code committed to Altus 4 meets our high standards for quality, security, and maintainability.

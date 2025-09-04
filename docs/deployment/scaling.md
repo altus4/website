@@ -11,11 +11,11 @@ This guide covers strategies for scaling Altus 4 to handle increased traffic and
 
 Altus 4 is designed as a stateless application that can scale horizontally. The main components that need scaling consideration are:
 
-- __Application Servers__: Node.js instances handling API requests
-- __Database Layer__: MySQL connections and query performance
-- __Cache Layer__: Redis for session and result caching
-- __Load Balancing__: Request distribution and failover
-- __AI Services__: OpenAI API rate limiting and fallback handling
+- **Application Servers**: Node.js instances handling API requests
+- **Database Layer**: MySQL connections and query performance
+- **Cache Layer**: Redis for session and result caching
+- **Load Balancing**: Request distribution and failover
+- **AI Services**: OpenAI API rate limiting and fallback handling
 
 ## Scaling Metrics
 
@@ -23,12 +23,12 @@ Altus 4 is designed as a stateless application that can scale horizontally. The 
 
 Monitor these metrics to determine when scaling is needed:
 
-- __Response Time__: Average and P95 response times
-- __Request Rate__: Requests per second (RPS)
-- __Error Rate__: Percentage of failed requests
-- __Database Performance__: Query execution time and connection usage
-- __Cache Hit Rate__: Redis cache effectiveness
-- __Resource Utilization__: CPU, memory, and network usage
+- **Response Time**: Average and P95 response times
+- **Request Rate**: Requests per second (RPS)
+- **Error Rate**: Percentage of failed requests
+- **Database Performance**: Query execution time and connection usage
+- **Cache Hit Rate**: Redis cache effectiveness
+- **Resource Utilization**: CPU, memory, and network usage
 
 ### Scaling Triggers
 
@@ -175,7 +175,7 @@ services:
     networks:
       - altus4-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -230,31 +230,31 @@ spec:
   minReplicas: 3
   maxReplicas: 20
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
   behavior:
     scaleUp:
       stabilizationWindowSeconds: 60
       policies:
-      - type: Percent
-        value: 100
-        periodSeconds: 15
+        - type: Percent
+          value: 100
+          periodSeconds: 15
     scaleDown:
       stabilizationWindowSeconds: 180
       policies:
-      - type: Percent
-        value: 10
-        periodSeconds: 60
+        - type: Percent
+          value: 10
+          periodSeconds: 60
 ```
 
 #### Vertical Pod Autoscaler
@@ -270,16 +270,16 @@ spec:
     kind: Deployment
     name: altus4-api
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: 'Auto'
   resourcePolicy:
     containerPolicies:
-    - containerName: altus4-api
-      maxAllowed:
-        cpu: 2
-        memory: 4Gi
-      minAllowed:
-        cpu: 100m
-        memory: 128Mi
+      - containerName: altus4-api
+        maxAllowed:
+          cpu: 2
+          memory: 4Gi
+        minAllowed:
+          cpu: 100m
+          memory: 128Mi
 ```
 
 ## Database Scaling
@@ -326,7 +326,7 @@ class DatabaseService {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       connectionLimit: 20,
-      queueLimit: 50
+      queueLimit: 50,
     });
 
     // Read pools (slaves)
@@ -334,16 +334,20 @@ class DatabaseService {
       mysql.createPool({
         host: process.env.DB_READ_HOST_1,
         // ... similar configuration with lower connection limit
-        connectionLimit: 10
+        connectionLimit: 10,
       }),
       mysql.createPool({
         host: process.env.DB_READ_HOST_2,
-        connectionLimit: 10
-      })
+        connectionLimit: 10,
+      }),
     ];
   }
 
-  async executeQuery(query: string, params: any[], forceWrite = false): Promise<any> {
+  async executeQuery(
+    query: string,
+    params: any[],
+    forceWrite = false
+  ): Promise<any> {
     const isWriteOperation = forceWrite || this.isWriteQuery(query);
     const pool = isWriteOperation ? this.writePool : this.getReadPool();
 
@@ -356,7 +360,14 @@ class DatabaseService {
   }
 
   private isWriteQuery(query: string): boolean {
-    const writeKeywords = ['INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP', 'ALTER'];
+    const writeKeywords = [
+      'INSERT',
+      'UPDATE',
+      'DELETE',
+      'CREATE',
+      'DROP',
+      'ALTER',
+    ];
     return writeKeywords.some(keyword =>
       query.trim().toUpperCase().startsWith(keyword)
     );
@@ -396,11 +407,13 @@ class ConnectionPoolManager {
 
   private calculatePoolSize(config: DatabaseConfig): PoolConfig {
     const baseCPUs = os.cpus().length;
-    const expectedConcurrency = parseInt(process.env.EXPECTED_CONCURRENCY || '100');
+    const expectedConcurrency = parseInt(
+      process.env.EXPECTED_CONCURRENCY || '100'
+    );
 
     return {
       max: Math.min(baseCPUs * 2, Math.ceil(expectedConcurrency / 10)),
-      queue: expectedConcurrency * 2
+      queue: expectedConcurrency * 2,
     };
   }
 }
@@ -434,21 +447,24 @@ class CacheService {
   private redis: Redis.Cluster;
 
   constructor() {
-    this.redis = new Redis.Cluster([
-      { host: '127.0.0.1', port: 7000 },
-      { host: '127.0.0.1', port: 7001 },
-      { host: '127.0.0.1', port: 7002 },
-    ], {
-      clusterRetryDelayOnFailover: 100,
-      maxRetriesPerRequest: 3,
-      retryDelayOnFailover: 100,
-      enableOfflineQueue: false,
-      redisOptions: {
-        password: process.env.REDIS_PASSWORD,
-        connectTimeout: 1000,
-        commandTimeout: 5000,
+    this.redis = new Redis.Cluster(
+      [
+        { host: '127.0.0.1', port: 7000 },
+        { host: '127.0.0.1', port: 7001 },
+        { host: '127.0.0.1', port: 7002 },
+      ],
+      {
+        clusterRetryDelayOnFailover: 100,
+        maxRetriesPerRequest: 3,
+        retryDelayOnFailover: 100,
+        enableOfflineQueue: false,
+        redisOptions: {
+          password: process.env.REDIS_PASSWORD,
+          connectTimeout: 1000,
+          commandTimeout: 5000,
+        },
       }
-    });
+    );
   }
 
   async get(key: string): Promise<string | null> {
@@ -489,7 +505,10 @@ class DatabaseConnectionManager {
   private pools: Map<string, mysql.Pool> = new Map();
   private healthChecks: Map<string, NodeJS.Timeout> = new Map();
 
-  async createPool(databaseId: string, config: DatabaseConfig): Promise<mysql.Pool> {
+  async createPool(
+    databaseId: string,
+    config: DatabaseConfig
+  ): Promise<mysql.Pool> {
     const pool = mysql.createPool({
       ...config,
       connectionLimit: this.calculateConnectionLimit(),
@@ -510,7 +529,7 @@ class DatabaseConnectionManager {
 
   private calculateConnectionLimit(): number {
     const cpuCores = os.cpus().length;
-    const memoryGB = Math.floor(os.totalmem() / (1024 ** 3));
+    const memoryGB = Math.floor(os.totalmem() / 1024 ** 3);
     const baseConnections = Math.max(cpuCores * 2, 10);
 
     // Scale based on available memory
@@ -543,11 +562,13 @@ class AIService {
   constructor() {
     this.rateLimiter = new RateLimiter({
       tokensPerInterval: 60,
-      interval: 'minute'
+      interval: 'minute',
     });
   }
 
-  async enhanceSearchResults(results: SearchResult[]): Promise<EnhancedResult[]> {
+  async enhanceSearchResults(
+    results: SearchResult[]
+  ): Promise<EnhancedResult[]> {
     // Check rate limit
     const allowed = await this.rateLimiter.removeTokens(1);
     if (!allowed) {
@@ -574,7 +595,7 @@ class AIService {
     return results.map(result => ({
       ...result,
       category: this.basicCategorization(result),
-      summary: this.extractSummary(result.content)
+      summary: this.extractSummary(result.content),
     }));
   }
 }
@@ -594,26 +615,26 @@ class MetricsCollector {
       name: 'altus4_request_duration_seconds',
       help: 'Duration of HTTP requests in seconds',
       labelNames: ['method', 'route', 'status_code'],
-      buckets: [0.1, 0.5, 1, 2, 5, 10]
+      buckets: [0.1, 0.5, 1, 2, 5, 10],
     });
 
     this.activeConnections = new this.prometheus.Gauge({
       name: 'altus4_database_connections_active',
       help: 'Number of active database connections',
-      labelNames: ['database_id']
+      labelNames: ['database_id'],
     });
 
     this.cacheHitRatio = new this.prometheus.Gauge({
       name: 'altus4_cache_hit_ratio',
       help: 'Cache hit ratio',
-      labelNames: ['cache_type']
+      labelNames: ['cache_type'],
     });
 
     this.searchLatency = new this.prometheus.Histogram({
       name: 'altus4_search_duration_seconds',
       help: 'Search operation duration',
       labelNames: ['search_mode', 'database_count'],
-      buckets: [0.05, 0.1, 0.25, 0.5, 1, 2.5, 5]
+      buckets: [0.05, 0.1, 0.25, 0.5, 1, 2.5, 5],
     });
   }
 }
@@ -631,7 +652,7 @@ class PerformanceBenchmark {
       averageLatency: 0,
       p95Latency: 0,
       p99Latency: 0,
-      throughput: 0
+      throughput: 0,
     };
 
     const startTime = Date.now();
@@ -711,11 +732,11 @@ class PerformanceBenchmark {
 
 ## Scaling Best Practices
 
-1. __Monitor First__: Establish comprehensive monitoring before scaling
-2. __Scale Gradually__: Increase capacity incrementally to validate changes
-3. __Test Scaling__: Use staging environments to test scaling configurations
-4. __Plan for Failures__: Implement circuit breakers and fallback mechanisms
-5. __Cache Aggressively__: Use multi-level caching to reduce database load
-6. __Optimize Queries__: Ensure all database queries are optimized before scaling
-7. __Monitor Costs__: Track infrastructure costs as you scale
-8. __Document Changes__: Keep scaling procedures documented and updated
+1. **Monitor First**: Establish comprehensive monitoring before scaling
+2. **Scale Gradually**: Increase capacity incrementally to validate changes
+3. **Test Scaling**: Use staging environments to test scaling configurations
+4. **Plan for Failures**: Implement circuit breakers and fallback mechanisms
+5. **Cache Aggressively**: Use multi-level caching to reduce database load
+6. **Optimize Queries**: Ensure all database queries are optimized before scaling
+7. **Monitor Costs**: Track infrastructure costs as you scale
+8. **Document Changes**: Keep scaling procedures documented and updated
