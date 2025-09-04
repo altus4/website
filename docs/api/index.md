@@ -359,4 +359,4 @@ print(data['data']['results'])
 
 ---
 
-**Need help?** Check out the [examples section](../examples/) for practical implementations or [report issues](https://github.com/yourusername/altus4/issues) if you find any problems.
+**Need help?** Check out the [examples section](../examples/) for practical implementations or [report issues](https://github.com/altus4/core/issues) if you find any problems.
