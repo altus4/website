@@ -131,7 +131,7 @@ jobs:
 
           ## View Documentation
 
-          **Live Documentation**: [https://altus4.github.io/docs](https://altus4.github.io/docs)
+          **Live Documentation**: [https://altus4.thavarshan.com/docs](https://altus4.thavarshan.com/docs)
 
           ## Auto-Synchronization
 
@@ -217,7 +217,7 @@ jobs:
               "type": "git",
               "url": "https://github.com/altus4/docs.git"
             },
-            "homepage": "https://altus4.github.io/docs",
+            "homepage": "https://altus4.thavarshan.com/docs",
             "devDependencies": {
               "vitepress": "^2.0.0-alpha.12"
             }
@@ -358,7 +358,7 @@ jobs:
           echo "**Source Commit**: [${{ steps.commit_info.outputs.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})" >> $GITHUB_STEP_SUMMARY
           echo "**Commit Message**: ${{ steps.commit_info.outputs.message }}" >> $GITHUB_STEP_SUMMARY
           echo "**Author**: ${{ steps.commit_info.outputs.author }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Documentation Site**: [https://altus4.github.io/docs](https://altus4.github.io/docs)" >> $GITHUB_STEP_SUMMARY
+          echo "**Documentation Site**: [https://altus4.thavarshan.com/docs](https://altus4.thavarshan.com/docs)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "The documentation will be automatically deployed to GitHub Pages within a few minutes." >> $GITHUB_STEP_SUMMARY
 
@@ -369,4 +369,4 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Status**: No changes detected in documentation" >> $GITHUB_STEP_SUMMARY
           echo "**Checked Paths**: \`docs/\`, \`README.md\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Current Documentation**: [https://altus4.github.io/docs](https://altus4.github.io/docs)" >> $GITHUB_STEP_SUMMARY
+          echo "**Current Documentation**: [https://altus4.thavarshan.com/docs](https://altus4.thavarshan.com/docs)" >> $GITHUB_STEP_SUMMARY
