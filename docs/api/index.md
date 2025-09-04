@@ -40,7 +40,7 @@ Authorization: Bearer <your-api-key>
 | `GET`    | `/api/keys/:id/usage`      | Get API key usage stats | API Key       |
 | `POST`   | `/api/keys/:id/regenerate` | Regenerate API key      | API Key       |
 
-[**→ Complete API Key Authentication Guide**](../setup/index.md#api-key-setup)
+[**→ Complete API Key Authentication Guide**](./authentication.md)
 
 ## Database Management
 
@@ -59,7 +59,7 @@ Manage MySQL database connections for searching.
 | `GET`    | `/api/databases/:id/schema` | Get database schema        | API Key       |
 | `GET`    | `/api/databases/:id/status` | Get connection status      | API Key       |
 
-[**Complete Database Documentation**](../services/index.md#databaseservice)
+[**Complete Database Documentation**](./database.md)
 
 ## Search Operations
 
@@ -75,7 +75,7 @@ Execute searches across connected databases with AI enhancements.
 | `GET`  | `/api/search/history`     | Get search history        | API Key       |
 | `GET`  | `/api/search/trends`      | Get user search trends    | API Key       |
 
-[**Complete Search Documentation**](../services/search-service.md)
+[**Complete Search Documentation**](./search.md)
 
 ## Analytics & Insights
 
@@ -93,7 +93,7 @@ Access search analytics, performance metrics, and trend data.
 | `GET`  | `/api/analytics/overview`        | Get system overview       | API Key       |
 | `GET`  | `/api/analytics/user-activity`   | Get user activity metrics | API Key       |
 
-[**Complete Analytics Documentation**](../services/index.md#analytics-and-insights)
+[**Complete Analytics Documentation**](./analytics.md)
 
 ## System Endpoints
 
@@ -114,19 +114,19 @@ All API responses follow this structure:
 
 ```typescript
 interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
+  success: boolean
+  data?: T
   error?: {
-    code: string;
-    message: string;
-    details?: any;
-  };
+    code: string
+    message: string
+    details?: any
+  }
   meta?: {
-    timestamp: Date;
-    requestId: string;
-    version: string;
-    executionTime?: number;
-  };
+    timestamp: Date
+    requestId: string
+    version: string
+    executionTime?: number
+  }
 }
 ```
 
@@ -199,7 +199,7 @@ interface ApiResponse<T> {
 | `AI_SERVICE_ERROR`         | 500         | OpenAI API error                      |
 | `INTERNAL_ERROR`           | 500         | Unexpected server error               |
 
-[**Complete Error Documentation**](#error-handling)
+[**Complete Error Documentation**](./errors.md)
 
 ## Rate Limiting
 
@@ -300,10 +300,10 @@ const response = await fetch('http://localhost:3000/api/search', {
     searchMode: 'natural',
     limit: 10,
   }),
-});
+})
 
-const result = await response.json();
-console.log(result.data.results);
+const result = await response.json()
+console.log(result.data.results)
 ```
 
 ### Python Examples
@@ -332,12 +332,12 @@ print(data['data']['results'])
 
 ## Related Documentation
 
-- **[API Key Authentication Guide](../setup/index.md#api-key-setup)** - Complete API key setup and usage
-- **[Database Management](../services/index.md#databaseservice)** - Managing database connections
-- **[Search Operations](../services/search-service.md)** - Search API and features
-- **[Analytics API](../services/index.md#analytics-and-insights)** - Analytics and insights
+- **[API Key Authentication Guide](./authentication.md)** - Complete API key setup and usage
+- **[Database Management](./database.md)** - Managing database connections
+- **[Search Operations](./search.md)** - Search API and features
+- **[Analytics API](./analytics.md)** - Analytics and insights
 - **[Request/Response Schemas](#request-response-examples)** - Complete type definitions
-- **[Error Handling](#error-handling)** - Error codes and troubleshooting
+- **[Error Handling](./errors.md)** - Error codes and troubleshooting
 
 ## API Testing
 
@@ -359,4 +359,4 @@ print(data['data']['results'])
 
 ---
 
-**Need help?** Check out the [examples section](../examples/index.md) for practical implementations or [report issues](https://github.com/altus4/website/issues) if you find any problems.
+**Need help?** Check out the [examples section](../examples/) for practical implementations or [report issues](https://github.com/yourusername/altus4/issues) if you find any problems.

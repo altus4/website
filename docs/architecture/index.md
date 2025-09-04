@@ -146,8 +146,8 @@ Data access is abstracted through service interfaces:
 
 ```typescript
 interface IUserService {
-  getUserById(id: string): Promise<User>;
-  createUser(userData: CreateUserRequest): Promise<User>;
+  getUserById(id: string): Promise<User>
+  createUser(userData: CreateUserRequest): Promise<User>
 }
 ```
 
@@ -156,17 +156,17 @@ interface IUserService {
 Different search modes implemented as strategies:
 
 ```typescript
-type SearchMode = 'natural' | 'boolean' | 'semantic';
+type SearchMode = 'natural' | 'boolean' | 'semantic'
 
 class SearchService {
   private getSearchStrategy(mode: SearchMode): SearchStrategy {
     switch (mode) {
       case 'natural':
-        return new NaturalSearchStrategy();
+        return new NaturalSearchStrategy()
       case 'boolean':
-        return new BooleanSearchStrategy();
+        return new BooleanSearchStrategy()
       case 'semantic':
-        return new SemanticSearchStrategy();
+        return new SemanticSearchStrategy()
     }
   }
 }
@@ -179,10 +179,10 @@ Event-driven analytics and monitoring:
 ```typescript
 class SearchService extends EventEmitter {
   async search(request: SearchRequest): Promise<SearchResponse> {
-    this.emit('search:started', request);
-    const result = await this.performSearch(request);
-    this.emit('search:completed', { request, result });
-    return result;
+    this.emit('search:started', request)
+    const result = await this.performSearch(request)
+    this.emit('search:completed', { request, result })
+    return result
   }
 }
 ```
@@ -376,8 +376,8 @@ class AppError extends Error {
     public statusCode: number = 500,
     public details?: any
   ) {
-    super(message);
-    this.name = 'AppError';
+    super(message)
+    this.name = 'AppError'
   }
 }
 
@@ -388,10 +388,10 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  const statusCode = error instanceof AppError ? error.statusCode : 500;
-  const code = error instanceof AppError ? error.code : 'INTERNAL_ERROR';
+  const statusCode = error instanceof AppError ? error.statusCode : 500
+  const code = error instanceof AppError ? error.code : 'INTERNAL_ERROR'
 
-  logger.error('Request failed:', { error, request: req.body });
+  logger.error('Request failed:', { error, request: req.body })
 
   res.status(statusCode).json({
     success: false,
@@ -404,8 +404,8 @@ export const errorHandler = (
       timestamp: new Date().toISOString(),
       requestId: req.headers['x-request-id'],
     },
-  });
-};
+  })
+}
 ```
 
 ## Monitoring & Observability
@@ -428,25 +428,25 @@ export const errorHandler = (
 ```typescript
 interface Metrics {
   requests: {
-    total: number;
-    successful: number;
-    failed: number;
-    averageResponseTime: number;
-  };
+    total: number
+    successful: number
+    failed: number
+    averageResponseTime: number
+  }
   searches: {
-    total: number;
-    cacheHits: number;
-    averageExecutionTime: number;
-  };
+    total: number
+    cacheHits: number
+    averageExecutionTime: number
+  }
   database: {
-    activeConnections: number;
-    queryCount: number;
-    averageQueryTime: number;
-  };
+    activeConnections: number
+    queryCount: number
+    averageQueryTime: number
+  }
   cache: {
-    hitRate: number;
-    memoryUsage: number;
-  };
+    hitRate: number
+    memoryUsage: number
+  }
 }
 ```
 
@@ -457,32 +457,32 @@ interface Metrics {
 ```typescript
 interface Config {
   server: {
-    port: number;
-    environment: 'development' | 'production' | 'test';
-  };
+    port: number
+    environment: 'development' | 'production' | 'test'
+  }
   database: {
-    host: string;
-    port: number;
-    username: string;
-    password: string;
-    database: string;
-    connectionLimit: number;
-  };
+    host: string
+    port: number
+    username: string
+    password: string
+    database: string
+    connectionLimit: number
+  }
   cache: {
-    host: string;
-    port: number;
-    password?: string;
-  };
+    host: string
+    port: number
+    password?: string
+  }
   security: {
-    jwtSecret: string;
-    jwtExpiresIn: string;
-    bcryptRounds: number;
-  };
+    jwtSecret: string
+    jwtExpiresIn: string
+    bcryptRounds: number
+  }
   ai: {
-    openaiApiKey: string;
-    model: string;
-    maxTokens: number;
-  };
+    openaiApiKey: string
+    model: string
+    maxTokens: number
+  }
 }
 ```
 

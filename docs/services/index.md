@@ -59,7 +59,7 @@ The core search orchestration engine that coordinates multi-database searches wi
 - AI service integration patterns
 - Error handling and fallback mechanisms
 
-### DatabaseService
+### [DatabaseService](./database-service.md)
 
 MySQL database connection management and query execution service.
 
@@ -78,7 +78,7 @@ MySQL database connection management and query execution service.
 - Schema introspection and metadata extraction
 - Security patterns for credential handling
 
-### AIService
+### [AIService](./ai-service.md)
 
 OpenAI integration service for AI-enhanced search capabilities.
 
@@ -97,7 +97,7 @@ OpenAI integration service for AI-enhanced search capabilities.
 - Error handling for external API failures
 - Rate limiting and quota management
 
-### CacheService
+### [CacheService](./cache-service.md)
 
 Redis-based caching and analytics service for performance optimization.
 
@@ -116,7 +116,7 @@ Redis-based caching and analytics service for performance optimization.
 - Analytics data modeling
 - Performance monitoring patterns
 
-### UserService
+### [UserService](./user-service.md)
 
 User management service handling account lifecycle and basic authentication.
 
@@ -133,7 +133,7 @@ User management service handling account lifecycle and basic authentication.
 - User data validation and sanitization
 - Security best practices
 
-### ApiKeyService
+### [ApiKeyService](./apikey-service.md)
 
 API key management service for B2B authentication and authorization.
 
@@ -174,11 +174,11 @@ Services use structured error handling with custom error types:
 
 ```typescript
 try {
-  const results = await this.databaseService.executeSearch(query);
-  return results;
+  const results = await this.databaseService.executeSearch(query)
+  return results
 } catch (error) {
-  logger.error('Search failed:', error);
-  throw new AppError('SEARCH_FAILED', 'Search operation failed', 500);
+  logger.error('Search failed:', error)
+  throw new AppError('SEARCH_FAILED', 'Search operation failed', 500)
 }
 ```
 
@@ -188,12 +188,12 @@ Complex operations use Promise.allSettled for graceful failure handling:
 
 ```typescript
 const searchPromises = databases.map(async dbId => {
-  return this.executeSearchOnDatabase(dbId, query, options);
-});
+  return this.executeSearchOnDatabase(dbId, query, options)
+})
 
-const results = await Promise.allSettled(searchPromises);
-const successful = results.filter(r => r.status === 'fulfilled');
-const failed = results.filter(r => r.status === 'rejected');
+const results = await Promise.allSettled(searchPromises)
+const successful = results.filter(r => r.status === 'fulfilled')
+const failed = results.filter(r => r.status === 'rejected')
 ```
 
 ### Caching Strategy
@@ -202,14 +202,14 @@ Services implement intelligent caching with TTL and invalidation:
 
 ```typescript
 // Check cache first
-const cacheKey = this.generateCacheKey(request);
-const cached = await this.cacheService.get(cacheKey);
-if (cached) return cached;
+const cacheKey = this.generateCacheKey(request)
+const cached = await this.cacheService.get(cacheKey)
+if (cached) return cached
 
 // Execute operation and cache result
-const result = await this.performOperation(request);
-await this.cacheService.set(cacheKey, result, 300); // 5 min TTL
-return result;
+const result = await this.performOperation(request)
+await this.cacheService.set(cacheKey, result, 300) // 5 min TTL
+return result
 ```
 
 ## Testing Services
@@ -220,27 +220,27 @@ Each service has comprehensive unit tests with mocked dependencies:
 
 ```typescript
 describe('SearchService', () => {
-  let searchService: SearchService;
-  let mockDatabaseService: jest.Mocked<DatabaseService>;
-  let mockAIService: jest.Mocked<AIService>;
-  let mockCacheService: jest.Mocked<CacheService>;
+  let searchService: SearchService
+  let mockDatabaseService: jest.Mocked<DatabaseService>
+  let mockAIService: jest.Mocked<AIService>
+  let mockCacheService: jest.Mocked<CacheService>
 
   beforeEach(() => {
-    mockDatabaseService = createMockDatabaseService();
-    mockAIService = createMockAIService();
-    mockCacheService = createMockCacheService();
+    mockDatabaseService = createMockDatabaseService()
+    mockAIService = createMockAIService()
+    mockCacheService = createMockCacheService()
 
     searchService = new SearchService(
       mockDatabaseService,
       mockAIService,
       mockCacheService
-    );
-  });
+    )
+  })
 
   it('should perform search successfully', async () => {
     // Test implementation
-  });
-});
+  })
+})
 ```
 
 ### Integration Testing
@@ -249,15 +249,15 @@ Services are tested with real dependencies in integration tests:
 
 ```typescript
 describe('SearchService Integration', () => {
-  let searchService: SearchService;
-  let databaseService: DatabaseService;
+  let searchService: SearchService
+  let databaseService: DatabaseService
 
   beforeAll(async () => {
     // Setup real database connection for integration testing
-    databaseService = new DatabaseService();
+    databaseService = new DatabaseService()
     // ... other real services
-  });
-});
+  })
+})
 ```
 
 ## Service Metrics
@@ -291,29 +291,29 @@ Services communicate through well-defined interfaces:
 export class SearchService {
   async search(request: SearchRequest): Promise<SearchResponse> {
     // 1. Check cache
-    const cached = await this.cacheService.get(cacheKey);
-    if (cached) return cached;
+    const cached = await this.cacheService.get(cacheKey)
+    if (cached) return cached
 
     // 2. Process with AI (if enabled)
-    let processedQuery = request.query;
+    let processedQuery = request.query
     if (request.searchMode === 'semantic') {
-      const aiResult = await this.aiService.processQuery(request.query);
-      processedQuery = aiResult.optimizedQuery;
+      const aiResult = await this.aiService.processQuery(request.query)
+      processedQuery = aiResult.optimizedQuery
     }
 
     // 3. Execute database searches
     const results = await this.databaseService.executeSearch(
       processedQuery,
       request.databases
-    );
+    )
 
     // 4. Enhance results with AI
-    const categorized = await this.aiService.categorizeResults(results);
+    const categorized = await this.aiService.categorizeResults(results)
 
     // 5. Cache and return
-    const response = { results: categorized /* ... */ };
-    await this.cacheService.set(cacheKey, response, ttl);
-    return response;
+    const response = { results: categorized /* ... */ }
+    await this.cacheService.set(cacheKey, response, ttl)
+    return response
   }
 }
 ```
@@ -332,7 +332,7 @@ When adding a new service:
 
 ```typescript
 export interface INewService {
-  methodName(params: ParamType): Promise<ReturnType>;
+  methodName(params: ParamType): Promise<ReturnType>
 }
 
 export class NewService implements INewService {
@@ -344,10 +344,10 @@ export class NewService implements INewService {
   async methodName(params: ParamType): Promise<ReturnType> {
     try {
       // Implementation
-      return result;
+      return result
     } catch (error) {
-      logger.error('Operation failed:', error);
-      throw new AppError('OPERATION_FAILED', error.message);
+      logger.error('Operation failed:', error)
+      throw new AppError('OPERATION_FAILED', error.message)
     }
   }
 }
@@ -358,7 +358,7 @@ export class NewService implements INewService {
 **Next Steps:**
 
 - [Deep dive into SearchService](./search-service.md)
-- [Understanding DatabaseService](#databaseservice)
-- [AI Integration Patterns](#aiservice)
-- [Caching Strategies](#cacheservice)
-- [Authentication Flows](#userservice)
+- [Understanding DatabaseService](./database-service.md)
+- [AI Integration Patterns](./ai-service.md)
+- [Caching Strategies](./cache-service.md)
+- [Authentication Flows](./user-service.md)
