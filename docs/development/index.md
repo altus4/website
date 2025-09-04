@@ -15,15 +15,15 @@ This guide covers everything developers need to know to contribute effectively t
 
 Before contributing to Altus 4, ensure you have:
 
-- **Node.js 18+** with npm 8+
-- **MySQL 8.0+** for database operations
-- **Redis 6.0+** for caching
-- **Git** for version control
-- **IDE** with TypeScript support (VS Code recommended)
+- __Node.js 18+__ with npm 8+
+- __MySQL 8.0+__ for database operations
+- __Redis 6.0+__ for caching
+- __Git__ for version control
+- __IDE__ with TypeScript support (VS Code recommended)
 
 ### Development Environment Setup
 
-1. **Fork and Clone the Repository**
+1. __Fork and Clone the Repository__
 
 ```bash
 # Fork the repository on GitHub, then clone your fork
@@ -34,7 +34,7 @@ cd altus4
 git remote add upstream https://github.com/original/altus4.git
 ```
 
-1. **Install Dependencies**
+1. __Install Dependencies__
 
 ```bash
 # Install all dependencies
@@ -44,7 +44,7 @@ npm install
 npm run type-check
 ```
 
-1. **Configure Environment**
+1. __Configure Environment__
 
 ```bash
 # Copy development environment template
@@ -54,7 +54,7 @@ cp .env.example .env.development
 # Use different ports/databases for development
 ```
 
-1. **Setup Development Database**
+1. __Setup Development Database__
 
 ```sql
 -- Create development database
@@ -70,7 +70,7 @@ GRANT ALL PRIVILEGES ON altus4_test.* TO 'altus4_dev'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-1. **Run Database Migrations**
+1. __Run Database Migrations__
 
 ```bash
 # Apply all migrations to development database
@@ -80,7 +80,7 @@ npm run migrate
 npm run migrate:status
 ```
 
-1. **Start Development Server**
+1. __Start Development Server__
 
 ```bash
 # Start in development mode with hot reload
@@ -186,17 +186,17 @@ npm run format
 
 ### Code Organization Principles
 
-1. **Single Responsibility**: Each class/function has one clear purpose
-2. **Dependency Injection**: Use constructor injection for dependencies
-3. **Interface Segregation**: Prefer small, focused interfaces
-4. **DRY (Don't Repeat Yourself)**: Extract common functionality
-5. **SOLID Principles**: Follow object-oriented design principles
+1. __Single Responsibility__: Each class/function has one clear purpose
+2. __Dependency Injection__: Use constructor injection for dependencies
+3. __Interface Segregation__: Prefer small, focused interfaces
+4. __DRY (Don't Repeat Yourself)__: Extract common functionality
+5. __SOLID Principles__: Follow object-oriented design principles
 
 ## Development Workflow
 
 ### Git Workflow
 
-We follow the **GitHub Flow** with feature branches:
+We follow the __GitHub Flow__ with feature branches:
 
 ```bash
 # Always start from latest main
@@ -218,7 +218,7 @@ git push origin feature/search-optimization
 
 ### Commit Message Format
 
-We follow the **Conventional Commits** specification:
+We follow the __Conventional Commits__ specification:
 
 ```text
 <type>[optional scope]: <description>
@@ -228,7 +228,7 @@ We follow the **Conventional Commits** specification:
 [optional footer]
 ```
 
-**Types:**
+__Types:__
 
 - `feat`: New feature
 - `fix`: Bug fix
@@ -238,7 +238,7 @@ We follow the **Conventional Commits** specification:
 - `test`: Adding or modifying tests
 - `chore`: Maintenance tasks
 
-**Examples:**
+__Examples:__
 
 ```bash
 feat(search): add semantic search capability
@@ -261,13 +261,13 @@ refactor(database): optimize connection pooling
 
 ### Feature Development Process
 
-1. **Planning & Design**
+1. __Planning & Design__
    - Create or reference GitHub issue
    - Design API endpoints if needed
    - Plan database schema changes
    - Consider performance implications
 
-2. **Implementation Steps**
+2. __Implementation Steps__
    - Add TypeScript types
    - Implement service layer
    - Add controller methods
@@ -275,7 +275,7 @@ refactor(database): optimize connection pooling
    - Add middleware if needed
    - Write comprehensive tests
 
-3. **Testing & Documentation**
+3. __Testing & Documentation__
    - Unit tests for new services
    - Integration tests for new endpoints
    - Update API documentation
@@ -283,7 +283,7 @@ refactor(database): optimize connection pooling
 
 ### Example: Adding a New Service
 
-1. **Define TypeScript Interface**
+1. __Define TypeScript Interface__
 
 ```typescript
 // src/types/index.ts
@@ -300,7 +300,7 @@ export interface AnalyticsReport {
 }
 ```
 
-1. **Implement Service Class**
+1. __Implement Service Class__
 
 ```typescript
 // src/services/AnalyticsService.ts
@@ -349,7 +349,7 @@ export class AnalyticsService implements IAnalyticsService {
 }
 ```
 
-1. **Add Controller Methods**
+1. __Add Controller Methods__
 
 ```typescript
 // src/controllers/AnalyticsController.ts
@@ -384,7 +384,7 @@ export class AnalyticsController {
 }
 ```
 
-1. **Add API Routes**
+1. __Add API Routes__
 
 ```typescript
 // src/routes/analytics.ts
@@ -415,7 +415,7 @@ router.get(
 export default router
 ```
 
-1. **Write Tests**
+1. __Write Tests__
 
 ```typescript
 // src/services/AnalyticsService.test.ts
@@ -454,7 +454,7 @@ describe('AnalyticsService', () => {
 
 ### Development Debugging
 
-**VS Code Launch Configuration:**
+__VS Code Launch Configuration:__
 
 ```json
 // .vscode/launch.json
@@ -488,7 +488,7 @@ describe('AnalyticsService', () => {
 }
 ```
 
-**Debug Commands:**
+__Debug Commands:__
 
 ```bash
 # Debug with Node.js inspector
@@ -542,7 +542,7 @@ try {
 
 ### Database Optimization
 
-1. **Use Connection Pooling**
+1. __Use Connection Pooling__
 
 ```typescript
 // Proper connection management
@@ -560,7 +560,7 @@ export class DatabaseService {
 }
 ```
 
-1. **Optimize Queries**
+1. __Optimize Queries__
 
 ```typescript
 // Use prepared statements
@@ -575,7 +575,7 @@ const query = 'SELECT id, name, email FROM users WHERE id = ?'
 // CREATE FULLTEXT INDEX idx_content_search ON articles(title, content);
 ```
 
-1. **Implement Caching Strategies**
+1. __Implement Caching Strategies__
 
 ```typescript
 // Multi-level caching
@@ -602,7 +602,7 @@ async getCachedData(key: string): Promise<any> {
 
 ### Memory Management
 
-1. **Avoid Memory Leaks**
+1. __Avoid Memory Leaks__
 
 ```typescript
 // Properly close connections
@@ -620,7 +620,7 @@ const timer = setInterval(() => {}, 1000);
 clearInterval(timer);
 ```
 
-1. **Monitor Memory Usage**
+1. __Monitor Memory Usage__
 
 ```typescript
 // Memory usage monitoring
@@ -976,20 +976,20 @@ Update OpenAPI specification for new endpoints:
 
 ### Before Submitting
 
-1. **Code Quality Checklist**
+1. __Code Quality Checklist__
    - [ ] Code follows style guidelines
    - [ ] All tests pass
    - [ ] Test coverage meets requirements
    - [ ] No linting errors
    - [ ] Documentation updated
 
-2. **Testing Checklist**
+2. __Testing Checklist__
    - [ ] Unit tests for new functionality
    - [ ] Integration tests for new endpoints
    - [ ] Manual testing completed
    - [ ] Edge cases considered
 
-3. **Documentation Checklist**
+3. __Documentation Checklist__
    - [ ] Code comments added
    - [ ] API documentation updated
    - [ ] README updated if needed
@@ -1025,10 +1025,10 @@ Brief description of changes made.
 
 ### Review Process
 
-1. **Automated Checks** - CI pipeline runs tests and linting
-2. **Peer Review** - At least one team member reviews the code
-3. **Integration Testing** - Changes tested in staging environment
-4. **Approval** - Maintainer approves and merges
+1. __Automated Checks__ - CI pipeline runs tests and linting
+2. __Peer Review__ - At least one team member reviews the code
+3. __Integration Testing__ - Changes tested in staging environment
+4. __Approval__ - Maintainer approves and merges
 
 ## Release Process
 
@@ -1036,9 +1036,9 @@ Brief description of changes made.
 
 We follow [SemVer](https://semver.org/):
 
-- **MAJOR**: Breaking changes (1.0.0 → 2.0.0)
-- **MINOR**: New features (1.0.0 → 1.1.0)
-- **PATCH**: Bug fixes (1.0.0 → 1.0.1)
+- __MAJOR__: Breaking changes (1.0.0 → 2.0.0)
+- __MINOR__: New features (1.0.0 → 1.1.0)
+- __PATCH__: Bug fixes (1.0.0 → 1.0.1)
 
 ### Release Workflow
 
@@ -1069,10 +1069,10 @@ npm run deploy:production
 
 ### Getting Help
 
-- **Documentation**: Start with this guide and API docs
-- **GitHub Issues**: Report bugs and request features
-- **Discussions**: Ask questions and share ideas
-- **Discord**: Real-time community chat (link in README)
+- __Documentation__: Start with this guide and API docs
+- __GitHub Issues__: Report bugs and request features
+- __Discussions__: Ask questions and share ideas
+- __Discord__: Real-time community chat (link in README)
 
 ### Contributing Guidelines
 
@@ -1084,4 +1084,4 @@ npm run deploy:production
 
 ---
 
-**Thank you for contributing to Altus 4! Your efforts help make MySQL search intelligent and accessible for everyone.**
+__Thank you for contributing to Altus 4! Your efforts help make MySQL search intelligent and accessible for everyone.__

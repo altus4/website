@@ -89,14 +89,14 @@ Authentication-related failures involving API keys or tokens.
 }
 ```
 
-**Common Causes:**
+__Common Causes:__
 
 - API key was revoked or deleted
 - Incorrect API key format
 - Typo in API key
 - Using test key in production environment
 
-**Resolution:**
+__Resolution:__
 
 1. Verify API key format and correctness
 2. Check if key was revoked in dashboard
@@ -141,13 +141,13 @@ Permission and access-related failures.
 }
 ```
 
-**Common Causes:**
+__Common Causes:__
 
 - API key missing required permission scope
 - Tier limitations (free tier restrictions)
 - Attempting admin operations with limited key
 
-**Resolution:**
+__Resolution:__
 
 1. Update API key permissions
 2. Use API key with appropriate permissions
@@ -193,7 +193,7 @@ Request validation and formatting errors.
 }
 ```
 
-**Common Validation Errors:**
+__Common Validation Errors:__
 
 | Field | Error | Description |
 |-------|-------|-------------|
@@ -620,16 +620,16 @@ except Exception as e:
 
 #### Authentication Issues
 
-**Problem**: `INVALID_API_KEY` error
-**Solutions**:
+__Problem__: `INVALID_API_KEY` error
+__Solutions__:
 
 1. Verify API key format: `altus4_sk_(live|test)_[token]`
 2. Check for typos or extra spaces
 3. Ensure using correct environment (live vs test)
 4. Verify key hasn't been revoked
 
-**Problem**: `INSUFFICIENT_PERMISSIONS` error
-**Solutions**:
+__Problem__: `INSUFFICIENT_PERMISSIONS` error
+__Solutions__:
 
 1. Check required permissions for the endpoint
 2. Update API key permissions
@@ -638,16 +638,16 @@ except Exception as e:
 
 #### Connection Issues
 
-**Problem**: `DATABASE_ERROR` - connection timeout
-**Solutions**:
+__Problem__: `DATABASE_ERROR` - connection timeout
+__Solutions__:
 
 1. Check database server status
 2. Verify network connectivity
 3. Check database connection settings
 4. Review database server logs
 
-**Problem**: `AI_SERVICE_ERROR` - OpenAI API issues
-**Solutions**:
+__Problem__: `AI_SERVICE_ERROR` - OpenAI API issues
+__Solutions__:
 
 1. Check OpenAI service status
 2. Verify API key has sufficient credits
@@ -656,16 +656,16 @@ except Exception as e:
 
 #### Performance Issues
 
-**Problem**: Slow response times
-**Solutions**:
+__Problem__: Slow response times
+__Solutions__:
 
 1. Check database indexes and optimization
 2. Review query complexity
 3. Enable caching
 4. Monitor database performance
 
-**Problem**: High error rates
-**Solutions**:
+__Problem__: High error rates
+__Solutions__:
 
 1. Review error patterns in logs
 2. Check database connectivity
@@ -676,11 +676,11 @@ except Exception as e:
 
 When reporting issues, include:
 
-1. **Request ID** from error response
-2. **Timestamp** of the error
-3. **API key prefix** (first 20 characters)
-4. **Complete error response**
-5. **Request parameters** (without sensitive data)
+1. __Request ID__ from error response
+2. __Timestamp__ of the error
+3. __API key prefix__ (first 20 characters)
+4. __Complete error response__
+5. __Request parameters__ (without sensitive data)
 
 ### Error Logging
 
@@ -712,12 +712,12 @@ const logError = (error, context = {}) => {
 
 Set up monitoring for:
 
-1. **Error Rates** - Alert when error rate exceeds threshold
-2. **Authentication Failures** - Monitor for potential security issues
-3. **Rate Limiting** - Track rate limit usage and patterns
-4. **Service Errors** - Alert on external service failures
-5. **Response Times** - Monitor performance degradation
+1. __Error Rates__ - Alert when error rate exceeds threshold
+2. __Authentication Failures__ - Monitor for potential security issues
+3. __Rate Limiting__ - Track rate limit usage and patterns
+4. __Service Errors__ - Alert on external service failures
+5. __Response Times__ - Monitor performance degradation
 
 ---
 
-**Next Steps**: [Rate Limiting](./rate-limiting.md) | [Search Operations](./search.md)
+__Next Steps__: [Rate Limiting](./rate-limiting.md) | [Search Operations](./search.md)

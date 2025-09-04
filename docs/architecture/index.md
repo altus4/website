@@ -8,7 +8,7 @@ description: Comprehensive documentation of Altus 4's system architecture, desig
 AI-Enhanced MySQL Search Engine Architecture
 
 ::: info Sync Test
-**Sync Test**: This documentation was updated on December 2024 to test automatic synchronization from `altus4/website` to `altus4/docs`.
+__Sync Test__: This documentation was updated on December 2024 to test automatic synchronization from `altus4/website` to `altus4/docs`.
 :::
 
 Altus 4 is built on a modern, scalable architecture that combines traditional database search with AI capabilities. This document covers the system design, patterns, and implementation details.
@@ -26,7 +26,7 @@ Altus 4 is built on a modern, scalable architecture that combines traditional da
 
 ## System Overview
 
-Altus 4 follows a **layered architecture** pattern optimized for scalability, maintainability, and testability:
+Altus 4 follows a __layered architecture__ pattern optimized for scalability, maintainability, and testability:
 
 ```mermaid
 graph TD
@@ -42,11 +42,11 @@ graph TD
 
 ### Architecture Principles
 
-- **Layered Design**: Clear separation of concerns
-- **🔌 Dependency Injection**: Loose coupling between components
-- **Async Processing**: Non-blocking operations throughout
-- **Event-Driven**: Analytics and monitoring via events
-- **Security-First**: Authentication and authorization at every layer
+- __Layered Design__: Clear separation of concerns
+- __🔌 Dependency Injection__: Loose coupling between components
+- __Async Processing__: Non-blocking operations throughout
+- __Event-Driven__: Analytics and monitoring via events
+- __Security-First__: Authentication and authorization at every layer
 
 ## Core Components
 
@@ -56,9 +56,9 @@ User-facing interfaces and integrations
 
 | Component                    | Description              | Technology            |
 | ---------------------------- | ------------------------ | --------------------- |
-| **Web UI**                   | Primary user interface   | Vue.js, Tailwind CSS  |
-| **Mobile Apps**              | iOS/Android applications | React Native (future) |
-| **Third-party Integrations** | API consumers            | REST API clients      |
+| __Web UI__                   | Primary user interface   | Vue.js, Tailwind CSS  |
+| __Mobile Apps__              | iOS/Android applications | React Native (future) |
+| __Third-party Integrations__ | API consumers            | REST API clients      |
 
 ### 🔌 API Layer
 
@@ -66,12 +66,12 @@ Request handling and middleware pipeline
 
 ::: details API Layer Components
 
-- **🌍 Express.js Server**: RESTful API endpoints with middleware pipeline
-- **Authentication**: API key-based authentication with tiered rate limiting
-- **Validation**: Zod schema validation for all endpoints
-- **Rate Limiting**: Redis-backed rate limiting per API key tier
-- **Error Handling**: Centralized error handling with structured responses
-- **Request Logging**: Comprehensive logging with correlation IDs
+- __🌍 Express.js Server__: RESTful API endpoints with middleware pipeline
+- __Authentication__: API key-based authentication with tiered rate limiting
+- __Validation__: Zod schema validation for all endpoints
+- __Rate Limiting__: Redis-backed rate limiting per API key tier
+- __Error Handling__: Centralized error handling with structured responses
+- __Request Logging__: Comprehensive logging with correlation IDs
 
 :::
 
@@ -81,11 +81,11 @@ Business logic and orchestration
 
 | Service             | Purpose                  | Key Features                           |
 | ------------------- | ------------------------ | -------------------------------------- |
-| **SearchService**   | Search orchestration     | Multi-database, AI integration         |
-| **DatabaseService** | MySQL operations         | Connection pooling, query optimization |
-| **AIService**       | AI integration           | OpenAI API, semantic search            |
-| **CacheService**    | Performance optimization | Redis caching, analytics               |
-| **UserService**     | User management          | Authentication, profiles               |
+| __SearchService__   | Search orchestration     | Multi-database, AI integration         |
+| __DatabaseService__ | MySQL operations         | Connection pooling, query optimization |
+| __AIService__       | AI integration           | OpenAI API, semantic search            |
+| __CacheService__    | Performance optimization | Redis caching, analytics               |
+| __UserService__     | User management          | Authentication, profiles               |
 
 ### Data Layer
 
@@ -134,9 +134,9 @@ export class SearchService {
 
 ::: tip Benefits
 
-- **Improved Testability**: Easy mocking for unit tests
-- **Flexible Composition**: Services can be easily swapped
-- **Clear Dependencies**: Explicit dependency relationships
+- __Improved Testability__: Easy mocking for unit tests
+- __Flexible Composition__: Services can be easily swapped
+- __Clear Dependencies__: Explicit dependency relationships
 
 :::
 
@@ -238,60 +238,60 @@ graph TD
 
 ### Authentication & Authorization
 
-- **API Keys**: Long-lived credentials for B2B service integration
-- **Tiered Permissions**: Scoped permissions per API key (search, analytics, admin)
-- **Environment Separation**: Test and live API key environments
-- **Role-based Access**: User roles for administrative access control
+- __API Keys__: Long-lived credentials for B2B service integration
+- __Tiered Permissions__: Scoped permissions per API key (search, analytics, admin)
+- __Environment Separation__: Test and live API key environments
+- __Role-based Access__: User roles for administrative access control
 
 ### Data Protection
 
-- **Credential Encryption**: Database credentials encrypted at rest
-- **SQL Injection Prevention**: Parameterized queries throughout
-- **Input Sanitization**: All user inputs validated and sanitized
-- **HTTPS Only**: TLS encryption for all API communications
+- __Credential Encryption__: Database credentials encrypted at rest
+- __SQL Injection Prevention__: Parameterized queries throughout
+- __Input Sanitization__: All user inputs validated and sanitized
+- __HTTPS Only__: TLS encryption for all API communications
 
 ### Rate Limiting
 
-- **Tiered Limits**: Rate limits based on API key tier (free/pro/enterprise)
-- **Per-API Key**: Individual rate limiting per API key
-- **Sliding Window**: Redis-based sliding window rate limiting
-- **Graceful Degradation**: Informative error responses with upgrade suggestions
+- __Tiered Limits__: Rate limits based on API key tier (free/pro/enterprise)
+- __Per-API Key__: Individual rate limiting per API key
+- __Sliding Window__: Redis-based sliding window rate limiting
+- __Graceful Degradation__: Informative error responses with upgrade suggestions
 
 ## Performance Architecture
 
 ### Caching Strategy
 
-- **Multi-level Caching**: L1 (in-memory) and L2 (Redis) caching
-- **Cache Keys**: Deterministic cache key generation based on request parameters
-- **TTL Management**: Different TTL values based on data volatility
-- **Cache Invalidation**: Event-driven cache invalidation on data updates
+- __Multi-level Caching__: L1 (in-memory) and L2 (Redis) caching
+- __Cache Keys__: Deterministic cache key generation based on request parameters
+- __TTL Management__: Different TTL values based on data volatility
+- __Cache Invalidation__: Event-driven cache invalidation on data updates
 
 ### Database Optimization
 
-- **Connection Pooling**: Efficient MySQL connection management
-- **Full-text Indexes**: Optimized MySQL FULLTEXT indexes for search
-- **Query Optimization**: Analyzed and optimized search queries
-- **Read Replicas**: Support for read replica databases (future enhancement)
+- __Connection Pooling__: Efficient MySQL connection management
+- __Full-text Indexes__: Optimized MySQL FULLTEXT indexes for search
+- __Query Optimization__: Analyzed and optimized search queries
+- __Read Replicas__: Support for read replica databases (future enhancement)
 
 ### Parallel Processing
 
-- **Concurrent Searches**: Multiple database searches executed in parallel
-- **Promise.allSettled**: Graceful handling of partial failures
-- **Worker Threads**: CPU-intensive operations (future enhancement)
+- __Concurrent Searches__: Multiple database searches executed in parallel
+- __Promise.allSettled__: Graceful handling of partial failures
+- __Worker Threads__: CPU-intensive operations (future enhancement)
 
 ## Scalability Considerations
 
 ### Horizontal Scaling
 
-- **Stateless Design**: No server-side session state
-- **Load Balancer Ready**: Compatible with standard load balancers
-- **Database Sharding**: Support for multiple database connections
+- __Stateless Design__: No server-side session state
+- __Load Balancer Ready__: Compatible with standard load balancers
+- __Database Sharding__: Support for multiple database connections
 
 ### Vertical Scaling
 
-- **Resource Monitoring**: CPU and memory usage tracking
-- **Connection Pool Tuning**: Configurable database connection limits
-- **Cache Size Management**: Redis memory usage optimization
+- __Resource Monitoring__: CPU and memory usage tracking
+- __Connection Pool Tuning__: Configurable database connection limits
+- __Cache Size Management__: Redis memory usage optimization
 
 ### Microservices Migration Path
 
@@ -317,13 +317,13 @@ graph TB
 
 ### Error Categories
 
-1. **Validation Errors**: Invalid request data (400)
-2. **Authentication Errors**: Invalid or missing tokens (401)
-3. **Authorization Errors**: Insufficient permissions (403)
-4. **Not Found Errors**: Resource doesn't exist (404)
-5. **Rate Limit Errors**: Too many requests (429)
-6. **Service Errors**: External service failures (502/503)
-7. **Internal Errors**: Unexpected application errors (500)
+1. __Validation Errors__: Invalid request data (400)
+2. __Authentication Errors__: Invalid or missing tokens (401)
+3. __Authorization Errors__: Insufficient permissions (403)
+4. __Not Found Errors__: Resource doesn't exist (404)
+5. __Rate Limit Errors__: Too many requests (429)
+6. __Service Errors__: External service failures (502/503)
+7. __Internal Errors__: Unexpected application errors (500)
 
 ### Error Handling Strategy
 
@@ -412,16 +412,16 @@ export const errorHandler = (
 
 ### Logging Strategy
 
-- **Structured Logging**: JSON-formatted logs with consistent fields
-- **Log Levels**: Debug, info, warn, error with configurable levels
-- **Correlation IDs**: Request tracing across service boundaries
-- **Performance Metrics**: Response times and resource usage
+- __Structured Logging__: JSON-formatted logs with consistent fields
+- __Log Levels__: Debug, info, warn, error with configurable levels
+- __Correlation IDs__: Request tracing across service boundaries
+- __Performance Metrics__: Response times and resource usage
 
 ### Health Checks
 
-- **Liveness Probe**: `/health` - Basic application health
-- **Readiness Probe**: `/health/ready` - Service dependencies health
-- **Deep Health Checks**: Individual service component health
+- __Liveness Probe__: `/health` - Basic application health
+- __Readiness Probe__: `/health/ready` - Service dependencies health
+- __Deep Health Checks__: Individual service component health
 
 ### Metrics Collection
 
@@ -494,20 +494,20 @@ All configuration is validated at startup with detailed error messages for missi
 
 ### Planned Improvements
 
-1. **Event Sourcing**: Audit trail for all data changes
-2. **CQRS**: Separate read/write models for better performance
-3. **Message Queues**: Asynchronous processing for heavy operations
-4. **Circuit Breakers**: Fault tolerance for external service calls
-5. **GraphQL API**: Alternative API interface for flexible queries
-6. **WebSocket Support**: Real-time search suggestions and results
+1. __Event Sourcing__: Audit trail for all data changes
+2. __CQRS__: Separate read/write models for better performance
+3. __Message Queues__: Asynchronous processing for heavy operations
+4. __Circuit Breakers__: Fault tolerance for external service calls
+5. __GraphQL API__: Alternative API interface for flexible queries
+6. __WebSocket Support__: Real-time search suggestions and results
 
 ### Technology Roadmap
 
-- **Database**: Consider PostgreSQL for advanced full-text search features
-- **Search Engine**: Evaluate Elasticsearch integration for complex queries
-- **Containerization**: Docker and Kubernetes deployment
-- **Monitoring**: Prometheus/Grafana observability stack
+- __Database__: Consider PostgreSQL for advanced full-text search features
+- __Search Engine__: Evaluate Elasticsearch integration for complex queries
+- __Containerization__: Docker and Kubernetes deployment
+- __Monitoring__: Prometheus/Grafana observability stack
 
 ---
 
-**This architecture provides a solid foundation for Altus 4's current needs while maintaining flexibility for future enhancements and scaling requirements.**
+__This architecture provides a solid foundation for Altus 4's current needs while maintaining flexibility for future enhancements and scaling requirements.__

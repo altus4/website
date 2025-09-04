@@ -11,25 +11,27 @@ This guide covers strategies for scaling Altus 4 to handle increased traffic and
 
 Altus 4 is designed as a stateless application that can scale horizontally. The main components that need scaling consideration are:
 
-- **Application Servers**: Node.js instances handling API requests
-- **Database Layer**: MySQL connections and query performance
-- **Cache Layer**: Redis for session and result caching
-- **Load Balancing**: Request distribution and failover
-- **AI Services**: OpenAI API rate limiting and fallback handling
+- __Application Servers__: Node.js instances handling API requests
+- __Database Layer__: MySQL connections and query performance
+- __Cache Layer__: Redis for session and result caching
+- __Load Balancing__: Request distribution and failover
+- __AI Services__: OpenAI API rate limiting and fallback handling
 
 ## Scaling Metrics
 
 ### Key Performance Indicators
+
 Monitor these metrics to determine when scaling is needed:
 
-- **Response Time**: Average and P95 response times
-- **Request Rate**: Requests per second (RPS)
-- **Error Rate**: Percentage of failed requests
-- **Database Performance**: Query execution time and connection usage
-- **Cache Hit Rate**: Redis cache effectiveness
-- **Resource Utilization**: CPU, memory, and network usage
+- __Response Time__: Average and P95 response times
+- __Request Rate__: Requests per second (RPS)
+- __Error Rate__: Percentage of failed requests
+- __Database Performance__: Query execution time and connection usage
+- __Cache Hit Rate__: Redis cache effectiveness
+- __Resource Utilization__: CPU, memory, and network usage
 
 ### Scaling Triggers
+
 Consider scaling when you observe:
 
 - Consistent response times > 500ms
@@ -44,6 +46,7 @@ Consider scaling when you observe:
 ### Load Balancer Configuration
 
 #### NGINX Load Balancer
+
 ```nginx
 upstream altus4_backend {
     least_conn;
@@ -95,6 +98,7 @@ server {
 ```
 
 #### HAProxy Configuration
+
 ```haproxy
 global
     maxconn 4096
@@ -141,6 +145,7 @@ backend altus4_health
 ### Auto-Scaling with Docker Swarm
 
 #### Docker Swarm Service
+
 ```yaml
 version: '3.8'
 services:
@@ -211,6 +216,7 @@ volumes:
 ### Kubernetes Auto-Scaling
 
 #### Horizontal Pod Autoscaler
+
 ```yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -252,6 +258,7 @@ spec:
 ```
 
 #### Vertical Pod Autoscaler
+
 ```yaml
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
@@ -280,6 +287,7 @@ spec:
 ### MySQL Read Replicas
 
 #### Master-Slave Configuration
+
 ```sql
 -- Master configuration (my.cnf)
 [mysqld]
@@ -302,6 +310,7 @@ innodb_buffer_pool_size = 1G
 ```
 
 #### Connection Pool Configuration
+
 ```typescript
 // Read-write splitting in DatabaseService
 class DatabaseService {
@@ -356,6 +365,7 @@ class DatabaseService {
 ```
 
 ### Database Connection Pooling
+
 ```typescript
 // Dynamic connection pool sizing
 class ConnectionPoolManager {
@@ -401,6 +411,7 @@ class ConnectionPoolManager {
 ### Redis Cluster Configuration
 
 #### Redis Cluster Setup
+
 ```bash
 # Create Redis cluster nodes
 redis-server --port 7000 --cluster-enabled yes --cluster-config-file nodes-7000.conf
@@ -415,6 +426,7 @@ redis-cli --cluster create 127.0.0.1:7000 127.0.0.1:7001 127.0.0.1:7002 127.0.0.
 ```
 
 #### Redis Cluster Client Configuration
+
 ```typescript
 import Redis from 'ioredis';
 
@@ -451,6 +463,7 @@ class CacheService {
 ```
 
 ### Redis Sentinel for High Availability
+
 ```javascript
 const Redis = require('ioredis');
 
@@ -470,6 +483,7 @@ const redis = new Redis({
 ## Application-Level Scaling
 
 ### Connection Pool Management
+
 ```typescript
 class DatabaseConnectionManager {
   private pools: Map<string, mysql.Pool> = new Map();
@@ -520,6 +534,7 @@ class DatabaseConnectionManager {
 ```
 
 ### AI Service Scaling
+
 ```typescript
 class AIService {
   private requestQueue: Queue = new Queue();
@@ -568,6 +583,7 @@ class AIService {
 ## Monitoring Scaling Performance
 
 ### Custom Metrics
+
 ```typescript
 class MetricsCollector {
   private prometheus = require('prom-client');
@@ -604,6 +620,7 @@ class MetricsCollector {
 ```
 
 ### Performance Benchmarking
+
 ```typescript
 class PerformanceBenchmark {
   async runLoadTest(config: LoadTestConfig): Promise<BenchmarkResults> {
@@ -657,6 +674,7 @@ class PerformanceBenchmark {
 ## Scaling Checklist
 
 ### Infrastructure Scaling
+
 - [ ] Load balancer configured with health checks
 - [ ] Application servers auto-scaling enabled
 - [ ] Database read replicas configured
@@ -665,6 +683,7 @@ class PerformanceBenchmark {
 - [ ] Monitoring and alerting configured
 
 ### Application Scaling
+
 - [ ] Connection pooling optimized
 - [ ] Caching strategy implemented
 - [ ] Rate limiting configured
@@ -673,6 +692,7 @@ class PerformanceBenchmark {
 - [ ] Async processing for heavy operations
 
 ### Database Scaling
+
 - [ ] Read-write splitting implemented
 - [ ] Connection pool sizing optimized
 - [ ] Query optimization completed
@@ -681,6 +701,7 @@ class PerformanceBenchmark {
 - [ ] Backup strategy scales with data
 
 ### Performance Validation
+
 - [ ] Load testing completed
 - [ ] Performance benchmarks established
 - [ ] Scaling triggers defined
@@ -690,11 +711,11 @@ class PerformanceBenchmark {
 
 ## Scaling Best Practices
 
-1. **Monitor First**: Establish comprehensive monitoring before scaling
-2. **Scale Gradually**: Increase capacity incrementally to validate changes
-3. **Test Scaling**: Use staging environments to test scaling configurations
-4. **Plan for Failures**: Implement circuit breakers and fallback mechanisms
-5. **Cache Aggressively**: Use multi-level caching to reduce database load
-6. **Optimize Queries**: Ensure all database queries are optimized before scaling
-7. **Monitor Costs**: Track infrastructure costs as you scale
-8. **Document Changes**: Keep scaling procedures documented and updated
+1. __Monitor First__: Establish comprehensive monitoring before scaling
+2. __Scale Gradually__: Increase capacity incrementally to validate changes
+3. __Test Scaling__: Use staging environments to test scaling configurations
+4. __Plan for Failures__: Implement circuit breakers and fallback mechanisms
+5. __Cache Aggressively__: Use multi-level caching to reduce database load
+6. __Optimize Queries__: Ensure all database queries are optimized before scaling
+7. __Monitor Costs__: Track infrastructure costs as you scale
+8. __Document Changes__: Keep scaling procedures documented and updated

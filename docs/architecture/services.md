@@ -29,11 +29,11 @@ graph TB
 
 The service layer sits between the API layer (controllers and routes) and the data layer (databases and external APIs), providing:
 
-- **Business Logic Encapsulation** - Core application logic separated from HTTP concerns
-- **Data Orchestration** - Coordination between multiple data sources
-- **Transaction Management** - Ensuring data consistency across operations
-- **Error Handling** - Centralized error processing and recovery
-- **Caching Strategy** - Intelligent caching and performance optimization
+- __Business Logic Encapsulation__ - Core application logic separated from HTTP concerns
+- __Data Orchestration__ - Coordination between multiple data sources
+- __Transaction Management__ - Ensuring data consistency across operations
+- __Error Handling__ - Centralized error processing and recovery
+- __Caching Strategy__ - Intelligent caching and performance optimization
 
 ## Service Architecture Patterns
 
@@ -63,11 +63,12 @@ export class SearchService implements ISearchService {
 }
 ```
 
-**Benefits:**
-- **Testability**: Easy to mock dependencies in unit tests
-- **Flexibility**: Can swap implementations without changing service code
-- **Separation of Concerns**: Each dependency handles its specific domain
-- **Configuration**: Dependencies can be configured externally
+__Benefits:__
+
+- __Testability__: Easy to mock dependencies in unit tests
+- __Flexibility__: Can swap implementations without changing service code
+- __Separation of Concerns__: Each dependency handles its specific domain
+- __Configuration__: Dependencies can be configured externally
 
 ### 2. Service Orchestration Pattern
 
@@ -126,16 +127,17 @@ export class AIService {
 
 ### 1. SearchService - The Orchestrator
 
-**Purpose**: Central coordinator for all search operations
+__Purpose__: Central coordinator for all search operations
 
-**Key Responsibilities:**
+__Key Responsibilities:__
+
 - Multi-database search orchestration
 - AI-powered query optimization
 - Result aggregation and ranking
 - Caching strategy implementation
 - Analytics logging
 
-**Architecture:**
+__Architecture:__
 
 ```mermaid
 graph LR
@@ -150,7 +152,8 @@ graph LR
     US --> UserDB[(User Database)]
 ```
 
-**Key Methods:**
+__Key Methods:__
+
 ```typescript
 class SearchService {
   // Core search orchestration
@@ -169,16 +172,17 @@ class SearchService {
 
 ### 2. DatabaseService - Connection Manager
 
-**Purpose**: MySQL database connection management and query execution
+__Purpose__: MySQL database connection management and query execution
 
-**Key Responsibilities:**
+__Key Responsibilities:__
+
 - Connection pool management per user database
 - Secure credential storage and encryption
 - Schema discovery and metadata extraction
 - Query optimization and execution
 - Health monitoring and reconnection
 
-**Connection Pool Architecture:**
+__Connection Pool Architecture:__
 
 ```mermaid
 graph TB
@@ -192,7 +196,8 @@ graph TB
     CP3 --> DBN[(MySQL DB N)]
 ```
 
-**Key Methods:**
+__Key Methods:__
+
 ```typescript
 class DatabaseService {
   // Connection management
@@ -212,16 +217,17 @@ class DatabaseService {
 
 ### 3. AIService - Intelligence Layer
 
-**Purpose**: OpenAI integration for semantic search and query optimization
+__Purpose__: OpenAI integration for semantic search and query optimization
 
-**Key Responsibilities:**
+__Key Responsibilities:__
+
 - Query semantic analysis and optimization
 - Search result categorization and enhancement
 - Intelligent search suggestions
 - Trend analysis and insights generation
 - Fallback handling for AI unavailability
 
-**AI Processing Pipeline:**
+__AI Processing Pipeline:__
 
 ```mermaid
 graph LR
@@ -235,7 +241,8 @@ graph LR
     SG --> Final[Final Response]
 ```
 
-**Key Methods:**
+__Key Methods:__
+
 ```typescript
 class AIService {
   // Query processing
@@ -254,16 +261,17 @@ class AIService {
 
 ### 4. CacheService - Performance Layer
 
-**Purpose**: Redis-based caching and analytics storage
+__Purpose__: Redis-based caching and analytics storage
 
-**Key Responsibilities:**
+__Key Responsibilities:__
+
 - Multi-level caching (memory + Redis)
 - Search result caching with intelligent TTL
 - Analytics data aggregation and storage
 - Popular queries and trending searches
 - Cache invalidation and warming strategies
 
-**Caching Architecture:**
+__Caching Architecture:__
 
 ```mermaid
 graph TB
@@ -279,7 +287,8 @@ graph TB
     Analytics --> Metrics[Performance Metrics]
 ```
 
-**Key Methods:**
+__Key Methods:__
+
 ```typescript
 class CacheService {
   // Basic caching operations
@@ -300,16 +309,18 @@ class CacheService {
 
 ### 5. UserService - Identity Management
 
-**Purpose**: User account management and authentication
+__Purpose__: User account management and authentication
 
-**Key Responsibilities:**
+__Key Responsibilities:__
+
 - User registration and profile management
 - Password hashing and authentication
 - Role-based access control
 - Account lifecycle operations
 - Security audit logging
 
-**Key Methods:**
+__Key Methods:__
+
 ```typescript
 class UserService {
   // User management
@@ -330,16 +341,17 @@ class UserService {
 
 ### 6. ApiKeyService - API Authentication
 
-**Purpose**: API key lifecycle management and validation
+__Purpose__: API key lifecycle management and validation
 
-**Key Responsibilities:**
+__Key Responsibilities:__
+
 - Secure API key generation and storage
 - API key validation and user context extraction
 - Tiered rate limiting and permissions
 - Usage tracking and analytics
 - Key rotation and revocation
 
-**API Key Architecture:**
+__API Key Architecture:__
 
 ```mermaid
 graph LR
@@ -352,7 +364,8 @@ graph LR
     UT --> Metrics[Usage Metrics]
 ```
 
-**Key Methods:**
+__Key Methods:__
+
 ```typescript
 class ApiKeyService {
   // Key lifecycle
@@ -719,12 +732,12 @@ export class DatabaseService {
 
 ## Related Documentation
 
-- **[Database Service](../services/database-service.md)** - Detailed DatabaseService documentation
-- **[Search Service](../services/search-service.md)** - Comprehensive SearchService guide
-- **[AI Service](../services/ai-service.md)** - AI integration patterns
-- **[Cache Service](../services/cache-service.md)** - Caching strategies and implementation
-- **[Testing Guide](../testing/)** - Service testing patterns and examples
+- __[Database Service](../services/database-service.md)__ - Detailed DatabaseService documentation
+- __[Search Service](../services/search-service.md)__ - Comprehensive SearchService guide
+- __[AI Service](../services/ai-service.md)__ - AI integration patterns
+- __[Cache Service](../services/cache-service.md)__ - Caching strategies and implementation
+- __[Testing Guide](../testing/)__ - Service testing patterns and examples
 
 ---
 
-**The service layer is the foundation of Altus 4's reliability and performance, implementing robust patterns for scalability, maintainability, and observability.**
+__The service layer is the foundation of Altus 4's reliability and performance, implementing robust patterns for scalability, maintainability, and observability.__

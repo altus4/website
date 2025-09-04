@@ -29,11 +29,11 @@ graph TD
 
 ### Security Features
 
-- **Credential Encryption** - All database credentials encrypted at rest
-- **Connection Pooling** - Efficient connection management with configurable limits
-- **Access Control** - Database connections scoped to user accounts
-- **SSL Support** - Secure connections with SSL/TLS encryption
-- **Network Security** - IP allowlisting and VPC support
+- __Credential Encryption__ - All database credentials encrypted at rest
+- __Connection Pooling__ - Efficient connection management with configurable limits
+- __Access Control__ - Database connections scoped to user accounts
+- __SSL Support__ - Secure connections with SSL/TLS encryption
+- __Network Security__ - IP allowlisting and VPC support
 
 ## Database Endpoints
 
@@ -41,16 +41,16 @@ graph TD
 
 Connect a new MySQL database to your Altus 4 account.
 
-**Endpoint**: `POST /api/databases`
+__Endpoint__: `POST /api/databases`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
-**Request Body**:
+__Request Body__:
 
 ```json
 {
@@ -81,7 +81,7 @@ Content-Type: application/json
 }
 ```
 
-**Request Parameters**:
+__Request Parameters__:
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -95,7 +95,7 @@ Content-Type: application/json
 | `connectionOptions` | object | No | Advanced connection settings |
 | `searchOptions` | object | No | Search-specific configuration |
 
-**SSL Configuration**:
+__SSL Configuration__:
 
 ```json
 {
@@ -107,7 +107,7 @@ Content-Type: application/json
 }
 ```
 
-**Connection Options**:
+__Connection Options__:
 
 ```json
 {
@@ -119,7 +119,7 @@ Content-Type: application/json
 }
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -154,7 +154,7 @@ Content-Type: application/json
 }
 ```
 
-**cURL Example**:
+__cURL Example__:
 
 ```bash
 curl -X POST https://api.altus4.dev/api/databases \
@@ -177,22 +177,22 @@ curl -X POST https://api.altus4.dev/api/databases \
 
 Retrieve all database connections associated with your account.
 
-**Endpoint**: `GET /api/databases`
+__Endpoint__: `GET /api/databases`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `limit` - Number of databases to return (1-100, default: 50)
 - `offset` - Pagination offset (default: 0)
 - `status` - Filter by status: `connected`, `disconnected`, `error`
 - `search` - Search database names
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -232,15 +232,15 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Retrieve detailed information about a specific database connection.
 
-**Endpoint**: `GET /api/databases/:databaseId`
+__Endpoint__: `GET /api/databases/:databaseId`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -306,16 +306,16 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Update an existing database connection's settings.
 
-**Endpoint**: `PUT /api/databases/:databaseId`
+__Endpoint__: `PUT /api/databases/:databaseId`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
-**Request Body**:
+__Request Body__:
 
 ```json
 {
@@ -331,7 +331,7 @@ Content-Type: application/json
 }
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -352,15 +352,15 @@ Content-Type: application/json
 
 Remove a database connection from your account.
 
-**Endpoint**: `DELETE /api/databases/:databaseId`
+__Endpoint__: `DELETE /api/databases/:databaseId`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -372,7 +372,7 @@ Authorization: Bearer <YOUR_API_KEY>
 }
 ```
 
-**Note**: Removing a database connection will:
+__Note__: Removing a database connection will:
 
 - Immediately close all active connections
 - Clear cached search results for that database
@@ -385,15 +385,15 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Test connectivity to a specific database.
 
-**Endpoint**: `POST /api/databases/:databaseId/test`
+__Endpoint__: `POST /api/databases/:databaseId/test`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -415,7 +415,7 @@ Authorization: Bearer <YOUR_API_KEY>
 }
 ```
 
-**Error Response**:
+__Error Response__:
 
 ```json
 {
@@ -436,15 +436,15 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Get real-time connection health status.
 
-**Endpoint**: `GET /api/databases/:databaseId/status`
+__Endpoint__: `GET /api/databases/:databaseId/status`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -484,21 +484,21 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Discover the database schema including tables, columns, and indexes.
 
-**Endpoint**: `GET /api/databases/:databaseId/schema`
+__Endpoint__: `GET /api/databases/:databaseId/schema`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `tables` - Comma-separated list of specific tables to include
 - `includeData` - Include sample data for each table (default: false)
 - `includeIndexes` - Include detailed index information (default: true)
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -605,7 +605,7 @@ Authorization: Bearer <YOUR_API_KEY>
 }
 ```
 
-**cURL Example**:
+__cURL Example__:
 
 ```bash
 curl -X GET "https://api.altus4.dev/api/databases/db_abc123def456/schema?includeData=true&tables=articles,posts" \
@@ -844,19 +844,19 @@ print(f"Active connections: {health['connection']['activeConnections']}")
 
 ### Security Recommendations
 
-1. **Use Dedicated Users**: Create specific MySQL users for Altus 4 with minimal required permissions
-2. **Enable SSL/TLS**: Always use encrypted connections in production
-3. **Network Security**: Use VPC, private networks, or IP allowlisting
-4. **Regular Rotation**: Rotate database passwords regularly
-5. **Monitor Access**: Review connection logs and usage patterns
+1. __Use Dedicated Users__: Create specific MySQL users for Altus 4 with minimal required permissions
+2. __Enable SSL/TLS__: Always use encrypted connections in production
+3. __Network Security__: Use VPC, private networks, or IP allowlisting
+4. __Regular Rotation__: Rotate database passwords regularly
+5. __Monitor Access__: Review connection logs and usage patterns
 
 ### Performance Optimization
 
-1. **Connection Pooling**: Configure appropriate connection limits based on your database capacity
-2. **Index Strategy**: Ensure FULLTEXT indexes exist on searchable columns
-3. **Query Optimization**: Review slow query logs and optimize problematic queries
-4. **Resource Monitoring**: Monitor database CPU, memory, and disk usage
-5. **Schema Design**: Design tables with search performance in mind
+1. __Connection Pooling__: Configure appropriate connection limits based on your database capacity
+2. __Index Strategy__: Ensure FULLTEXT indexes exist on searchable columns
+3. __Query Optimization__: Review slow query logs and optimize problematic queries
+4. __Resource Monitoring__: Monitor database CPU, memory, and disk usage
+5. __Schema Design__: Design tables with search performance in mind
 
 ### Recommended MySQL User Permissions
 
@@ -878,4 +878,4 @@ FLUSH PRIVILEGES;
 
 ---
 
-**Next Steps**: [Analytics & Insights](./analytics.md) | [Error Handling](./errors.md)
+__Next Steps__: [Analytics & Insights](./analytics.md) | [Error Handling](./errors.md)

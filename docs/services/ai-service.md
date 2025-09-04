@@ -14,11 +14,12 @@ The AIService integrates OpenAI's API to provide semantic search capabilities, i
 ### Responsibilities
 
 The AIService handles:
-- **Semantic Search** - Convert queries into embeddings for concept-based matching
-- **Query Optimization** - AI-powered query refinement and expansion
-- **Result Enhancement** - Categorization and contextual enrichment of search results
-- **Insights Generation** - AI-driven analytics and trend analysis
-- **Natural Language Processing** - Understanding user intent and query context
+
+- __Semantic Search__ - Convert queries into embeddings for concept-based matching
+- __Query Optimization__ - AI-powered query refinement and expansion
+- __Result Enhancement__ - Categorization and contextual enrichment of search results
+- __Insights Generation__ - AI-driven analytics and trend analysis
+- __Natural Language Processing__ - Understanding user intent and query context
 
 ### Architecture
 
@@ -1014,14 +1015,14 @@ const defaultConfig: Partial<AIConfig> = {
 
 ### Best Practices
 
-1. **API Key Security**: Store OpenAI API keys securely, never in code
-2. **Rate Limiting**: Implement proper backoff strategies for rate limits
-3. **Caching**: Cache expensive operations like embeddings and insights
-4. **Error Handling**: Graceful degradation when AI services are unavailable
-5. **Cost Management**: Monitor token usage and implement usage limits
-6. **Quality Control**: Validate AI responses and implement fallbacks
-7. **Performance**: Batch operations when possible to reduce API calls
+1. __API Key Security__: Store OpenAI API keys securely, never in code
+2. __Rate Limiting__: Implement proper backoff strategies for rate limits
+3. __Caching__: Cache expensive operations like embeddings and insights
+4. __Error Handling__: Graceful degradation when AI services are unavailable
+5. __Cost Management__: Monitor token usage and implement usage limits
+6. __Quality Control__: Validate AI responses and implement fallbacks
+7. __Performance__: Batch operations when possible to reduce API calls
 
 ---
 
-**The AIService provides intelligent capabilities that significantly enhance traditional database search, making Altus 4 a truly AI-powered search platform.**
+__The AIService provides intelligent capabilities that significantly enhance traditional database search, making Altus 4 a truly AI-powered search platform.__

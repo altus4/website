@@ -14,11 +14,12 @@ The CacheService provides Redis-based caching capabilities for search results, a
 ### Responsibilities
 
 The CacheService handles:
-- **Search Result Caching** - Cache frequently accessed search results for improved response times
-- **Analytics Storage** - Store and retrieve search analytics and user behavior data
-- **Performance Optimization** - Reduce database load through intelligent caching strategies
-- **Session Management** - Manage user sessions and temporary data storage
-- **Real-time Metrics** - Track and store real-time performance metrics
+
+- __Search Result Caching__ - Cache frequently accessed search results for improved response times
+- __Analytics Storage__ - Store and retrieve search analytics and user behavior data
+- __Performance Optimization__ - Reduce database load through intelligent caching strategies
+- __Session Management__ - Manage user sessions and temporary data storage
+- __Real-time Metrics__ - Track and store real-time performance metrics
 
 ### Architecture
 
@@ -984,19 +985,19 @@ private async warmPopularQueries(): Promise<void> {
 
 ### Performance Optimization
 
-1. **TTL Strategy**: Use appropriate TTLs based on data volatility
-2. **Key Design**: Use consistent, hierarchical key naming patterns
-3. **Batch Operations**: Group multiple operations when possible
-4. **Memory Management**: Monitor memory usage and implement eviction policies
-5. **Connection Pooling**: Use connection pooling for high-throughput scenarios
+1. __TTL Strategy__: Use appropriate TTLs based on data volatility
+2. __Key Design__: Use consistent, hierarchical key naming patterns
+3. __Batch Operations__: Group multiple operations when possible
+4. __Memory Management__: Monitor memory usage and implement eviction policies
+5. __Connection Pooling__: Use connection pooling for high-throughput scenarios
 
 ### Security Best Practices
 
-1. **Access Control**: Implement proper Redis authentication
-2. **Network Security**: Use TLS encryption for Redis connections
-3. **Key Isolation**: Use key prefixes to isolate different applications
-4. **Session Security**: Implement secure session management practices
+1. __Access Control__: Implement proper Redis authentication
+2. __Network Security__: Use TLS encryption for Redis connections
+3. __Key Isolation__: Use key prefixes to isolate different applications
+4. __Session Security__: Implement secure session management practices
 
 ---
 
-**The CacheService provides the performance foundation for Altus 4, delivering fast response times and scalable analytics storage through intelligent Redis-based caching strategies.**
+__The CacheService provides the performance foundation for Altus 4, delivering fast response times and scalable analytics storage through intelligent Redis-based caching strategies.__

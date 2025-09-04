@@ -28,11 +28,11 @@ graph TD
 
 ### Rate Limiting Strategy
 
-- **Sliding Window** - Uses Redis-based sliding window algorithm
-- **Per-API Key** - Individual rate limiting per API key
-- **Tiered Limits** - Different limits based on subscription tier
-- **Graceful Degradation** - Informative error responses with upgrade suggestions
-- **Burst Handling** - Short-term burst allowances within limits
+- __Sliding Window__ - Uses Redis-based sliding window algorithm
+- __Per-API Key__ - Individual rate limiting per API key
+- __Tiered Limits__ - Different limits based on subscription tier
+- __Graceful Degradation__ - Informative error responses with upgrade suggestions
+- __Burst Handling__ - Short-term burst allowances within limits
 
 ## Rate Limit Tiers
 
@@ -40,10 +40,10 @@ graph TD
 
 | Tier | Requests/Hour | Burst Limit | Block Duration | Concurrent Connections | AI Requests/Hour |
 |------|---------------|-------------|----------------|----------------------|------------------|
-| **Free** | 1,000 | 50 | 5 minutes | 3 | 100 |
-| **Pro** | 10,000 | 200 | 5 minutes | 10 | 2,000 |
-| **Enterprise** | 100,000 | 500 | 1 minute | 50 | 20,000 |
-| **Custom** | Negotiable | Custom | 30 seconds | Unlimited | Custom |
+| __Free__ | 1,000 | 50 | 5 minutes | 3 | 100 |
+| __Pro__ | 10,000 | 200 | 5 minutes | 10 | 2,000 |
+| __Enterprise__ | 100,000 | 500 | 1 minute | 50 | 20,000 |
+| __Custom__ | Negotiable | Custom | 30 seconds | Unlimited | Custom |
 
 ### Authentication Endpoints
 
@@ -128,15 +128,15 @@ Retry-After: 45
 
 Get current rate limit status without consuming a request:
 
-**Endpoint**: `GET /api/rate-limit/status`
+__Endpoint__: `GET /api/rate-limit/status`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -185,14 +185,14 @@ Authorization: Bearer <YOUR_API_KEY>
 
 ### Rate Limit Analytics
 
-**Endpoint**: `GET /api/rate-limit/analytics`
+__Endpoint__: `GET /api/rate-limit/analytics`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `period` - Analysis period: `hour`, `day`, `week` (default: `day`)
 - `includeBreakdown` - Include endpoint-specific breakdown
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -658,4 +658,4 @@ if (shouldUpgrade.recommended) {
 
 ---
 
-**This completes the comprehensive API documentation for Altus 4. All endpoints, authentication, error handling, and rate limiting are now thoroughly documented with practical examples and best practices.**
+__This completes the comprehensive API documentation for Altus 4. All endpoints, authentication, error handling, and rate limiting are now thoroughly documented with practical examples and best practices.__

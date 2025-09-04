@@ -47,11 +47,11 @@ constructor(
 }
 ```
 
-**Benefits:**
+__Benefits:__
 
-- **Testability**: Easy to mock dependencies in unit tests
-- **Flexibility**: Can swap implementations without changing the service
-- **Separation of Concerns**: Each dependency handles its specific domain
+- __Testability__: Easy to mock dependencies in unit tests
+- __Flexibility__: Can swap implementations without changing the service
+- __Separation of Concerns__: Each dependency handles its specific domain
 
 ### Orchestration Pattern
 
@@ -73,9 +73,9 @@ graph TD
 
 ### 1. `search(request: SearchRequest): Promise<SearchResponse>`
 
-**Purpose**: The main search orchestration method that coordinates all search operations.
+__Purpose__: The main search orchestration method that coordinates all search operations.
 
-**Flow Diagram**:
+__Flow Diagram__:
 
 ```mermaid
 graph LR
@@ -87,7 +87,7 @@ graph LR
     F --> G[Response]
 ```
 
-**Implementation Breakdown**:
+__Implementation Breakdown__:
 
 ```typescript
 public async search(request: SearchRequest): Promise<SearchResponse> {
@@ -171,17 +171,17 @@ public async search(request: SearchRequest): Promise<SearchResponse> {
 }
 ```
 
-**Key Design Decisions**:
+__Key Design Decisions__:
 
-1. **Cache-First Strategy**: Check cache before expensive operations
-2. **Graceful Failure Handling**: Use `Promise.allSettled` to handle partial failures
-3. **Parallel Execution**: Search multiple databases simultaneously for performance
-4. **AI Integration**: Optional semantic enhancement based on request mode
-5. **Comprehensive Logging**: Track performance and errors for monitoring
+1. __Cache-First Strategy__: Check cache before expensive operations
+2. __Graceful Failure Handling__: Use `Promise.allSettled` to handle partial failures
+3. __Parallel Execution__: Search multiple databases simultaneously for performance
+4. __AI Integration__: Optional semantic enhancement based on request mode
+5. __Comprehensive Logging__: Track performance and errors for monitoring
 
 ### 2. `executeSearchOnDatabase(databaseId, query, request)`
 
-**Purpose**: Execute search on a single database with result transformation.
+__Purpose__: Execute search on a single database with result transformation.
 
 ```typescript
 private async executeSearchOnDatabase(
@@ -218,7 +218,7 @@ private async executeSearchOnDatabase(
 }
 ```
 
-**Result Transformation**:
+__Result Transformation__:
 
 - Converts raw database rows to structured `SearchResult` objects
 - Generates unique IDs for each result
@@ -227,7 +227,7 @@ private async executeSearchOnDatabase(
 
 ### 3. `getSearchSuggestions(request: SearchRequest)`
 
-**Purpose**: Generate intelligent search suggestions combining AI and popular queries.
+__Purpose__: Generate intelligent search suggestions combining AI and popular queries.
 
 ```typescript
 public async getSearchSuggestions(request: SearchRequest): Promise<QuerySuggestion[]> {
@@ -267,16 +267,16 @@ public async getSearchSuggestions(request: SearchRequest): Promise<QuerySuggesti
 }
 ```
 
-**Suggestion Sources**:
+__Suggestion Sources__:
 
-1. **AI Suggestions**: Semantic understanding and query expansion
-2. **Popular Queries**: Based on user search patterns and analytics
-3. **Deduplication**: Ensures unique suggestions with highest scores
-4. **Ranking**: Combines multiple scoring mechanisms
+1. __AI Suggestions__: Semantic understanding and query expansion
+2. __Popular Queries__: Based on user search patterns and analytics
+3. __Deduplication__: Ensures unique suggestions with highest scores
+4. __Ranking__: Combines multiple scoring mechanisms
 
 ### 4. `generateCacheKey(request: SearchRequest)`
 
-**Purpose**: Create deterministic cache keys for search requests.
+__Purpose__: Create deterministic cache keys for search requests.
 
 ```typescript
 private generateCacheKey(request: SearchRequest): string {
@@ -294,16 +294,16 @@ private generateCacheKey(request: SearchRequest): string {
 }
 ```
 
-**Key Properties**:
+__Key Properties__:
 
-- **Deterministic**: Same request always generates same key
-- **Normalized**: Case-insensitive, sorted arrays for consistency
-- **Compact**: Base64 encoding for Redis key efficiency
-- **Structured**: Includes all parameters affecting search results
+- __Deterministic__: Same request always generates same key
+- __Normalized__: Case-insensitive, sorted arrays for consistency
+- __Compact__: Base64 encoding for Redis key efficiency
+- __Structured__: Includes all parameters affecting search results
 
 ### 5. `calculateRelevanceScore(row, query)`
 
-**Purpose**: Calculate relevance scores for search results.
+__Purpose__: Calculate relevance scores for search results.
 
 ```typescript
 private calculateRelevanceScore(row: any, query: string): number {
@@ -337,16 +337,16 @@ private calculateRelevanceScore(row: any, query: string): number {
 }
 ```
 
-**Scoring Algorithm**:
+__Scoring Algorithm__:
 
-1. **Exact Phrase Matching**: Full query string found = 1.0 points
-2. **Term Matching**: Individual terms found = 0.3 points each
-3. **Field Weighting**: Title/name fields get 1.5x multiplier
-4. **Score Normalization**: Capped at 1.0 for consistency
+1. __Exact Phrase Matching__: Full query string found = 1.0 points
+2. __Term Matching__: Individual terms found = 0.3 points each
+3. __Field Weighting__: Title/name fields get 1.5x multiplier
+4. __Score Normalization__: Capped at 1.0 for consistency
 
 ### 6. `generateSnippet(row, query)`
 
-**Purpose**: Generate search snippets with highlighted matching terms.
+__Purpose__: Generate search snippets with highlighted matching terms.
 
 ```typescript
 private generateSnippet(row: any, query: string): string {
@@ -379,18 +379,18 @@ private generateSnippet(row: any, query: string): string {
 }
 ```
 
-**Snippet Logic**:
+__Snippet Logic__:
 
-1. **Relevance Priority**: Prefer fields containing search terms
-2. **Length Optimization**: Truncate at 200 characters
-3. **Fallback Strategy**: Use any text field if no matches
-4. **Future Enhancement**: Could add term highlighting
+1. __Relevance Priority__: Prefer fields containing search terms
+2. __Length Optimization__: Truncate at 200 characters
+3. __Fallback Strategy__: Use any text field if no matches
+4. __Future Enhancement__: Could add term highlighting
 
 ## Helper Methods
 
 ### `logSearchAnalytics(request, response)`
 
-**Purpose**: Log search performance and user behavior for analytics.
+__Purpose__: Log search performance and user behavior for analytics.
 
 ```typescript
 private async logSearchAnalytics(
@@ -415,7 +415,7 @@ private async logSearchAnalytics(
 }
 ```
 
-**Analytics Data**:
+__Analytics Data__:
 
 - User search patterns and preferences
 - Query performance metrics
@@ -425,7 +425,7 @@ private async logSearchAnalytics(
 
 ### `generateCategories(results)`
 
-**Purpose**: Use AI to automatically categorize search results.
+__Purpose__: Use AI to automatically categorize search results.
 
 ```typescript
 private async generateCategories(results: SearchResult[]): Promise<Category[]> {
@@ -603,12 +603,12 @@ try {
 
 ## Related Documentation
 
-- **[DatabaseService](./database-service.md)** - MySQL operations and connection management
-- **[AIService](./ai-service.md)** - OpenAI integration and semantic enhancements
-- **[CacheService](./cache-service.md)** - Redis caching and analytics storage
-- **[API Reference](../api/search.md)** - Search endpoint documentation
-- **[Testing Guide](../testing/unit.md)** - Service testing patterns
+- __[DatabaseService](./database-service.md)__ - MySQL operations and connection management
+- __[AIService](./ai-service.md)__ - OpenAI integration and semantic enhancements
+- __[CacheService](./cache-service.md)__ - Redis caching and analytics storage
+- __[API Reference](../api/search.md)__ - Search endpoint documentation
+- __[Testing Guide](../testing/unit.md)__ - Service testing patterns
 
 ---
 
-**The SearchService is the heart of Altus 4's search capabilities, orchestrating complex operations while maintaining high performance and reliability through intelligent caching, parallel processing, and graceful error handling.**
+__The SearchService is the heart of Altus 4's search capabilities, orchestrating complex operations while maintaining high performance and reliability through intelligent caching, parallel processing, and graceful error handling.__

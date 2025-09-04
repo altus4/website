@@ -55,11 +55,11 @@ graph TB
 
 ### Security Principles
 
-1. **Zero Trust Architecture** - Never trust, always verify
-2. **Principle of Least Privilege** - Minimal necessary permissions
-3. **Defense in Depth** - Multiple security layers
-4. **Fail Secure** - Secure defaults and failure modes
-5. **Security by Design** - Built-in security from the ground up
+1. __Zero Trust Architecture__ - Never trust, always verify
+2. __Principle of Least Privilege__ - Minimal necessary permissions
+3. __Defense in Depth__ - Multiple security layers
+4. __Fail Secure__ - Secure defaults and failure modes
+5. __Security by Design__ - Built-in security from the ground up
 
 ## Authentication System
 
@@ -159,13 +159,13 @@ export class ApiKeyService {
 
 #### Security Features
 
-1. **Secure Generation**: Cryptographically secure random number generation
-2. **Hash Storage**: Only SHA-256 hashes stored, never plaintext keys
-3. **Prefix Indexing**: Fast lookup without exposing full keys
-4. **Timing Attack Protection**: Constant-time comparisons
-5. **Environment Separation**: Test vs live key isolation
-6. **Expiration Support**: Optional key expiration dates
-7. **Usage Tracking**: Monitor for suspicious activity
+1. __Secure Generation__: Cryptographically secure random number generation
+2. __Hash Storage__: Only SHA-256 hashes stored, never plaintext keys
+3. __Prefix Indexing__: Fast lookup without exposing full keys
+4. __Timing Attack Protection__: Constant-time comparisons
+5. __Environment Separation__: Test vs live key isolation
+6. __Expiration Support__: Optional key expiration dates
+7. __Usage Tracking__: Monitor for suspicious activity
 
 ### Authentication Middleware
 
@@ -996,31 +996,31 @@ export class IncidentResponse {
 
 ### Development Security
 
-1. **Secure Coding Practices**
+1. __Secure Coding Practices__
    - Input validation on all user inputs
    - Parameterized queries for database operations
    - Proper error handling without information disclosure
    - Secure random number generation
 
-2. **Dependency Management**
+2. __Dependency Management__
    - Regular security audits with `npm audit`
    - Automated dependency updates
    - Vulnerability scanning in CI/CD pipeline
 
-3. **Secret Management**
+3. __Secret Management__
    - Environment variables for sensitive configuration
    - No hardcoded secrets in source code
    - Secret rotation procedures
 
 ### Deployment Security
 
-1. **Infrastructure Security**
+1. __Infrastructure Security__
    - Network segmentation and firewalls
    - Regular security patches and updates
    - Intrusion detection systems
    - Encrypted storage and backups
 
-2. **Monitoring and Alerting**
+2. __Monitoring and Alerting__
    - Real-time security monitoring
    - Automated incident response
    - Regular security assessments
@@ -1028,11 +1028,11 @@ export class IncidentResponse {
 
 ## Related Documentation
 
-- **[API Authentication Guide](../api/authentication.md)** - API key setup and usage
-- **[Database Security](./database.md#security-considerations)** - Database security measures
-- **[Deployment Security](../deployment/production.md#security)** - Production security setup
-- **[Rate Limiting](../api/rate-limiting.md)** - Rate limiting implementation
+- __[API Authentication Guide](../api/authentication.md)__ - API key setup and usage
+- __[Database Security](./database.md#security-considerations)__ - Database security measures
+- __[Deployment Security](../deployment/production.md#security)__ - Production security setup
+- __[Rate Limiting](../api/rate-limiting.md)__ - Rate limiting implementation
 
 ---
 
-**Security is paramount in Altus 4's design, with multiple layers of protection ensuring data integrity, user privacy, and system reliability.**
+__Security is paramount in Altus 4's design, with multiple layers of protection ensuring data integrity, user privacy, and system reliability.__

@@ -15,22 +15,22 @@ Integration tests verify that different components of Altus 4 work correctly tog
 
 Integration tests focus on:
 
-- **API Endpoints**: Complete request/response cycles
-- **Database Operations**: Real database interactions
-- **Service Integration**: How services work together
-- **External Dependencies**: Third-party API integrations
-- **Authentication Flow**: End-to-end auth processes
-- **Error Handling**: System behavior under failure conditions
+- __API Endpoints__: Complete request/response cycles
+- __Database Operations__: Real database interactions
+- __Service Integration__: How services work together
+- __External Dependencies__: Third-party API integrations
+- __Authentication Flow__: End-to-end auth processes
+- __Error Handling__: System behavior under failure conditions
 
 ### Integration vs Unit Tests
 
 | Aspect | Unit Tests | Integration Tests |
 |--------|------------|-------------------|
-| **Scope** | Single component | Multiple components |
-| **Speed** | Very fast (<1ms) | Moderate (10-100ms) |
-| **Dependencies** | Mocked | Real or test doubles |
-| **Environment** | Isolated | Test environment |
-| **Purpose** | Logic verification | Component interaction |
+| __Scope__ | Single component | Multiple components |
+| __Speed__ | Very fast (<1ms) | Moderate (10-100ms) |
+| __Dependencies__ | Mocked | Real or test doubles |
+| __Environment__ | Isolated | Test environment |
+| __Purpose__ | Logic verification | Component interaction |
 
 ## Test Environment Setup
 
@@ -1385,13 +1385,13 @@ afterEach(async () => {
 
 ### Integration Test Guidelines
 
-1. **Use Real Dependencies**: Test with actual database, cache, and external services
-2. **Isolate Tests**: Each test should be independent and not affect others
-3. **Test Happy Path**: Verify normal operation flows
-4. **Test Error Conditions**: Verify error handling and recovery
-5. **Performance Aware**: Monitor test execution time and system resources
-6. **Data Management**: Use fixtures and cleanup between tests
-7. **Environment Consistency**: Use consistent test environment setup
+1. __Use Real Dependencies__: Test with actual database, cache, and external services
+2. __Isolate Tests__: Each test should be independent and not affect others
+3. __Test Happy Path__: Verify normal operation flows
+4. __Test Error Conditions__: Verify error handling and recovery
+5. __Performance Aware__: Monitor test execution time and system resources
+6. __Data Management__: Use fixtures and cleanup between tests
+7. __Environment Consistency__: Use consistent test environment setup
 
 ### Common Patterns
 
@@ -1437,11 +1437,11 @@ it('should meet performance requirements', async () => {
 
 ## Related Documentation
 
-- **[Unit Testing Guide](./unit.md)** - Unit testing strategies and patterns
-- **[Performance Testing Guide](./performance.md)** - Performance testing implementation
-- **[Testing Overview](./index.md)** - Complete testing strategy
-- **[Development Standards](../development/standards.md)** - Code quality standards
+- __[Unit Testing Guide](./unit.md)__ - Unit testing strategies and patterns
+- __[Performance Testing Guide](./performance.md)__ - Performance testing implementation
+- __[Testing Overview](./index.md)__ - Complete testing strategy
+- __[Development Standards](../development/standards.md)__ - Code quality standards
 
 ---
 
-**Integration tests ensure that Altus 4 components work correctly together in realistic scenarios. Follow these patterns to build comprehensive integration test suites that verify system behavior and catch integration issues early.**
+__Integration tests ensure that Altus 4 components work correctly together in realistic scenarios. Follow these patterns to build comprehensive integration test suites that verify system behavior and catch integration issues early.__

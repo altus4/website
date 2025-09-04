@@ -34,7 +34,8 @@ curl -X POST https://api.altus4.com/api/v1/search \
   }'
 ```
 
-**Query Breakdown:**
+__Query Breakdown:__
+
 - `+(mysql database)` - Must contain either "mysql" OR "database"
 - `+(performance optimization)` - Must contain either "performance" OR "optimization"
 - `-"slow query"` - Must NOT contain the exact phrase "slow query"
@@ -1060,11 +1061,11 @@ console.log('Enhanced results with AI categorization and summaries:', enhancedRe
 
 You've mastered advanced query techniques! Continue exploring:
 
-- **[AI Integration](./ai-integration.md)** - Leverage semantic search and AI enhancements
-- **[Multi-Database Search](./multi-database.md)** - Advanced federation strategies
-- **[SDK Usage](./sdk.md)** - Using official SDKs for your language
-- **[API Reference](../api/search.md)** - Complete API documentation
+- __[AI Integration](./ai-integration.md)__ - Leverage semantic search and AI enhancements
+- __[Multi-Database Search](./multi-database.md)__ - Advanced federation strategies
+- __[SDK Usage](./sdk.md)__ - Using official SDKs for your language
+- __[API Reference](../api/search.md)__ - Complete API documentation
 
 ---
 
-**Advanced queries unlock the full power of Altus 4's search capabilities. Experiment with these patterns to build sophisticated search experiences.**
+__Advanced queries unlock the full power of Altus 4's search capabilities. Experiment with these patterns to build sophisticated search experiences.__

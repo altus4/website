@@ -13,10 +13,10 @@ Altus 4 uses API key-based authentication for all service integration. This prov
 
 ### Authentication Flow
 
-1. **Register** a new user account
-2. **Login** to get a bootstrap JWT token (one-time use)
-3. **Create** your first API key using the JWT token
-4. **Use API key** for all subsequent requests
+1. __Register__ a new user account
+2. __Login__ to get a bootstrap JWT token (one-time use)
+3. __Create__ your first API key using the JWT token
+4. __Use API key__ for all subsequent requests
 
 ```mermaid
 graph TD
@@ -31,8 +31,8 @@ graph TD
 
 API keys follow a structured format for easy identification:
 
-- **Live Environment**: `altus4_sk_live_abc123def456...`
-- **Test Environment**: `altus4_sk_test_xyz789abc123...`
+- __Live Environment__: `altus4_sk_live_abc123def456...`
+- __Test Environment__: `altus4_sk_test_xyz789abc123...`
 
 The format includes:
 
@@ -47,15 +47,15 @@ The format includes:
 
 Register a new user account to begin the authentication process.
 
-**Endpoint**: `POST /api/auth/register`
+__Endpoint__: `POST /api/auth/register`
 
-**Headers**:
+__Headers__:
 
 ```http
 Content-Type: application/json
 ```
 
-**Request Body**:
+__Request Body__:
 
 ```json
 {
@@ -65,7 +65,7 @@ Content-Type: application/json
 }
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -83,7 +83,7 @@ Content-Type: application/json
 }
 ```
 
-**cURL Example**:
+__cURL Example__:
 
 ```bash
 curl -X POST https://api.altus4.dev/api/auth/register \
@@ -99,15 +99,15 @@ curl -X POST https://api.altus4.dev/api/auth/register \
 
 Login to receive a JWT token for API key creation. This JWT token should only be used to create your initial API key.
 
-**Endpoint**: `POST /api/auth/login`
+__Endpoint__: `POST /api/auth/login`
 
-**Headers**:
+__Headers__:
 
 ```http
 Content-Type: application/json
 ```
 
-**Request Body**:
+__Request Body__:
 
 ```json
 {
@@ -116,7 +116,7 @@ Content-Type: application/json
 }
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -136,7 +136,7 @@ Content-Type: application/json
 }
 ```
 
-**cURL Example**:
+__cURL Example__:
 
 ```bash
 curl -X POST https://api.altus4.dev/api/auth/login \
@@ -151,15 +151,15 @@ curl -X POST https://api.altus4.dev/api/auth/login \
 
 Create your first API key using the JWT token from login. This is a one-time setup process.
 
-**Endpoint**: `POST /api/management/setup`
+__Endpoint__: `POST /api/management/setup`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <JWT_TOKEN_FROM_LOGIN>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -178,7 +178,7 @@ Authorization: Bearer <JWT_TOKEN_FROM_LOGIN>
 }
 ```
 
-**cURL Example**:
+__cURL Example__:
 
 ```bash
 curl -X POST https://api.altus4.dev/api/management/setup \
@@ -193,16 +193,16 @@ Once you have your initial API key, use it to manage additional keys and your ac
 
 Create additional API keys for different environments or use cases.
 
-**Endpoint**: `POST /api/keys`
+__Endpoint__: `POST /api/keys`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
-**Request Body**:
+__Request Body__:
 
 ```json
 {
@@ -213,7 +213,7 @@ Content-Type: application/json
 }
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -240,15 +240,15 @@ Content-Type: application/json
 
 Retrieve all API keys associated with your account.
 
-**Endpoint**: `GET /api/keys`
+__Endpoint__: `GET /api/keys`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -275,16 +275,16 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Update an existing API key's name, tier, or permissions.
 
-**Endpoint**: `PUT /api/keys/:keyId`
+__Endpoint__: `PUT /api/keys/:keyId`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
-**Request Body**:
+__Request Body__:
 
 ```json
 {
@@ -298,15 +298,15 @@ Content-Type: application/json
 
 Permanently revoke an API key. This action cannot be undone.
 
-**Endpoint**: `DELETE /api/keys/:keyId`
+__Endpoint__: `DELETE /api/keys/:keyId`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -322,15 +322,15 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Generate a new secret for an existing API key while maintaining the same ID and settings.
 
-**Endpoint**: `POST /api/keys/:keyId/regenerate`
+__Endpoint__: `POST /api/keys/:keyId/regenerate`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -351,20 +351,20 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Get detailed usage statistics for a specific API key.
 
-**Endpoint**: `GET /api/keys/:keyId/usage`
+__Endpoint__: `GET /api/keys/:keyId/usage`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `period` - `hour`, `day`, `week`, `month` (default: `day`)
 - `limit` - Number of data points to return (default: 100)
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -464,11 +464,11 @@ data = response.json()
 
 API keys can be scoped with specific permissions:
 
-- **`search`** - Execute search operations
-- **`database:read`** - View database connections and schema
-- **`database:write`** - Add, update, remove database connections
-- **`analytics`** - Access analytics and insights data
-- **`admin`** - Full account management (user management, billing)
+- __`search`__ - Execute search operations
+- __`database:read`__ - View database connections and schema
+- __`database:write`__ - Add, update, remove database connections
+- __`analytics`__ - Access analytics and insights data
+- __`admin`__ - Full account management (user management, billing)
 
 Example permission combinations:
 
@@ -482,11 +482,11 @@ Example permission combinations:
 
 ### API Key Security
 
-1. **Store Securely**: Never commit API keys to version control
-2. **Use Environment Variables**: Store keys in environment variables
-3. **Rotate Regularly**: Regenerate keys periodically
-4. **Scope Appropriately**: Use minimal required permissions
-5. **Monitor Usage**: Regularly review API key usage statistics
+1. __Store Securely__: Never commit API keys to version control
+2. __Use Environment Variables__: Store keys in environment variables
+3. __Rotate Regularly__: Regenerate keys periodically
+4. __Scope Appropriately__: Use minimal required permissions
+5. __Monitor Usage__: Regularly review API key usage statistics
 
 ### Environment Separation
 
@@ -536,19 +536,19 @@ const makeApiRequest = async (endpoint, data) => {
 
 ### Common Issues
 
-**Invalid API Key (401)**:
+__Invalid API Key (401)__:
 
 - Verify API key format and prefix
 - Check if key has been revoked
 - Ensure key is for the correct environment
 
-**Insufficient Permissions (403)**:
+__Insufficient Permissions (403)__:
 
 - Review required permissions for the endpoint
 - Update API key permissions if needed
 - Check if tier supports the requested feature
 
-**Rate Limit Exceeded (429)**:
+__Rate Limit Exceeded (429)__:
 
 - Review current tier limits
 - Implement proper rate limiting in your application
@@ -578,4 +578,4 @@ Expected response:
 
 ---
 
-**Next Steps**: [Search Operations](./search.md) | [Database Management](./database.md)
+__Next Steps__: [Search Operations](./search.md) | [Database Management](./database.md)

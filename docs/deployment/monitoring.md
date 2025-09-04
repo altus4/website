@@ -34,12 +34,12 @@ graph TD
 
 | Component | Purpose | Technology | Port |
 |-----------|---------|------------|------|
-| **Metrics Collection** | Application & system metrics | Prometheus | 9090 |
-| **Metrics Visualization** | Dashboards and graphs | Grafana | 3000 |
-| **Log Aggregation** | Centralized logging | ELK Stack | 9200 |
-| **Application Monitoring** | APM and tracing | Jaeger/Zipkin | 16686 |
-| **Alerting** | Proactive notifications | AlertManager | 9093 |
-| **Uptime Monitoring** | External health checks | Blackbox Exporter | 9115 |
+| __Metrics Collection__ | Application & system metrics | Prometheus | 9090 |
+| __Metrics Visualization__ | Dashboards and graphs | Grafana | 3000 |
+| __Log Aggregation__ | Centralized logging | ELK Stack | 9200 |
+| __Application Monitoring__ | APM and tracing | Jaeger/Zipkin | 16686 |
+| __Alerting__ | Proactive notifications | AlertManager | 9093 |
+| __Uptime Monitoring__ | External health checks | Blackbox Exporter | 9115 |
 
 ## Application Metrics Integration
 

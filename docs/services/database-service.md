@@ -14,11 +14,12 @@ The DatabaseService is responsible for managing MySQL database connections, exec
 ### Responsibilities
 
 The DatabaseService handles:
-- **Connection Management** - Secure MySQL connection pooling and lifecycle management
-- **Query Execution** - Full-text search query execution with optimization
-- **Schema Discovery** - Database schema introspection and metadata extraction
-- **Security** - Credential encryption and secure connection handling
-- **Health Monitoring** - Connection health checks and performance monitoring
+
+- __Connection Management__ - Secure MySQL connection pooling and lifecycle management
+- __Query Execution__ - Full-text search query execution with optimization
+- __Schema Discovery__ - Database schema introspection and metadata extraction
+- __Security__ - Credential encryption and secure connection handling
+- __Health Monitoring__ - Connection health checks and performance monitoring
 
 ### Architecture
 
@@ -882,28 +883,28 @@ describe('DatabaseService Integration', () => {
 
 ### Security Best Practices
 
-1. **Credential Encryption**: Always encrypt database passwords at rest
-2. **Connection Security**: Use SSL/TLS connections in production
-3. **SQL Injection Prevention**: Use parameterized queries exclusively
-4. **Access Control**: Validate user permissions before database operations
-5. **Audit Logging**: Log all database operations for security auditing
+1. __Credential Encryption__: Always encrypt database passwords at rest
+2. __Connection Security__: Use SSL/TLS connections in production
+3. __SQL Injection Prevention__: Use parameterized queries exclusively
+4. __Access Control__: Validate user permissions before database operations
+5. __Audit Logging__: Log all database operations for security auditing
 
 ### Performance Best Practices
 
-1. **Connection Pooling**: Use appropriate pool sizes based on database capacity
-2. **Query Optimization**: Analyze and optimize slow queries regularly
-3. **Index Strategy**: Ensure proper indexes for full-text search
-4. **Resource Monitoring**: Monitor database performance and connection health
-5. **Caching**: Implement query result caching where appropriate
+1. __Connection Pooling__: Use appropriate pool sizes based on database capacity
+2. __Query Optimization__: Analyze and optimize slow queries regularly
+3. __Index Strategy__: Ensure proper indexes for full-text search
+4. __Resource Monitoring__: Monitor database performance and connection health
+5. __Caching__: Implement query result caching where appropriate
 
 ### Operational Best Practices
 
-1. **Health Monitoring**: Regular health checks and alerting
-2. **Error Recovery**: Implement retry logic for transient failures
-3. **Resource Cleanup**: Proper connection and resource cleanup
-4. **Configuration Validation**: Validate all database configurations
-5. **Documentation**: Maintain clear documentation of database schemas
+1. __Health Monitoring__: Regular health checks and alerting
+2. __Error Recovery__: Implement retry logic for transient failures
+3. __Resource Cleanup__: Proper connection and resource cleanup
+4. __Configuration Validation__: Validate all database configurations
+5. __Documentation__: Maintain clear documentation of database schemas
 
 ---
 
-**The DatabaseService provides a robust foundation for MySQL database management in Altus 4, handling everything from secure connections to optimized query execution.**
+__The DatabaseService provides a robust foundation for MySQL database management in Altus 4, handling everything from secure connections to optimized query execution.__

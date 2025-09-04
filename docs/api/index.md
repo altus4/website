@@ -15,16 +15,16 @@ All API endpoints require API key authentication for B2B service integration.
 
 ### Authentication Flow
 
-1. **Register** a new user account
-2. **Create** your first API key using the management endpoint
-3. **Include API key** in `Authorization` header for all subsequent requests
+1. __Register__ a new user account
+2. __Create__ your first API key using the management endpoint
+3. __Include API key__ in `Authorization` header for all subsequent requests
 
 ```bash
 # Include API key in all requests
 Authorization: Bearer <your-api-key>
 ```
 
-**API Key Format**: `altus4_sk_live_abc123def456...` (live) or `altus4_sk_test_xyz789abc123...` (test)
+__API Key Format__: `altus4_sk_live_abc123def456...` (live) or `altus4_sk_test_xyz789abc123...` (test)
 
 ### Authentication Endpoints
 
@@ -40,7 +40,7 @@ Authorization: Bearer <your-api-key>
 | `GET`    | `/api/keys/:id/usage`      | Get API key usage stats | API Key       |
 | `POST`   | `/api/keys/:id/regenerate` | Regenerate API key      | API Key       |
 
-[**→ Complete API Key Authentication Guide**](./authentication.md)
+[__→ Complete API Key Authentication Guide__](./authentication.md)
 
 ## Database Management
 
@@ -59,7 +59,7 @@ Manage MySQL database connections for searching.
 | `GET`    | `/api/databases/:id/schema` | Get database schema        | API Key       |
 | `GET`    | `/api/databases/:id/status` | Get connection status      | API Key       |
 
-[**Complete Database Documentation**](./database.md)
+[__Complete Database Documentation__](./database.md)
 
 ## Search Operations
 
@@ -75,7 +75,7 @@ Execute searches across connected databases with AI enhancements.
 | `GET`  | `/api/search/history`     | Get search history        | API Key       |
 | `GET`  | `/api/search/trends`      | Get user search trends    | API Key       |
 
-[**Complete Search Documentation**](./search.md)
+[__Complete Search Documentation__](./search.md)
 
 ## Analytics & Insights
 
@@ -93,7 +93,7 @@ Access search analytics, performance metrics, and trend data.
 | `GET`  | `/api/analytics/overview`        | Get system overview       | API Key       |
 | `GET`  | `/api/analytics/user-activity`   | Get user activity metrics | API Key       |
 
-[**Complete Analytics Documentation**](./analytics.md)
+[__Complete Analytics Documentation__](./analytics.md)
 
 ## System Endpoints
 
@@ -199,7 +199,7 @@ interface ApiResponse<T> {
 | `AI_SERVICE_ERROR`         | 500         | OpenAI API error                      |
 | `INTERNAL_ERROR`           | 500         | Unexpected server error               |
 
-[**Complete Error Documentation**](./errors.md)
+[__Complete Error Documentation__](./errors.md)
 
 ## Rate Limiting
 
@@ -209,14 +209,14 @@ API requests are rate-limited based on your API key tier for fair usage and syst
 
 | Tier           | Requests/Hour | Use Case             | Block Duration |
 | -------------- | ------------- | -------------------- | -------------- |
-| **Free**       | 1,000         | Development, testing | 5 minutes      |
-| **Pro**        | 10,000        | Small-medium prod    | 5 minutes      |
-| **Enterprise** | 100,000       | Large scale prod     | 1 minute       |
+| __Free__       | 1,000         | Development, testing | 5 minutes      |
+| __Pro__        | 10,000        | Small-medium prod    | 5 minutes      |
+| __Enterprise__ | 100,000       | Large scale prod     | 1 minute       |
 
 ### Rate Limiting for Authentication
 
-- **Registration/Login**: 10 requests per minute (IP-based)
-- **API key management**: Based on your API key tier
+- __Registration/Login__: 10 requests per minute (IP-based)
+- __API key management__: Based on your API key tier
 
 ### Rate Limit Headers
 
@@ -332,20 +332,20 @@ print(data['data']['results'])
 
 ## Related Documentation
 
-- **[API Key Authentication Guide](./authentication.md)** - Complete API key setup and usage
-- **[Database Management](./database.md)** - Managing database connections
-- **[Search Operations](./search.md)** - Search API and features
-- **[Analytics API](./analytics.md)** - Analytics and insights
-- **[Request/Response Schemas](#request-response-examples)** - Complete type definitions
-- **[Error Handling](./errors.md)** - Error codes and troubleshooting
+- __[API Key Authentication Guide](./authentication.md)__ - Complete API key setup and usage
+- __[Database Management](./database.md)__ - Managing database connections
+- __[Search Operations](./search.md)__ - Search API and features
+- __[Analytics API](./analytics.md)__ - Analytics and insights
+- __[Request/Response Schemas](#request-response-examples)__ - Complete type definitions
+- __[Error Handling](./errors.md)__ - Error codes and troubleshooting
 
 ## API Testing
 
 ### Testing Tools
 
-- **[Postman Collection](./postman-collection.json)** - Import ready-to-use requests
-- **[OpenAPI Spec](./openapi.yaml)** - Machine-readable API definition
-- **[Insomnia Workspace](./insomnia-workspace.json)** - Alternative REST client
+- __[Postman Collection](./postman-collection.json)__ - Import ready-to-use requests
+- __[OpenAPI Spec](./openapi.yaml)__ - Machine-readable API definition
+- __[Insomnia Workspace](./insomnia-workspace.json)__ - Alternative REST client
 
 ### Testing Checklist
 
@@ -359,4 +359,4 @@ print(data['data']['results'])
 
 ---
 
-**Need help?** Check out the [examples section](../examples/) for practical implementations or [report issues](https://github.com/yourusername/altus4/issues) if you find any problems.
+__Need help?__ Check out the [examples section](../examples/) for practical implementations or [report issues](https://github.com/yourusername/altus4/issues) if you find any problems.

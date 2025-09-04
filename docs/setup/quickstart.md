@@ -13,10 +13,10 @@ This guide will get you up and running with Altus 4 as quickly as possible. For 
 
 Before starting, ensure you have:
 
-- **Node.js 18+** installed
-- **MySQL 8.0+** running and accessible
-- **Redis 6.0+** running (optional but recommended)
-- **OpenAI API key** (optional, for AI features)
+- __Node.js 18+__ installed
+- __MySQL 8.0+__ running and accessible
+- __Redis 6.0+__ running (optional but recommended)
+- __OpenAI API key__ (optional, for AI features)
 
 ## Step 1: Clone and Install
 
@@ -39,7 +39,7 @@ cp .env.example .env
 nano .env
 ```
 
-**Minimum required environment variables:**
+__Minimum required environment variables:__
 
 ```bash
 # Database Configuration (Primary - for metadata storage)
@@ -120,6 +120,7 @@ curl http://localhost:3000/health
 ```
 
 Expected response:
+
 ```json
 {
   "status": "healthy",
@@ -163,7 +164,7 @@ curl -X POST http://localhost:3000/api/v1/management/setup \
   -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
 ```
 
-**Save the API key from the response** - you'll need it for all future requests!
+__Save the API key from the response__ - you'll need it for all future requests!
 
 ## Step 8: Test Your First Search
 
@@ -197,32 +198,32 @@ curl -X POST http://localhost:3000/api/v1/search \
   }'
 ```
 
-## Success!
+## Success
 
 You now have Altus 4 running locally! Here's what you can do next:
 
 ### Explore the API
 
-- **[API Reference](../api/)** - Complete API documentation
-- **[Search Operations](../api/search.md)** - Advanced search features
-- **[Database Management](../api/database.md)** - Managing connections
+- __[API Reference](../api/)__ - Complete API documentation
+- __[Search Operations](../api/search.md)__ - Advanced search features
+- __[Database Management](../api/database.md)__ - Managing connections
 
 ### Try Advanced Features
 
-- **[AI-Enhanced Search](../examples/ai-integration.md)** - Semantic search with OpenAI
-- **[Multi-Database Search](../examples/multi-database.md)** - Search across multiple databases
-- **[Analytics & Insights](../api/analytics.md)** - Search trends and performance
+- __[AI-Enhanced Search](../examples/ai-integration.md)__ - Semantic search with OpenAI
+- __[Multi-Database Search](../examples/multi-database.md)__ - Search across multiple databases
+- __[Analytics & Insights](../api/analytics.md)__ - Search trends and performance
 
 ### Development
 
-- **[Development Guide](../development/)** - Contributing to Altus 4
-- **[Testing Guide](../testing/)** - Running and writing tests
+- __[Development Guide](../development/)__ - Contributing to Altus 4
+- __[Testing Guide](../testing/)__ - Running and writing tests
 
 ## Troubleshooting
 
 ### Common Issues
 
-**Database Connection Failed**
+__Database Connection Failed__
 
 ```bash
 # Check MySQL is running
@@ -232,7 +233,7 @@ sudo systemctl status mysql
 mysql -h localhost -u altus4_user -p altus4_meta
 ```
 
-**Redis Connection Issues**
+__Redis Connection Issues__
 
 ```bash
 # Check Redis is running
@@ -243,7 +244,7 @@ redis-cli ping
 redis-server
 ```
 
-**Port Already in Use**
+__Port Already in Use__
 
 ```bash
 # Change port in .env file
@@ -253,7 +254,7 @@ PORT=3001
 lsof -ti:3000 | xargs kill -9
 ```
 
-**Migration Errors**
+__Migration Errors__
 
 ```bash
 # Check database exists and user has permissions
@@ -266,11 +267,11 @@ npm run migrate:up
 
 ### Getting Help
 
-- **[Complete Setup Guide](./index.md)** - Detailed installation instructions
-- **[Development Guide](../development/)** - Development environment setup
-- **[GitHub Issues](https://github.com/yourusername/altus4/issues)** - Report bugs or get help
-- **[GitHub Discussions](https://github.com/yourusername/altus4/discussions)** - Community support
+- __[Complete Setup Guide](./index.md)__ - Detailed installation instructions
+- __[Development Guide](../development/)__ - Development environment setup
+- __[GitHub Issues](https://github.com/yourusername/altus4/issues)__ - Report bugs or get help
+- __[GitHub Discussions](https://github.com/yourusername/altus4/discussions)__ - Community support
 
 ---
 
-**Ready to build amazing search experiences?** Check out the [examples section](../examples/) for practical implementations!
+__Ready to build amazing search experiences?__ Check out the [examples section](../examples/) for practical implementations!

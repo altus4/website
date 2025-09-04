@@ -37,7 +37,7 @@ curl -X POST https://api.altus4.com/api/v1/search \
   }'
 ```
 
-**Response includes results from all databases:**
+__Response includes results from all databases:__
 
 ```json
 {
@@ -1013,10 +1013,10 @@ class ResilientMultiDatabaseSearch:
 
 You've mastered multi-database search strategies! Continue exploring:
 
-- **[SDK Usage](./sdk.md)** - Official SDKs with multi-database support
-- **[Performance Guide](../testing/performance.md)** - Advanced optimization techniques
-- **[API Reference](../api/search.md)** - Complete multi-database API documentation
+- __[SDK Usage](./sdk.md)__ - Official SDKs with multi-database support
+- __[Performance Guide](../testing/performance.md)__ - Advanced optimization techniques
+- __[API Reference](../api/search.md)__ - Complete multi-database API documentation
 
 ---
 
-**Multi-database search unlocks the full potential of federated search across your entire data ecosystem. Use these patterns to build comprehensive search experiences.**
+__Multi-database search unlocks the full potential of federated search across your entire data ecosystem. Use these patterns to build comprehensive search experiences.__

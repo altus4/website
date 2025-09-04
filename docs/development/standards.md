@@ -13,19 +13,19 @@ This document outlines the coding standards, style guidelines, and best practice
 
 ### 1. Code Quality Principles
 
-- **Readability First**: Code is read more often than it's written
-- **Consistency**: Follow established patterns throughout the codebase
-- **Simplicity**: Prefer simple, clear solutions over clever ones
-- **Documentation**: Code should be self-documenting with clear naming
-- **Testing**: All code must be thoroughly tested
+- __Readability First__: Code is read more often than it's written
+- __Consistency__: Follow established patterns throughout the codebase
+- __Simplicity__: Prefer simple, clear solutions over clever ones
+- __Documentation__: Code should be self-documenting with clear naming
+- __Testing__: All code must be thoroughly tested
 
 ### 2. SOLID Principles
 
-- **Single Responsibility**: Each class/function should have one reason to change
-- **Open/Closed**: Open for extension, closed for modification
-- **Liskov Substitution**: Derived classes must be substitutable for base classes
-- **Interface Segregation**: Clients shouldn't depend on interfaces they don't use
-- **Dependency Inversion**: Depend on abstractions, not concretions
+- __Single Responsibility__: Each class/function should have one reason to change
+- __Open/Closed__: Open for extension, closed for modification
+- __Liskov Substitution__: Derived classes must be substitutable for base classes
+- __Interface Segregation__: Clients shouldn't depend on interfaces they don't use
+- __Dependency Inversion__: Depend on abstractions, not concretions
 
 ## TypeScript Standards
 
@@ -911,6 +911,7 @@ npm run test:integration -- --grep "SearchService"
 - [DatabaseService](../services/database-service.md) - Database connection management
 - [AIService](../services/ai-service.md) - AI integration and enhancements
 - [CacheService](../services/cache-service.md) - Redis caching implementation
+
 ```
 
 ## Code Review Standards
@@ -971,7 +972,8 @@ type(scope): description
 [optional footer]
 ```
 
-**Types:**
+__Types:__
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -980,7 +982,8 @@ type(scope): description
 - `test`: Test changes
 - `chore`: Build/tooling changes
 
-**Examples:**
+__Examples:__
+
 ```
 feat(search): add semantic search mode
 
@@ -992,11 +995,11 @@ Closes #123
 
 ## Related Documentation
 
-- **[Development Guide](./index.md)** - Complete development setup
-- **[Git Workflow](./git-workflow.md)** - Git branching and workflow
-- **[Testing Guide](../testing/)** - Testing strategies and patterns
-- **[API Documentation](../api/)** - API design standards
+- __[Development Guide](./index.md)__ - Complete development setup
+- __[Git Workflow](./git-workflow.md)__ - Git branching and workflow
+- __[Testing Guide](../testing/)__ - Testing strategies and patterns
+- __[API Documentation](../api/)__ - API design standards
 
 ---
 
-**Following these standards ensures code quality, maintainability, and consistency across the Altus 4 codebase. All contributors must adhere to these guidelines.**
+__Following these standards ensures code quality, maintainability, and consistency across the Altus 4 codebase. All contributors must adhere to these guidelines.__

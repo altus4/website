@@ -11,7 +11,7 @@ This guide demonstrates how to leverage Altus 4's AI-powered features including 
 
 ## Prerequisites
 
-- **OpenAI API Key** configured in your Altus 4 instance
+- __OpenAI API Key__ configured in your Altus 4 instance
 - Understanding of [Basic Search](./basic-search.md) concepts
 - API key with `search` and `analytics` permissions
 
@@ -186,7 +186,8 @@ curl -X POST https://api.altus4.com/api/v1/search/optimize \
   }'
 ```
 
-**Response:**
+__Response:__
+
 ```json
 {
   "success": true,
@@ -1029,11 +1030,11 @@ class CostOptimizedAI {
 
 You've mastered AI integration with Altus 4! Continue exploring:
 
-- **[Multi-Database Search](./multi-database.md)** - Advanced federation with AI
-- **[SDK Usage](./sdk.md)** - Official SDKs with AI features
-- **[API Reference](../api/search.md)** - Complete AI endpoint documentation
-- **[Performance Guide](../testing/performance.md)** - Optimizing AI-enhanced searches
+- __[Multi-Database Search](./multi-database.md)__ - Advanced federation with AI
+- __[SDK Usage](./sdk.md)__ - Official SDKs with AI features
+- __[API Reference](../api/search.md)__ - Complete AI endpoint documentation
+- __[Performance Guide](../testing/performance.md)__ - Optimizing AI-enhanced searches
 
 ---
 
-**AI integration transforms search from keyword matching to intelligent understanding. Experiment with these features to create truly smart search experiences.**
+__AI integration transforms search from keyword matching to intelligent understanding. Experiment with these features to create truly smart search experiences.__

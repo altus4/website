@@ -21,22 +21,22 @@ graph LR
 
 ### Service Principles
 
-1. **Single Responsibility** - Each service has a focused purpose
-2. **Dependency Injection** - Services receive dependencies via constructor
-3. **Interface-Based** - Services implement clear interfaces
-4. **Error Handling** - Comprehensive error handling with custom exceptions
-5. **Testability** - Services are unit testable with mocked dependencies
+1. __Single Responsibility__ - Each service has a focused purpose
+2. __Dependency Injection__ - Services receive dependencies via constructor
+3. __Interface-Based__ - Services implement clear interfaces
+4. __Error Handling__ - Comprehensive error handling with custom exceptions
+5. __Testability__ - Services are unit testable with mocked dependencies
 
 ## Service Overview
 
 | Service             | Purpose              | Dependencies                             | Key Features                                                |
 | ------------------- | -------------------- | ---------------------------------------- | ----------------------------------------------------------- |
-| **SearchService**   | Search orchestration | DatabaseService, AIService, CacheService | Multi-database search, AI enhancement, caching              |
-| **DatabaseService** | MySQL operations     | mysql2/promise                           | Connection management, query execution, schema discovery    |
-| **AIService**       | AI/ML integration    | OpenAI API                               | Semantic search, query optimization, result categorization  |
-| **CacheService**    | Caching & analytics  | Redis/ioredis                            | Search caching, analytics storage, performance optimization |
-| **UserService**     | User management      | DatabaseService                          | User CRUD, password hashing, account management             |
-| **ApiKeyService**   | API key management   | DatabaseService                          | API key generation, validation, tiered permissions          |
+| __SearchService__   | Search orchestration | DatabaseService, AIService, CacheService | Multi-database search, AI enhancement, caching              |
+| __DatabaseService__ | MySQL operations     | mysql2/promise                           | Connection management, query execution, schema discovery    |
+| __AIService__       | AI/ML integration    | OpenAI API                               | Semantic search, query optimization, result categorization  |
+| __CacheService__    | Caching & analytics  | Redis/ioredis                            | Search caching, analytics storage, performance optimization |
+| __UserService__     | User management      | DatabaseService                          | User CRUD, password hashing, account management             |
+| __ApiKeyService__   | API key management   | DatabaseService                          | API key generation, validation, tiered permissions          |
 
 ## Detailed Service Documentation
 
@@ -44,7 +44,7 @@ graph LR
 
 The core search orchestration engine that coordinates multi-database searches with AI enhancements.
 
-**Key Responsibilities:**
+__Key Responsibilities:__
 
 - Orchestrate searches across multiple MySQL databases
 - Integrate AI-powered semantic search and query optimization
@@ -52,7 +52,7 @@ The core search orchestration engine that coordinates multi-database searches wi
 - Generate search suggestions and trend insights
 - Transform raw database results into structured search responses
 
-**Code Highlights:**
+__Code Highlights:__
 
 - Complex async/await orchestration
 - Advanced caching strategies
@@ -63,7 +63,7 @@ The core search orchestration engine that coordinates multi-database searches wi
 
 MySQL database connection management and query execution service.
 
-**Key Responsibilities:**
+__Key Responsibilities:__
 
 - Manage MySQL connection pools for multiple databases
 - Execute full-text search queries with optimization
@@ -71,7 +71,7 @@ MySQL database connection management and query execution service.
 - Handle connection testing and health monitoring
 - Encrypt and store database credentials securely
 
-**Code Highlights:**
+__Code Highlights:__
 
 - Connection pooling and lifecycle management
 - Dynamic query building and parameterization
@@ -82,7 +82,7 @@ MySQL database connection management and query execution service.
 
 OpenAI integration service for AI-enhanced search capabilities.
 
-**Key Responsibilities:**
+__Key Responsibilities:__
 
 - Process queries with semantic understanding
 - Generate intelligent search suggestions
@@ -90,7 +90,7 @@ OpenAI integration service for AI-enhanced search capabilities.
 - Provide query optimization recommendations
 - Generate search trend insights and analytics
 
-**Code Highlights:**
+__Code Highlights:__
 
 - OpenAI API integration patterns
 - Prompt engineering and response processing
@@ -101,7 +101,7 @@ OpenAI integration service for AI-enhanced search capabilities.
 
 Redis-based caching and analytics service for performance optimization.
 
-**Key Responsibilities:**
+__Key Responsibilities:__
 
 - Cache search results for improved performance
 - Store and retrieve search analytics data
@@ -109,7 +109,7 @@ Redis-based caching and analytics service for performance optimization.
 - Track user search patterns and behaviors
 - Provide real-time performance metrics
 
-**Code Highlights:**
+__Code Highlights:__
 
 - Redis data structures and operations
 - Cache invalidation strategies
@@ -120,14 +120,14 @@ Redis-based caching and analytics service for performance optimization.
 
 User management service handling account lifecycle and basic authentication.
 
-**Key Responsibilities:**
+__Key Responsibilities:__
 
 - User registration and profile management
 - Password hashing and authentication
 - User permission and role management
 - Account lifecycle operations
 
-**Code Highlights:**
+__Code Highlights:__
 
 - bcrypt password hashing patterns
 - User data validation and sanitization
@@ -137,7 +137,7 @@ User management service handling account lifecycle and basic authentication.
 
 API key management service for B2B authentication and authorization.
 
-**Key Responsibilities:**
+__Key Responsibilities:__
 
 - Generate secure API keys with proper formatting
 - Validate API keys and extract user context
@@ -145,7 +145,7 @@ API key management service for B2B authentication and authorization.
 - Implement tiered rate limiting and permissions
 - Track API key usage and analytics
 
-**Code Highlights:**
+__Code Highlights:__
 
 - Secure key generation and hashing
 - Prefix-based key lookup optimization
@@ -322,11 +322,11 @@ export class SearchService {
 
 When adding a new service:
 
-1. **Create interface** defining the service contract
-2. **Implement service class** with proper dependency injection
-3. **Add comprehensive tests** (unit and integration)
-4. **Document the service** following this template
-5. **Update service registration** in the IoC container
+1. __Create interface__ defining the service contract
+2. __Implement service class__ with proper dependency injection
+3. __Add comprehensive tests__ (unit and integration)
+4. __Document the service__ following this template
+5. __Update service registration__ in the IoC container
 
 ### Service Template
 
@@ -355,7 +355,7 @@ export class NewService implements INewService {
 
 ---
 
-**Next Steps:**
+__Next Steps:__
 
 - [Deep dive into SearchService](./search-service.md)
 - [Understanding DatabaseService](./database-service.md)

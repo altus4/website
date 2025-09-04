@@ -31,11 +31,11 @@ graph TB
 
 ### Testing Principles
 
-1. **Fast Feedback**: Tests should run quickly to enable rapid development
-2. **Reliability**: Tests should be deterministic and not flaky
-3. **Isolation**: Tests should not depend on external services or other tests
-4. **Maintainability**: Tests should be easy to understand and modify
-5. **Coverage**: Critical paths must have comprehensive test coverage
+1. __Fast Feedback__: Tests should run quickly to enable rapid development
+2. __Reliability__: Tests should be deterministic and not flaky
+3. __Isolation__: Tests should not depend on external services or other tests
+4. __Maintainability__: Tests should be easy to understand and modify
+5. __Coverage__: Critical paths must have comprehensive test coverage
 
 ## Test Organization
 
@@ -739,31 +739,31 @@ class CustomTestReporter {
 
 ### Testing Guidelines
 
-1. **Write Tests First**: Follow TDD when possible
-2. **Test Behavior, Not Implementation**: Focus on what the code does, not how
-3. **Keep Tests Simple**: Each test should verify one specific behavior
-4. **Use Descriptive Names**: Test names should clearly describe the scenario
-5. **Maintain Test Independence**: Tests should not depend on each other
-6. **Mock External Dependencies**: Isolate the code under test
-7. **Test Edge Cases**: Include boundary conditions and error scenarios
-8. **Keep Tests Fast**: Unit tests should run in milliseconds
-9. **Regular Test Maintenance**: Update tests when code changes
-10. **Monitor Test Quality**: Track coverage, flakiness, and performance
+1. __Write Tests First__: Follow TDD when possible
+2. __Test Behavior, Not Implementation__: Focus on what the code does, not how
+3. __Keep Tests Simple__: Each test should verify one specific behavior
+4. __Use Descriptive Names__: Test names should clearly describe the scenario
+5. __Maintain Test Independence__: Tests should not depend on each other
+6. __Mock External Dependencies__: Isolate the code under test
+7. __Test Edge Cases__: Include boundary conditions and error scenarios
+8. __Keep Tests Fast__: Unit tests should run in milliseconds
+9. __Regular Test Maintenance__: Update tests when code changes
+10. __Monitor Test Quality__: Track coverage, flakiness, and performance
 
 ### Quality Metrics
 
-- **Code Coverage**: Minimum 90% for critical components
-- **Test Performance**: Unit tests < 1ms, Integration tests < 100ms
-- **Test Reliability**: < 1% flaky test rate
-- **Maintenance**: Tests updated within same PR as code changes
+- __Code Coverage__: Minimum 90% for critical components
+- __Test Performance__: Unit tests < 1ms, Integration tests < 100ms
+- __Test Reliability__: < 1% flaky test rate
+- __Maintenance__: Tests updated within same PR as code changes
 
 ## Related Documentation
 
-- **[Unit Testing Guide](../testing/unit.md)** - Detailed unit testing patterns
-- **[Integration Testing Guide](../testing/integration.md)** - Integration testing strategies
-- **[Performance Testing Guide](../testing/performance.md)** - Performance testing implementation
-- **[Development Standards](../development/standards.md)** - Code quality standards
+- __[Unit Testing Guide](../testing/unit.md)__ - Detailed unit testing patterns
+- __[Integration Testing Guide](../testing/integration.md)__ - Integration testing strategies
+- __[Performance Testing Guide](../testing/performance.md)__ - Performance testing implementation
+- __[Development Standards](../development/standards.md)__ - Code quality standards
 
 ---
 
-**A comprehensive testing strategy ensures Altus 4's reliability, performance, and maintainability. Follow these guidelines to build a robust test suite that supports confident development and deployment.**
+__A comprehensive testing strategy ensures Altus 4's reliability, performance, and maintainability. Follow these guidelines to build a robust test suite that supports confident development and deployment.__

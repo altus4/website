@@ -50,19 +50,19 @@ graph TB
 
 ### Database Responsibilities
 
-#### 1. **Primary Database (Metadata Storage)**
+#### 1. __Primary Database (Metadata Storage)__
 
-- **Purpose**: Store Altus 4 system metadata and configuration
-- **Database**: `altus4_metadata`
-- **Contents**: Users, API keys, search history, analytics, database connections
-- **Management**: Fully managed by Altus 4 with migrations
+- __Purpose__: Store Altus 4 system metadata and configuration
+- __Database__: `altus4_metadata`
+- __Contents__: Users, API keys, search history, analytics, database connections
+- __Management__: Fully managed by Altus 4 with migrations
 
-#### 2. **User Databases (Search Targets)**
+#### 2. __User Databases (Search Targets)__
 
-- **Purpose**: Customer databases that Altus 4 searches
-- **Management**: Read-only access, customer-managed
-- **Requirements**: MySQL 8.0+ with FULLTEXT indexes
-- **Connection**: Secure connection pooling per database
+- __Purpose__: Customer databases that Altus 4 searches
+- __Management__: Read-only access, customer-managed
+- __Requirements__: MySQL 8.0+ with FULLTEXT indexes
+- __Connection__: Secure connection pooling per database
 
 ## Primary Database Schema
 
@@ -149,7 +149,7 @@ erDiagram
 
 #### 1. `users` Table
 
-**Purpose**: Store user account information and authentication data
+__Purpose__: Store user account information and authentication data
 
 ```sql
 CREATE TABLE users (
@@ -168,16 +168,17 @@ CREATE TABLE users (
 );
 ```
 
-**Key Features:**
-- **UUID Primary Key**: Globally unique identifiers
-- **Email Uniqueness**: Enforced at database level
-- **Password Security**: bcrypt hashed with salt rounds
-- **Role-Based Access**: Simple role system (user/admin)
-- **Audit Trail**: Created/updated timestamps
+__Key Features:__
+
+- __UUID Primary Key__: Globally unique identifiers
+- __Email Uniqueness__: Enforced at database level
+- __Password Security__: bcrypt hashed with salt rounds
+- __Role-Based Access__: Simple role system (user/admin)
+- __Audit Trail__: Created/updated timestamps
 
 #### 2. `api_keys` Table
 
-**Purpose**: Store API key metadata and usage tracking
+__Purpose__: Store API key metadata and usage tracking
 
 ```sql
 CREATE TABLE api_keys (
@@ -211,17 +212,18 @@ CREATE TABLE api_keys (
 );
 ```
 
-**Key Features:**
-- **Secure Storage**: Only hash stored, never full key
-- **Prefix Indexing**: Fast lookup by key prefix
-- **Tiered Permissions**: Granular permission system
-- **Usage Tracking**: Monitor API key usage patterns
-- **Environment Separation**: Test vs live key isolation
-- **Expiration Support**: Optional key expiration
+__Key Features:__
+
+- __Secure Storage__: Only hash stored, never full key
+- __Prefix Indexing__: Fast lookup by key prefix
+- __Tiered Permissions__: Granular permission system
+- __Usage Tracking__: Monitor API key usage patterns
+- __Environment Separation__: Test vs live key isolation
+- __Expiration Support__: Optional key expiration
 
 #### 3. `databases` Table
 
-**Purpose**: Store user database connection configurations
+__Purpose__: Store user database connection configurations
 
 ```sql
 CREATE TABLE databases (
@@ -251,16 +253,17 @@ CREATE TABLE databases (
 );
 ```
 
-**Key Features:**
-- **Encrypted Credentials**: AES-256 encryption for passwords
-- **Connection Pooling**: Support for connection pool configuration
-- **SSL Support**: Secure database connections
-- **Health Monitoring**: Track connection status and last usage
-- **Uniqueness**: Prevent duplicate database connections per user
+__Key Features:__
+
+- __Encrypted Credentials__: AES-256 encryption for passwords
+- __Connection Pooling__: Support for connection pool configuration
+- __SSL Support__: Secure database connections
+- __Health Monitoring__: Track connection status and last usage
+- __Uniqueness__: Prevent duplicate database connections per user
 
 #### 4. `searches` Table
 
-**Purpose**: Log search operations for analytics and debugging
+__Purpose__: Log search operations for analytics and debugging
 
 ```sql
 CREATE TABLE searches (
@@ -289,16 +292,17 @@ CREATE TABLE searches (
 );
 ```
 
-**Key Features:**
-- **Search Analytics**: Track all search operations
-- **Performance Monitoring**: Execution time tracking
-- **Query Analysis**: Full-text search on queries themselves
-- **Categorization**: Store AI-generated result categories
-- **Multi-Database Support**: Handle searches across multiple databases
+__Key Features:__
+
+- __Search Analytics__: Track all search operations
+- __Performance Monitoring__: Execution time tracking
+- __Query Analysis__: Full-text search on queries themselves
+- __Categorization__: Store AI-generated result categories
+- __Multi-Database Support__: Handle searches across multiple databases
 
 #### 5. `analytics` Table
 
-**Purpose**: Store aggregated analytics and metrics data
+__Purpose__: Store aggregated analytics and metrics data
 
 ```sql
 CREATE TABLE analytics (
@@ -321,11 +325,12 @@ CREATE TABLE analytics (
 );
 ```
 
-**Key Features:**
-- **Flexible Metrics**: JSON storage for various metric types
-- **Time-Series Data**: Date-based analytics storage
-- **Aggregation Support**: Pre-computed analytics for performance
-- **Uniqueness**: Prevent duplicate metrics per user/date
+__Key Features:__
+
+- __Flexible Metrics__: JSON storage for various metric types
+- __Time-Series Data__: Date-based analytics storage
+- __Aggregation Support__: Pre-computed analytics for performance
+- __Uniqueness__: Prevent duplicate metrics per user/date
 
 ## Migration System
 
@@ -370,11 +375,11 @@ npm run migrate:status
 
 The migration system uses a bash script that:
 
-1. **Loads Environment Variables**: From `.env` file
-2. **Validates Database Connection**: Ensures database is accessible
-3. **Tracks Migration State**: Uses a `migrations` table
-4. **Applies Changes Sequentially**: In numerical order
-5. **Handles Errors Gracefully**: Stops on first error
+1. __Loads Environment Variables__: From `.env` file
+2. __Validates Database Connection__: Ensures database is accessible
+3. __Tracks Migration State__: Uses a `migrations` table
+4. __Applies Changes Sequentially__: In numerical order
+5. __Handles Errors Gracefully__: Stops on first error
 
 ```bash
 #!/bin/bash
@@ -420,7 +425,7 @@ esac
 
 ### Migration Best Practices
 
-#### 1. **Atomic Migrations**
+#### 1. __Atomic Migrations__
 
 Each migration should be atomic and reversible:
 
@@ -450,7 +455,7 @@ DROP COLUMN timezone;
 COMMIT;
 ```
 
-#### 2. **Data Migrations**
+#### 2. __Data Migrations__
 
 Handle data transformations carefully:
 
@@ -475,7 +480,7 @@ ALTER TABLE searches DROP COLUMN search_params;
 COMMIT;
 ```
 
-#### 3. **Index Management**
+#### 3. __Index Management__
 
 Create indexes concurrently when possible:
 
@@ -551,7 +556,7 @@ interface FullTextIndex {
 
 ### Connection Requirements
 
-#### 1. **User Permissions**
+#### 1. __User Permissions__
 
 User database connections require specific permissions:
 
@@ -569,16 +574,16 @@ GRANT SELECT ON information_schema.* TO 'altus4_search'@'%';
 FLUSH PRIVILEGES;
 ```
 
-#### 2. **Connection Security**
+#### 2. __Connection Security__
 
-- **SSL Encryption**: Recommended for production
-- **IP Whitelisting**: Restrict access to Altus 4 servers
-- **Connection Limits**: Configure appropriate connection limits
-- **Timeout Settings**: Set reasonable timeout values
+- __SSL Encryption__: Recommended for production
+- __IP Whitelisting__: Restrict access to Altus 4 servers
+- __Connection Limits__: Configure appropriate connection limits
+- __Timeout Settings__: Set reasonable timeout values
 
 ## Database Optimization
 
-### 1. **Query Optimization**
+### 1. __Query Optimization__
 
 #### FULLTEXT Search Optimization
 
@@ -604,7 +609,7 @@ CREATE INDEX idx_api_keys_active_tier ON api_keys(is_active, rate_limit_tier);
 CREATE INDEX idx_databases_user_active_name ON databases(user_id, is_active, name);
 ```
 
-### 2. **Connection Pool Optimization**
+### 2. __Connection Pool Optimization__
 
 ```typescript
 // Optimized connection pool configuration
@@ -625,7 +630,7 @@ const poolConfig = {
 }
 ```
 
-### 3. **Performance Monitoring**
+### 3. __Performance Monitoring__
 
 #### Query Performance Tracking
 
@@ -666,7 +671,7 @@ export class DatabaseService {
 
 ## Backup and Recovery
 
-### 1. **Backup Strategy**
+### 1. __Backup Strategy__
 
 #### Automated Backups
 
@@ -703,7 +708,7 @@ binlog-format=ROW
 expire_logs_days=7
 ```
 
-### 2. **Disaster Recovery**
+### 2. __Disaster Recovery__
 
 #### Recovery Procedures
 
@@ -721,7 +726,7 @@ mysql -h "$DB_HOST" -u "$DB_USERNAME" -p"$DB_PASSWORD"
 
 ## Security Considerations
 
-### 1. **Data Encryption**
+### 1. __Data Encryption__
 
 #### At Rest Encryption
 
@@ -747,7 +752,7 @@ const sslConfig = {
 }
 ```
 
-### 2. **Access Control**
+### 2. __Access Control__
 
 #### Database User Privileges
 
@@ -765,7 +770,7 @@ GRANT SELECT, INSERT, UPDATE ON altus4_metadata.analytics TO 'altus4_app'@'%';
 GRANT SELECT ON user_database.* TO 'altus4_search'@'%';
 ```
 
-### 3. **Audit Logging**
+### 3. __Audit Logging__
 
 ```sql
 -- Enable audit logging
@@ -776,11 +781,11 @@ SET GLOBAL audit_log_format = 'JSON';
 
 ## Related Documentation
 
-- **[Service Layer Architecture](./services.md)** - How services interact with databases
-- **[Security Model](./security.md)** - Comprehensive security architecture
-- **[API Reference](../api/database.md)** - Database management API endpoints
-- **[Deployment Guide](../deployment/)** - Production database setup
+- __[Service Layer Architecture](./services.md)__ - How services interact with databases
+- __[Security Model](./security.md)__ - Comprehensive security architecture
+- __[API Reference](../api/database.md)__ - Database management API endpoints
+- __[Deployment Guide](../deployment/)__ - Production database setup
 
 ---
 
-**The database architecture provides a solid foundation for Altus 4's multi-tenant search capabilities while maintaining security, performance, and scalability.**
+__The database architecture provides a solid foundation for Altus 4's multi-tenant search capabilities while maintaining security, performance, and scalability.__

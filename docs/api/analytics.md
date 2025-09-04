@@ -26,11 +26,11 @@ graph TD
 
 ### Available Metrics
 
-- **Search Performance** - Response times, success rates, error patterns
-- **Usage Analytics** - Search volume, popular queries, user patterns
-- **Database Health** - Connection status, query performance, index utilization
-- **AI Insights** - Query categorization, trend analysis, optimization suggestions
-- **Business Intelligence** - User engagement, feature adoption, growth metrics
+- __Search Performance__ - Response times, success rates, error patterns
+- __Usage Analytics__ - Search volume, popular queries, user patterns
+- __Database Health__ - Connection status, query performance, index utilization
+- __AI Insights__ - Query categorization, trend analysis, optimization suggestions
+- __Business Intelligence__ - User engagement, feature adoption, growth metrics
 
 ## Analytics Endpoints
 
@@ -38,21 +38,21 @@ graph TD
 
 Get a comprehensive dashboard view of your search analytics.
 
-**Endpoint**: `GET /api/analytics/dashboard`
+__Endpoint__: `GET /api/analytics/dashboard`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `period` - Time period: `hour`, `day`, `week`, `month` (default: `day`)
 - `databases` - Comma-separated database IDs to filter
 - `timezone` - Timezone for date aggregation (default: `UTC`)
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -136,16 +136,16 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Get detailed search trend analysis over time.
 
-**Endpoint**: `GET /api/analytics/trends`
+__Endpoint__: `GET /api/analytics/trends`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `period` - `hour`, `day`, `week`, `month` (default: `week`)
 - `limit` - Number of data points (default: 100)
 - `databases` - Filter by specific databases
 - `groupBy` - Group results by: `query`, `category`, `database`
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -216,15 +216,15 @@ Get detailed search trend analysis over time.
 
 Get detailed performance analytics including response times, error rates, and resource utilization.
 
-**Endpoint**: `GET /api/analytics/performance`
+__Endpoint__: `GET /api/analytics/performance`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `period` - Time period for analysis
 - `breakdown` - Breakdown by: `endpoint`, `database`, `searchMode`
 - `includeErrors` - Include error analysis (default: true)
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -302,16 +302,16 @@ Get detailed performance analytics including response times, error rates, and re
 
 Get the most popular search queries with detailed analytics.
 
-**Endpoint**: `GET /api/analytics/popular-queries`
+__Endpoint__: `GET /api/analytics/popular-queries`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `limit` - Number of queries to return (default: 50)
 - `period` - Time period for popularity calculation
 - `minCount` - Minimum search count to include
 - `category` - Filter by query category
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -373,15 +373,15 @@ Get the most popular search queries with detailed analytics.
 
 Get AI-powered insights and recommendations based on your search patterns.
 
-**Endpoint**: `GET /api/analytics/insights`
+__Endpoint__: `GET /api/analytics/insights`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `type` - Insight type: `performance`, `usage`, `optimization`, `trends`
 - `databases` - Filter by specific databases
 - `includeRecommendations` - Include actionable recommendations
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -481,9 +481,9 @@ Get AI-powered insights and recommendations based on your search patterns.
 
 Get comprehensive system-wide analytics and health metrics.
 
-**Endpoint**: `GET /api/analytics/overview`
+__Endpoint__: `GET /api/analytics/overview`
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -545,15 +545,15 @@ Get comprehensive system-wide analytics and health metrics.
 
 Get detailed user activity and engagement metrics.
 
-**Endpoint**: `GET /api/analytics/user-activity`
+__Endpoint__: `GET /api/analytics/user-activity`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `segment` - User segment: `all`, `active`, `power`, `casual`
 - `period` - Analysis period
 - `includeDetails` - Include detailed user breakdown
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -620,9 +620,9 @@ Get detailed user activity and engagement metrics.
 
 Define custom metrics for tracking specific KPIs.
 
-**Endpoint**: `POST /api/analytics/custom-metrics`
+__Endpoint__: `POST /api/analytics/custom-metrics`
 
-**Request Body**:
+__Request Body__:
 
 ```json
 {
@@ -646,16 +646,16 @@ Define custom metrics for tracking specific KPIs.
 
 Export analytics data in various formats for external analysis.
 
-**Endpoint**: `GET /api/analytics/export`
+__Endpoint__: `GET /api/analytics/export`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `format` - Export format: `csv`, `json`, `xlsx`
 - `metrics` - Comma-separated list of metrics to include
 - `dateRange` - Date range for export
 - `granularity` - Data granularity: `hour`, `day`, `week`
 
-**Response**: File download or structured data based on format
+__Response__: File download or structured data based on format
 
 ## Code Examples
 
@@ -869,25 +869,25 @@ print(f"Cache Hit Rate: {report['cache_hit_rate']:.1%}")
 
 ### Performance Monitoring
 
-1. **Set Baselines**: Establish performance baselines for response times and success rates
-2. **Monitor Trends**: Track week-over-week and month-over-month changes
-3. **Alert Thresholds**: Set up alerts for degraded performance
-4. **Regular Reviews**: Schedule weekly analytics reviews
+1. __Set Baselines__: Establish performance baselines for response times and success rates
+2. __Monitor Trends__: Track week-over-week and month-over-month changes
+3. __Alert Thresholds__: Set up alerts for degraded performance
+4. __Regular Reviews__: Schedule weekly analytics reviews
 
 ### Data-Driven Optimization
 
-1. **Query Analysis**: Regularly review popular queries and optimize accordingly
-2. **Database Performance**: Monitor database-specific metrics and optimize slow queries
-3. **User Behavior**: Understand user patterns to improve search experience
-4. **A/B Testing**: Use analytics to measure impact of search improvements
+1. __Query Analysis__: Regularly review popular queries and optimize accordingly
+2. __Database Performance__: Monitor database-specific metrics and optimize slow queries
+3. __User Behavior__: Understand user patterns to improve search experience
+4. __A/B Testing__: Use analytics to measure impact of search improvements
 
 ### Reporting Strategy
 
-1. **Stakeholder Dashboards**: Create role-specific analytics dashboards
-2. **Automated Reports**: Set up scheduled reports for key metrics
-3. **Historical Analysis**: Maintain historical data for trend analysis
-4. **Data Export**: Regularly export data for deeper analysis
+1. __Stakeholder Dashboards__: Create role-specific analytics dashboards
+2. __Automated Reports__: Set up scheduled reports for key metrics
+3. __Historical Analysis__: Maintain historical data for trend analysis
+4. __Data Export__: Regularly export data for deeper analysis
 
 ---
 
-**Next Steps**: [Error Handling](./errors.md) | [Rate Limiting](./rate-limiting.md)
+__Next Steps__: [Error Handling](./errors.md) | [Rate Limiting](./rate-limiting.md)

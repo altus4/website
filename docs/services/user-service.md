@@ -14,12 +14,13 @@ The UserService manages user accounts, authentication, and profile operations. I
 ### Responsibilities
 
 The UserService handles:
-- **User Registration** - Secure user account creation with validation and verification
-- **Authentication** - Password-based login with security measures
-- **Profile Management** - User profile updates, preferences, and account settings
-- **Password Security** - Secure password hashing, validation, and reset functionality
-- **Account Lifecycle** - Account activation, deactivation, and deletion
-- **Audit Logging** - Comprehensive logging of user actions for security and compliance
+
+- __User Registration__ - Secure user account creation with validation and verification
+- __Authentication__ - Password-based login with security measures
+- __Profile Management__ - User profile updates, preferences, and account settings
+- __Password Security__ - Secure password hashing, validation, and reset functionality
+- __Account Lifecycle__ - Account activation, deactivation, and deletion
+- __Audit Logging__ - Comprehensive logging of user actions for security and compliance
 
 ### Architecture
 
@@ -1130,14 +1131,14 @@ interface UserConfig {
 
 ### Best Practices
 
-1. **Password Security**: Use strong hashing (bcrypt) with appropriate salt rounds
-2. **Input Validation**: Validate and sanitize all user inputs
-3. **Rate Limiting**: Implement login attempt rate limiting
-4. **Security Logging**: Log all security-relevant events
-5. **Account Lockout**: Implement progressive account lockout policies
-6. **Data Privacy**: Follow data protection regulations (GDPR, CCPA)
-7. **Session Management**: Implement secure session handling
+1. __Password Security__: Use strong hashing (bcrypt) with appropriate salt rounds
+2. __Input Validation__: Validate and sanitize all user inputs
+3. __Rate Limiting__: Implement login attempt rate limiting
+4. __Security Logging__: Log all security-relevant events
+5. __Account Lockout__: Implement progressive account lockout policies
+6. __Data Privacy__: Follow data protection regulations (GDPR, CCPA)
+7. __Session Management__: Implement secure session handling
 
 ---
 
-**The UserService provides secure and comprehensive user account management, forming the foundation for authentication and user experience in Altus 4.**
+__The UserService provides secure and comprehensive user account management, forming the foundation for authentication and user experience in Altus 4.__

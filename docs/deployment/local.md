@@ -10,15 +10,17 @@ This guide walks you through setting up Altus 4 for local development on your ma
 ## Prerequisites
 
 ### System Requirements
-- **Node.js**: Version 18 or higher
-- **npm**: Version 9 or higher (comes with Node.js)
-- **Git**: For version control
-- **MySQL**: Version 8.0 or higher
-- **Redis**: Version 6.0 or higher (optional but recommended)
+
+- __Node.js__: Version 18 or higher
+- __npm__: Version 9 or higher (comes with Node.js)
+- __Git__: For version control
+- __MySQL__: Version 8.0 or higher
+- __Redis__: Version 6.0 or higher (optional but recommended)
 
 ### Platform-Specific Installation
 
 #### macOS
+
 ```bash
 # Install Homebrew if not already installed
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -36,6 +38,7 @@ brew services start redis
 ```
 
 #### Ubuntu/Debian
+
 ```bash
 # Update package list
 sudo apt update
@@ -56,6 +59,7 @@ sudo systemctl enable redis-server
 ```
 
 #### Windows
+
 ```powershell
 # Install Node.js from https://nodejs.org/
 # Or use Chocolatey
@@ -71,17 +75,20 @@ choco install redis-64
 ## Project Setup
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/your-org/altus4-core.git
 cd altus4-core
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Environment Configuration
+
 Create your local environment file:
 
 ```bash
@@ -127,6 +134,7 @@ ENABLE_SWAGGER=true
 ### 4. Database Setup
 
 #### Create Development Database
+
 ```bash
 # Connect to MySQL as root
 mysql -u root -p
@@ -140,6 +148,7 @@ EXIT;
 ```
 
 #### Run Database Migrations
+
 ```bash
 # Run database schema creation
 npm run db:migrate
@@ -149,6 +158,7 @@ npm run db:seed
 ```
 
 ### 5. Verify Setup
+
 Test your database connection:
 
 ```bash
@@ -156,6 +166,7 @@ npm run db:test
 ```
 
 Expected output:
+
 ```
 ✓ Database connection successful
 ✓ All required tables exist
@@ -165,6 +176,7 @@ Expected output:
 ## Development Commands
 
 ### Start Development Server
+
 ```bash
 # Start with hot reloading
 npm run dev
@@ -177,6 +189,7 @@ PORT=4000 npm run dev
 ```
 
 ### Database Operations
+
 ```bash
 # Run migrations
 npm run db:migrate
@@ -195,6 +208,7 @@ npm run db:create-migration migration_name
 ```
 
 ### Testing
+
 ```bash
 # Run all tests
 npm test
@@ -213,6 +227,7 @@ npm run test:integration
 ```
 
 ### Code Quality
+
 ```bash
 # Run ESLint
 npm run lint
@@ -230,6 +245,7 @@ npm run format
 ## Development Database Schema
 
 ### Core Tables
+
 The development database includes these main tables:
 
 ```sql
@@ -282,6 +298,7 @@ CREATE TABLE databases (
 ```
 
 ### Test Data Seeding
+
 The seed script creates sample data for development:
 
 ```bash
@@ -301,6 +318,7 @@ INSERT INTO databases (id, user_id, name, host, username, password_encrypted, da
 ## Development Tools
 
 ### VS Code Configuration
+
 Recommended VS Code extensions:
 
 ```json
@@ -334,6 +352,7 @@ VS Code settings (`.vscode/settings.json`):
 ```
 
 ### Debug Configuration
+
 VS Code debug configuration (`.vscode/launch.json`):
 
 ```json
@@ -367,6 +386,7 @@ VS Code debug configuration (`.vscode/launch.json`):
 ## API Testing
 
 ### Using cURL
+
 Test the API endpoints locally:
 
 ```bash
@@ -391,6 +411,7 @@ curl -X POST http://localhost:3000/api/v1/api-keys \
 ```
 
 ### Using Postman
+
 Import the Postman collection:
 
 ```bash
@@ -399,7 +420,9 @@ npm run postman:export
 ```
 
 ### Swagger Documentation
+
 Access interactive API documentation at:
+
 ```
 http://localhost:3000/api/docs
 ```
@@ -407,6 +430,7 @@ http://localhost:3000/api/docs
 ## Development Workflow
 
 ### Feature Development
+
 1. Create feature branch: `git checkout -b feature/new-search-mode`
 2. Make changes and write tests
 3. Run tests: `npm test`
@@ -415,6 +439,7 @@ http://localhost:3000/api/docs
 6. Push and create pull request
 
 ### Database Schema Changes
+
 1. Create migration: `npm run db:create-migration add_new_table`
 2. Edit migration file in `migrations/` directory
 3. Run migration: `npm run db:migrate`
@@ -422,6 +447,7 @@ http://localhost:3000/api/docs
 5. Update seed data if needed
 
 ### Service Testing
+
 Test individual services:
 
 ```typescript
@@ -454,6 +480,7 @@ describe('SearchService', () => {
 ## Common Development Issues
 
 ### Port Already in Use
+
 ```bash
 # Find process using port 3000
 lsof -ti:3000
@@ -466,6 +493,7 @@ PORT=3001 npm run dev
 ```
 
 ### Database Connection Issues
+
 ```bash
 # Check MySQL service status
 brew services list | grep mysql  # macOS
@@ -479,6 +507,7 @@ mysql -u altus4_dev -p altus4_development
 ```
 
 ### Redis Connection Issues
+
 ```bash
 # Check Redis status
 redis-cli ping  # Should return PONG
@@ -489,6 +518,7 @@ systemctl status redis-server    # Linux
 ```
 
 ### TypeScript Errors
+
 ```bash
 # Clear TypeScript cache
 npm run build:clean
@@ -503,6 +533,7 @@ npx tsc --noEmit src/services/search.service.ts
 ## Performance Considerations
 
 ### Local Development Optimization
+
 - Use SSD for better database performance
 - Allocate adequate RAM (minimum 8GB recommended)
 - Use local Redis instance for caching
@@ -510,6 +541,7 @@ npx tsc --noEmit src/services/search.service.ts
 - Use nodemon for fast reloading during development
 
 ### Development vs Production Differences
+
 - Development uses pretty-printed logs
 - Debug logging is enabled
 - CORS is permissive in development
@@ -520,8 +552,8 @@ npx tsc --noEmit src/services/search.service.ts
 
 Once your local development environment is set up:
 
-1. **Explore the Codebase**: Familiarize yourself with the service architecture
-2. **Run the Test Suite**: Understand the testing patterns
-3. **Make a Small Change**: Try adding a new API endpoint
-4. **Read the API Documentation**: Understand the external interface
-5. **Check Out Examples**: See how to integrate with the API
+1. __Explore the Codebase__: Familiarize yourself with the service architecture
+2. __Run the Test Suite__: Understand the testing patterns
+3. __Make a Small Change__: Try adding a new API endpoint
+4. __Read the API Documentation__: Understand the external interface
+5. __Check Out Examples__: See how to integrate with the API

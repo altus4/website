@@ -29,11 +29,11 @@ graph TB
 
 ### Testing Principles
 
-1. **Fast Feedback**: Tests should run quickly to enable rapid development
-2. **Reliable**: Tests should be deterministic and not flaky
-3. **Independent**: Tests should not depend on each other
-4. **Maintainable**: Tests should be easy to understand and modify
-5. **Comprehensive**: Critical paths should have high test coverage
+1. __Fast Feedback__: Tests should run quickly to enable rapid development
+2. __Reliable__: Tests should be deterministic and not flaky
+3. __Independent__: Tests should not depend on each other
+4. __Maintainable__: Tests should be easy to understand and modify
+5. __Comprehensive__: Critical paths should have high test coverage
 
 ## Test Types
 
@@ -41,33 +41,33 @@ graph TB
 
 Test individual functions, classes, and components in isolation.
 
-**Location**: `src/**/*.test.ts`
-**Framework**: Jest with TypeScript
-**Coverage Target**: 90%+
+__Location__: `src/**/*.test.ts`
+__Framework__: Jest with TypeScript
+__Coverage Target__: 90%+
 
 ### 2. Integration Tests
 
 Test API endpoints and service interactions with mocked external dependencies.
 
-**Location**: `tests/integration/**/*.test.ts`
-**Framework**: Jest + Supertest
-**Coverage Target**: Key API endpoints
+__Location__: `tests/integration/**/*.test.ts`
+__Framework__: Jest + Supertest
+__Coverage Target__: Key API endpoints
 
 ### 3. Performance Tests
 
 Test system performance under load and measure response times.
 
-**Location**: `tests/performance/**/*.test.ts`
-**Framework**: Jest + Custom benchmarking
-**Coverage Target**: Critical search operations
+__Location__: `tests/performance/**/*.test.ts`
+__Framework__: Jest + Custom benchmarking
+__Coverage Target__: Critical search operations
 
 ### 4. End-to-End Tests
 
 Test complete user workflows from client to database.
 
-**Location**: `tests/e2e/**/*.test.ts`
-**Framework**: Jest + Real services
-**Coverage Target**: Primary user flows
+__Location__: `tests/e2e/**/*.test.ts`
+__Framework__: Jest + Real services
+__Coverage Target__: Primary user flows
 
 ## Test Configuration
 
@@ -108,7 +108,7 @@ module.exports = {
 
 ### Environment Setup
 
-**Test Environment Variables** (`.env.test`):
+__Test Environment Variables__ (`.env.test`):
 
 ```bash
 NODE_ENV=test
@@ -128,7 +128,7 @@ ENABLE_QUERY_LOGGING=false
 ENABLE_PERFORMANCE_MONITORING=false
 ```
 
-**Global Test Setup** (`tests/setup.ts`):
+__Global Test Setup__ (`tests/setup.ts`):
 
 ```typescript
 import { logger } from '@/utils/logger'
@@ -862,26 +862,26 @@ jobs:
 
 ### Test Writing Guidelines
 
-1. **AAA Pattern**: Arrange, Act, Assert
-2. **Descriptive Names**: Test names should describe the scenario
-3. **Single Responsibility**: Each test should verify one behavior
-4. **Independent Tests**: Tests should not depend on each other
-5. **Fast Execution**: Unit tests should complete in milliseconds
+1. __AAA Pattern__: Arrange, Act, Assert
+2. __Descriptive Names__: Test names should describe the scenario
+3. __Single Responsibility__: Each test should verify one behavior
+4. __Independent Tests__: Tests should not depend on each other
+5. __Fast Execution__: Unit tests should complete in milliseconds
 
 ### Mocking Guidelines
 
-1. **Mock External Dependencies**: Database, APIs, file system
-2. **Don't Mock What You Don't Own**: Avoid mocking internal classes
-3. **Verify Mock Interactions**: Check that mocks are called correctly
-4. **Reset Mocks**: Clear mock state between tests
+1. __Mock External Dependencies__: Database, APIs, file system
+2. __Don't Mock What You Don't Own__: Avoid mocking internal classes
+3. __Verify Mock Interactions__: Check that mocks are called correctly
+4. __Reset Mocks__: Clear mock state between tests
 
 ### Common Pitfalls
 
-1. **Testing Implementation Details**: Focus on behavior, not implementation
-2. **Overly Complex Tests**: Keep tests simple and focused
-3. **Missing Error Cases**: Test both success and failure paths
-4. **Flaky Tests**: Avoid tests that randomly fail
-5. **Slow Tests**: Keep unit tests fast with proper mocking
+1. __Testing Implementation Details__: Focus on behavior, not implementation
+2. __Overly Complex Tests__: Keep tests simple and focused
+3. __Missing Error Cases__: Test both success and failure paths
+4. __Flaky Tests__: Avoid tests that randomly fail
+5. __Slow Tests__: Keep unit tests fast with proper mocking
 
 ## Debugging Tests
 
@@ -933,4 +933,4 @@ npm test -- --testNamePattern="should return cached results" --verbose
 
 ---
 
-**With this comprehensive testing strategy, Altus 4 maintains high code quality, reliability, and confidence in all deployments.**
+__With this comprehensive testing strategy, Altus 4 maintains high code quality, reliability, and confidence in all deployments.__

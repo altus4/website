@@ -15,9 +15,9 @@ Altus 4 provides powerful search capabilities that enhance MySQL's native full-t
 
 Altus 4 supports three distinct search modes:
 
-- **Natural Language** - Human-readable queries with automatic optimization
-- **Boolean** - Traditional boolean operators (AND, OR, NOT) with MySQL syntax
-- **Semantic** - AI-powered semantic search using OpenAI embeddings
+- __Natural Language__ - Human-readable queries with automatic optimization
+- __Boolean__ - Traditional boolean operators (AND, OR, NOT) with MySQL syntax
+- __Semantic__ - AI-powered semantic search using OpenAI embeddings
 
 ### Search Architecture
 
@@ -43,16 +43,16 @@ graph TD
 
 Perform a search across one or more connected databases with comprehensive options.
 
-**Endpoint**: `POST /api/search`
+__Endpoint__: `POST /api/search`
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
-**Request Body**:
+__Request Body__:
 
 ```json
 {
@@ -78,7 +78,7 @@ Content-Type: application/json
 }
 ```
 
-**Request Parameters**:
+__Request Parameters__:
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -90,7 +90,7 @@ Content-Type: application/json
 | `filters` | object | No | Search filters and constraints |
 | `options` | object | No | Additional search options |
 
-**Filters Object**:
+__Filters Object__:
 
 ```json
 {
@@ -105,7 +105,7 @@ Content-Type: application/json
 }
 ```
 
-**Options Object**:
+__Options Object__:
 
 ```json
 {
@@ -118,7 +118,7 @@ Content-Type: application/json
 }
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -199,7 +199,7 @@ Content-Type: application/json
 
 Process human-readable queries with automatic optimization.
 
-**Example Request**:
+__Example Request__:
 
 ```json
 {
@@ -210,7 +210,7 @@ Process human-readable queries with automatic optimization.
 }
 ```
 
-**Features**:
+__Features__:
 
 - Automatic query expansion and optimization
 - Synonym detection and matching
@@ -221,7 +221,7 @@ Process human-readable queries with automatic optimization.
 
 Use traditional boolean operators for precise control.
 
-**Example Request**:
+__Example Request__:
 
 ```json
 {
@@ -232,7 +232,7 @@ Use traditional boolean operators for precise control.
 }
 ```
 
-**Supported Operators**:
+__Supported Operators__:
 
 - `AND` - Both terms must be present
 - `OR` - Either term can be present
@@ -241,7 +241,7 @@ Use traditional boolean operators for precise control.
 - `""` - Exact phrase matching
 - `*` - Wildcard matching
 
-**Boolean Query Examples**:
+__Boolean Query Examples__:
 
 ```bash
 # Exact phrase
@@ -267,7 +267,7 @@ optim* AND databas*
 
 AI-powered search using embeddings for concept matching.
 
-**Example Request**:
+__Example Request__:
 
 ```json
 {
@@ -280,7 +280,7 @@ AI-powered search using embeddings for concept matching.
 }
 ```
 
-**Features**:
+__Features__:
 
 - Concept-based matching beyond keywords
 - Understanding of context and intent
@@ -293,21 +293,21 @@ AI-powered search using embeddings for concept matching.
 
 Retrieve intelligent search suggestions based on query and context.
 
-**Endpoint**: `GET /api/search/suggestions`
+__Endpoint__: `GET /api/search/suggestions`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `q` - Partial query string
 - `databases` - Comma-separated database IDs
 - `limit` - Number of suggestions (default: 5, max: 20)
 
-**Headers**:
+__Headers__:
 
 ```http
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -339,7 +339,7 @@ Authorization: Bearer <YOUR_API_KEY>
 }
 ```
 
-**cURL Example**:
+__cURL Example__:
 
 ```bash
 curl -X GET "https://api.altus4.dev/api/search/suggestions?q=database%20perf&databases=db_uuid_1&limit=5" \
@@ -352,9 +352,9 @@ curl -X GET "https://api.altus4.dev/api/search/suggestions?q=database%20perf&dat
 
 Get detailed performance analysis for a search query.
 
-**Endpoint**: `POST /api/search/analyze`
+__Endpoint__: `POST /api/search/analyze`
 
-**Request Body**:
+__Request Body__:
 
 ```json
 {
@@ -364,7 +364,7 @@ Get detailed performance analysis for a search query.
 }
 ```
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -402,9 +402,9 @@ Get detailed performance analysis for a search query.
 
 Retrieve user's search history with analytics.
 
-**Endpoint**: `GET /api/search/history`
+__Endpoint__: `GET /api/search/history`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `limit` - Number of history entries (default: 50, max: 500)
 - `offset` - Pagination offset
@@ -412,7 +412,7 @@ Retrieve user's search history with analytics.
 - `to` - End date (ISO string)
 - `databases` - Filter by specific databases
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -448,14 +448,14 @@ Retrieve user's search history with analytics.
 
 Get user's search trends and pattern insights.
 
-**Endpoint**: `GET /api/search/trends`
+__Endpoint__: `GET /api/search/trends`
 
-**Query Parameters**:
+__Query Parameters__:
 
 - `period` - `day`, `week`, `month` (default: `week`)
 - `databases` - Filter by specific databases
 
-**Response**:
+__Response__:
 
 ```json
 {
@@ -697,17 +697,17 @@ for result in results['data']['results']:
 
 ### Query Optimization
 
-1. **Use Specific Terms**: More specific queries yield better results
-2. **Leverage Search Modes**: Choose the right mode for your use case
-3. **Apply Filters**: Use filters to narrow down results effectively
-4. **Cache Results**: Enable caching for frequently used queries
+1. __Use Specific Terms__: More specific queries yield better results
+2. __Leverage Search Modes__: Choose the right mode for your use case
+3. __Apply Filters__: Use filters to narrow down results effectively
+4. __Cache Results__: Enable caching for frequently used queries
 
 ### Performance Tips
 
-1. **Limit Results**: Use appropriate limits to improve response times
-2. **Batch Databases**: Search multiple databases in a single request
-3. **Use Pagination**: Implement pagination for large result sets
-4. **Monitor Usage**: Track search performance and optimize accordingly
+1. __Limit Results__: Use appropriate limits to improve response times
+2. __Batch Databases__: Search multiple databases in a single request
+3. __Use Pagination__: Implement pagination for large result sets
+4. __Monitor Usage__: Track search performance and optimize accordingly
 
 ### Error Handling
 
@@ -740,4 +740,4 @@ const safeSearch = async (query, databases) => {
 
 ---
 
-**Next Steps**: [Database Management](./database.md) | [Analytics & Insights](./analytics.md)
+__Next Steps__: [Database Management](./database.md) | [Analytics & Insights](./analytics.md)

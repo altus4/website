@@ -13,9 +13,9 @@ This guide provides practical examples of basic search operations using Altus 4'
 
 Before running these examples, ensure you have:
 
-- **Altus 4 API Key** - Get one from the [Quick Start Guide](../setup/quickstart.md)
-- **Database Connection** - At least one connected MySQL database
-- **HTTP Client** - cURL, Postman, or your preferred programming language
+- __Altus 4 API Key__ - Get one from the [Quick Start Guide](../setup/quickstart.md)
+- __Database Connection__ - At least one connected MySQL database
+- __HTTP Client__ - cURL, Postman, or your preferred programming language
 
 ## Basic Search Request
 
@@ -35,7 +35,8 @@ curl -X POST https://api.altus4.com/api/v1/search \
   }'
 ```
 
-**Response:**
+__Response:__
+
 ```json
 {
   "success": true,
@@ -122,7 +123,8 @@ for result in results['data']['results']:
     print(f"Score: {result['relevanceScore']}")
 ```
 
-**Boolean Operators:**
+__Boolean Operators:__
+
 - `+word` - Must contain word
 - `-word` - Must not contain word
 - `"exact phrase"` - Exact phrase match
@@ -589,16 +591,17 @@ help_results = search_documentation("how to reset password", "support_db")
 
 Now that you understand basic search operations, explore:
 
-- **[Advanced Queries](./advanced-queries.md)** - Complex search patterns and filters
-- **[AI Integration](./ai-integration.md)** - Leveraging semantic search capabilities
-- **[Multi-Database Search](./multi-database.md)** - Searching across multiple databases
-- **[API Reference](../api/search.md)** - Complete search API documentation
+- __[Advanced Queries](./advanced-queries.md)__ - Complex search patterns and filters
+- __[AI Integration](./ai-integration.md)__ - Leveraging semantic search capabilities
+- __[Multi-Database Search](./multi-database.md)__ - Searching across multiple databases
+- __[API Reference](../api/search.md)__ - Complete search API documentation
 
 ## Troubleshooting
 
 ### Common Issues
 
-**Empty Results**
+__Empty Results__
+
 ```javascript
 // Check if your database has FULLTEXT indexes
 const schemaResponse = await fetch(`https://api.altus4.com/api/v1/databases/${databaseId}/schema`, {
@@ -608,7 +611,8 @@ const schema = await schemaResponse.json()
 console.log('FULLTEXT indexes:', schema.data.fulltextIndexes)
 ```
 
-**Slow Searches**
+__Slow Searches__
+
 ```bash
 # Use more specific queries
 # Good: "mysql index optimization"
@@ -621,7 +625,8 @@ console.log('FULLTEXT indexes:', schema.data.fulltextIndexes)
 }
 ```
 
-**Authentication Errors**
+__Authentication Errors__
+
 ```javascript
 // Verify API key format
 if (!apiKey.startsWith('altus4_sk_')) {
@@ -634,4 +639,4 @@ console.log('API Key permissions:', req.apiKey.permissions)
 
 ---
 
-**Ready for more advanced search techniques?** Continue with [Advanced Queries](./advanced-queries.md) to learn complex search patterns and optimization strategies.
+__Ready for more advanced search techniques?__ Continue with [Advanced Queries](./advanced-queries.md) to learn complex search patterns and optimization strategies.

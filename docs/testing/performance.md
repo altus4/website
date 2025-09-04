@@ -15,22 +15,22 @@ Performance testing ensures that Altus 4 meets performance requirements under va
 
 Performance testing aims to:
 
-- **Verify Response Times**: Ensure API endpoints meet SLA requirements
-- **Identify Bottlenecks**: Find performance limitations in the system
-- **Test Scalability**: Verify system behavior under increasing load
-- **Validate Stability**: Ensure system remains stable under sustained load
-- **Optimize Resource Usage**: Identify memory leaks and inefficient resource usage
-- **Benchmark Performance**: Establish baseline performance metrics
+- __Verify Response Times__: Ensure API endpoints meet SLA requirements
+- __Identify Bottlenecks__: Find performance limitations in the system
+- __Test Scalability__: Verify system behavior under increasing load
+- __Validate Stability__: Ensure system remains stable under sustained load
+- __Optimize Resource Usage__: Identify memory leaks and inefficient resource usage
+- __Benchmark Performance__: Establish baseline performance metrics
 
 ### Types of Performance Testing
 
 | Test Type | Purpose | Load Pattern | Duration |
 |-----------|---------|--------------|----------|
-| **Load Testing** | Normal expected load | Gradual increase to target | 10-30 minutes |
-| **Stress Testing** | Beyond normal capacity | Rapid increase past limits | 5-15 minutes |
-| **Spike Testing** | Sudden load increases | Sharp spikes in traffic | 2-10 minutes |
-| **Volume Testing** | Large amounts of data | Steady load with big datasets | 30-60 minutes |
-| **Endurance Testing** | Extended periods | Constant load over time | 2-24 hours |
+| __Load Testing__ | Normal expected load | Gradual increase to target | 10-30 minutes |
+| __Stress Testing__ | Beyond normal capacity | Rapid increase past limits | 5-15 minutes |
+| __Spike Testing__ | Sudden load increases | Sharp spikes in traffic | 2-10 minutes |
+| __Volume Testing__ | Large amounts of data | Steady load with big datasets | 30-60 minutes |
+| __Endurance Testing__ | Extended periods | Constant load over time | 2-24 hours |
 
 ## Performance Requirements
 
@@ -1069,13 +1069,13 @@ module.exports = {
 
 ### Performance Testing Guidelines
 
-1. **Establish Baselines**: Define performance targets and baseline metrics
-2. **Test Realistic Scenarios**: Use realistic data volumes and usage patterns
-3. **Monitor System Resources**: Track CPU, memory, and I/O during tests
-4. **Test Different Load Patterns**: Include steady load, spikes, and gradual increases
-5. **Isolate Performance Tests**: Run in dedicated environment without interference
-6. **Automate Performance Testing**: Include in CI/CD pipeline for regression detection
-7. **Document Results**: Keep historical performance data for trend analysis
+1. __Establish Baselines__: Define performance targets and baseline metrics
+2. __Test Realistic Scenarios__: Use realistic data volumes and usage patterns
+3. __Monitor System Resources__: Track CPU, memory, and I/O during tests
+4. __Test Different Load Patterns__: Include steady load, spikes, and gradual increases
+5. __Isolate Performance Tests__: Run in dedicated environment without interference
+6. __Automate Performance Testing__: Include in CI/CD pipeline for regression detection
+7. __Document Results__: Keep historical performance data for trend analysis
 
 ### Common Performance Anti-patterns
 
@@ -1146,11 +1146,11 @@ class GoodCacheService {
 
 ## Related Documentation
 
-- **[Unit Testing Guide](./unit.md)** - Unit testing strategies and patterns
-- **[Integration Testing Guide](./integration.md)** - Integration testing implementation
-- **[Testing Overview](./index.md)** - Complete testing strategy
-- **[Development Standards](../development/standards.md)** - Code quality standards
+- __[Unit Testing Guide](./unit.md)__ - Unit testing strategies and patterns
+- __[Integration Testing Guide](./integration.md)__ - Integration testing implementation
+- __[Testing Overview](./index.md)__ - Complete testing strategy
+- __[Development Standards](../development/standards.md)__ - Code quality standards
 
 ---
 
-**Performance testing ensures Altus 4 meets performance requirements under various load conditions. Use these strategies and tools to identify bottlenecks, validate scalability, and maintain optimal performance.**
+__Performance testing ensures Altus 4 meets performance requirements under various load conditions. Use these strategies and tools to identify bottlenecks, validate scalability, and maintain optimal performance.__

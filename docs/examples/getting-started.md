@@ -29,6 +29,7 @@ curl -X POST https://api.altus4.com/api/v1/auth/register \
 ```
 
 Response:
+
 ```json
 {
   "success": true,
@@ -57,6 +58,7 @@ curl -X POST https://api.altus4.com/api/v1/auth/login \
 ```
 
 Response:
+
 ```json
 {
   "success": true,
@@ -83,6 +85,7 @@ curl -X POST https://api.altus4.com/api/v1/api-keys \
 ```
 
 Response:
+
 ```json
 {
   "success": true,
@@ -96,7 +99,7 @@ Response:
 }
 ```
 
-**Important:** Save this API key securely. You won't be able to see it again.
+__Important:__ Save this API key securely. You won't be able to see it again.
 
 ## Step 3: Connect Your Database
 
@@ -117,6 +120,7 @@ curl -X POST https://api.altus4.com/api/v1/databases \
 ```
 
 Response:
+
 ```json
 {
   "success": true,
@@ -141,6 +145,7 @@ curl -X GET https://api.altus4.com/api/v1/databases/db-789/schema \
 ```
 
 Response:
+
 ```json
 {
   "success": true,
@@ -188,6 +193,7 @@ curl -X POST https://api.altus4.com/api/v1/search \
 ```
 
 Response:
+
 ```json
 {
   "success": true,
@@ -276,6 +282,7 @@ curl -X GET https://api.altus4.com/api/v1/analytics/insights \
 ```
 
 Response:
+
 ```json
 {
   "success": true,
@@ -309,6 +316,7 @@ Response:
 ## Common Use Cases
 
 ### Content Management System
+
 Search across blog posts, pages, and documentation:
 
 ```javascript
@@ -328,6 +336,7 @@ const searchResults = await fetch('/api/v1/search', {
 ```
 
 ### E-commerce Product Search
+
 Find products across multiple catalogs:
 
 ```python
@@ -348,6 +357,7 @@ response = requests.post('https://api.altus4.com/api/v1/search',
 ```
 
 ### Knowledge Base Search
+
 Search across documentation and FAQs:
 
 ```bash
@@ -365,21 +375,22 @@ curl -X POST https://api.altus4.com/api/v1/search \
 
 ## Next Steps
 
-1. **Explore API Reference**: Check out the complete [API documentation](/api/search) for all available endpoints and options.
+1. __Explore API Reference__: Check out the complete [API documentation](/api/search) for all available endpoints and options.
 
-2. **Optimize Your Database**: Review our [setup guide](../setup/index.md) to improve search performance.
+2. __Optimize Your Database__: Review our [setup guide](../setup/index.md) to improve search performance.
 
-3. **Set up Monitoring**: Configure [monitoring and analytics](/deployment/monitoring) to track search performance and usage patterns.
+3. __Set up Monitoring__: Configure [monitoring and analytics](/deployment/monitoring) to track search performance and usage patterns.
 
-4. **Upgrade Your Plan**: Consider upgrading to Pro or Enterprise for advanced features like semantic search and higher rate limits.
+4. __Upgrade Your Plan__: Consider upgrading to Pro or Enterprise for advanced features like semantic search and higher rate limits.
 
-5. **Integration Examples**: See language-specific integration examples in our [SDK guide](./sdk.md).
+5. __Integration Examples__: See language-specific integration examples in our [SDK guide](./sdk.md).
 
 ## Troubleshooting
 
 ### Common Issues
 
-**Connection Refused**
+__Connection Refused__
+
 ```json
 {
   "success": false,
@@ -389,9 +400,11 @@ curl -X POST https://api.altus4.com/api/v1/search \
   }
 }
 ```
+
 Solution: Check your database credentials and network connectivity.
 
-**Rate Limit Exceeded**
+__Rate Limit Exceeded__
+
 ```json
 {
   "success": false,
@@ -401,9 +414,11 @@ Solution: Check your database credentials and network connectivity.
   }
 }
 ```
+
 Solution: Implement request throttling or upgrade your plan.
 
-**No Search Results**
+__No Search Results__
+
 - Ensure your database has FULLTEXT indexes
 - Check that the search query matches your content
 - Try different search modes (natural, boolean, semantic)
@@ -412,4 +427,4 @@ Solution: Implement request throttling or upgrade your plan.
 
 - Check the [setup guide](../setup/index.md) for common questions
 - Join our [Discord community](https://discord.gg/altus4)
-- Contact support at support@altus4.com
+- Contact support at <support@altus4.com>

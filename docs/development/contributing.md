@@ -15,15 +15,15 @@ Thank you for your interest in contributing to Altus 4! This guide will help you
 
 Before contributing, ensure you have:
 
-- **Node.js 18+** with npm 8+
-- **MySQL 8.0+** for database operations
-- **Redis 6.0+** for caching
-- **Git** for version control
-- **IDE** with TypeScript support (VS Code recommended)
+- __Node.js 18+__ with npm 8+
+- __MySQL 8.0+__ for database operations
+- __Redis 6.0+__ for caching
+- __Git__ for version control
+- __IDE__ with TypeScript support (VS Code recommended)
 
 ### Development Environment Setup
 
-1. **Fork the Repository**
+1. __Fork the Repository__
 
 ```bash
 # Fork the repository on GitHub, then clone your fork
@@ -34,7 +34,7 @@ cd altus4
 git remote add upstream https://github.com/altus4/core.git
 ```
 
-2. **Install Dependencies**
+2. __Install Dependencies__
 
 ```bash
 # Install project dependencies
@@ -44,7 +44,7 @@ npm install
 npm install -g typescript ts-node nodemon
 ```
 
-3. **Environment Configuration**
+3. __Environment Configuration__
 
 ```bash
 # Copy environment template
@@ -54,7 +54,7 @@ cp .env.example .env.development
 # Edit .env.development with your local settings
 ```
 
-4. **Database Setup**
+4. __Database Setup__
 
 ```bash
 # Create development database
@@ -66,7 +66,7 @@ mysql -u root -p -e "GRANT ALL PRIVILEGES ON altus4_dev.* TO 'altus4_dev'@'local
 npm run migrate:dev
 ```
 
-5. **Verify Setup**
+5. __Verify Setup__
 
 ```bash
 # Run tests to ensure everything is working
@@ -83,13 +83,13 @@ curl http://localhost:3000/health
 
 ### Branch Strategy
 
-We use **GitFlow** with the following branch structure:
+We use __GitFlow__ with the following branch structure:
 
-- **`main`** - Production-ready code
-- **`develop`** - Integration branch for features
-- **`feature/*`** - Feature development branches
-- **`hotfix/*`** - Critical production fixes
-- **`release/*`** - Release preparation branches
+- __`main`__ - Production-ready code
+- __`develop`__ - Integration branch for features
+- __`feature/*`__ - Feature development branches
+- __`hotfix/*`__ - Critical production fixes
+- __`release/*`__ - Release preparation branches
 
 ### Creating a Feature Branch
 
@@ -111,7 +111,7 @@ git push origin feature/your-feature-name
 
 ### Commit Message Format
 
-We follow **Conventional Commits** specification:
+We follow __Conventional Commits__ specification:
 
 ```
 type(scope): description
@@ -121,7 +121,8 @@ type(scope): description
 [optional footer]
 ```
 
-**Types:**
+__Types:__
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -132,7 +133,8 @@ type(scope): description
 - `perf`: Performance improvements
 - `ci`: CI/CD changes
 
-**Examples:**
+__Examples:__
+
 ```bash
 feat(search): add AI-powered semantic search mode
 fix(auth): resolve API key validation issue
@@ -324,7 +326,8 @@ Execute a search across connected databases.
 }
 ```
 
-**Response**:
+__Response__:
+
 ```json
 {
   "success": true,
@@ -335,6 +338,7 @@ Execute a search across connected databases.
   }
 }
 ```
+
 ```
 
 ## Pull Request Process
@@ -357,14 +361,14 @@ npm test
 npm run test:coverage
 ```
 
-2. **Update Documentation**
+2. __Update Documentation__
 
 - Update relevant documentation files
 - Add JSDoc comments for new functions
 - Update API documentation if applicable
 - Add examples for new features
 
-3. **Verify Changes**
+3. __Verify Changes__
 
 ```bash
 # Build the project
@@ -379,14 +383,14 @@ npm run dev
 
 ### Submitting a Pull Request
 
-1. **Create Pull Request**
+1. __Create Pull Request__
 
 - Go to your fork on GitHub
 - Click "New Pull Request"
 - Select `develop` as the base branch
 - Provide a clear title and description
 
-2. **Pull Request Template**
+2. __Pull Request Template__
 
 ```markdown
 ## Description
@@ -411,7 +415,7 @@ Brief description of changes made.
 - [ ] No new linting errors
 ```
 
-3. **Review Process**
+3. __Review Process__
 
 - Automated checks must pass (CI/CD)
 - At least one maintainer review required
@@ -422,19 +426,19 @@ Brief description of changes made.
 
 #### For Contributors
 
-- **Respond Promptly**: Address review feedback within 48 hours
-- **Be Open to Feedback**: Consider suggestions constructively
-- **Explain Decisions**: Provide context for implementation choices
-- **Keep PRs Focused**: One feature/fix per PR
-- **Update Documentation**: Ensure docs reflect changes
+- __Respond Promptly__: Address review feedback within 48 hours
+- __Be Open to Feedback__: Consider suggestions constructively
+- __Explain Decisions__: Provide context for implementation choices
+- __Keep PRs Focused__: One feature/fix per PR
+- __Update Documentation__: Ensure docs reflect changes
 
 #### For Reviewers
 
-- **Be Constructive**: Provide helpful, actionable feedback
-- **Focus on Code Quality**: Check for bugs, performance, maintainability
-- **Verify Tests**: Ensure adequate test coverage
-- **Check Documentation**: Verify docs are updated
-- **Consider Security**: Look for potential security issues
+- __Be Constructive__: Provide helpful, actionable feedback
+- __Focus on Code Quality__: Check for bugs, performance, maintainability
+- __Verify Tests__: Ensure adequate test coverage
+- __Check Documentation__: Verify docs are updated
+- __Consider Security__: Look for potential security issues
 
 ## Issue Reporting
 
@@ -578,41 +582,41 @@ this.logger.error('Search failed', {
 
 We are committed to providing a welcoming and inclusive environment:
 
-- **Be Respectful**: Treat everyone with respect and kindness
-- **Be Inclusive**: Welcome newcomers and help them learn
-- **Be Constructive**: Provide helpful feedback and suggestions
-- **Be Professional**: Maintain professional communication
-- **Be Patient**: Remember that everyone is learning
+- __Be Respectful__: Treat everyone with respect and kindness
+- __Be Inclusive__: Welcome newcomers and help them learn
+- __Be Constructive__: Provide helpful feedback and suggestions
+- __Be Professional__: Maintain professional communication
+- __Be Patient__: Remember that everyone is learning
 
 ### Communication Channels
 
-- **GitHub Issues**: Bug reports and feature requests
-- **GitHub Discussions**: General questions and discussions
-- **Pull Requests**: Code review and collaboration
-- **Documentation**: Contribute to docs and examples
+- __GitHub Issues__: Bug reports and feature requests
+- __GitHub Discussions__: General questions and discussions
+- __Pull Requests__: Code review and collaboration
+- __Documentation__: Contribute to docs and examples
 
 ### Recognition
 
 Contributors are recognized through:
 
-- **Contributors List**: Listed in README and documentation
-- **Release Notes**: Contributions mentioned in release notes
-- **Community Highlights**: Featured in community updates
+- __Contributors List__: Listed in README and documentation
+- __Release Notes__: Contributions mentioned in release notes
+- __Community Highlights__: Featured in community updates
 
 ## Getting Help
 
 ### Resources
 
-- **[Development Guide](./index.md)** - Complete development setup
-- **[Testing Guide](./testing.md)** - Testing strategies and examples
-- **[Code Standards](./standards.md)** - Coding standards and best practices
-- **[API Documentation](../api/)** - Complete API reference
+- __[Development Guide](./index.md)__ - Complete development setup
+- __[Testing Guide](./testing.md)__ - Testing strategies and examples
+- __[Code Standards](./standards.md)__ - Coding standards and best practices
+- __[API Documentation](../api/)__ - Complete API reference
 
 ### Support Channels
 
-- **GitHub Issues**: Technical questions and bug reports
-- **GitHub Discussions**: General questions and community support
-- **Documentation**: Comprehensive guides and examples
+- __GitHub Issues__: Technical questions and bug reports
+- __GitHub Discussions__: General questions and community support
+- __Documentation__: Comprehensive guides and examples
 
 ### Mentorship
 
@@ -625,4 +629,4 @@ New contributors can:
 
 ---
 
-**Thank you for contributing to Altus 4! Your contributions help make this project better for everyone. We appreciate your time and effort in improving the codebase, documentation, and community.**
+__Thank you for contributing to Altus 4! Your contributions help make this project better for everyone. We appreciate your time and effort in improving the codebase, documentation, and community.__

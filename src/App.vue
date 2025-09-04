@@ -9,10 +9,10 @@
           <!-- Logo -->
           <a
             href="/"
-            class="flex items-center hover:opacity-80 transition-opacity cursor-pointer"
+            class="flex items-center hover:opacity-80 space-x-2 transition-opacity cursor-pointer"
           >
             <AltusLogo variant="dark" size="32" :animated="true" />
-            <span class="text-xl font-bold text-gray-900 -ml-1.5">ltus 4</span>
+            <span class="text-xl font-bold text-gray-900">Altus 4</span>
           </a>
 
           <!-- Navigation Links -->

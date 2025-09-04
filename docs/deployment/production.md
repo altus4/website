@@ -35,30 +35,30 @@ graph TD
 
 | Component | Purpose | Minimum Specs | Recommended Specs |
 |-----------|---------|----------------|-------------------|
-| **Application Server** | Altus 4 API | 2 vCPU, 4GB RAM | 4 vCPU, 8GB RAM |
-| **Database Server** | MySQL Primary | 2 vCPU, 8GB RAM | 4 vCPU, 16GB RAM |
-| **Cache Server** | Redis Cluster | 2 vCPU, 4GB RAM | 4 vCPU, 8GB RAM |
-| **Load Balancer** | Traffic Distribution | 1 vCPU, 2GB RAM | 2 vCPU, 4GB RAM |
+| __Application Server__ | Altus 4 API | 2 vCPU, 4GB RAM | 4 vCPU, 8GB RAM |
+| __Database Server__ | MySQL Primary | 2 vCPU, 8GB RAM | 4 vCPU, 16GB RAM |
+| __Cache Server__ | Redis Cluster | 2 vCPU, 4GB RAM | 4 vCPU, 8GB RAM |
+| __Load Balancer__ | Traffic Distribution | 1 vCPU, 2GB RAM | 2 vCPU, 4GB RAM |
 
 ## Pre-Production Checklist
 
 ### Infrastructure Requirements
 
-- [ ] **Compute Resources**: Adequate CPU, memory, and storage
-- [ ] **Network Security**: Firewall rules, VPC configuration
-- [ ] **Domain Setup**: SSL certificates, DNS configuration
-- [ ] **External Services**: OpenAI API access, third-party integrations
-- [ ] **Backup Strategy**: Database and configuration backups
-- [ ] **Monitoring**: Logging, metrics, alerting setup
+- [ ] __Compute Resources__: Adequate CPU, memory, and storage
+- [ ] __Network Security__: Firewall rules, VPC configuration
+- [ ] __Domain Setup__: SSL certificates, DNS configuration
+- [ ] __External Services__: OpenAI API access, third-party integrations
+- [ ] __Backup Strategy__: Database and configuration backups
+- [ ] __Monitoring__: Logging, metrics, alerting setup
 
 ### Security Requirements
 
-- [ ] **SSL/TLS Certificates**: Valid certificates for all domains
-- [ ] **Database Security**: Encrypted connections, strong passwords
-- [ ] **API Security**: Rate limiting, authentication verification
-- [ ] **Network Security**: Firewall rules, VPN access
-- [ ] **Secrets Management**: Secure environment variable storage
-- [ ] **Access Control**: SSH keys, user permissions
+- [ ] __SSL/TLS Certificates__: Valid certificates for all domains
+- [ ] __Database Security__: Encrypted connections, strong passwords
+- [ ] __API Security__: Rate limiting, authentication verification
+- [ ] __Network Security__: Firewall rules, VPN access
+- [ ] __Secrets Management__: Secure environment variable storage
+- [ ] __Access Control__: SSH keys, user permissions
 
 ## Environment Setup
 
@@ -66,7 +66,7 @@ graph TD
 
 #### Operating System Configuration
 
-**Ubuntu 20.04/22.04 LTS (Recommended):**
+__Ubuntu 20.04/22.04 LTS (Recommended):__
 
 ```bash
 # Update system packages
@@ -134,7 +134,7 @@ sudo apt install mysql-server-8.0 -y
 sudo mysql_secure_installation
 ```
 
-**MySQL Configuration (`/etc/mysql/mysql.conf.d/mysqld.cnf`):**
+__MySQL Configuration (`/etc/mysql/mysql.conf.d/mysqld.cnf`):__
 
 ```ini
 [mysqld]
@@ -944,4 +944,4 @@ redis-cli slowlog get 10
 
 ---
 
-**This production deployment guide provides enterprise-grade setup procedures for reliable, secure, and performant Altus 4 deployments.**
+__This production deployment guide provides enterprise-grade setup procedures for reliable, secure, and performant Altus 4 deployments.__

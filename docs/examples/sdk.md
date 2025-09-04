@@ -13,11 +13,11 @@ This guide demonstrates how to use official Altus 4 SDKs to integrate search fun
 
 Currently, Altus 4 provides SDKs for:
 
-- **JavaScript/TypeScript** - For Node.js and browser applications
-- **Python** - For Python 3.8+ applications
-- **Go** - For Go 1.19+ applications
-- **Java** - For Java 11+ applications
-- **PHP** - For PHP 8.0+ applications
+- __JavaScript/TypeScript__ - For Node.js and browser applications
+- __Python__ - For Python 3.8+ applications
+- __Go__ - For Go 1.19+ applications
+- __Java__ - For Java 11+ applications
+- __PHP__ - For PHP 8.0+ applications
 
 ## JavaScript/TypeScript SDK
 
@@ -1114,10 +1114,10 @@ describe('SearchService', () => {
 
 You've learned how to use Altus 4 SDKs effectively! Continue exploring:
 
-- **[API Reference](../api/)** - Complete API documentation
-- **[Performance Guide](../testing/performance.md)** - SDK optimization techniques
-- **[Examples Repository](https://github.com/altus4/examples)** - More SDK examples
+- __[API Reference](../api/)__ - Complete API documentation
+- __[Performance Guide](../testing/performance.md)__ - SDK optimization techniques
+- __[Examples Repository](https://github.com/altus4/examples)__ - More SDK examples
 
 ---
 
-**Official SDKs provide the best developer experience with type safety, error handling, and performance optimizations. Choose the SDK for your preferred language and start building!**
+__Official SDKs provide the best developer experience with type safety, error handling, and performance optimizations. Choose the SDK for your preferred language and start building!__

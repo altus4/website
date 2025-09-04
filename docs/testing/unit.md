@@ -13,11 +13,11 @@ This guide covers unit testing strategies, patterns, and best practices for test
 
 ### Unit Testing Principles
 
-1. **Isolation**: Test components in complete isolation from dependencies
-2. **Fast Execution**: Unit tests should run quickly (< 1ms per test)
-3. **Deterministic**: Tests should produce consistent results
-4. **Single Responsibility**: Each test should verify one specific behavior
-5. **Clear Intent**: Test names should clearly describe what is being tested
+1. __Isolation__: Test components in complete isolation from dependencies
+2. __Fast Execution__: Unit tests should run quickly (< 1ms per test)
+3. __Deterministic__: Tests should produce consistent results
+4. __Single Responsibility__: Each test should verify one specific behavior
+5. __Clear Intent__: Test names should clearly describe what is being tested
 
 ### Test Structure (AAA Pattern)
 
@@ -1225,11 +1225,11 @@ npm run test:unit -- --coverage --coverageReporters=html
 
 ## Related Documentation
 
-- **[Integration Testing](./integration.md)** - Testing component interactions
-- **[Performance Testing](./performance.md)** - Load and performance testing
-- **[Testing Overview](./index.md)** - Complete testing strategy
-- **[Development Standards](../development/standards.md)** - Code quality standards
+- __[Integration Testing](./integration.md)__ - Testing component interactions
+- __[Performance Testing](./performance.md)__ - Load and performance testing
+- __[Testing Overview](./index.md)__ - Complete testing strategy
+- __[Development Standards](../development/standards.md)__ - Code quality standards
 
 ---
 
-**Unit tests form the foundation of code quality in Altus 4. Follow these patterns and practices to ensure reliable, maintainable test suites.**
+__Unit tests form the foundation of code quality in Altus 4. Follow these patterns and practices to ensure reliable, maintainable test suites.__

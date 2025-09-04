@@ -13,11 +13,11 @@ Welcome to the comprehensive documentation for Altus 4. This documentation provi
 
 Altus 4 is an advanced AI-powered MySQL full-text search engine that enhances traditional database search capabilities with:
 
-- **Semantic Search**: AI-powered understanding of query intent and context
-- **Multi-Database Support**: Search across multiple MySQL databases simultaneously
-- **Intelligent Caching**: Redis-backed performance optimization
-- **API-First Design**: RESTful API with comprehensive authentication
-- **Real-time Analytics**: Search trends and performance insights
+- __Semantic Search__: AI-powered understanding of query intent and context
+- __Multi-Database Support__: Search across multiple MySQL databases simultaneously
+- __Intelligent Caching__: Redis-backed performance optimization
+- __API-First Design__: RESTful API with comprehensive authentication
+- __Real-time Analytics__: Search trends and performance insights
 
 ## Quick Start
 
@@ -48,29 +48,29 @@ Visit `http://localhost:3000/health` to verify the installation.
 
 ### For New Users
 
-1. **[Setup & Installation](setup/)** - Get Altus 4 running
-2. **[API Overview](api/)** - Understanding the API
-3. **[Examples](examples/)** - Practical code examples
+1. __[Setup & Installation](setup/)__ - Get Altus 4 running
+2. __[API Overview](api/)__ - Understanding the API
+3. __[Examples](examples/)__ - Practical code examples
 
 ### For Developers
 
-1. **[Architecture](architecture/)** - System design and patterns
-2. **[Services](services/)** - Core business logic documentation
-3. **[Development Guide](development/)** - Contributing and development workflow
+1. __[Architecture](architecture/)__ - System design and patterns
+2. __[Services](services/)__ - Core business logic documentation
+3. __[Development Guide](development/)__ - Contributing and development workflow
 
 ### For DevOps
 
-1. **[Setup & Deployment](setup/)** - Production deployment guide
-2. **[Testing](testing/)** - Testing strategies and examples
+1. __[Setup & Deployment](setup/)__ - Production deployment guide
+2. __[Testing](testing/)__ - Testing strategies and examples
 
 ## Key Features
 
-- **Advanced Search**: Natural language, boolean, and semantic search modes
-- **AI Integration**: OpenAI-powered query optimization and result enhancement
-- **High Performance**: Intelligent caching and parallel database queries
-- **Enterprise Security**: API key authentication with tiered rate limiting
-- **Rich Analytics**: Search trends, performance metrics, and insights
-- **Developer Friendly**: Comprehensive API documentation and examples
+- __Advanced Search__: Natural language, boolean, and semantic search modes
+- __AI Integration__: OpenAI-powered query optimization and result enhancement
+- __High Performance__: Intelligent caching and parallel database queries
+- __Enterprise Security__: API key authentication with tiered rate limiting
+- __Rich Analytics__: Search trends, performance metrics, and insights
+- __Developer Friendly__: Comprehensive API documentation and examples
 
 ## API Authentication
 
@@ -85,24 +85,24 @@ Authorization: Bearer altus4_sk_live_abc123def456...
 
 Need help with Altus 4?
 
-- **Documentation**: You're in the right place!
-- **Examples**: Check out the [examples section](examples/)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/altus4/issues)
-- **Community**: [GitHub Discussions](https://github.com/yourusername/altus4/discussions)
+- __Documentation__: You're in the right place!
+- __Examples__: Check out the [examples section](examples/)
+- __Issues__: [GitHub Issues](https://github.com/yourusername/altus4/issues)
+- __Community__: [GitHub Discussions](https://github.com/yourusername/altus4/discussions)
 
 ## Sync Test Status
 
-**Last Updated**: December 2024
-**Test Status**: Documentation sync is working!
+__Last Updated__: December 2024
+__Test Status__: Documentation sync is working!
 
 This section was added to test the automatic synchronization between the main repository (`altus4/website`) and the documentation repository (`altus4/docs`).
 
 ### How the Sync Works
 
-1. **Source**: Changes made in `altus4/website/docs/`
-2. **Trigger**: GitHub Actions workflow on push to main/develop
-3. **Target**: Automatically synced to `altus4/docs`
-4. **Deploy**: GitHub Pages automatically builds and deploys
+1. __Source__: Changes made in `altus4/website/docs/`
+2. __Trigger__: GitHub Actions workflow on push to main/develop
+3. __Target__: Automatically synced to `altus4/docs`
+4. __Deploy__: GitHub Pages automatically builds and deploys
 
 If you can see this section in the `altus4/docs` repository, the sync is working perfectly!
 
@@ -122,4 +122,4 @@ graph TD
 
 ---
 
-**Ready to enhance your MySQL search capabilities with AI?** Start with the [Setup Guide](setup/) or explore our [API Reference](api/).
+__Ready to enhance your MySQL search capabilities with AI?__ Start with the [Setup Guide](setup/) or explore our [API Reference](api/).

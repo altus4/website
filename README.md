@@ -4,31 +4,31 @@ A modern, responsive marketing website for Altus 4 - an AI-enhanced MySQL full-t
 
 ## Features
 
-- **Modern Design**: Clean, professional design with gradient backgrounds and smooth animations
-- **Responsive**: Mobile-first design that works on all devices
-- **Performance Optimized**: Fast loading with optimized assets and smooth scrolling
-- **SEO Friendly**: Comprehensive meta tags and semantic HTML structure
-- **Accessible**: Built with accessibility best practices
-- **Documentation**: Integrated VitePress documentation with automatic sync to separate repository
+- __Modern Design__: Clean, professional design with gradient backgrounds and smooth animations
+- __Responsive__: Mobile-first design that works on all devices
+- __Performance Optimized__: Fast loading with optimized assets and smooth scrolling
+- __SEO Friendly__: Comprehensive meta tags and semantic HTML structure
+- __Accessible__: Built with accessibility best practices
+- __Documentation__: Integrated VitePress documentation with automatic sync to separate repository
 
 ## Tech Stack
 
-- **Framework**: Vue.js 3 (Composition API)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Components**: Custom UI components inspired by Shadcn-Vue
-- **Icons**: Lucide Vue Next
-- **Build Tool**: Vite
-- **Documentation**: VitePress
+- __Framework__: Vue.js 3 (Composition API)
+- __Language__: TypeScript
+- __Styling__: Tailwind CSS
+- __Components__: Custom UI components inspired by Shadcn-Vue
+- __Icons__: Lucide Vue Next
+- __Build Tool__: Vite
+- __Documentation__: VitePress
 
 ## Sections
 
-1. **Hero Section**: Value proposition with clear CTA buttons
-1. **Features Section**: Showcase of key capabilities (AI, Performance, Security)
-1. **Technical Specifications**: Architecture overview and tech stack details
-1. **Project Status**: Current metrics, completion status, and roadmap
-1. **Call to Action**: Community engagement and quick start links
-1. **Footer**: Contact information, resources, and tech stack
+1. __Hero Section__: Value proposition with clear CTA buttons
+1. __Features Section__: Showcase of key capabilities (AI, Performance, Security)
+1. __Technical Specifications__: Architecture overview and tech stack details
+1. __Project Status__: Current metrics, completion status, and roadmap
+1. __Call to Action__: Community engagement and quick start links
+1. __Footer__: Contact information, resources, and tech stack
 
 ## Quick Start
 
@@ -80,8 +80,8 @@ npm run preview
 
 The website uses a custom color palette defined in `tailwind.config.js`. Main colors:
 
-- **Primary**: Blue (#3b82f6) for buttons and accents
-- **Secondary**: Gray scale for text and backgrounds
+- __Primary__: Blue (#3b82f6) for buttons and accents
+- __Secondary__: Gray scale for text and backgrounds
 
 ### Components
 
@@ -95,12 +95,12 @@ All UI components are located in `src/components/ui/` and can be easily customiz
 
 To update the content:
 
-1. **Hero Section**: Edit `src/components/HeroSection.vue`
-2. **Features**: Modify `src/components/FeaturesSection.vue`
-3. **Tech Specs**: Update `src/components/TechSpecsSection.vue`
-4. **Project Status**: Change metrics in `src/components/ProjectStatusSection.vue`
-5. **CTA**: Customize links in `src/components/CallToActionSection.vue`
-6. **Footer**: Update contact info in `src/components/FooterSection.vue`
+1. __Hero Section__: Edit `src/components/HeroSection.vue`
+2. __Features__: Modify `src/components/FeaturesSection.vue`
+3. __Tech Specs__: Update `src/components/TechSpecsSection.vue`
+4. __Project Status__: Change metrics in `src/components/ProjectStatusSection.vue`
+5. __CTA__: Customize links in `src/components/CallToActionSection.vue`
+6. __Footer__: Update contact info in `src/components/FooterSection.vue`
 
 ## Documentation
 
@@ -114,9 +114,9 @@ Live Documentation: [https://altus4.github.io/docs](https://altus4.github.io/doc
 
 The `docs/` directory is automatically synchronized to the [`altus4/docs`](https://github.com/altus4/docs) repository:
 
-- **Automatic**: Triggered on push to `main` or `develop` branches
-- **Manual**: Use `npm run docs:sync` for manual synchronization
-- **GitHub Pages**: Auto-deployment to documentation site
+- __Automatic__: Triggered on push to `main` or `develop` branches
+- __Manual__: Use `npm run docs:sync` for manual synchronization
+- __GitHub Pages__: Auto-deployment to documentation site
 
 ### Working with Documentation
 
@@ -166,9 +166,9 @@ Tailwind is configured in `tailwind.config.js` with:
 
 ## Performance
 
-- **Lighthouse Score**: 90+ (Performance, Accessibility, Best Practices, SEO)
-- **Bundle Size**: Optimized with Vite's tree shaking
-- **Loading Speed**: Lazy loading and optimized images
+- __Lighthouse Score__: 90+ (Performance, Accessibility, Best Practices, SEO)
+- __Bundle Size__: Optimized with Vite's tree shaking
+- __Loading Speed__: Lazy loading and optimized images
 
 ## Deployment
 

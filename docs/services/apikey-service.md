@@ -14,12 +14,13 @@ The ApiKeyService manages API keys for secure service-to-service authentication 
 ### Responsibilities
 
 The ApiKeyService handles:
-- **API Key Generation** - Secure generation of API keys with proper formatting and entropy
-- **Authentication & Authorization** - Validate API keys and enforce permission-based access control
-- **Tiered Access Control** - Manage different subscription tiers with varying limits and permissions
-- **Usage Tracking** - Monitor API key usage patterns and enforce rate limits
-- **Key Lifecycle Management** - Create, update, rotate, and revoke API keys
-- **Analytics & Reporting** - Provide detailed usage analytics and insights
+
+- __API Key Generation__ - Secure generation of API keys with proper formatting and entropy
+- __Authentication & Authorization__ - Validate API keys and enforce permission-based access control
+- __Tiered Access Control__ - Manage different subscription tiers with varying limits and permissions
+- __Usage Tracking__ - Monitor API key usage patterns and enforce rate limits
+- __Key Lifecycle Management__ - Create, update, rotate, and revoke API keys
+- __Analytics & Reporting__ - Provide detailed usage analytics and insights
 
 ### Architecture
 
@@ -1217,14 +1218,14 @@ interface ApiKeyConfig {
 
 ### Security Best Practices
 
-1. **Key Generation**: Use cryptographically secure random generation
-2. **Storage**: Hash keys for storage, never store plain text
-3. **Transmission**: Always use HTTPS for key transmission
-4. **Monitoring**: Implement comprehensive usage monitoring
-5. **Rotation**: Support regular key rotation
-6. **Compromise Detection**: Implement automated compromise detection
-7. **Rate Limiting**: Enforce strict rate limits per tier
+1. __Key Generation__: Use cryptographically secure random generation
+2. __Storage__: Hash keys for storage, never store plain text
+3. __Transmission__: Always use HTTPS for key transmission
+4. __Monitoring__: Implement comprehensive usage monitoring
+5. __Rotation__: Support regular key rotation
+6. __Compromise Detection__: Implement automated compromise detection
+7. __Rate Limiting__: Enforce strict rate limits per tier
 
 ---
 
-**The ApiKeyService provides enterprise-grade API key management with comprehensive security, analytics, and lifecycle management capabilities, forming the backbone of Altus 4's authentication system.**
+__The ApiKeyService provides enterprise-grade API key management with comprehensive security, analytics, and lifecycle management capabilities, forming the backbone of Altus 4's authentication system.__
