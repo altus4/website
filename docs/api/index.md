@@ -28,8 +28,8 @@ Authorization: Bearer <your-api-key>
 
 ### Authentication Endpoints
 
-| Method   | Endpoint                   | Description             | Auth Required |
-| -------- | -------------------------- | ----------------------- | ------------- |
+| Method   | Endpoint                      | Description             | Auth Required |
+| -------- | ----------------------------- | ----------------------- | ------------- |
 | `POST`   | `/api/v1/auth/register`       | Register new user       | No            |
 | `POST`   | `/api/v1/auth/login`          | User login              | No            |
 | `POST`   | `/api/v1/management/setup`    | Create first API key    | JWT Token     |
@@ -48,8 +48,8 @@ Manage MySQL database connections for searching.
 
 ### Database Endpoints
 
-| Method   | Endpoint                    | Description                | Auth Required |
-| -------- | --------------------------- | -------------------------- | ------------- |
+| Method   | Endpoint                       | Description                | Auth Required |
+| -------- | ------------------------------ | -------------------------- | ------------- |
 | `GET`    | `/api/v1/databases`            | List user databases        | API Key       |
 | `POST`   | `/api/v1/databases`            | Add database connection    | API Key       |
 | `GET`    | `/api/v1/databases/:id`        | Get database details       | API Key       |
@@ -67,8 +67,8 @@ Execute searches across connected databases with AI enhancements.
 
 ### Search Endpoints
 
-| Method | Endpoint                  | Description               | Auth Required |
-| ------ | ------------------------- | ------------------------- | ------------- |
+| Method | Endpoint                     | Description               | Auth Required |
+| ------ | ---------------------------- | ------------------------- | ------------- |
 | `POST` | `/api/v1/search`             | Execute search            | API Key       |
 | `GET`  | `/api/v1/search/suggestions` | Get search suggestions    | API Key       |
 | `POST` | `/api/v1/search/analyze`     | Analyze query performance | API Key       |
@@ -83,8 +83,8 @@ Access search analytics, performance metrics, and trend data.
 
 ### Analytics Endpoints
 
-| Method | Endpoint                         | Description               | Auth Required |
-| ------ | -------------------------------- | ------------------------- | ------------- |
+| Method | Endpoint                            | Description               | Auth Required |
+| ------ | ----------------------------------- | ------------------------- | ------------- |
 | `GET`  | `/api/v1/analytics/dashboard`       | Get dashboard data        | API Key       |
 | `GET`  | `/api/v1/analytics/trends`          | Get search trends         | API Key       |
 | `GET`  | `/api/v1/analytics/performance`     | Get performance metrics   | API Key       |

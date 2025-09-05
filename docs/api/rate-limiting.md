@@ -49,8 +49,8 @@ graph TD
 
 Special rate limits for authentication and security:
 
-| Endpoint                        | Rate Limit  | Duration    | Notes                      |
-| ------------------------------- | ----------- | ----------- | -------------------------- |
+| Endpoint                           | Rate Limit  | Duration    | Notes                      |
+| ---------------------------------- | ----------- | ----------- | -------------------------- |
 | `POST /api/v1/auth/register`       | 5 per hour  | Per IP      | Prevents spam registration |
 | `POST /api/v1/auth/login`          | 10 per hour | Per IP      | Brute force protection     |
 | `POST /api/v1/keys`                | 20 per hour | Per API key | Prevents key abuse         |
@@ -440,7 +440,9 @@ const cachedClient = new CachedClient('altus4_sk_live_abc123...', {
 });
 
 // Cached requests automatically
-const dashboard = await cachedClient.cachedRequest('/api/v1/analytics/dashboard');
+const dashboard = await cachedClient.cachedRequest(
+  '/api/v1/analytics/dashboard'
+);
 const databases = await cachedClient.cachedRequest(
   '/api/v1/databases',
   {},

@@ -343,7 +343,11 @@ class DatabaseService {
     ];
   }
 
-  async executeQuery(query: string, params: any[], forceWrite = false): Promise<any> {
+  async executeQuery(
+    query: string,
+    params: any[],
+    forceWrite = false
+  ): Promise<any> {
     const isWriteOperation = forceWrite || this.isWriteQuery(query);
     const pool = isWriteOperation ? this.writePool : this.getReadPool();
 
@@ -356,8 +360,17 @@ class DatabaseService {
   }
 
   private isWriteQuery(query: string): boolean {
-    const writeKeywords = ['INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP', 'ALTER'];
-    return writeKeywords.some(keyword => query.trim().toUpperCase().startsWith(keyword));
+    const writeKeywords = [
+      'INSERT',
+      'UPDATE',
+      'DELETE',
+      'CREATE',
+      'DROP',
+      'ALTER',
+    ];
+    return writeKeywords.some(keyword =>
+      query.trim().toUpperCase().startsWith(keyword)
+    );
   }
 }
 ```
@@ -394,7 +407,9 @@ class ConnectionPoolManager {
 
   private calculatePoolSize(config: DatabaseConfig): PoolConfig {
     const baseCPUs = os.cpus().length;
-    const expectedConcurrency = parseInt(process.env.EXPECTED_CONCURRENCY || '100');
+    const expectedConcurrency = parseInt(
+      process.env.EXPECTED_CONCURRENCY || '100'
+    );
 
     return {
       max: Math.min(baseCPUs * 2, Math.ceil(expectedConcurrency / 10)),
@@ -490,7 +505,10 @@ class DatabaseConnectionManager {
   private pools: Map<string, mysql.Pool> = new Map();
   private healthChecks: Map<string, NodeJS.Timeout> = new Map();
 
-  async createPool(databaseId: string, config: DatabaseConfig): Promise<mysql.Pool> {
+  async createPool(
+    databaseId: string,
+    config: DatabaseConfig
+  ): Promise<mysql.Pool> {
     const pool = mysql.createPool({
       ...config,
       connectionLimit: this.calculateConnectionLimit(),
@@ -548,7 +566,9 @@ class AIService {
     });
   }
 
-  async enhanceSearchResults(results: SearchResult[]): Promise<EnhancedResult[]> {
+  async enhanceSearchResults(
+    results: SearchResult[]
+  ): Promise<EnhancedResult[]> {
     // Check rate limit
     const allowed = await this.rateLimiter.removeTokens(1);
     if (!allowed) {

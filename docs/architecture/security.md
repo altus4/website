@@ -123,7 +123,10 @@ export class ApiKeyService {
       const prefix = providedKey.substring(0, 20);
 
       // 3. Hash provided key
-      const providedHash = crypto.createHash('sha256').update(providedKey).digest('hex');
+      const providedHash = crypto
+        .createHash('sha256')
+        .update(providedKey)
+        .digest('hex');
 
       // 4. Look up key by prefix (indexed lookup)
       const storedKey = await this.getKeyByPrefix(prefix);
@@ -248,7 +251,11 @@ type Permission =
 
 ```typescript
 export const requirePermission = (permission: string) => {
-  return (req: ApiKeyAuthenticatedRequest, res: Response, next: NextFunction): void => {
+  return (
+    req: ApiKeyAuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ): void => {
     if (!req.apiKey) {
       return res.status(401).json({
         success: false,
@@ -258,7 +265,8 @@ export const requirePermission = (permission: string) => {
 
     // Check if user has required permission
     const hasPermission =
-      req.apiKey.permissions.includes(permission) || req.apiKey.permissions.includes('admin');
+      req.apiKey.permissions.includes(permission) ||
+      req.apiKey.permissions.includes('admin');
 
     if (!hasPermission) {
       return res.status(403).json({
@@ -283,7 +291,11 @@ export const requirePermission = (permission: string) => {
 
 ```typescript
 export const requireRole = (role: 'admin' | 'user') => {
-  return (req: ApiKeyAuthenticatedRequest, res: Response, next: NextFunction): void => {
+  return (
+    req: ApiKeyAuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ): void => {
     if (!req.user) {
       return res.status(401).json({
         success: false,
@@ -317,7 +329,10 @@ export const requireRole = (role: 'admin' | 'user') => {
 
 ```typescript
 export class DatabaseService {
-  async getUserDatabase(userId: string, databaseId: string): Promise<Database | null> {
+  async getUserDatabase(
+    userId: string,
+    databaseId: string
+  ): Promise<Database | null> {
     // Ensure user can only access their own databases
     const database = await this.databaseRepository.findOne({
       id: databaseId,
@@ -325,7 +340,11 @@ export class DatabaseService {
     });
 
     if (!database) {
-      throw new AppError('Database not found or access denied', 404, 'DATABASE_NOT_FOUND');
+      throw new AppError(
+        'Database not found or access denied',
+        404,
+        'DATABASE_NOT_FOUND'
+      );
     }
 
     return database;
@@ -379,7 +398,10 @@ const RATE_LIMIT_TIERS: Record<string, RateLimitTier> = {
 export class RateLimiter {
   private redis: Redis;
 
-  async checkRateLimit(apiKeyId: string, tier: string): Promise<RateLimitResult> {
+  async checkRateLimit(
+    apiKeyId: string,
+    tier: string
+  ): Promise<RateLimitResult> {
     const limits = RATE_LIMIT_TIERS[tier];
     const now = Date.now();
     const hourWindow = Math.floor(now / (60 * 60 * 1000));
@@ -436,7 +458,10 @@ export class RateLimiter {
 
 ```typescript
 export class AbuseDetector {
-  async detectSuspiciousActivity(apiKeyId: string, request: Request): Promise<boolean> {
+  async detectSuspiciousActivity(
+    apiKeyId: string,
+    request: Request
+  ): Promise<boolean> {
     const suspicious = await Promise.all([
       this.checkRapidFireRequests(apiKeyId),
       this.checkUnusualQueryPatterns(request.body?.query),
@@ -483,7 +508,9 @@ export class EncryptionService {
   private readonly algorithm = 'aes-256-gcm';
   private readonly keyDerivation = 'pbkdf2';
 
-  async encryptCredentials(credentials: DatabaseCredentials): Promise<EncryptedCredentials> {
+  async encryptCredentials(
+    credentials: DatabaseCredentials
+  ): Promise<EncryptedCredentials> {
     // Generate random salt and IV
     const salt = crypto.randomBytes(32);
     const iv = crypto.randomBytes(16);
@@ -515,10 +542,18 @@ export class EncryptionService {
     };
   }
 
-  async decryptCredentials(encrypted: EncryptedCredentials): Promise<DatabaseCredentials> {
+  async decryptCredentials(
+    encrypted: EncryptedCredentials
+  ): Promise<DatabaseCredentials> {
     // Reconstruct encryption key
     const salt = Buffer.from(encrypted.salt, 'base64');
-    const key = crypto.pbkdf2Sync(process.env.ENCRYPTION_KEY!, salt, 100000, 32, 'sha256');
+    const key = crypto.pbkdf2Sync(
+      process.env.ENCRYPTION_KEY!,
+      salt,
+      100000,
+      32,
+      'sha256'
+    );
 
     // Decrypt credentials
     const iv = Buffer.from(encrypted.iv, 'base64');
@@ -528,7 +563,10 @@ export class EncryptionService {
     const decipher = crypto.createDecipher(encrypted.algorithm, key, iv);
     decipher.setAuthTag(authTag);
 
-    const decrypted = Buffer.concat([decipher.update(encryptedData), decipher.final()]);
+    const decrypted = Buffer.concat([
+      decipher.update(encryptedData),
+      decipher.final(),
+    ]);
 
     return JSON.parse(decrypted.toString('utf8'));
   }
@@ -827,7 +865,11 @@ export class SecurityLogger {
 
 ```typescript
 export class AuditLogger {
-  async logDatabaseAccess(userId: string, databaseId: string, action: string): Promise<void> {
+  async logDatabaseAccess(
+    userId: string,
+    databaseId: string,
+    action: string
+  ): Promise<void> {
     await this.auditRepository.create({
       userId,
       resourceType: 'database',
@@ -839,7 +881,11 @@ export class AuditLogger {
     });
   }
 
-  async logApiKeyOperation(userId: string, keyId: string, operation: string): Promise<void> {
+  async logApiKeyOperation(
+    userId: string,
+    keyId: string,
+    operation: string
+  ): Promise<void> {
     await this.auditRepository.create({
       userId,
       resourceType: 'api_key',
@@ -887,7 +933,10 @@ app.use(
 app.use((req, res, next) => {
   res.setHeader('X-API-Version', '1.0');
   res.setHeader('X-Rate-Limit-Policy', 'tiered');
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader(
+    'Strict-Transport-Security',
+    'max-age=31536000; includeSubDomains'
+  );
   next();
 });
 ```
@@ -913,7 +962,11 @@ app.use(
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset'],
+    exposedHeaders: [
+      'X-RateLimit-Limit',
+      'X-RateLimit-Remaining',
+      'X-RateLimit-Reset',
+    ],
   })
 );
 ```
@@ -924,10 +977,14 @@ app.use(
 
 ```typescript
 export class IncidentDetector {
-  async detectSecurityIncident(events: SecurityEvent[]): Promise<SecurityIncident | null> {
+  async detectSecurityIncident(
+    events: SecurityEvent[]
+  ): Promise<SecurityIncident | null> {
     // Multiple failed authentication attempts
     const failedAuths = events.filter(
-      e => e.type === 'auth_failure' && e.timestamp > new Date(Date.now() - 5 * 60 * 1000) // Last 5 minutes
+      e =>
+        e.type === 'auth_failure' &&
+        e.timestamp > new Date(Date.now() - 5 * 60 * 1000) // Last 5 minutes
     );
 
     if (failedAuths.length > 10) {

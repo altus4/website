@@ -35,20 +35,35 @@ export class ApiKeyService {
   ) {}
 
   // Core API Key Methods
-  async createApiKey(userId: string, keyData: CreateApiKeyRequest): Promise<ApiKey>;
+  async createApiKey(
+    userId: string,
+    keyData: CreateApiKeyRequest
+  ): Promise<ApiKey>;
   async getApiKey(keyId: string): Promise<ApiKey | null>;
   async validateApiKey(key: string): Promise<ValidationResult>;
-  async updateApiKey(keyId: string, updates: UpdateApiKeyRequest): Promise<ApiKey>;
+  async updateApiKey(
+    keyId: string,
+    updates: UpdateApiKeyRequest
+  ): Promise<ApiKey>;
   async revokeApiKey(keyId: string, reason?: string): Promise<void>;
   async regenerateApiKey(keyId: string): Promise<ApiKey>;
 
   // Usage Tracking
   async trackUsage(keyId: string, usage: UsageMetric): Promise<void>;
-  async getUsageStats(keyId: string, options: UsageStatsOptions): Promise<UsageStats>;
-  async checkRateLimit(keyId: string, endpoint?: string): Promise<RateLimitResult>;
+  async getUsageStats(
+    keyId: string,
+    options: UsageStatsOptions
+  ): Promise<UsageStats>;
+  async checkRateLimit(
+    keyId: string,
+    endpoint?: string
+  ): Promise<RateLimitResult>;
 
   // Permission Management
-  async updatePermissions(keyId: string, permissions: Permission[]): Promise<void>;
+  async updatePermissions(
+    keyId: string,
+    permissions: Permission[]
+  ): Promise<void>;
   async checkPermission(keyId: string, permission: string): Promise<boolean>;
   async upgradeTier(keyId: string, newTier: ApiKeyTier): Promise<void>;
 

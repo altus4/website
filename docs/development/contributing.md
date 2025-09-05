@@ -207,7 +207,9 @@ async function fetchUserData(userId: string): Promise<User> {
 function fetchUserDataBad(userId: string): Promise<User> {
   return userRepository
     .findById(userId)
-    .then(user => profileService.getProfile(userId).then(profile => ({ ...user, profile })));
+    .then(user =>
+      profileService.getProfile(userId).then(profile => ({ ...user, profile }))
+    );
 }
 ```
 
@@ -549,7 +551,10 @@ const results = await connection.execute(
 
 // Sanitize output
 const sanitizeHtml = (text: string): string => {
-  return text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return text
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 };
 ```
 
@@ -566,7 +571,10 @@ export class ValidationError extends AppError {
 
 // Provide helpful error messages
 if (!databases.length) {
-  throw new ValidationError('At least one database must be specified for search', 'databases');
+  throw new ValidationError(
+    'At least one database must be specified for search',
+    'databases'
+  );
 }
 
 // Log errors with context

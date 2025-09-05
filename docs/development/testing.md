@@ -81,7 +81,10 @@ tests/
 ```typescript
 // tests/unit/services/SearchService.test.ts
 import { SearchService } from '@/services/SearchService';
-import { createMockDatabaseService, createMockAIService } from '../../helpers/mocks';
+import {
+  createMockDatabaseService,
+  createMockAIService,
+} from '../../helpers/mocks';
 
 describe('SearchService', () => {
   let searchService: SearchService;
@@ -103,9 +106,13 @@ describe('SearchService', () => {
         userId: 'user-1',
       };
 
-      const expectedResults = [{ id: '1', title: 'MySQL Guide', relevanceScore: 0.9 }];
+      const expectedResults = [
+        { id: '1', title: 'MySQL Guide', relevanceScore: 0.9 },
+      ];
 
-      mockDatabaseService.executeFullTextSearch.mockResolvedValue(expectedResults);
+      mockDatabaseService.executeFullTextSearch.mockResolvedValue(
+        expectedResults
+      );
 
       // Act
       const result = await searchService.search(searchRequest);
@@ -134,7 +141,9 @@ describe('SearchService', () => {
         new Error('Database connection failed')
       );
 
-      await expect(searchService.search(searchRequest)).rejects.toThrow('Search failed');
+      await expect(searchService.search(searchRequest)).rejects.toThrow(
+        'Search failed'
+      );
     });
   });
 });
@@ -247,7 +256,10 @@ describe('Search API Integration', () => {
     });
 
     it('should handle authentication errors', async () => {
-      await request(app).post('/api/v1/search').send({ query: 'test' }).expect(401);
+      await request(app)
+        .post('/api/v1/search')
+        .send({ query: 'test' })
+        .expect(401);
     });
 
     it('should validate request parameters', async () => {
@@ -328,21 +340,27 @@ describe('Search Performance', () => {
   let searchService: SearchService;
 
   beforeAll(() => {
-    const { databaseService, aiService, cacheService } = createMockDependencies();
+    const { databaseService, aiService, cacheService } =
+      createMockDependencies();
     searchService = new SearchService(databaseService, aiService, cacheService);
   });
 
   it('should handle concurrent searches efficiently', async () => {
     const concurrentRequests = 100;
-    const searchRequests = Array.from({ length: concurrentRequests }, (_, i) => ({
-      query: `test query ${i}`,
-      databases: ['test-db'],
-      userId: `user-${i}`,
-    }));
+    const searchRequests = Array.from(
+      { length: concurrentRequests },
+      (_, i) => ({
+        query: `test query ${i}`,
+        databases: ['test-db'],
+        userId: `user-${i}`,
+      })
+    );
 
     const startTime = performance.now();
 
-    const results = await Promise.all(searchRequests.map(request => searchService.search(request)));
+    const results = await Promise.all(
+      searchRequests.map(request => searchService.search(request))
+    );
 
     const endTime = performance.now();
     const totalTime = endTime - startTime;

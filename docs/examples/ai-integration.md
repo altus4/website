@@ -229,38 +229,44 @@ class QueryIntelligenceEngine {
   }
 
   async analyzeQueryIntent(query, context = {}) {
-    const response = await fetch('https://api.altus4.com/api/v1/ai/analyze-intent', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query,
-        context,
-        includeConfidence: true,
-        includeSuggestions: true,
-      }),
-    });
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/ai/analyze-intent',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          context,
+          includeConfidence: true,
+          includeSuggestions: true,
+        }),
+      }
+    );
 
     return await response.json();
   }
 
   async optimizeForDomain(query, domain, databases) {
     // Domain-specific optimization (e.g., 'technical', 'ecommerce', 'support')
-    const optimization = await fetch('https://api.altus4.com/api/v1/ai/optimize-domain', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query,
-        domain,
-        databases,
-        includeTerminology: true,
-      }),
-    });
+    const optimization = await fetch(
+      'https://api.altus4.com/api/v1/ai/optimize-domain',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          domain,
+          databases,
+          includeTerminology: true,
+        }),
+      }
+    );
 
     const optimizationData = await optimization.json();
 
@@ -309,19 +315,22 @@ class QueryIntelligenceEngine {
   }
 
   async getPersonalizedSuggestions(userId, recentQueries) {
-    const response = await fetch('https://api.altus4.com/api/v1/ai/personalized-suggestions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId,
-        recentQueries,
-        includeTopics: true,
-        includeRelated: true,
-      }),
-    });
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/ai/personalized-suggestions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          recentQueries,
+          includeTopics: true,
+          includeRelated: true,
+        }),
+      }
+    );
 
     return await response.json();
   }
@@ -331,18 +340,23 @@ class QueryIntelligenceEngine {
 const queryEngine = new QueryIntelligenceEngine(apiKey);
 
 // Analyze query intent
-const intentAnalysis = await queryEngine.analyzeQueryIntent('how to fix slow database', {
-  userRole: 'developer',
-  previousQueries: ['mysql optimization'],
-});
+const intentAnalysis = await queryEngine.analyzeQueryIntent(
+  'how to fix slow database',
+  {
+    userRole: 'developer',
+    previousQueries: ['mysql optimization'],
+  }
+);
 
 console.log('Query intent:', intentAnalysis.data.intent);
 console.log('Confidence:', intentAnalysis.data.confidence);
 
 // Domain-specific optimization
-const techOptimization = await queryEngine.optimizeForDomain('performance issues', 'technical', [
-  'tech_docs_db',
-]);
+const techOptimization = await queryEngine.optimizeForDomain(
+  'performance issues',
+  'technical',
+  ['tech_docs_db']
+);
 
 console.log('Optimized query:', techOptimization.optimization.optimizedQuery);
 console.log('Domain terms added:', techOptimization.optimization.domainTerms);
@@ -531,45 +545,51 @@ class SmartSuggestionEngine {
   }
 
   async getSmartSuggestions(partialQuery, context = {}) {
-    const response = await fetch('https://api.altus4.com/api/v1/search/suggestions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: partialQuery,
-        context: {
-          ...this.userContext,
-          ...context,
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/search/suggestions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
         },
-        suggestionTypes: [
-          'completion', // Auto-complete current query
-          'related', // Related queries
-          'trending', // Popular queries
-          'corrected', // Spelling corrections
-          'semantic', // Semantically similar queries
-        ],
-        limit: 10,
-      }),
-    });
+        body: JSON.stringify({
+          query: partialQuery,
+          context: {
+            ...this.userContext,
+            ...context,
+          },
+          suggestionTypes: [
+            'completion', // Auto-complete current query
+            'related', // Related queries
+            'trending', // Popular queries
+            'corrected', // Spelling corrections
+            'semantic', // Semantically similar queries
+          ],
+          limit: 10,
+        }),
+      }
+    );
 
     return await response.json();
   }
 
   async getQueryCorrections(query) {
-    const response = await fetch('https://api.altus4.com/api/v1/ai/spell-check', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query,
-        includeSuggestions: true,
-        contextAware: true,
-      }),
-    });
+    const response = await fetch(
+      'https://api.altus4.com/api/v1/ai/spell-check',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          includeSuggestions: true,
+          contextAware: true,
+        }),
+      }
+    );
 
     return await response.json();
   }
@@ -673,11 +693,15 @@ const suggestions = await suggestionEngine.getSmartSuggestions('mysql perf');
 console.log('Smart suggestions:', suggestions.data.suggestions);
 
 // Check for spelling corrections
-const corrections = await suggestionEngine.getQueryCorrections('databse performace');
+const corrections =
+  await suggestionEngine.getQueryCorrections('databse performace');
 console.log('Corrections:', corrections.data.corrections);
 
 // Get trending queries
-const trending = await suggestionEngine.getTrendingSuggestions('7d', 'database');
+const trending = await suggestionEngine.getTrendingSuggestions(
+  '7d',
+  'database'
+);
 console.log('Trending:', trending.data.queries);
 ```
 

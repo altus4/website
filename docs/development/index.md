@@ -369,7 +369,10 @@ refactor(database): optimize connection pooling
 ```typescript
 // src/types/index.ts
 export interface IAnalyticsService {
-  generateReport(userId: string, dateRange: DateRange): Promise<AnalyticsReport>;
+  generateReport(
+    userId: string,
+    dateRange: DateRange
+  ): Promise<AnalyticsReport>;
   getUserMetrics(userId: string): Promise<UserMetrics>;
 }
 
@@ -394,13 +397,19 @@ export class AnalyticsService implements IAnalyticsService {
     private databaseService: DatabaseService
   ) {}
 
-  async generateReport(userId: string, dateRange: DateRange): Promise<AnalyticsReport> {
+  async generateReport(
+    userId: string,
+    dateRange: DateRange
+  ): Promise<AnalyticsReport> {
     try {
       logger.info(`Generating analytics report for user ${userId}`);
 
       // Implementation here
       const searchCount = await this.getSearchCount(userId, dateRange);
-      const averageResponseTime = await this.getAverageResponseTime(userId, dateRange);
+      const averageResponseTime = await this.getAverageResponseTime(
+        userId,
+        dateRange
+      );
 
       return {
         searchCount,
@@ -414,7 +423,10 @@ export class AnalyticsService implements IAnalyticsService {
     }
   }
 
-  private async getSearchCount(userId: string, dateRange: DateRange): Promise<number> {
+  private async getSearchCount(
+    userId: string,
+    dateRange: DateRange
+  ): Promise<number> {
     // Implementation
     return 0;
   }
@@ -502,7 +514,10 @@ describe('AnalyticsService', () => {
     mockCacheService = createMockCacheService();
     mockDatabaseService = createMockDatabaseService();
 
-    analyticsService = new AnalyticsService(mockCacheService, mockDatabaseService);
+    analyticsService = new AnalyticsService(
+      mockCacheService,
+      mockDatabaseService
+    );
   });
 
   describe('generateReport', () => {
@@ -831,7 +846,11 @@ const [rows] = await connection.execute(query, [searchTerm, category, limit]);
 
 ```typescript
 // API key authentication
-export const authenticateApiKey = async (req: Request, res: Response, next: NextFunction) => {
+export const authenticateApiKey = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
@@ -849,7 +868,11 @@ export const authenticateApiKey = async (req: Request, res: Response, next: Next
 
     const apiKey = parts[1];
     if (!apiKey.startsWith('altus4_sk_')) {
-      throw new AppError('INVALID_API_KEY_FORMAT', 'API key must start with altus4_sk_', 401);
+      throw new AppError(
+        'INVALID_API_KEY_FORMAT',
+        'API key must start with altus4_sk_',
+        401
+      );
     }
 
     const result = await apiKeyService.validateApiKey(apiKey);
@@ -879,10 +902,15 @@ export const requirePermission = (permission: string) => {
     }
 
     if (!req.apiKey.permissions.includes(permission)) {
-      throw new AppError('INSUFFICIENT_PERMISSIONS', `Permission '${permission}' required`, 403, {
-        required: permission,
-        available: req.apiKey.permissions,
-      });
+      throw new AppError(
+        'INSUFFICIENT_PERMISSIONS',
+        `Permission '${permission}' required`,
+        403,
+        {
+          required: permission,
+          available: req.apiKey.permissions,
+        }
+      );
     }
     next();
   };
@@ -945,7 +973,9 @@ describe('ServiceName', () => {
       };
 
       // Act & Assert
-      await expect(service.methodName(invalidInput)).rejects.toThrow('Expected error message');
+      await expect(service.methodName(invalidInput)).rejects.toThrow(
+        'Expected error message'
+      );
     });
   });
 });

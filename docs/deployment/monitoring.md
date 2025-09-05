@@ -163,7 +163,11 @@ interface MetricsRequest extends Request {
   startTime?: number;
 }
 
-export const metricsMiddleware = (req: MetricsRequest, res: Response, next: NextFunction) => {
+export const metricsMiddleware = (
+  req: MetricsRequest,
+  res: Response,
+  next: NextFunction
+) => {
   req.startTime = Date.now();
 
   // Capture the end function
@@ -174,9 +178,13 @@ export const metricsMiddleware = (req: MetricsRequest, res: Response, next: Next
     const route = req.route ? req.route.path : req.path;
 
     // Record metrics
-    httpRequestDuration.labels(req.method, route, res.statusCode.toString()).observe(duration);
+    httpRequestDuration
+      .labels(req.method, route, res.statusCode.toString())
+      .observe(duration);
 
-    httpRequestsTotal.labels(req.method, route, res.statusCode.toString()).inc();
+    httpRequestsTotal
+      .labels(req.method, route, res.statusCode.toString())
+      .inc();
 
     return originalSend.call(this, data);
   };
@@ -228,17 +236,23 @@ export class SearchService {
       const results = await this.performSearch(query);
 
       // Record success metrics
-      searchRequestsTotal.labels(labels.search_mode, labels.database_id, 'success').inc();
+      searchRequestsTotal
+        .labels(labels.search_mode, labels.database_id, 'success')
+        .inc();
 
       return results;
     } catch (error) {
       // Record failure metrics
-      searchRequestsTotal.labels(labels.search_mode, labels.database_id, 'error').inc();
+      searchRequestsTotal
+        .labels(labels.search_mode, labels.database_id, 'error')
+        .inc();
       throw error;
     } finally {
       // Record duration
       const duration = (Date.now() - startTime) / 1000;
-      searchDuration.labels(labels.search_mode, labels.database_id).observe(duration);
+      searchDuration
+        .labels(labels.search_mode, labels.database_id)
+        .observe(duration);
     }
   }
 }
@@ -723,7 +737,10 @@ const logFormat = winston.format.combine(
 const transports = [
   // Console transport for development
   new winston.transports.Console({
-    format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.simple()
+    ),
   }),
 
   // File transport for all logs
@@ -764,7 +781,8 @@ const logger = winston.createLogger({
 // Add request context middleware
 export const addRequestContext = (req: any, res: any, next: any) => {
   req.requestId =
-    req.headers['x-request-id'] || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    req.headers['x-request-id'] ||
+    `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
   // Add request ID to response headers
   res.setHeader('X-Request-ID', req.requestId);
@@ -775,11 +793,16 @@ export const addRequestContext = (req: any, res: any, next: any) => {
 // Logger with context
 export const createContextLogger = (context: Record<string, any>) => {
   return {
-    error: (message: string, meta?: any) => logger.error(message, { ...context, ...meta }),
-    warn: (message: string, meta?: any) => logger.warn(message, { ...context, ...meta }),
-    info: (message: string, meta?: any) => logger.info(message, { ...context, ...meta }),
-    http: (message: string, meta?: any) => logger.http(message, { ...context, ...meta }),
-    debug: (message: string, meta?: any) => logger.debug(message, { ...context, ...meta }),
+    error: (message: string, meta?: any) =>
+      logger.error(message, { ...context, ...meta }),
+    warn: (message: string, meta?: any) =>
+      logger.warn(message, { ...context, ...meta }),
+    info: (message: string, meta?: any) =>
+      logger.info(message, { ...context, ...meta }),
+    http: (message: string, meta?: any) =>
+      logger.http(message, { ...context, ...meta }),
+    debug: (message: string, meta?: any) =>
+      logger.debug(message, { ...context, ...meta }),
   };
 };
 
@@ -800,7 +823,11 @@ interface LoggedRequest extends Request {
   logger?: any;
 }
 
-export const requestLoggingMiddleware = (req: LoggedRequest, res: Response, next: NextFunction) => {
+export const requestLoggingMiddleware = (
+  req: LoggedRequest,
+  res: Response,
+  next: NextFunction
+) => {
   req.startTime = Date.now();
 
   // Create request-specific logger

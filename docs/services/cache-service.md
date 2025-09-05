@@ -44,7 +44,9 @@ export class CacheService {
     results: SearchResult[],
     ttl?: number
   ): Promise<void>;
-  async getCachedSearchResults(query: SearchQuery): Promise<SearchResult[] | null>;
+  async getCachedSearchResults(
+    query: SearchQuery
+  ): Promise<SearchResult[] | null>;
   async invalidateSearchCache(pattern?: string): Promise<number>;
 
   // Analytics Methods
@@ -55,7 +57,10 @@ export class CacheService {
   // Session Management
   async createSession(userId: string, data: SessionData): Promise<string>;
   async getSession(sessionId: string): Promise<SessionData | null>;
-  async updateSession(sessionId: string, data: Partial<SessionData>): Promise<void>;
+  async updateSession(
+    sessionId: string,
+    data: Partial<SessionData>
+  ): Promise<void>;
   async destroySession(sessionId: string): Promise<boolean>;
 
   // Health and Monitoring
