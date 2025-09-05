@@ -30,20 +30,30 @@ export default {
           // Function to render mermaid diagrams
           const renderMermaidDiagrams = async () => {
             // Try multiple selectors to find mermaid code blocks
-            let mermaidElements = document.querySelectorAll('pre code.language-mermaid');
+            let mermaidElements = document.querySelectorAll(
+              'pre code.language-mermaid'
+            );
 
             // If not found, try alternative selectors
             if (mermaidElements.length === 0) {
-              mermaidElements = document.querySelectorAll('code.language-mermaid');
+              mermaidElements = document.querySelectorAll(
+                'code.language-mermaid'
+              );
             }
             if (mermaidElements.length === 0) {
-              mermaidElements = document.querySelectorAll('pre[class*="language-mermaid"] code');
+              mermaidElements = document.querySelectorAll(
+                'pre[class*="language-mermaid"] code'
+              );
             }
             if (mermaidElements.length === 0) {
-              mermaidElements = document.querySelectorAll('[class*="language-mermaid"]');
+              mermaidElements = document.querySelectorAll(
+                '[class*="language-mermaid"]'
+              );
             }
 
-            console.log(`Found ${mermaidElements.length} mermaid diagrams to render`);
+            console.log(
+              `Found ${mermaidElements.length} mermaid diagrams to render`
+            );
 
             for (let i = 0; i < mermaidElements.length; i++) {
               const element = mermaidElements[i] as HTMLElement;
