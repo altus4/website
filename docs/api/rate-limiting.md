@@ -51,10 +51,10 @@ Special rate limits for authentication and security:
 
 | Endpoint                        | Rate Limit  | Duration    | Notes                      |
 | ------------------------------- | ----------- | ----------- | -------------------------- |
-| `POST /api/auth/register`       | 5 per hour  | Per IP      | Prevents spam registration |
-| `POST /api/auth/login`          | 10 per hour | Per IP      | Brute force protection     |
-| `POST /api/keys`                | 20 per hour | Per API key | Prevents key abuse         |
-| `POST /api/keys/:id/regenerate` | 5 per hour  | Per API key | Security measure           |
+| `POST /api/v1/auth/register`       | 5 per hour  | Per IP      | Prevents spam registration |
+| `POST /api/v1/auth/login`          | 10 per hour | Per IP      | Brute force protection     |
+| `POST /api/v1/keys`                | 20 per hour | Per API key | Prevents key abuse         |
+| `POST /api/v1/keys/:id/regenerate` | 5 per hour  | Per API key | Security measure           |
 
 ## Rate Limit Headers
 
@@ -128,7 +128,7 @@ Retry-After: 45
 
 Get current rate limit status without consuming a request:
 
-**Endpoint**: `GET /api/rate-limit/status`
+**Endpoint**: `GET /api/v1/rate-limit/status`
 
 **Headers**:
 
@@ -185,7 +185,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 ### Rate Limit Analytics
 
-**Endpoint**: `GET /api/rate-limit/analytics`
+**Endpoint**: `GET /api/v1/rate-limit/analytics`
 
 **Query Parameters**:
 
@@ -217,7 +217,7 @@ Authorization: Bearer <YOUR_API_KEY>
       ],
       "endpointBreakdown": [
         {
-          "endpoint": "/api/search",
+          "endpoint": "/api/v1/search",
           "requests": 4200,
           "percentOfTotal": 74.1,
           "averageResponseTime": 234
@@ -252,7 +252,7 @@ class RateLimitMonitor {
 
   async checkRateLimit() {
     try {
-      const status = await this.client.makeRequest('/api/rate-limit/status');
+      const status = await this.client.makeRequest('/api/v1/rate-limit/status');
       const { current, limits } = status.data.rateLimit;
 
       const usagePercent = current.requests / limits.requestsPerHour;
@@ -358,9 +358,9 @@ const queue = new RequestQueue(client, 15) // 15 requests per minute
 
 // Queue multiple requests
 const promises = [
-  queue.enqueue({ endpoint: '/api/search', options: { method: 'POST', body: {...} } }),
-  queue.enqueue({ endpoint: '/api/databases', options: { method: 'GET' } }),
-  queue.enqueue({ endpoint: '/api/analytics/dashboard', options: { method: 'GET' } })
+  queue.enqueue({ endpoint: '/api/v1/search', options: { method: 'POST', body: {...} } }),
+  queue.enqueue({ endpoint: '/api/v1/databases', options: { method: 'GET' } }),
+  queue.enqueue({ endpoint: '/api/v1/analytics/dashboard', options: { method: 'GET' } })
 ]
 
 const results = await Promise.all(promises)
@@ -440,9 +440,9 @@ const cachedClient = new CachedClient('altus4_sk_live_abc123...', {
 });
 
 // Cached requests automatically
-const dashboard = await cachedClient.cachedRequest('/api/analytics/dashboard');
+const dashboard = await cachedClient.cachedRequest('/api/v1/analytics/dashboard');
 const databases = await cachedClient.cachedRequest(
-  '/api/databases',
+  '/api/v1/databases',
   {},
   1800000
 ); // 30 min cache
@@ -533,7 +533,7 @@ class RateLimitManager:
 
     async def get_rate_limit_status(self) -> RateLimitInfo:
         """Get current rate limit status"""
-        data = await self.make_rate_limited_request('/api/rate-limit/status')
+        data = await self.make_rate_limited_request('/api/v1/rate-limit/status')
         rate_limit = data['data']['rateLimit']
 
         return RateLimitInfo(
@@ -556,7 +556,7 @@ async def main():
     for i in range(10):
         try:
             result = await manager.make_rate_limited_request(
-                '/api/search',
+                '/api/v1/search',
                 'POST',
                 json={'query': f'search query {i}', 'databases': ['db_abc123']}
             )

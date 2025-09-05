@@ -38,7 +38,7 @@ graph TD
 
 Get a comprehensive dashboard view of your search analytics.
 
-**Endpoint**: `GET /api/analytics/dashboard`
+**Endpoint**: `GET /api/v1/analytics/dashboard`
 
 **Query Parameters**:
 
@@ -136,7 +136,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Get detailed search trend analysis over time.
 
-**Endpoint**: `GET /api/analytics/trends`
+**Endpoint**: `GET /api/v1/analytics/trends`
 
 **Query Parameters**:
 
@@ -216,7 +216,7 @@ Get detailed search trend analysis over time.
 
 Get detailed performance analytics including response times, error rates, and resource utilization.
 
-**Endpoint**: `GET /api/analytics/performance`
+**Endpoint**: `GET /api/v1/analytics/performance`
 
 **Query Parameters**:
 
@@ -242,7 +242,7 @@ Get detailed performance analytics including response times, error rates, and re
       },
       "endpoints": [
         {
-          "endpoint": "/api/search",
+          "endpoint": "/api/v1/search",
           "totalRequests": 1250,
           "averageResponseTime": 267,
           "successRate": 0.981,
@@ -302,7 +302,7 @@ Get detailed performance analytics including response times, error rates, and re
 
 Get the most popular search queries with detailed analytics.
 
-**Endpoint**: `GET /api/analytics/popular-queries`
+**Endpoint**: `GET /api/v1/analytics/popular-queries`
 
 **Query Parameters**:
 
@@ -373,7 +373,7 @@ Get the most popular search queries with detailed analytics.
 
 Get AI-powered insights and recommendations based on your search patterns.
 
-**Endpoint**: `GET /api/analytics/insights`
+**Endpoint**: `GET /api/v1/analytics/insights`
 
 **Query Parameters**:
 
@@ -481,7 +481,7 @@ Get AI-powered insights and recommendations based on your search patterns.
 
 Get comprehensive system-wide analytics and health metrics.
 
-**Endpoint**: `GET /api/analytics/overview`
+**Endpoint**: `GET /api/v1/analytics/overview`
 
 **Response**:
 
@@ -545,7 +545,7 @@ Get comprehensive system-wide analytics and health metrics.
 
 Get detailed user activity and engagement metrics.
 
-**Endpoint**: `GET /api/analytics/user-activity`
+**Endpoint**: `GET /api/v1/analytics/user-activity`
 
 **Query Parameters**:
 
@@ -620,7 +620,7 @@ Get detailed user activity and engagement metrics.
 
 Define custom metrics for tracking specific KPIs.
 
-**Endpoint**: `POST /api/analytics/custom-metrics`
+**Endpoint**: `POST /api/v1/analytics/custom-metrics`
 
 **Request Body**:
 
@@ -646,7 +646,7 @@ Define custom metrics for tracking specific KPIs.
 
 Export analytics data in various formats for external analysis.
 
-**Endpoint**: `GET /api/analytics/export`
+**Endpoint**: `GET /api/v1/analytics/export`
 
 **Query Parameters**:
 
@@ -677,7 +677,7 @@ class Altus4Analytics {
     if (databases) params.append('databases', databases.join(','));
 
     const response = await fetch(
-      `${this.baseUrl}/api/analytics/dashboard?${params}`,
+      `${this.baseUrl}/api/v1/analytics/dashboard?${params}`,
       { headers: this.headers }
     );
 
@@ -692,7 +692,7 @@ class Altus4Analytics {
     });
 
     const response = await fetch(
-      `${this.baseUrl}/api/analytics/trends?${params}`,
+      `${this.baseUrl}/api/v1/analytics/trends?${params}`,
       { headers: this.headers }
     );
 
@@ -704,7 +704,7 @@ class Altus4Analytics {
     if (category) params.append('category', category);
 
     const response = await fetch(
-      `${this.baseUrl}/api/analytics/popular-queries?${params}`,
+      `${this.baseUrl}/api/v1/analytics/popular-queries?${params}`,
       { headers: this.headers }
     );
 
@@ -715,7 +715,7 @@ class Altus4Analytics {
     const params = new URLSearchParams({ type });
 
     const response = await fetch(
-      `${this.baseUrl}/api/analytics/insights?${params}`,
+      `${this.baseUrl}/api/v1/analytics/insights?${params}`,
       { headers: this.headers }
     );
 
@@ -730,7 +730,7 @@ class Altus4Analytics {
     });
 
     const response = await fetch(
-      `${this.baseUrl}/api/analytics/performance?${params}`,
+      `${this.baseUrl}/api/v1/analytics/performance?${params}`,
       { headers: this.headers }
     );
 
@@ -781,7 +781,7 @@ class Altus4AnalyticsDashboard:
 
     def get_dashboard_data(self, period='week'):
         response = requests.get(
-            f'{self.base_url}/api/analytics/dashboard',
+            f'{self.base_url}/api/v1/analytics/dashboard',
             headers=self.headers,
             params={'period': period}
         )
@@ -789,7 +789,7 @@ class Altus4AnalyticsDashboard:
 
     def get_search_trends(self, period='month', limit=100):
         response = requests.get(
-            f'{self.base_url}/api/analytics/trends',
+            f'{self.base_url}/api/v1/analytics/trends',
             headers=self.headers,
             params={'period': period, 'limit': limit}
         )
@@ -797,7 +797,7 @@ class Altus4AnalyticsDashboard:
 
     def get_performance_metrics(self, period='day'):
         response = requests.get(
-            f'{self.base_url}/api/analytics/performance',
+            f'{self.base_url}/api/v1/analytics/performance',
             headers=self.headers,
             params={'period': period, 'breakdown': 'endpoint,database'}
         )

@@ -43,7 +43,7 @@ graph TD
 
 Perform a search across one or more connected databases with comprehensive options.
 
-**Endpoint**: `POST /api/search`
+**Endpoint**: `POST /api/v1/search`
 
 **Headers**:
 
@@ -293,7 +293,7 @@ AI-powered search using embeddings for concept matching.
 
 Retrieve intelligent search suggestions based on query and context.
 
-**Endpoint**: `GET /api/search/suggestions`
+**Endpoint**: `GET /api/v1/search/suggestions`
 
 **Query Parameters**:
 
@@ -342,7 +342,7 @@ Authorization: Bearer <YOUR_API_KEY>
 **cURL Example**:
 
 ```bash
-curl -X GET "https://api.altus4.dev/api/search/suggestions?q=database%20perf&databases=db_uuid_1&limit=5" \
+curl -X GET "https://api.altus4.dev/api/v1/search/suggestions?q=database%20perf&databases=db_uuid_1&limit=5" \
   -H "Authorization: Bearer altus4_sk_live_abc123..."
 ```
 
@@ -352,7 +352,7 @@ curl -X GET "https://api.altus4.dev/api/search/suggestions?q=database%20perf&dat
 
 Get detailed performance analysis for a search query.
 
-**Endpoint**: `POST /api/search/analyze`
+**Endpoint**: `POST /api/v1/search/analyze`
 
 **Request Body**:
 
@@ -402,7 +402,7 @@ Get detailed performance analysis for a search query.
 
 Retrieve user's search history with analytics.
 
-**Endpoint**: `GET /api/search/history`
+**Endpoint**: `GET /api/v1/search/history`
 
 **Query Parameters**:
 
@@ -448,7 +448,7 @@ Retrieve user's search history with analytics.
 
 Get user's search trends and pattern insights.
 
-**Endpoint**: `GET /api/search/trends`
+**Endpoint**: `GET /api/v1/search/trends`
 
 **Query Parameters**:
 
@@ -506,7 +506,7 @@ const altus4 = {
 
 // Basic search
 const searchResults = async (query, databases) => {
-  const response = await fetch(`${altus4.baseUrl}/api/search`, {
+  const response = await fetch(`${altus4.baseUrl}/api/v1/search`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${altus4.apiKey}`,
@@ -530,7 +530,7 @@ const searchResults = async (query, databases) => {
 
 // Search with advanced options
 const advancedSearch = async searchParams => {
-  const response = await fetch(`${altus4.baseUrl}/api/search`, {
+  const response = await fetch(`${altus4.baseUrl}/api/v1/search`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${altus4.apiKey}`,
@@ -611,7 +611,7 @@ class Altus4Search:
             payload['options'] = kwargs['options']
 
         response = requests.post(
-            f'{self.base_url}/api/search',
+            f'{self.base_url}/api/v1/search',
             headers=self.headers,
             json=payload
         )
@@ -627,7 +627,7 @@ class Altus4Search:
         }
 
         response = requests.get(
-            f'{self.base_url}/api/search/suggestions',
+            f'{self.base_url}/api/v1/search/suggestions',
             headers=self.headers,
             params=params
         )
@@ -643,7 +643,7 @@ class Altus4Search:
         }
 
         response = requests.get(
-            f'{self.base_url}/api/search/history',
+            f'{self.base_url}/api/v1/search/history',
             headers=self.headers,
             params=params
         )
@@ -714,7 +714,7 @@ for result in results['data']['results']:
 ```javascript
 const safeSearch = async (query, databases) => {
   try {
-    const response = await fetch('/api/search', {
+    const response = await fetch('/api/v1/search', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${apiKey}`,

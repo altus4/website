@@ -34,16 +34,11 @@ export class DatabaseService {
   async addDatabase(userId: string, config: DatabaseConfig): Promise<Database>;
   async removeDatabase(userId: string, databaseId: string): Promise<void>;
   async testConnection(config: DatabaseConfig): Promise<ConnectionTestResult>;
-  async executeSearch(
-    databaseId: string,
-    query: SearchQuery
-  ): Promise<SearchResult[]>;
+  async executeSearch(databaseId: string, query: SearchQuery): Promise<SearchResult[]>;
   async discoverSchema(databaseId: string): Promise<DatabaseSchema>;
 
   // Connection Management
-  private async createConnection(
-    config: DatabaseConfig
-  ): Promise<mysql.Connection>;
+  private async createConnection(config: DatabaseConfig): Promise<mysql.Connection>;
   private async getConnectionPool(databaseId: string): Promise<mysql.Pool>;
   private async releaseConnection(connection: mysql.Connection): Promise<void>;
 }
@@ -794,9 +789,7 @@ describe('DatabaseService', () => {
 
       expect(result).toHaveProperty('id');
       expect(result.name).toBe(config.name);
-      expect(mockEncryptionService.encrypt).toHaveBeenCalledWith(
-        config.password
-      );
+      expect(mockEncryptionService.encrypt).toHaveBeenCalledWith(config.password);
     });
 
     it('should throw error for invalid database configuration', async () => {
@@ -809,9 +802,9 @@ describe('DatabaseService', () => {
         password: 'testpass',
       };
 
-      await expect(
-        databaseService.addDatabase('user123', config)
-      ).rejects.toThrow('VALIDATION_ERROR');
+      await expect(databaseService.addDatabase('user123', config)).rejects.toThrow(
+        'VALIDATION_ERROR'
+      );
     });
   });
 
@@ -836,9 +829,7 @@ describe('DatabaseService', () => {
         },
       ];
 
-      jest
-        .spyOn(databaseService as any, 'executeQueryWithTimeout')
-        .mockResolvedValue(mockResults);
+      jest.spyOn(databaseService as any, 'executeQueryWithTimeout').mockResolvedValue(mockResults);
 
       const results = await databaseService.executeSearch('db123', searchQuery);
 
@@ -868,10 +859,7 @@ describe('DatabaseService Integration', () => {
 
   it('should perform end-to-end database operations', async () => {
     // Add database
-    const database = await databaseService.addDatabase(
-      'testuser',
-      testDbConfig
-    );
+    const database = await databaseService.addDatabase('testuser', testDbConfig);
     expect(database.id).toBeDefined();
 
     // Test connection

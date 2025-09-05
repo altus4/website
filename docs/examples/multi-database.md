@@ -399,21 +399,13 @@ class IntelligentResultAggregator {
     } = options;
 
     // Flatten all results
-    const allResults = searchResults.flatMap(result =>
-      result.success ? result.data.results : []
-    );
+    const allResults = searchResults.flatMap(result => (result.success ? result.data.results : []));
 
     // Apply deduplication
-    const deduplicatedResults = await this.deduplicateResults(
-      allResults,
-      deduplicationStrategy
-    );
+    const deduplicatedResults = await this.deduplicateResults(allResults, deduplicationStrategy);
 
     // Apply intelligent ranking
-    const rankedResults = await this.rankResults(
-      deduplicatedResults,
-      rankingStrategy
-    );
+    const rankedResults = await this.rankResults(deduplicatedResults, rankingStrategy);
 
     // Apply result limit
     const finalResults = rankedResults.slice(0, maxResults);
@@ -448,11 +440,7 @@ class IntelligentResultAggregator {
     const similarityThreshold = 0.8;
 
     for (const result of results) {
-      const isDuplicate = await this.checkSimilarity(
-        result,
-        uniqueResults,
-        similarityThreshold
-      );
+      const isDuplicate = await this.checkSimilarity(result, uniqueResults, similarityThreshold);
       if (!isDuplicate) {
         uniqueResults.push(result);
       }
@@ -510,10 +498,7 @@ class IntelligentResultAggregator {
       const title = result.data.title?.toLowerCase();
       if (!title) return;
 
-      if (
-        !titleMap.has(title) ||
-        result.relevanceScore > titleMap.get(title).relevanceScore
-      ) {
+      if (!titleMap.has(title) || result.relevanceScore > titleMap.get(title).relevanceScore) {
         titleMap.set(title, result);
       }
     });
@@ -562,12 +547,10 @@ class IntelligentResultAggregator {
       .map(result => {
         const relevanceScore = result.relevanceScore * 0.4;
         const databaseScore = this.getDatabaseScore(result.database) * 0.3;
-        const freshnessScore =
-          this.getFreshnessScore(result.data.updated_at) * 0.2;
+        const freshnessScore = this.getFreshnessScore(result.data.updated_at) * 0.2;
         const engagementScore = this.getEngagementScore(result.data) * 0.1;
 
-        result.hybridScore =
-          relevanceScore + databaseScore + freshnessScore + engagementScore;
+        result.hybridScore = relevanceScore + databaseScore + freshnessScore + engagementScore;
         return result;
       })
       .sort((a, b) => b.hybridScore - a.hybridScore);
@@ -633,14 +616,11 @@ const searchPromises = [
 const searchResults = await Promise.all(searchPromises);
 
 // Aggregate with intelligent deduplication and ranking
-const aggregatedResults = await aggregator.aggregateWithDeduplication(
-  searchResults,
-  {
-    deduplicationStrategy: 'content_similarity',
-    rankingStrategy: 'hybrid',
-    maxResults: 30,
-  }
-);
+const aggregatedResults = await aggregator.aggregateWithDeduplication(searchResults, {
+  deduplicationStrategy: 'content_similarity',
+  rankingStrategy: 'hybrid',
+  maxResults: 30,
+});
 
 console.log(
   `Aggregated ${aggregatedResults.data.totalCount} unique results from ${aggregatedResults.data.originalCount} total results`
@@ -916,9 +896,7 @@ class SmartDatabaseSelector {
       categories.push('tutorials');
     }
 
-    if (
-      keywords.some(word => ['error', 'bug', 'issue', 'problem'].includes(word))
-    ) {
+    if (keywords.some(word => ['error', 'bug', 'issue', 'problem'].includes(word))) {
       categories.push('troubleshooting');
     }
 
@@ -935,8 +913,7 @@ class SmartDatabaseSelector {
     score += categoryOverlap * 0.4;
 
     // Content freshness
-    const daysSinceUpdate =
-      (Date.now() - databaseProfile.lastUpdated) / (1000 * 60 * 60 * 24);
+    const daysSinceUpdate = (Date.now() - databaseProfile.lastUpdated) / (1000 * 60 * 60 * 24);
     score += Math.max(0, 1 - daysSinceUpdate / 365) * 0.3;
 
     // Database size (more content = higher chance of relevant results)

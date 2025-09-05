@@ -41,33 +41,42 @@ git remote add upstream https://github.com/original/altus4.git
 npm install
 
 # Verify installation
-npm run type-check
+npm run typecheck
 ```
 
 1. **Configure Environment**
 
 ```bash
 # Copy development environment template
-cp .env.example .env.development
+cp .env.example .env
 
 # Edit with your local configuration
-# Use different ports/databases for development
+nano .env
 ```
 
-1. **Setup Development Database**
+1. **Setup Development Environment**
+
+**Option 1: Docker Environment (Recommended)**
+
+```bash
+# Start complete development environment
+npm run dev:start
+
+# This automatically:
+# - Starts MySQL and Redis containers
+# - Creates the altus4 database
+# - Runs all migrations
+# - Waits for services to be healthy
+```
+
+**Option 2: Manual Database Setup**
 
 ```sql
 -- Create development database
-CREATE DATABASE altus4_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE altus4 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Create test database
 CREATE DATABASE altus4_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- Create user with appropriate permissions
-CREATE USER 'altus4_dev'@'localhost' IDENTIFIED BY 'dev_password';
-GRANT ALL PRIVILEGES ON altus4_dev.* TO 'altus4_dev'@'localhost';
-GRANT ALL PRIVILEGES ON altus4_test.* TO 'altus4_dev'@'localhost';
-FLUSH PRIVILEGES;
 ```
 
 1. **Run Database Migrations**
@@ -78,6 +87,9 @@ npm run migrate
 
 # Check migration status
 npm run migrate:status
+
+# Rollback if needed
+npm run migrate:down
 ```
 
 1. **Start Development Server**
@@ -88,6 +100,75 @@ npm run dev
 
 # Verify server is running
 curl http://localhost:3000/health
+```
+
+## Available npm Scripts
+
+Altus 4 provides a comprehensive set of npm scripts organized by functionality:
+
+### 🚀 Core Development
+
+```bash
+npm run dev              # Start development server with hot reload
+npm run build            # Build production bundle (tsc + tsc-alias)
+npm start                # Start production server
+npm run clean            # Clean build artifacts
+```
+
+### ✅ Quality Assurance
+
+```bash
+npm run typecheck        # TypeScript type checking only
+npm run lint             # ESLint checking only
+npm run lint:fix         # Fix ESLint issues
+npm run format           # Format all files with Prettier
+npm run format:check     # Check Prettier formatting
+npm run format:src       # Format source files only
+npm run format:tests     # Format test files only
+npm run check            # Full quality check (typecheck + lint + format:check)
+npm run validate         # Complete validation (check + test)
+npm run fix              # Fix all issues (lint:fix + format)
+```
+
+### 🧪 Testing
+
+```bash
+npm test                 # Unit tests only
+npm run test:watch       # Unit tests in watch mode
+npm run test:coverage    # Unit tests with coverage
+npm run test:integration # Integration tests only
+npm run test:performance # Performance tests only
+npm run test:all         # All tests (unit + integration)
+```
+
+### 🗄️ Database Management
+
+```bash
+npm run migrate          # Run pending migrations (up)
+npm run migrate:up       # Run pending migrations (explicit)
+npm run migrate:down     # Rollback migrations
+npm run migrate:status   # Check migration status
+```
+
+### 🐳 Development Environment
+
+```bash
+npm run dev:start        # Start Docker services + migrations
+npm run dev:stop         # Stop Docker services
+npm run dev:reset        # Reset development environment
+npm run dev:logs         # View Docker service logs
+```
+
+### 🔐 Security & Git Hooks
+
+```bash
+npm run security:audit           # Security audit
+npm run security:fix             # Fix security issues
+npm run security:verify-commits  # Verify commit signatures
+npm run security:setup-gpg       # Setup GPG signing
+npm run security:configure-gpg   # Configure GPG signing
+npm run security:generate-jwt    # Generate JWT secret
+npm run hooks:test               # Test Git hooks functionality
 ```
 
 ## Project Structure
@@ -288,10 +369,7 @@ refactor(database): optimize connection pooling
 ```typescript
 // src/types/index.ts
 export interface IAnalyticsService {
-  generateReport(
-    userId: string,
-    dateRange: DateRange
-  ): Promise<AnalyticsReport>;
+  generateReport(userId: string, dateRange: DateRange): Promise<AnalyticsReport>;
   getUserMetrics(userId: string): Promise<UserMetrics>;
 }
 
@@ -316,19 +394,13 @@ export class AnalyticsService implements IAnalyticsService {
     private databaseService: DatabaseService
   ) {}
 
-  async generateReport(
-    userId: string,
-    dateRange: DateRange
-  ): Promise<AnalyticsReport> {
+  async generateReport(userId: string, dateRange: DateRange): Promise<AnalyticsReport> {
     try {
       logger.info(`Generating analytics report for user ${userId}`);
 
       // Implementation here
       const searchCount = await this.getSearchCount(userId, dateRange);
-      const averageResponseTime = await this.getAverageResponseTime(
-        userId,
-        dateRange
-      );
+      const averageResponseTime = await this.getAverageResponseTime(userId, dateRange);
 
       return {
         searchCount,
@@ -342,10 +414,7 @@ export class AnalyticsService implements IAnalyticsService {
     }
   }
 
-  private async getSearchCount(
-    userId: string,
-    dateRange: DateRange
-  ): Promise<number> {
+  private async getSearchCount(userId: string, dateRange: DateRange): Promise<number> {
     // Implementation
     return 0;
   }
@@ -433,10 +502,7 @@ describe('AnalyticsService', () => {
     mockCacheService = createMockCacheService();
     mockDatabaseService = createMockDatabaseService();
 
-    analyticsService = new AnalyticsService(
-      mockCacheService,
-      mockDatabaseService
-    );
+    analyticsService = new AnalyticsService(mockCacheService, mockDatabaseService);
   });
 
   describe('generateReport', () => {
@@ -462,7 +528,7 @@ describe('AnalyticsService', () => {
 ```json
 // .vscode/launch.json
 {
-  "version": "0.2.0",
+  "version": "0.2.1",
   "configurations": [
     {
       "name": "Launch Development Server",
@@ -765,11 +831,7 @@ const [rows] = await connection.execute(query, [searchTerm, category, limit]);
 
 ```typescript
 // API key authentication
-export const authenticateApiKey = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const authenticateApiKey = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
@@ -787,11 +849,7 @@ export const authenticateApiKey = async (
 
     const apiKey = parts[1];
     if (!apiKey.startsWith('altus4_sk_')) {
-      throw new AppError(
-        'INVALID_API_KEY_FORMAT',
-        'API key must start with altus4_sk_',
-        401
-      );
+      throw new AppError('INVALID_API_KEY_FORMAT', 'API key must start with altus4_sk_', 401);
     }
 
     const result = await apiKeyService.validateApiKey(apiKey);
@@ -821,15 +879,10 @@ export const requirePermission = (permission: string) => {
     }
 
     if (!req.apiKey.permissions.includes(permission)) {
-      throw new AppError(
-        'INSUFFICIENT_PERMISSIONS',
-        `Permission '${permission}' required`,
-        403,
-        {
-          required: permission,
-          available: req.apiKey.permissions,
-        }
-      );
+      throw new AppError('INSUFFICIENT_PERMISSIONS', `Permission '${permission}' required`, 403, {
+        required: permission,
+        available: req.apiKey.permissions,
+      });
     }
     next();
   };
@@ -892,9 +945,7 @@ describe('ServiceName', () => {
       };
 
       // Act & Assert
-      await expect(service.methodName(invalidInput)).rejects.toThrow(
-        'Expected error message'
-      );
+      await expect(service.methodName(invalidInput)).rejects.toThrow('Expected error message');
     });
   });
 });

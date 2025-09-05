@@ -47,7 +47,7 @@ The format includes:
 
 Register a new user account to begin the authentication process.
 
-**Endpoint**: `POST /api/auth/register`
+**Endpoint**: `POST /api/v1/auth/register`
 
 **Headers**:
 
@@ -86,7 +86,7 @@ Content-Type: application/json
 **cURL Example**:
 
 ```bash
-curl -X POST https://api.altus4.dev/api/auth/register \
+curl -X POST https://api.altus4.dev/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -99,7 +99,7 @@ curl -X POST https://api.altus4.dev/api/auth/register \
 
 Login to receive a JWT token for API key creation. This JWT token should only be used to create your initial API key.
 
-**Endpoint**: `POST /api/auth/login`
+**Endpoint**: `POST /api/v1/auth/login`
 
 **Headers**:
 
@@ -139,7 +139,7 @@ Content-Type: application/json
 **cURL Example**:
 
 ```bash
-curl -X POST https://api.altus4.dev/api/auth/login \
+curl -X POST https://api.altus4.dev/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -151,7 +151,7 @@ curl -X POST https://api.altus4.dev/api/auth/login \
 
 Create your first API key using the JWT token from login. This is a one-time setup process.
 
-**Endpoint**: `POST /api/management/setup`
+**Endpoint**: `POST /api/v1/management/setup`
 
 **Headers**:
 
@@ -181,7 +181,7 @@ Authorization: Bearer <JWT_TOKEN_FROM_LOGIN>
 **cURL Example**:
 
 ```bash
-curl -X POST https://api.altus4.dev/api/management/setup \
+curl -X POST https://api.altus4.dev/api/v1/management/setup \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 ```
 
@@ -193,7 +193,7 @@ Once you have your initial API key, use it to manage additional keys and your ac
 
 Create additional API keys for different environments or use cases.
 
-**Endpoint**: `POST /api/keys`
+**Endpoint**: `POST /api/v1/keys`
 
 **Headers**:
 
@@ -240,7 +240,7 @@ Content-Type: application/json
 
 Retrieve all API keys associated with your account.
 
-**Endpoint**: `GET /api/keys`
+**Endpoint**: `GET /api/v1/keys`
 
 **Headers**:
 
@@ -275,7 +275,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Update an existing API key's name, tier, or permissions.
 
-**Endpoint**: `PUT /api/keys/:keyId`
+**Endpoint**: `PUT /api/v1/keys/:keyId`
 
 **Headers**:
 
@@ -298,7 +298,7 @@ Content-Type: application/json
 
 Permanently revoke an API key. This action cannot be undone.
 
-**Endpoint**: `DELETE /api/keys/:keyId`
+**Endpoint**: `DELETE /api/v1/keys/:keyId`
 
 **Headers**:
 
@@ -322,7 +322,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Generate a new secret for an existing API key while maintaining the same ID and settings.
 
-**Endpoint**: `POST /api/keys/:keyId/regenerate`
+**Endpoint**: `POST /api/v1/keys/:keyId/regenerate`
 
 **Headers**:
 
@@ -351,7 +351,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Get detailed usage statistics for a specific API key.
 
-**Endpoint**: `GET /api/keys/:keyId/usage`
+**Endpoint**: `GET /api/v1/keys/:keyId/usage`
 
 **Query Parameters**:
 
@@ -378,7 +378,7 @@ Authorization: Bearer <YOUR_API_KEY>
       "averageResponseTime": 245,
       "topEndpoints": [
         {
-          "endpoint": "/api/search",
+          "endpoint": "/api/v1/search",
           "requests": 800,
           "averageResponseTime": 280
         }
@@ -408,7 +408,7 @@ Authorization: Bearer altus4_sk_live_abc123def456...
 ```javascript
 const apiKey = 'altus4_sk_live_abc123def456...';
 
-const response = await fetch('https://api.altus4.dev/api/search', {
+const response = await fetch('https://api.altus4.dev/api/v1/search', {
   method: 'POST',
   headers: {
     Authorization: `Bearer ${apiKey}`,
@@ -432,7 +432,7 @@ import requests
 api_key = 'altus4_sk_live_abc123def456...'
 
 response = requests.post(
-    'https://api.altus4.dev/api/search',
+    'https://api.altus4.dev/api/v1/search',
     headers={
         'Authorization': f'Bearer {api_key}',
         'Content-Type': 'application/json'
@@ -575,6 +575,62 @@ Expected response:
   }
 }
 ```
+
+---
+
+## Testing Authentication
+
+For local development and testing, you can use these pre-configured credentials:
+
+### Test User Credentials
+
+```json
+{
+  "email": "postman@example.com",
+  "password": "postman123"
+}
+```
+
+### Complete Testing Flow
+
+1. **Login to get JWT token**:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "postman@example.com",
+    "password": "postman123"
+  }'
+```
+
+2. **Create API key using JWT**:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/management/setup \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "name": "Test API Key"
+  }'
+```
+
+3. **Use API key for search**:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/search \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "query": "test search",
+    "databases": [],
+    "limit": 5
+  }'
+```
+
+### Postman Collection
+
+A complete Postman collection with all authentication flows is available in the `/examples` directory.
 
 ---
 

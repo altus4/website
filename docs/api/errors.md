@@ -30,7 +30,7 @@ All API errors follow a consistent response format:
   "meta": {
     "timestamp": "2024-01-15T10:30:00.000Z",
     "requestId": "req_abc123def456",
-    "version": "0.2.0"
+    "version": "0.2.1"
   }
 }
 ```
@@ -395,7 +395,7 @@ class Altus4Client {
   async searchWithRetry(query, databases, maxRetries = 3) {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        return await this.makeRequest('/api/search', {
+        return await this.makeRequest('/api/v1/search', {
           method: 'POST',
           body: JSON.stringify({ query, databases }),
         });
@@ -578,7 +578,7 @@ class Altus4Client:
         """Execute search with automatic retries"""
         for attempt in range(1, max_retries + 1):
             try:
-                return self.make_request('/api/search', 'POST', json={
+                return self.make_request('/api/v1/search', 'POST', json={
                     'query': query,
                     'databases': databases
                 })

@@ -41,7 +41,7 @@ graph TD
 
 Connect a new MySQL database to your Altus 4 account.
 
-**Endpoint**: `POST /api/databases`
+**Endpoint**: `POST /api/v1/databases`
 
 **Headers**:
 
@@ -157,7 +157,7 @@ Content-Type: application/json
 **cURL Example**:
 
 ```bash
-curl -X POST https://api.altus4.dev/api/databases \
+curl -X POST https://api.altus4.dev/api/v1/databases \
   -H "Authorization: Bearer altus4_sk_live_abc123..." \
   -H "Content-Type: application/json" \
   -d '{
@@ -177,7 +177,7 @@ curl -X POST https://api.altus4.dev/api/databases \
 
 Retrieve all database connections associated with your account.
 
-**Endpoint**: `GET /api/databases`
+**Endpoint**: `GET /api/v1/databases`
 
 **Query Parameters**:
 
@@ -232,7 +232,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Retrieve detailed information about a specific database connection.
 
-**Endpoint**: `GET /api/databases/:databaseId`
+**Endpoint**: `GET /api/v1/databases/:databaseId`
 
 **Headers**:
 
@@ -306,7 +306,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Update an existing database connection's settings.
 
-**Endpoint**: `PUT /api/databases/:databaseId`
+**Endpoint**: `PUT /api/v1/databases/:databaseId`
 
 **Headers**:
 
@@ -352,7 +352,7 @@ Content-Type: application/json
 
 Remove a database connection from your account.
 
-**Endpoint**: `DELETE /api/databases/:databaseId`
+**Endpoint**: `DELETE /api/v1/databases/:databaseId`
 
 **Headers**:
 
@@ -385,7 +385,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Test connectivity to a specific database.
 
-**Endpoint**: `POST /api/databases/:databaseId/test`
+**Endpoint**: `POST /api/v1/databases/:databaseId/test`
 
 **Headers**:
 
@@ -436,7 +436,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Get real-time connection health status.
 
-**Endpoint**: `GET /api/databases/:databaseId/status`
+**Endpoint**: `GET /api/v1/databases/:databaseId/status`
 
 **Headers**:
 
@@ -484,7 +484,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Discover the database schema including tables, columns, and indexes.
 
-**Endpoint**: `GET /api/databases/:databaseId/schema`
+**Endpoint**: `GET /api/v1/databases/:databaseId/schema`
 
 **Query Parameters**:
 
@@ -608,7 +608,7 @@ Authorization: Bearer <YOUR_API_KEY>
 **cURL Example**:
 
 ```bash
-curl -X GET "https://api.altus4.dev/api/databases/db_abc123def456/schema?includeData=true&tables=articles,posts" \
+curl -X GET "https://api.altus4.dev/api/v1/databases/db_abc123def456/schema?includeData=true&tables=articles,posts" \
   -H "Authorization: Bearer altus4_sk_live_abc123..."
 ```
 
@@ -628,7 +628,7 @@ class Altus4DatabaseManager {
   }
 
   async addDatabase(config) {
-    const response = await fetch(`${this.baseUrl}/api/databases`, {
+    const response = await fetch(`${this.baseUrl}/api/v1/databases`, {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify(config),
@@ -644,7 +644,7 @@ class Altus4DatabaseManager {
 
   async listDatabases(options = {}) {
     const params = new URLSearchParams(options);
-    const response = await fetch(`${this.baseUrl}/api/databases?${params}`, {
+    const response = await fetch(`${this.baseUrl}/api/v1/databases?${params}`, {
       headers: this.headers,
     });
 
@@ -653,7 +653,7 @@ class Altus4DatabaseManager {
 
   async testConnection(databaseId) {
     const response = await fetch(
-      `${this.baseUrl}/api/databases/${databaseId}/test`,
+      `${this.baseUrl}/api/v1/databases/${databaseId}/test`,
       {
         method: 'POST',
         headers: this.headers,
@@ -667,7 +667,7 @@ class Altus4DatabaseManager {
   async getSchema(databaseId, options = {}) {
     const params = new URLSearchParams(options);
     const response = await fetch(
-      `${this.baseUrl}/api/databases/${databaseId}/schema?${params}`,
+      `${this.baseUrl}/api/v1/databases/${databaseId}/schema?${params}`,
       { headers: this.headers }
     );
 
@@ -676,7 +676,7 @@ class Altus4DatabaseManager {
 
   async updateDatabase(databaseId, updates) {
     const response = await fetch(
-      `${this.baseUrl}/api/databases/${databaseId}`,
+      `${this.baseUrl}/api/v1/databases/${databaseId}`,
       {
         method: 'PUT',
         headers: this.headers,
@@ -732,7 +732,7 @@ class Altus4DatabaseManager:
     def add_database(self, config):
         """Add a new database connection"""
         response = requests.post(
-            f'{self.base_url}/api/databases',
+            f'{self.base_url}/api/v1/databases',
             headers=self.headers,
             json=config
         )
@@ -746,7 +746,7 @@ class Altus4DatabaseManager:
     def list_databases(self, **options):
         """List all database connections"""
         response = requests.get(
-            f'{self.base_url}/api/databases',
+            f'{self.base_url}/api/v1/databases',
             headers=self.headers,
             params=options
         )
@@ -755,7 +755,7 @@ class Altus4DatabaseManager:
     def test_connection(self, database_id):
         """Test database connection"""
         response = requests.post(
-            f'{self.base_url}/api/databases/{database_id}/test',
+            f'{self.base_url}/api/v1/databases/{database_id}/test',
             headers=self.headers
         )
 
@@ -765,7 +765,7 @@ class Altus4DatabaseManager:
     def get_schema(self, database_id, **options):
         """Get database schema information"""
         response = requests.get(
-            f'{self.base_url}/api/databases/{database_id}/schema',
+            f'{self.base_url}/api/v1/databases/{database_id}/schema',
             headers=self.headers,
             params=options
         )
@@ -774,7 +774,7 @@ class Altus4DatabaseManager:
     def get_status(self, database_id):
         """Get database connection status"""
         response = requests.get(
-            f'{self.base_url}/api/databases/{database_id}/status',
+            f'{self.base_url}/api/v1/databases/{database_id}/status',
             headers=self.headers
         )
         return response.json()
@@ -782,7 +782,7 @@ class Altus4DatabaseManager:
     def update_database(self, database_id, updates):
         """Update database connection"""
         response = requests.put(
-            f'{self.base_url}/api/databases/{database_id}',
+            f'{self.base_url}/api/v1/databases/{database_id}',
             headers=self.headers,
             json=updates
         )
@@ -791,7 +791,7 @@ class Altus4DatabaseManager:
     def remove_database(self, database_id):
         """Remove database connection"""
         response = requests.delete(
-            f'{self.base_url}/api/databases/{database_id}',
+            f'{self.base_url}/api/v1/databases/{database_id}',
             headers=self.headers
         )
         return response.json()

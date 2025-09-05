@@ -105,9 +105,9 @@ PORT=3000
 # Database Configuration
 DB_HOST=localhost
 DB_PORT=3306
-DB_USERNAME=altus4_dev
-DB_PASSWORD=dev_password
-DB_DATABASE=altus4_development
+DB_USERNAME=root
+DB_PASSWORD=
+DB_DATABASE=altus4
 
 # Redis Configuration
 REDIS_HOST=localhost
@@ -133,17 +133,33 @@ ENABLE_SWAGGER=true
 
 ### 4. Database Setup
 
-#### Create Development Database
+#### Option 1: Docker Environment (Recommended)
+
+The easiest way to set up the development environment is using the provided Docker configuration:
+
+```bash
+# Start complete development environment
+npm run dev:start
+```
+
+This command will:
+
+- Start MySQL 8.0 and Redis 7 containers
+- Create the `altus4` database automatically
+- Run all database migrations
+- Wait for services to be healthy
+- Display connection information
+
+#### Option 2: Manual Database Setup
+
+If you prefer to use your own MySQL installation:
 
 ```bash
 # Connect to MySQL as root
 mysql -u root -p
 
-# Create database and user
-CREATE DATABASE altus4_development;
-CREATE USER 'altus4_dev'@'localhost' IDENTIFIED BY 'dev_password';
-GRANT ALL PRIVILEGES ON altus4_development.* TO 'altus4_dev'@'localhost';
-FLUSH PRIVILEGES;
+# Create database
+CREATE DATABASE altus4 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 EXIT;
 ```
 
@@ -192,19 +208,25 @@ PORT=4000 npm run dev
 
 ```bash
 # Run migrations
-npm run db:migrate
+npm run migrate
+
+# Check migration status
+npm run migrate:status
 
 # Rollback migration
-npm run db:rollback
+npm run migrate:down
 
-# Reset database
-npm run db:reset
+# Start Docker environment with automatic setup
+npm run dev:start
 
-# Seed test data
-npm run db:seed
+# Stop Docker environment
+npm run dev:stop
 
-# Create new migration
-npm run db:create-migration migration_name
+# Reset Docker environment (clean slate)
+npm run dev:reset
+
+# View Docker service logs
+npm run dev:logs
 ```
 
 ### Testing
@@ -229,17 +251,79 @@ npm run test:integration
 ### Code Quality
 
 ```bash
+# Run type checking
+npm run typecheck
+
 # Run ESLint
 npm run lint
 
 # Fix ESLint issues
 npm run lint:fix
 
-# Run TypeScript type checking
-npm run typecheck
-
 # Format code with Prettier
 npm run format
+
+# Check Prettier formatting
+npm run format:check
+
+# Run complete quality check
+npm run check
+
+# Fix all issues automatically
+npm run fix
+
+# Complete validation (check + test)
+npm run validate
+```
+
+## Script Organization
+
+Altus 4 uses an organized script structure in the `bin/` directory:
+
+```text
+bin/
+├── dev/                    # 🐳 Development Environment
+│   ├── start.sh           # Start Docker services + migrations
+│   ├── stop.sh            # Stop Docker services
+│   ├── reset.sh           # Reset development environment
+│   └── docker-compose.yml # Docker services configuration
+├── db/                     # 🗄️ Database Operations
+│   └── migrate.sh         # Database migration management
+├── security/               # 🔐 Security & Authentication
+│   ├── generate-jwt-secret.sh # Generate JWT secrets
+│   ├── setup-gpg.sh       # GPG configuration
+│   └── verify-commits.sh  # Commit signature verification
+├── test/                   # 🧪 Testing Utilities
+│   └── test-hooks.sh      # Git hooks testing
+├── dev-start*             # 🚀 Convenience shortcuts
+├── dev-stop*              # 🛑
+├── dev-reset*             # 🔄
+├── migrate*               # 📊
+└── README.md              # 📖 Documentation
+```
+
+### Direct Script Usage
+
+You can also run scripts directly:
+
+```bash
+# Development environment
+./bin/dev-start            # Start Docker services
+./bin/dev-stop             # Stop Docker services
+./bin/dev-reset            # Reset environment
+
+# Database operations
+./bin/migrate up           # Run migrations
+./bin/migrate status       # Check status
+./bin/migrate down         # Rollback
+
+# Security operations
+./bin/security/generate-jwt-secret.sh
+./bin/security/setup-gpg.sh
+./bin/security/verify-commits.sh
+
+# Testing
+./bin/test/test-hooks.sh
 ```
 
 ## Development Database Schema
@@ -357,7 +441,7 @@ VS Code debug configuration (`.vscode/launch.json`):
 
 ```json
 {
-  "version": "0.2.0",
+  "version": "0.2.1",
   "configurations": [
     {
       "name": "Debug Altus 4",

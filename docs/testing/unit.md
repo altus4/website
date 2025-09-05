@@ -49,16 +49,8 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   roots: ['<rootDir>/src', '<rootDir>/tests'],
-  testMatch: [
-    '<rootDir>/tests/unit/**/*.test.ts',
-    '<rootDir>/src/**/__tests__/**/*.test.ts',
-  ],
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/**/*.d.ts',
-    '!src/**/__tests__/**',
-    '!src/index.ts',
-  ],
+  testMatch: ['<rootDir>/tests/unit/**/*.test.ts', '<rootDir>/src/**/__tests__/**/*.test.ts'],
+  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts', '!src/**/__tests__/**', '!src/index.ts'],
   coverageThreshold: {
     global: {
       branches: 90,
@@ -110,8 +102,7 @@ jest.mock('winston', () => ({
 // Custom matchers
 expect.extend({
   toBeValidUUID(received: string) {
-    const uuidRegex =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     const pass = uuidRegex.test(received);
 
     return {
@@ -223,9 +214,7 @@ describe('SearchService', () => {
 
       // Assert
       expect(result).toBe(cachedResults);
-      expect(mockCacheService.get).toHaveBeenCalledWith(
-        expect.stringMatching(/^search:/)
-      );
+      expect(mockCacheService.get).toHaveBeenCalledWith(expect.stringMatching(/^search:/));
       expect(mockDatabaseService.executeFullTextSearch).not.toHaveBeenCalled();
       expect(mockLogger.info).toHaveBeenCalledWith(
         'Cache hit for query: mysql performance optimization'
@@ -326,9 +315,7 @@ describe('SearchService', () => {
 
       // Mock different results for each database
       mockDatabaseService.executeFullTextSearch
-        .mockResolvedValueOnce([
-          { id: 1, title: 'Result 1', table: 'articles' },
-        ])
+        .mockResolvedValueOnce([{ id: 1, title: 'Result 1', table: 'articles' }])
         .mockResolvedValueOnce([{ id: 2, title: 'Result 2', table: 'posts' }])
         .mockResolvedValueOnce([{ id: 3, title: 'Result 3', table: 'docs' }]);
 
@@ -337,9 +324,7 @@ describe('SearchService', () => {
 
       // Assert
       expect(result.results).toHaveLength(3);
-      expect(mockDatabaseService.executeFullTextSearch).toHaveBeenCalledTimes(
-        3
-      );
+      expect(mockDatabaseService.executeFullTextSearch).toHaveBeenCalledTimes(3);
 
       // Verify parallel execution (all calls should have been made)
       expect(mockDatabaseService.executeFullTextSearch).toHaveBeenNthCalledWith(
@@ -408,14 +393,9 @@ describe('SearchService', () => {
       };
 
       // Act & Assert
-      await expect(searchService.search(invalidRequest as any)).rejects.toThrow(
-        'Search failed'
-      );
+      await expect(searchService.search(invalidRequest as any)).rejects.toThrow('Search failed');
 
-      expect(mockLogger.error).toHaveBeenCalledWith(
-        'Search execution failed:',
-        expect.any(Error)
-      );
+      expect(mockLogger.error).toHaveBeenCalledWith('Search execution failed:', expect.any(Error));
     });
 
     it('should generate consistent cache keys', () => {
@@ -478,10 +458,7 @@ describe('SearchService', () => {
       const query = 'mysql performance';
 
       // Act
-      const titleScore = (searchService as any).calculateRelevanceScore(
-        rowWithTitleMatch,
-        query
-      );
+      const titleScore = (searchService as any).calculateRelevanceScore(rowWithTitleMatch, query);
       const contentScore = (searchService as any).calculateRelevanceScore(
         rowWithContentMatch,
         query
@@ -594,9 +571,7 @@ describe('EncryptionService', () => {
         getAuthTag: jest.fn().mockReturnValue(mockAuthTag),
       };
 
-      mockCrypto.randomBytes
-        .mockReturnValueOnce(mockSalt)
-        .mockReturnValueOnce(mockIV);
+      mockCrypto.randomBytes.mockReturnValueOnce(mockSalt).mockReturnValueOnce(mockIV);
 
       mockCrypto.pbkdf2Sync.mockReturnValue(mockKey);
       mockCrypto.createCipher.mockReturnValue(mockCipher as any);
@@ -632,9 +607,7 @@ describe('EncryptionService', () => {
       });
 
       // Act & Assert
-      await expect(encryptionService.encrypt(plaintext)).rejects.toThrow(
-        'Encryption failed'
-      );
+      await expect(encryptionService.encrypt(plaintext)).rejects.toThrow('Encryption failed');
     });
   });
 
@@ -664,9 +637,7 @@ describe('EncryptionService', () => {
 
       // Assert
       expect(result).toBe('decrypteddata');
-      expect(mockDecipher.setAuthTag).toHaveBeenCalledWith(
-        Buffer.from('tag', 'base64')
-      );
+      expect(mockDecipher.setAuthTag).toHaveBeenCalledWith(Buffer.from('tag', 'base64'));
     });
 
     it('should handle decryption errors', async () => {
@@ -684,9 +655,7 @@ describe('EncryptionService', () => {
       });
 
       // Act & Assert
-      await expect(encryptionService.decrypt(invalidData)).rejects.toThrow(
-        'Decryption failed'
-      );
+      await expect(encryptionService.decrypt(invalidData)).rejects.toThrow('Decryption failed');
     });
   });
 });
@@ -807,10 +776,7 @@ describe('SearchController', () => {
         databases: ['db-uuid-1'],
       };
 
-      const validationError = new ValidationError(
-        'Query cannot be empty',
-        'query'
-      );
+      const validationError = new ValidationError('Query cannot be empty', 'query');
       mockSearchService.search.mockRejectedValue(validationError);
 
       // Act
@@ -947,9 +913,7 @@ export const createMockApiKey = (overrides: Partial<ApiKey> = {}): ApiKey => ({
   ...overrides,
 });
 
-export const createMockSearchResult = (
-  overrides: Partial<SearchResult> = {}
-): SearchResult => ({
+export const createMockSearchResult = (overrides: Partial<SearchResult> = {}): SearchResult => ({
   id: 'result-uuid-1',
   database: 'db-uuid-1',
   table: 'articles',
@@ -1089,18 +1053,14 @@ describe('Async Operations', () => {
     // Arrange
     const slowOperation = jest
       .fn()
-      .mockImplementation(
-        () => new Promise(resolve => setTimeout(resolve, 1000))
-      );
+      .mockImplementation(() => new Promise(resolve => setTimeout(resolve, 1000)));
 
     const timeoutPromise = new Promise((_, reject) =>
       setTimeout(() => reject(new Error('Timeout')), 500)
     );
 
     // Act & Assert
-    await expect(
-      Promise.race([slowOperation(), timeoutPromise])
-    ).rejects.toThrow('Timeout');
+    await expect(Promise.race([slowOperation(), timeoutPromise])).rejects.toThrow('Timeout');
   });
 });
 ```

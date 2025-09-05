@@ -31,15 +31,19 @@ git clone https://github.com/altus4/core.git
 cd altus4
 npm install
 
-# Setup environment
-cp .env.example .env
-# Edit .env with your database credentials
+# Option 1: Full Docker Environment (Recommended)
+npm run dev:start        # Starts MySQL + Redis + runs migrations
+npm run dev              # Start the application
+# Server starts at http://localhost:3000
 
-# Run database migrations
-npm run migrate
+# Option 2: Manual Setup
+cp .env.example .env     # Setup environment
+# Edit .env with your MySQL/Redis credentials
+npm run migrate          # Run database migrations
+npm run dev              # Start development server
 
-# Start development server
-npm run dev
+# When done developing
+npm run dev:stop         # Stop Docker services
 ```
 
 Visit `http://localhost:3000/health` to verify the installation.

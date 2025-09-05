@@ -30,15 +30,15 @@ Authorization: Bearer <your-api-key>
 
 | Method   | Endpoint                   | Description             | Auth Required |
 | -------- | -------------------------- | ----------------------- | ------------- |
-| `POST`   | `/api/auth/register`       | Register new user       | No            |
-| `POST`   | `/api/auth/login`          | User login              | No            |
-| `POST`   | `/api/management/setup`    | Create first API key    | JWT Token     |
-| `POST`   | `/api/keys`                | Create new API key      | API Key       |
-| `GET`    | `/api/keys`                | List API keys           | API Key       |
-| `PUT`    | `/api/keys/:id`            | Update API key          | API Key       |
-| `DELETE` | `/api/keys/:id`            | Revoke API key          | API Key       |
-| `GET`    | `/api/keys/:id/usage`      | Get API key usage stats | API Key       |
-| `POST`   | `/api/keys/:id/regenerate` | Regenerate API key      | API Key       |
+| `POST`   | `/api/v1/auth/register`       | Register new user       | No            |
+| `POST`   | `/api/v1/auth/login`          | User login              | No            |
+| `POST`   | `/api/v1/management/setup`    | Create first API key    | JWT Token     |
+| `POST`   | `/api/v1/keys`                | Create new API key      | API Key       |
+| `GET`    | `/api/v1/keys`                | List API keys           | API Key       |
+| `PUT`    | `/api/v1/keys/:id`            | Update API key          | API Key       |
+| `DELETE` | `/api/v1/keys/:id`            | Revoke API key          | API Key       |
+| `GET`    | `/api/v1/keys/:id/usage`      | Get API key usage stats | API Key       |
+| `POST`   | `/api/v1/keys/:id/regenerate` | Regenerate API key      | API Key       |
 
 [**→ Complete API Key Authentication Guide**](./authentication.md)
 
@@ -50,14 +50,14 @@ Manage MySQL database connections for searching.
 
 | Method   | Endpoint                    | Description                | Auth Required |
 | -------- | --------------------------- | -------------------------- | ------------- |
-| `GET`    | `/api/databases`            | List user databases        | API Key       |
-| `POST`   | `/api/databases`            | Add database connection    | API Key       |
-| `GET`    | `/api/databases/:id`        | Get database details       | API Key       |
-| `PUT`    | `/api/databases/:id`        | Update database connection | API Key       |
-| `DELETE` | `/api/databases/:id`        | Remove database connection | API Key       |
-| `POST`   | `/api/databases/:id/test`   | Test database connection   | API Key       |
-| `GET`    | `/api/databases/:id/schema` | Get database schema        | API Key       |
-| `GET`    | `/api/databases/:id/status` | Get connection status      | API Key       |
+| `GET`    | `/api/v1/databases`            | List user databases        | API Key       |
+| `POST`   | `/api/v1/databases`            | Add database connection    | API Key       |
+| `GET`    | `/api/v1/databases/:id`        | Get database details       | API Key       |
+| `PUT`    | `/api/v1/databases/:id`        | Update database connection | API Key       |
+| `DELETE` | `/api/v1/databases/:id`        | Remove database connection | API Key       |
+| `POST`   | `/api/v1/databases/:id/test`   | Test database connection   | API Key       |
+| `GET`    | `/api/v1/databases/:id/schema` | Get database schema        | API Key       |
+| `GET`    | `/api/v1/databases/:id/status` | Get connection status      | API Key       |
 
 [**Complete Database Documentation**](./database.md)
 
@@ -69,11 +69,11 @@ Execute searches across connected databases with AI enhancements.
 
 | Method | Endpoint                  | Description               | Auth Required |
 | ------ | ------------------------- | ------------------------- | ------------- |
-| `POST` | `/api/search`             | Execute search            | API Key       |
-| `GET`  | `/api/search/suggestions` | Get search suggestions    | API Key       |
-| `POST` | `/api/search/analyze`     | Analyze query performance | API Key       |
-| `GET`  | `/api/search/history`     | Get search history        | API Key       |
-| `GET`  | `/api/search/trends`      | Get user search trends    | API Key       |
+| `POST` | `/api/v1/search`             | Execute search            | API Key       |
+| `GET`  | `/api/v1/search/suggestions` | Get search suggestions    | API Key       |
+| `POST` | `/api/v1/search/analyze`     | Analyze query performance | API Key       |
+| `GET`  | `/api/v1/search/history`     | Get search history        | API Key       |
+| `GET`  | `/api/v1/search/trends`      | Get user search trends    | API Key       |
 
 [**Complete Search Documentation**](./search.md)
 
@@ -85,13 +85,13 @@ Access search analytics, performance metrics, and trend data.
 
 | Method | Endpoint                         | Description               | Auth Required |
 | ------ | -------------------------------- | ------------------------- | ------------- |
-| `GET`  | `/api/analytics/dashboard`       | Get dashboard data        | API Key       |
-| `GET`  | `/api/analytics/trends`          | Get search trends         | API Key       |
-| `GET`  | `/api/analytics/performance`     | Get performance metrics   | API Key       |
-| `GET`  | `/api/analytics/popular-queries` | Get popular queries       | API Key       |
-| `GET`  | `/api/analytics/insights`        | Get AI-generated insights | API Key       |
-| `GET`  | `/api/analytics/overview`        | Get system overview       | API Key       |
-| `GET`  | `/api/analytics/user-activity`   | Get user activity metrics | API Key       |
+| `GET`  | `/api/v1/analytics/dashboard`       | Get dashboard data        | API Key       |
+| `GET`  | `/api/v1/analytics/trends`          | Get search trends         | API Key       |
+| `GET`  | `/api/v1/analytics/performance`     | Get performance metrics   | API Key       |
+| `GET`  | `/api/v1/analytics/popular-queries` | Get popular queries       | API Key       |
+| `GET`  | `/api/v1/analytics/insights`        | Get AI-generated insights | API Key       |
+| `GET`  | `/api/v1/analytics/overview`        | Get system overview       | API Key       |
+| `GET`  | `/api/v1/analytics/user-activity`   | Get user activity metrics | API Key       |
 
 [**Complete Analytics Documentation**](./analytics.md)
 
@@ -252,7 +252,7 @@ X-RateLimit-Tier: Free
 
 ```bash
 # Register new user
-curl -X POST http://localhost:3000/api/auth/register \
+curl -X POST http://localhost:3000/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -261,7 +261,7 @@ curl -X POST http://localhost:3000/api/auth/register \
   }'
 
 # Login and get JWT token (for initial setup only)
-curl -X POST http://localhost:3000/api/auth/login \
+curl -X POST http://localhost:3000/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -269,11 +269,11 @@ curl -X POST http://localhost:3000/api/auth/login \
   }'
 
 # Create your first API key
-curl -X POST http://localhost:3000/api/management/setup \
+curl -X POST http://localhost:3000/api/v1/management/setup \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 
 # Execute search with API key (use for all subsequent requests)
-curl -X POST http://localhost:3000/api/search \
+curl -X POST http://localhost:3000/api/v1/search \
   -H "Authorization: Bearer altus4_sk_test_abc123def456..." \
   -H "Content-Type: application/json" \
   -d '{
@@ -288,7 +288,7 @@ curl -X POST http://localhost:3000/api/search \
 
 ```javascript
 // Using fetch API
-const response = await fetch('http://localhost:3000/api/search', {
+const response = await fetch('http://localhost:3000/api/v1/search', {
   method: 'POST',
   headers: {
     Authorization: `Bearer ${apiKey}`, // altus4_sk_live_abc123...
@@ -313,7 +313,7 @@ import requests
 
 # Search request
 response = requests.post(
-    'http://localhost:3000/api/search',
+    'http://localhost:3000/api/v1/search',
     headers={
         'Authorization': f'Bearer {api_key}',  # altus4_sk_live_abc123...
         'Content-Type': 'application/json'

@@ -121,9 +121,7 @@ async function main() {
 
     console.log('Search Results:');
     results.results.forEach((result, index) => {
-      console.log(
-        `${index + 1}. ${result.table} - Score: ${result.relevanceScore}`
-      );
+      console.log(`${index + 1}. ${result.table} - Score: ${result.relevanceScore}`);
       console.log(`   Snippet: ${result.snippet}`);
     });
   } catch (error) {
@@ -396,15 +394,11 @@ async function demonstrateSemanticSearch() {
 
   console.log('\n=== SEMANTIC SEARCH RESULTS ===');
   console.log(`Query: "${query}"`);
-  console.log(
-    `Found ${results.results.length} results in ${results.insights.executionTime}ms`
-  );
+  console.log(`Found ${results.results.length} results in ${results.insights.executionTime}ms`);
 
   // Display top results with semantic context
   results.results.slice(0, 5).forEach((result, index) => {
-    console.log(
-      `\n${index + 1}. ${result.table} (Relevance: ${result.aiRelevance.toFixed(3)})`
-    );
+    console.log(`\n${index + 1}. ${result.table} (Relevance: ${result.aiRelevance.toFixed(3)})`);
     console.log(`   Topics: ${result.semanticContext.topics.join(', ')}`);
     console.log(`   Snippet: ${result.snippet}`);
   });
@@ -420,18 +414,14 @@ async function demonstrateSemanticSearch() {
   // Show intelligent suggestions
   console.log('\n=== AI SUGGESTIONS ===');
   results.suggestions.forEach(suggestion => {
-    console.log(
-      `"${suggestion.text}" (${suggestion.type}, score: ${suggestion.score.toFixed(2)})`
-    );
+    console.log(`"${suggestion.text}" (${suggestion.type}, score: ${suggestion.score.toFixed(2)})`);
   });
 
   // Get related queries
   const relatedQueries = await client.getRelatedQueries(query);
   console.log('\n=== RELATED QUERIES ===');
   relatedQueries.forEach(related => {
-    console.log(
-      `"${related.query}" (similarity: ${related.similarity.toFixed(2)})`
-    );
+    console.log(`"${related.query}" (similarity: ${related.similarity.toFixed(2)})`);
   });
 }
 
@@ -466,10 +456,7 @@ class MultiDatabaseSearcher {
       console.log(`Database "${dbConfig.name}" registered with ID: ${dbId}`);
       return dbId;
     } catch (error) {
-      console.error(
-        `Failed to register database ${dbConfig.name}:`,
-        error.message
-      );
+      console.error(`Failed to register database ${dbConfig.name}:`, error.message);
       throw error;
     }
   }
@@ -493,9 +480,7 @@ class MultiDatabaseSearcher {
       maxConcurrency = 5,
     } = options;
 
-    console.log(
-      `Searching across ${databases.length} databases for: "${query}"`
-    );
+    console.log(`Searching across ${databases.length} databases for: "${query}"`);
 
     if (parallelSearch && databases.length > 1) {
       return this.parallelMultiSearch(query, databases, options);
@@ -612,8 +597,7 @@ class MultiDatabaseSearcher {
         // Boost relevance for better performing databases
         adjustedRelevance:
           result.relevanceScore *
-            this.databases.get(dbResult.databaseId)?.performance.successRate ||
-          1.0,
+            this.databases.get(dbResult.databaseId)?.performance.successRate || 1.0,
       }));
 
       allResults = allResults.concat(enhancedResults);
@@ -634,14 +618,10 @@ class MultiDatabaseSearcher {
     });
 
     // Calculate performance metrics
-    const totalExecutionTime = Math.max(
-      ...successful.map(r => r.executionTime),
-      0
-    );
+    const totalExecutionTime = Math.max(...successful.map(r => r.executionTime), 0);
     const averageResponseTime =
       successful.length > 0
-        ? successful.reduce((sum, r) => sum + r.executionTime, 0) /
-          successful.length
+        ? successful.reduce((sum, r) => sum + r.executionTime, 0) / successful.length
         : 0;
 
     return {
@@ -659,13 +639,11 @@ class MultiDatabaseSearcher {
       databaseResults: databaseResults,
       performance: {
         fastestDatabase: successful.reduce(
-          (prev, curr) =>
-            prev.executionTime < curr.executionTime ? prev : curr,
+          (prev, curr) => (prev.executionTime < curr.executionTime ? prev : curr),
           successful[0]
         ),
         slowestDatabase: successful.reduce(
-          (prev, curr) =>
-            prev.executionTime > curr.executionTime ? prev : curr,
+          (prev, curr) => (prev.executionTime > curr.executionTime ? prev : curr),
           successful[0]
         ),
       },
@@ -696,10 +674,8 @@ class MultiDatabaseSearcher {
     const db = this.databases.get(databaseId);
     if (db) {
       // Update moving averages
-      db.performance.avgResponseTime =
-        db.performance.avgResponseTime * 0.9 + executionTime * 0.1;
-      db.performance.successRate =
-        db.performance.successRate * 0.9 + (success ? 0.1 : 0);
+      db.performance.avgResponseTime = db.performance.avgResponseTime * 0.9 + executionTime * 0.1;
+      db.performance.successRate = db.performance.successRate * 0.9 + (success ? 0.1 : 0);
     }
   }
 
@@ -773,9 +749,7 @@ async function demonstrateMultiDatabaseSearch() {
   console.log(`Searched ${results.summary.totalDatabases} databases`);
   console.log(`Found ${results.summary.totalResults} total results`);
   console.log(`Total execution time: ${results.summary.totalExecutionTime}ms`);
-  console.log(
-    `Average response time: ${results.summary.averageResponseTime.toFixed(0)}ms`
-  );
+  console.log(`Average response time: ${results.summary.averageResponseTime.toFixed(0)}ms`);
 
   // Show top results from each database
   console.log('\n=== TOP RESULTS BY DATABASE ===');
@@ -784,9 +758,7 @@ async function demonstrateMultiDatabaseSearch() {
     .forEach(dbResult => {
       console.log(`\n${dbResult.databaseName} (${dbResult.executionTime}ms):`);
       dbResult.results.slice(0, 3).forEach((result, i) => {
-        console.log(
-          `  ${i + 1}. ${result.table} - ${result.relevanceScore.toFixed(3)}`
-        );
+        console.log(`  ${i + 1}. ${result.table} - ${result.relevanceScore.toFixed(3)}`);
         console.log(`     ${result.snippet}`);
       });
     });
@@ -796,12 +768,8 @@ async function demonstrateMultiDatabaseSearch() {
   const stats = searcher.getDatabaseStats();
   stats.forEach(stat => {
     console.log(`${stat.name}:`);
-    console.log(
-      `  Avg Response: ${stat.performance.avgResponseTime.toFixed(0)}ms`
-    );
-    console.log(
-      `  Success Rate: ${(stat.performance.successRate * 100).toFixed(1)}%`
-    );
+    console.log(`  Avg Response: ${stat.performance.avgResponseTime.toFixed(0)}ms`);
+    console.log(`  Success Rate: ${(stat.performance.successRate * 100).toFixed(1)}%`);
     console.log(`  Tables: ${stat.tableCount}`);
   });
 
@@ -890,8 +858,7 @@ const AltusSearchInterface = ({ altusConfig }) => {
           databases: altusConfig.databases,
           searchMode: mode,
           limit: 20,
-          categories:
-            selectedCategories.length > 0 ? selectedCategories : undefined,
+          categories: selectedCategories.length > 0 ? selectedCategories : undefined,
           includeAnalytics: true,
         }),
       });
@@ -948,68 +915,63 @@ const AltusSearchInterface = ({ altusConfig }) => {
   };
 
   return (
-    <div className="altus-search-interface">
+    <div className='altus-search-interface'>
       {/* Search Form */}
-      <form onSubmit={handleSearch} className="search-form">
-        <div className="search-input-container">
+      <form onSubmit={handleSearch} className='search-form'>
+        <div className='search-input-container'>
           <input
-            type="text"
+            type='text'
             value={query}
             onChange={handleQueryChange}
-            placeholder="Search across your databases..."
-            className="search-input"
-            autoComplete="off"
+            placeholder='Search across your databases...'
+            className='search-input'
+            autoComplete='off'
           />
 
           {/* Search Suggestions */}
           {suggestions.length > 0 && (
-            <div className="suggestions-dropdown">
+            <div className='suggestions-dropdown'>
               {suggestions.map((suggestion, index) => (
                 <div
                   key={index}
-                  className="suggestion-item"
+                  className='suggestion-item'
                   onClick={() => handleSuggestionSelect(suggestion)}
                 >
-                  <span className="suggestion-text">{suggestion.text}</span>
-                  <span className={`suggestion-type ${suggestion.type}`}>
-                    {suggestion.type}
-                  </span>
+                  <span className='suggestion-text'>{suggestion.text}</span>
+                  <span className={`suggestion-type ${suggestion.type}`}>{suggestion.type}</span>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        <button type="submit" disabled={loading} className="search-button">
+        <button type='submit' disabled={loading} className='search-button'>
           {loading ? 'Searching...' : 'Search'}
         </button>
       </form>
 
       {/* Search Mode Selector */}
-      <div className="search-modes">
+      <div className='search-modes'>
         {['natural', 'boolean', 'semantic'].map(mode => (
-          <label
-            key={mode}
-            className={`mode-option ${searchMode === mode ? 'active' : ''}`}
-          >
+          <label key={mode} className={`mode-option ${searchMode === mode ? 'active' : ''}`}>
             <input
-              type="radio"
-              name="searchMode"
+              type='radio'
+              name='searchMode'
               value={mode}
               checked={searchMode === mode}
               onChange={() => handleSearchModeChange(mode)}
             />
             {mode.charAt(0).toUpperCase() + mode.slice(1)}
-            {mode === 'semantic' && <span className="ai-badge">AI</span>}
+            {mode === 'semantic' && <span className='ai-badge'>AI</span>}
           </label>
         ))}
       </div>
 
       {/* Category Filters */}
       {categories.length > 0 && (
-        <div className="category-filters">
+        <div className='category-filters'>
           <h4>Filter by Category:</h4>
-          <div className="category-buttons">
+          <div className='category-buttons'>
             {categories.map(category => (
               <button
                 key={category.name}
@@ -1026,51 +988,45 @@ const AltusSearchInterface = ({ altusConfig }) => {
       )}
 
       {/* Search Results */}
-      <div className="search-results">
+      <div className='search-results'>
         {loading && (
-          <div className="loading-indicator">
-            <div className="spinner"></div>
+          <div className='loading-indicator'>
+            <div className='spinner'></div>
             Searching across databases...
           </div>
         )}
 
         {!loading && results.length > 0 && (
           <>
-            <div className="results-header">
+            <div className='results-header'>
               <h3>Found {results.length} results</h3>
-              {searchMode === 'semantic' && (
-                <span className="ai-powered">AI-Enhanced Results</span>
-              )}
+              {searchMode === 'semantic' && <span className='ai-powered'>AI-Enhanced Results</span>}
             </div>
 
-            <div className="results-list">
+            <div className='results-list'>
               {results.map((result, index) => (
-                <div key={result.id || index} className="result-item">
-                  <div className="result-header">
-                    <h4 className="result-title">
-                      {result.data.title ||
-                        result.data.name ||
-                        `Result from ${result.table}`}
+                <div key={result.id || index} className='result-item'>
+                  <div className='result-header'>
+                    <h4 className='result-title'>
+                      {result.data.title || result.data.name || `Result from ${result.table}`}
                     </h4>
-                    <div className="result-metadata">
-                      <span className="source-table">{result.table}</span>
+                    <div className='result-metadata'>
+                      <span className='source-table'>{result.table}</span>
                       {result.sourceDatabase && (
-                        <span className="source-database">
-                          {result.sourceDatabase.name}
-                        </span>
+                        <span className='source-database'>{result.sourceDatabase.name}</span>
                       )}
-                      <span className="relevance-score">
+                      <span className='relevance-score'>
                         {(result.relevanceScore * 100).toFixed(1)}% match
                       </span>
                     </div>
                   </div>
 
-                  <div className="result-snippet">{result.snippet}</div>
+                  <div className='result-snippet'>{result.snippet}</div>
 
                   {result.categories && result.categories.length > 0 && (
-                    <div className="result-categories">
+                    <div className='result-categories'>
                       {result.categories.map(category => (
-                        <span key={category} className="result-category">
+                        <span key={category} className='result-category'>
                           {category}
                         </span>
                       ))}
@@ -1078,14 +1034,11 @@ const AltusSearchInterface = ({ altusConfig }) => {
                   )}
 
                   {/* Show matched columns */}
-                  {result.matchedColumns &&
-                    result.matchedColumns.length > 0 && (
-                      <div className="matched-columns">
-                        <small>
-                          Matched in: {result.matchedColumns.join(', ')}
-                        </small>
-                      </div>
-                    )}
+                  {result.matchedColumns && result.matchedColumns.length > 0 && (
+                    <div className='matched-columns'>
+                      <small>Matched in: {result.matchedColumns.join(', ')}</small>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -1093,16 +1046,11 @@ const AltusSearchInterface = ({ altusConfig }) => {
         )}
 
         {!loading && query && results.length === 0 && (
-          <div className="no-results">
+          <div className='no-results'>
             <h3>No results found</h3>
-            <p>
-              Try adjusting your search terms or using a different search mode.
-            </p>
+            <p>Try adjusting your search terms or using a different search mode.</p>
             {searchMode !== 'semantic' && (
-              <button
-                onClick={() => handleSearchModeChange('semantic')}
-                className="try-ai-button"
-              >
+              <button onClick={() => handleSearchModeChange('semantic')} className='try-ai-button'>
                 Try AI-powered semantic search
               </button>
             )}
@@ -1122,17 +1070,14 @@ const App = () => {
     const initializeAltus = async () => {
       try {
         // Get authentication token
-        const loginResponse = await fetch(
-          'http://localhost:3000/api/auth/login',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              email: process.env.REACT_APP_ALTUS_EMAIL,
-              password: process.env.REACT_APP_ALTUS_PASSWORD,
-            }),
-          }
-        );
+        const loginResponse = await fetch('http://localhost:3000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: process.env.REACT_APP_ALTUS_EMAIL,
+            password: process.env.REACT_APP_ALTUS_PASSWORD,
+          }),
+        });
 
         const loginData = await loginResponse.json();
 
@@ -1156,7 +1101,7 @@ const App = () => {
   }
 
   return (
-    <div className="App">
+    <div className='App'>
       <header>
         <h1>Intelligent Database Search</h1>
         <p>Powered by Altus 4 AI-Enhanced MySQL Search</p>
@@ -1180,8 +1125,7 @@ export default App;
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .search-form {
@@ -1590,10 +1534,7 @@ class AltusLoadTester {
     console.log('Initializing load tester...');
 
     try {
-      const response = await axios.post(
-        `${this.baseURL}/auth/login`,
-        this.credentials
-      );
+      const response = await axios.post(`${this.baseURL}/auth/login`, this.credentials);
       this.token = response.data.data.token;
       console.log('Authentication successful');
     } catch (error) {
@@ -1674,8 +1615,7 @@ class AltusLoadTester {
       activeRequests.add(currentRequestId);
 
       try {
-        const query =
-          config.queries[Math.floor(Math.random() * config.queries.length)];
+        const query = config.queries[Math.floor(Math.random() * config.queries.length)];
         const result = await this.executeSearch(query, config.searchOptions);
 
         if (config.onRequest) {
@@ -1745,8 +1685,7 @@ class AltusLoadTester {
 
     // Calculate throughput
     const testDuration =
-      (requests[requests.length - 1]?.timestamp.getTime() -
-        requests[0]?.timestamp.getTime()) /
+      (requests[requests.length - 1]?.timestamp.getTime() - requests[0]?.timestamp.getTime()) /
       1000;
     const throughput = requests.length / testDuration;
 
@@ -1760,9 +1699,7 @@ class AltusLoadTester {
         throughput: throughput,
       },
       responseTime: {
-        average:
-          responseTimes.reduce((sum, time) => sum + time, 0) /
-          responseTimes.length,
+        average: responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length,
         min: Math.min(...responseTimes),
         max: Math.max(...responseTimes),
         p50: calculatePercentile(50),
@@ -1798,8 +1735,7 @@ class AltusLoadTester {
     return Object.entries(timeGroups).map(([timestamp, reqs]) => ({
       timestamp: parseInt(timestamp),
       requestCount: reqs.length,
-      averageResponseTime:
-        reqs.reduce((sum, r) => sum + r.responseTime, 0) / reqs.length,
+      averageResponseTime: reqs.reduce((sum, r) => sum + r.responseTime, 0) / reqs.length,
       errorCount: reqs.filter(r => r.statusCode >= 400).length,
     }));
   }
@@ -1810,8 +1746,7 @@ class AltusLoadTester {
     const recommendations = [];
 
     // Performance recommendations
-    const avgResponseTime =
-      requests.reduce((sum, r) => sum + r.responseTime, 0) / requests.length;
+    const avgResponseTime = requests.reduce((sum, r) => sum + r.responseTime, 0) / requests.length;
     if (avgResponseTime > 1000) {
       recommendations.push({
         type: 'performance',
@@ -1833,8 +1768,7 @@ class AltusLoadTester {
     // Throughput recommendations
     const throughput =
       requests.length /
-      ((requests[requests.length - 1]?.timestamp.getTime() -
-        requests[0]?.timestamp.getTime()) /
+      ((requests[requests.length - 1]?.timestamp.getTime() - requests[0]?.timestamp.getTime()) /
         1000);
     if (throughput < 10) {
       recommendations.push({
@@ -1878,9 +1812,7 @@ class AltusLoadTester {
     if (report.recommendations.length > 0) {
       console.log('\nRecommendations:');
       report.recommendations.forEach((rec, i) => {
-        console.log(
-          `  ${i + 1}. [${rec.priority.toUpperCase()}] ${rec.message}`
-        );
+        console.log(`  ${i + 1}. [${rec.priority.toUpperCase()}] ${rec.message}`);
       });
     }
   }
@@ -1930,10 +1862,7 @@ async function runPerformanceTests() {
 
     // Save detailed report to file
     const fs = require('fs');
-    fs.writeFileSync(
-      `load-test-report-${Date.now()}.json`,
-      JSON.stringify(report, null, 2)
-    );
+    fs.writeFileSync(`load-test-report-${Date.now()}.json`, JSON.stringify(report, null, 2));
     console.log('\nDetailed report saved to file');
   } catch (error) {
     console.error('Load test failed:', error);
@@ -2055,13 +1984,10 @@ class AltusAnalyticsDashboard extends EventEmitter {
     console.log('Initializing Altus Analytics Dashboard...');
 
     // Authenticate with Altus
-    const response = await axios.post(
-      `${this.altusConfig.baseUrl}/auth/login`,
-      {
-        email: this.altusConfig.email,
-        password: this.altusConfig.password,
-      }
-    );
+    const response = await axios.post(`${this.altusConfig.baseUrl}/auth/login`, {
+      email: this.altusConfig.email,
+      password: this.altusConfig.password,
+    });
 
     this.token = response.data.data.token;
     console.log('Connected to Altus 4 Analytics API');
@@ -2107,31 +2033,22 @@ class AltusAnalyticsDashboard extends EventEmitter {
 
   async collectSearchMetrics() {
     try {
-      const response = await axios.get(
-        `${this.altusConfig.baseUrl}/analytics/performance`,
-        {
-          headers: { Authorization: `Bearer ${this.token}` },
-          params: {
-            timeFrame: '30m',
-            includeBreakdown: true,
-          },
-        }
-      );
+      const response = await axios.get(`${this.altusConfig.baseUrl}/analytics/performance`, {
+        headers: { Authorization: `Bearer ${this.token}` },
+        params: {
+          timeFrame: '30m',
+          includeBreakdown: true,
+        },
+      });
 
       const data = response.data.data;
 
       // Update search metrics
       this.metrics.searchMetrics.set('totalSearches', data.totalSearches || 0);
-      this.metrics.searchMetrics.set(
-        'averageResponseTime',
-        data.averageResponseTime || 0
-      );
+      this.metrics.searchMetrics.set('averageResponseTime', data.averageResponseTime || 0);
       this.metrics.searchMetrics.set('successRate', data.successRate || 100);
       this.metrics.searchMetrics.set('cacheHitRate', data.cacheHitRate || 0);
-      this.metrics.searchMetrics.set(
-        'aiSearchPercentage',
-        data.aiSearchPercentage || 0
-      );
+      this.metrics.searchMetrics.set('aiSearchPercentage', data.aiSearchPercentage || 0);
 
       // Breakdown by search mode
       if (data.searchModeBreakdown) {
@@ -2147,13 +2064,10 @@ class AltusAnalyticsDashboard extends EventEmitter {
 
   async collectUserActivity() {
     try {
-      const response = await axios.get(
-        `${this.altusConfig.baseUrl}/analytics/user-activity`,
-        {
-          headers: { Authorization: `Bearer ${this.token}` },
-          params: { timeFrame: '1h' },
-        }
-      );
+      const response = await axios.get(`${this.altusConfig.baseUrl}/analytics/user-activity`, {
+        headers: { Authorization: `Bearer ${this.token}` },
+        params: { timeFrame: '1h' },
+      });
 
       const data = response.data.data;
 
@@ -2205,16 +2119,13 @@ class AltusAnalyticsDashboard extends EventEmitter {
 
   async collectTrendData() {
     try {
-      const response = await axios.get(
-        `${this.altusConfig.baseUrl}/analytics/trends`,
-        {
-          headers: { Authorization: `Bearer ${this.token}` },
-          params: {
-            timeFrame: '24h',
-            includeCategories: true,
-          },
-        }
-      );
+      const response = await axios.get(`${this.altusConfig.baseUrl}/analytics/trends`, {
+        headers: { Authorization: `Bearer ${this.token}` },
+        params: {
+          timeFrame: '24h',
+          includeCategories: true,
+        },
+      });
 
       this.metrics.trends = response.data.data.trends || [];
     } catch (error) {
@@ -2357,35 +2268,23 @@ class AltusAnalyticsDashboard extends EventEmitter {
       const snapshot = this.getSnapshot();
       const summary = snapshot.summary;
 
-      console.log(
-        '╔══════════════════════════════════════════════════════════════╗'
-      );
-      console.log(
-        '║                    ALTUS 4 ANALYTICS DASHBOARD                ║'
-      );
-      console.log(
-        '╚══════════════════════════════════════════════════════════════╝'
-      );
+      console.log('╔══════════════════════════════════════════════════════════════╗');
+      console.log('║                    ALTUS 4 ANALYTICS DASHBOARD                ║');
+      console.log('╚══════════════════════════════════════════════════════════════╝');
       console.log(`Last Updated: ${snapshot.timestamp.toLocaleString()}\n`);
 
       // System status
       const statusIcon = summary.status === 'healthy' ? '[OK]' : '[ERROR]';
-      console.log(
-        `System Status: ${statusIcon} ${summary.status.toUpperCase()}`
-      );
+      console.log(`System Status: ${statusIcon} ${summary.status.toUpperCase()}`);
 
       if (snapshot.system.uptime) {
-        console.log(
-          `Uptime: ${(snapshot.system.uptime / 3600).toFixed(1)} hours`
-        );
+        console.log(`Uptime: ${(snapshot.system.uptime / 3600).toFixed(1)} hours`);
       }
 
       console.log('\nSEARCH METRICS');
       console.log('─'.repeat(50));
       console.log(`Total Searches (30m): ${summary.totalSearches}`);
-      console.log(
-        `Average Response Time: ${summary.averageResponseTime.toFixed(0)}ms`
-      );
+      console.log(`Average Response Time: ${summary.averageResponseTime.toFixed(0)}ms`);
       console.log(`Success Rate: ${summary.successRate.toFixed(1)}%`);
       console.log(`Cache Hit Rate: ${summary.cacheEfficiency.toFixed(1)}%`);
       console.log(`AI Search Usage: ${summary.aiUsage.toFixed(1)}%`);
@@ -2407,9 +2306,7 @@ class AltusAnalyticsDashboard extends EventEmitter {
         console.log('─'.repeat(50));
         snapshot.trends.slice(0, 5).forEach(trend => {
           const arrow = trend.growth > 0 ? '↑' : trend.growth < 0 ? '↓' : '→';
-          console.log(
-            `  ${arrow} ${trend.category}: ${trend.queries} queries (+${trend.growth}%)`
-          );
+          console.log(`  ${arrow} ${trend.category}: ${trend.queries} queries (+${trend.growth}%)`);
         });
       }
 
@@ -2420,14 +2317,8 @@ class AltusAnalyticsDashboard extends EventEmitter {
         console.log('─'.repeat(50));
         alerts.forEach(alert => {
           const icon =
-            alert.severity === 'critical'
-              ? '🔴'
-              : alert.severity === 'high'
-                ? '🟠'
-                : '🟡';
-          console.log(
-            `  ${icon} [${alert.severity.toUpperCase()}] ${alert.message}`
-          );
+            alert.severity === 'critical' ? '🔴' : alert.severity === 'high' ? '🟠' : '🟡';
+          console.log(`  ${icon} [${alert.severity.toUpperCase()}] ${alert.message}`);
         });
       }
 
@@ -2492,10 +2383,7 @@ async function startAnalyticsDashboard() {
 
         // Save report to file
         const fs = require('fs');
-        fs.writeFileSync(
-          `analytics-report-${Date.now()}.json`,
-          JSON.stringify(report, null, 2)
-        );
+        fs.writeFileSync(`analytics-report-${Date.now()}.json`, JSON.stringify(report, null, 2));
       } catch (error) {
         console.error('Failed to generate report:', error.message);
       }

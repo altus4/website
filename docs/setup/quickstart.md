@@ -45,9 +45,9 @@ nano .env
 # Database Configuration (Primary - for metadata storage)
 DB_HOST=localhost
 DB_PORT=3306
-DB_USERNAME=altus4_user
-DB_PASSWORD=your_secure_password
-DB_DATABASE=altus4_meta
+DB_USERNAME=root
+DB_PASSWORD=
+DB_DATABASE=altus4
 
 # Authentication
 JWT_SECRET=your_very_long_and_secure_jwt_secret_key_here_at_least_32_characters
@@ -62,21 +62,30 @@ OPENAI_API_KEY=sk-your_openai_api_key_here
 
 ## Step 3: Database Setup
 
-Create the MySQL database and user:
+**Option 1: Docker Environment (Recommended)**
+
+```bash
+# Start Docker services (MySQL + Redis) with automatic setup
+npm run dev:start
+```
+
+This will:
+
+- Start MySQL and Redis containers
+- Create the `altus4` database automatically
+- Run all database migrations
+- Wait for services to be healthy
+
+**Option 2: Manual Database Setup**
+
+Create the MySQL database manually:
 
 ```sql
 -- Connect to MySQL as root
 mysql -u root -p
 
 -- Create database
-CREATE DATABASE altus4_meta CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- Create user
-CREATE USER 'altus4_user'@'localhost' IDENTIFIED BY 'your_secure_password';
-
--- Grant permissions
-GRANT ALL PRIVILEGES ON altus4_meta.* TO 'altus4_user'@'localhost';
-FLUSH PRIVILEGES;
+CREATE DATABASE altus4 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 ## Step 4: Run Migrations
@@ -84,6 +93,9 @@ FLUSH PRIVILEGES;
 ```bash
 # Apply database migrations
 npm run migrate
+
+# Check migration status
+npm run migrate:status
 ```
 
 Expected output:
@@ -94,6 +106,8 @@ Expected output:
 ✅ Migration 003_create_analytics_table.up.sql applied
 ✅ Migration 004_create_api_keys_table.up.sql applied
 ✅ Migration 005_update_users_table_for_api_keys.up.sql applied
+✅ Migration 006_create_database_connections_table.up.sql applied
+✅ Migration 007_create_search_analytics_table.up.sql applied
 ```
 
 ## Step 5: Start the Server
@@ -125,7 +139,7 @@ Expected response:
 {
   "status": "healthy",
   "timestamp": "2024-01-15T10:30:00.000Z",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "uptime": 1.234
 }
 ```

@@ -301,11 +301,7 @@ Response:
       }
     ],
     "trends": {
-      "popular_queries": [
-        "machine learning",
-        "artificial intelligence",
-        "web development"
-      ],
+      "popular_queries": ["machine learning", "artificial intelligence", "web development"],
       "search_volume_trend": "increasing",
       "avg_response_time": "52ms"
     }

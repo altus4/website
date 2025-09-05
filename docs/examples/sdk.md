@@ -125,8 +125,7 @@ class AdvancedSearchService {
     ]);
 
     return {
-      results:
-        searchResults.status === 'fulfilled' ? searchResults.value : null,
+      results: searchResults.status === 'fulfilled' ? searchResults.value : null,
       suggestions: suggestions.status === 'fulfilled' ? suggestions.value : [],
       trends: trends.status === 'fulfilled' ? trends.value : null,
       errors: [searchResults, suggestions, trends]
@@ -173,16 +172,15 @@ class AdvancedSearchService {
 const searchService = new AdvancedSearchService(process.env.ALTUS4_API_KEY!);
 
 // Search with fallback modes
-const results = await searchService.searchWithFallback(
-  'database performance issues',
-  ['docs-db', 'community-db']
-);
+const results = await searchService.searchWithFallback('database performance issues', [
+  'docs-db',
+  'community-db',
+]);
 
 // Search with analytics
-const analyticsResults = await searchService.searchWithAnalytics(
-  'mysql optimization',
-  ['tech-docs-db']
-);
+const analyticsResults = await searchService.searchWithAnalytics('mysql optimization', [
+  'tech-docs-db',
+]);
 
 // Batch search
 const batchResults = await searchService.batchSearch(
@@ -276,24 +274,20 @@ export const SearchComponent: React.FC<SearchComponentProps> = ({
   }, [query, debouncedSearch, getSuggestions]);
 
   return (
-    <div className="search-component">
-      <div className="search-input-container">
+    <div className='search-component'>
+      <div className='search-input-container'>
         <input
-          type="text"
+          type='text'
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder={placeholder}
-          className="search-input"
+          className='search-input'
         />
 
         {suggestions.length > 0 && (
-          <div className="suggestions">
+          <div className='suggestions'>
             {suggestions.map((suggestion, index) => (
-              <button
-                key={index}
-                onClick={() => setQuery(suggestion)}
-                className="suggestion-item"
-              >
+              <button key={index} onClick={() => setQuery(suggestion)} className='suggestion-item'>
                 {suggestion}
               </button>
             ))}
@@ -301,16 +295,16 @@ export const SearchComponent: React.FC<SearchComponentProps> = ({
         )}
       </div>
 
-      {loading && <div className="loading">Searching...</div>}
+      {loading && <div className='loading'>Searching...</div>}
 
-      {error && <div className="error">Error: {error}</div>}
+      {error && <div className='error'>Error: {error}</div>}
 
-      <div className="results">
+      <div className='results'>
         {results.map(result => (
-          <div key={result.id} className="result-item">
+          <div key={result.id} className='result-item'>
             <h3>{result.data.title}</h3>
             <p>{result.snippet}</p>
-            <div className="result-meta">
+            <div className='result-meta'>
               <span>Relevance: {Math.round(result.relevanceScore * 100)}%</span>
               <span>Source: {result.database}</span>
             </div>
