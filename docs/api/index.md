@@ -28,24 +28,24 @@ Authorization: Bearer <your-api-key>
 
 ### Authentication Endpoints
 
-| Method   | Endpoint                      | Description             | Auth Required | Status |
-| -------- | ----------------------------- | ----------------------- | ------------- | ------ |
-| `POST`   | `/api/v1/auth/register`       | Register new user       | No            | Tested |
-| `POST`   | `/api/v1/auth/login`          | User login              | No            | Tested |
-| `GET`    | `/api/v1/auth/profile`        | Get user profile        | JWT Token     | Tested |
-| `PUT`    | `/api/v1/auth/profile`        | Update user profile     | JWT Token     | Tested |
-| `POST`   | `/api/v1/auth/change-password`| Change user password    | JWT Token     | Tested |
-| `POST`   | `/api/v1/auth/refresh`        | Refresh JWT token       | JWT Token     | Tested |
-| `POST`   | `/api/v1/auth/logout`         | Logout user             | JWT Token     | Tested |
-| `DELETE` | `/api/v1/auth/account`        | Deactivate account      | JWT Token     | Tested |
-| `POST`   | `/api/v1/management/setup`    | Create first API key    | JWT Token     | Tested |
-| `GET`    | `/api/v1/management/migration-status` | Check migration status | JWT Token | Tested |
-| `POST`   | `/api/v1/keys`                | Create new API key      | API Key       | Requires admin permission |
-| `GET`    | `/api/v1/keys`                | List API keys           | API Key       | Tested |
-| `PUT`    | `/api/v1/keys/:keyId`         | Update API key          | API Key       | Requires admin permission |
-| `DELETE` | `/api/v1/keys/:keyId`         | Revoke API key          | API Key       | Requires admin permission |
-| `GET`    | `/api/v1/keys/:keyId/usage`   | Get API key usage stats | API Key       | Not tested |
-| `POST`   | `/api/v1/keys/:keyId/regenerate` | Regenerate API key   | API Key       | Requires admin permission |
+| Method   | Endpoint                              | Description             | Auth Required | Status                    |
+| -------- | ------------------------------------- | ----------------------- | ------------- | ------------------------- |
+| `POST`   | `/api/v1/auth/register`               | Register new user       | No            | Tested                    |
+| `POST`   | `/api/v1/auth/login`                  | User login              | No            | Tested                    |
+| `GET`    | `/api/v1/auth/profile`                | Get user profile        | JWT Token     | Tested                    |
+| `PUT`    | `/api/v1/auth/profile`                | Update user profile     | JWT Token     | Tested                    |
+| `POST`   | `/api/v1/auth/change-password`        | Change user password    | JWT Token     | Tested                    |
+| `POST`   | `/api/v1/auth/refresh`                | Refresh JWT token       | JWT Token     | Tested                    |
+| `POST`   | `/api/v1/auth/logout`                 | Logout user             | JWT Token     | Tested                    |
+| `DELETE` | `/api/v1/auth/account`                | Deactivate account      | JWT Token     | Tested                    |
+| `POST`   | `/api/v1/management/setup`            | Create first API key    | JWT Token     | Tested                    |
+| `GET`    | `/api/v1/management/migration-status` | Check migration status  | JWT Token     | Tested                    |
+| `POST`   | `/api/v1/keys`                        | Create new API key      | API Key       | Requires admin permission |
+| `GET`    | `/api/v1/keys`                        | List API keys           | API Key       | Tested                    |
+| `PUT`    | `/api/v1/keys/:keyId`                 | Update API key          | API Key       | Requires admin permission |
+| `DELETE` | `/api/v1/keys/:keyId`                 | Revoke API key          | API Key       | Requires admin permission |
+| `GET`    | `/api/v1/keys/:keyId/usage`           | Get API key usage stats | API Key       | Not tested                |
+| `POST`   | `/api/v1/keys/:keyId/regenerate`      | Regenerate API key      | API Key       | Requires admin permission |
 
 [**→ Complete API Key Authentication Guide**](./authentication.md)
 
@@ -55,16 +55,16 @@ Manage MySQL database connections for searching.
 
 ### Database Endpoints
 
-| Method   | Endpoint                       | Description                | Auth Required | Status |
-| -------- | ------------------------------ | -------------------------- | ------------- | ------ |
-| `GET`    | `/api/v1/databases`            | List user databases        | JWT Token     | Tested |
-| `POST`   | `/api/v1/databases`            | Add database connection    | JWT Token     | Tested |
+| Method   | Endpoint                       | Description                | Auth Required | Status     |
+| -------- | ------------------------------ | -------------------------- | ------------- | ---------- |
+| `GET`    | `/api/v1/databases`            | List user databases        | JWT Token     | Tested     |
+| `POST`   | `/api/v1/databases`            | Add database connection    | JWT Token     | Tested     |
 | `GET`    | `/api/v1/databases/:id`        | Get database details       | JWT Token     | Not tested |
 | `PUT`    | `/api/v1/databases/:id`        | Update database connection | JWT Token     | Not tested |
 | `DELETE` | `/api/v1/databases/:id`        | Remove database connection | JWT Token     | Not tested |
 | `POST`   | `/api/v1/databases/:id/test`   | Test database connection   | JWT Token     | Not tested |
 | `GET`    | `/api/v1/databases/:id/schema` | Get database schema        | JWT Token     | Not tested |
-| `GET`    | `/api/v1/databases/status`     | Get connection statuses    | JWT Token     | Tested |
+| `GET`    | `/api/v1/databases/status`     | Get connection statuses    | JWT Token     | Tested     |
 
 [**Complete Database Documentation**](./database.md)
 
@@ -74,13 +74,13 @@ Execute searches across connected databases with AI enhancements.
 
 ### Search Endpoints
 
-| Method | Endpoint                     | Description               | Auth Required | Status |
-| ------ | ---------------------------- | ------------------------- | ------------- | ------ |
-| `POST` | `/api/v1/search`             | Execute search            | API Key       | Tested |
-| `GET`  | `/api/v1/search/suggestions` | Get search suggestions    | API Key       | Tested |
+| Method | Endpoint                     | Description               | Auth Required       | Status     |
+| ------ | ---------------------------- | ------------------------- | ------------------- | ---------- |
+| `POST` | `/api/v1/search`             | Execute search            | API Key             | Tested     |
+| `GET`  | `/api/v1/search/suggestions` | Get search suggestions    | API Key             | Tested     |
 | `POST` | `/api/v1/search/analyze`     | Analyze query performance | API Key (analytics) | Not tested |
-| `GET`  | `/api/v1/search/history`     | Get search history        | API Key       | Tested |
-| `GET`  | `/api/v1/search/trends`      | Get user search trends    | API Key (analytics) | Tested |
+| `GET`  | `/api/v1/search/history`     | Get search history        | API Key             | Tested     |
+| `GET`  | `/api/v1/search/trends`      | Get user search trends    | API Key (analytics) | Tested     |
 
 [**Complete Search Documentation**](./search.md)
 
@@ -90,16 +90,16 @@ Access search analytics, performance metrics, and trend data.
 
 ### Analytics Endpoints
 
-| Method | Endpoint                            | Description               | Auth Required | Status |
-| ------ | ----------------------------------- | ------------------------- | ------------- | ------ |
-| `GET`  | `/api/v1/analytics/dashboard`       | Get dashboard data        | JWT Token     | Tested |
-| `GET`  | `/api/v1/analytics/search-trends`   | Get search trends         | JWT Token     | Tested |
-| `GET`  | `/api/v1/analytics/performance`     | Get performance metrics   | JWT Token     | Tested |
-| `GET`  | `/api/v1/analytics/popular-queries` | Get popular queries       | JWT Token     | Tested |
-| `GET`  | `/api/v1/analytics/search-history`  | Get search history        | JWT Token     | Tested |
-| `GET`  | `/api/v1/analytics/insights`        | Get AI-generated insights | JWT Token     | Tested |
-| `GET`  | `/api/v1/analytics/admin/system-overview` | Get system overview (admin) | JWT Token (admin) | Not tested |
-| `GET`  | `/api/v1/analytics/admin/user-activity` | Get user activity (admin) | JWT Token (admin) | Not tested |
+| Method | Endpoint                                      | Description                    | Auth Required     | Status     |
+| ------ | --------------------------------------------- | ------------------------------ | ----------------- | ---------- |
+| `GET`  | `/api/v1/analytics/dashboard`                 | Get dashboard data             | JWT Token         | Tested     |
+| `GET`  | `/api/v1/analytics/search-trends`             | Get search trends              | JWT Token         | Tested     |
+| `GET`  | `/api/v1/analytics/performance`               | Get performance metrics        | JWT Token         | Tested     |
+| `GET`  | `/api/v1/analytics/popular-queries`           | Get popular queries            | JWT Token         | Tested     |
+| `GET`  | `/api/v1/analytics/search-history`            | Get search history             | JWT Token         | Tested     |
+| `GET`  | `/api/v1/analytics/insights`                  | Get AI-generated insights      | JWT Token         | Tested     |
+| `GET`  | `/api/v1/analytics/admin/system-overview`     | Get system overview (admin)    | JWT Token (admin) | Not tested |
+| `GET`  | `/api/v1/analytics/admin/user-activity`       | Get user activity (admin)      | JWT Token (admin) | Not tested |
 | `GET`  | `/api/v1/analytics/admin/performance-metrics` | Get system performance (admin) | JWT Token (admin) | Not tested |
 
 [**Complete Analytics Documentation**](./analytics.md)
@@ -108,10 +108,10 @@ Access search analytics, performance metrics, and trend data.
 
 Health checks and system information.
 
-| Method | Endpoint                      | Description           | Auth Required | Status |
-| ------ | ----------------------------- | --------------------- | ------------- | ------ |
-| `GET`  | `/health`                     | System health check   | No            | Tested |
-| `GET`  | `/api/v1/management/health`   | Management health     | No            | Tested |
+| Method | Endpoint                    | Description         | Auth Required | Status |
+| ------ | --------------------------- | ------------------- | ------------- | ------ |
+| `GET`  | `/health`                   | System health check | No            | Tested |
+| `GET`  | `/api/v1/management/health` | Management health   | No            | Tested |
 
 ## Request/Response Format
 
@@ -435,6 +435,7 @@ All previously failing endpoints have been successfully fixed and tested:
 ### Testing Methodology
 
 Comprehensive automated testing was performed using curl commands to verify:
+
 - User registration and JWT token generation
 - Database connection status retrieval
 - Analytics search history with proper authentication
@@ -444,6 +445,7 @@ Comprehensive automated testing was performed using curl commands to verify:
 ### Development Notes
 
 This API testing and documentation effort resulted in:
+
 - **3 critical bugs fixed** that were preventing proper functionality
 - **100% endpoint coverage** with all 33 routes working correctly
 - **Accurate response documentation** with real JSON examples

@@ -125,7 +125,8 @@ export class TestDatabaseManager {
     const products = [
       {
         name: 'Gaming Laptop Pro',
-        description: 'High-performance gaming laptop with RTX graphics and fast SSD storage',
+        description:
+          'High-performance gaming laptop with RTX graphics and fast SSD storage',
         category: 'Electronics',
         price: 1299.99,
       },
@@ -274,9 +275,10 @@ describe('Authentication Integration', () => {
 
       // Verify user was created in database
       const connection = await testDb.getConnection();
-      const [users] = await connection.execute('SELECT * FROM users WHERE email = ?', [
-        userData.email,
-      ]);
+      const [users] = await connection.execute(
+        'SELECT * FROM users WHERE email = ?',
+        [userData.email]
+      );
 
       expect(users).toHaveLength(1);
       expect((users as any[])[0].email).toBe(userData.email);
@@ -290,7 +292,10 @@ describe('Authentication Integration', () => {
       };
 
       // First registration
-      await request(baseUrl).post('/api/v1/auth/register').send(userData).expect(201);
+      await request(baseUrl)
+        .post('/api/v1/auth/register')
+        .send(userData)
+        .expect(201);
 
       // Duplicate registration
       const response = await request(baseUrl)
@@ -386,10 +391,12 @@ describe('Authentication Integration', () => {
       testUser = await createTestUser();
 
       // Get auth token
-      const loginResponse = await request(baseUrl).post('/api/v1/auth/login').send({
-        email: testUser.email,
-        password: 'testPassword123',
-      });
+      const loginResponse = await request(baseUrl)
+        .post('/api/v1/auth/login')
+        .send({
+          email: testUser.email,
+          password: 'testPassword123',
+        });
 
       authToken = loginResponse.body.data.token;
     });
@@ -434,7 +441,10 @@ describe('Authentication Integration', () => {
         .expect(201);
 
       expect(response.body.data.apiKey.key).toMatch(/^altus4_sk_live_/);
-      expect(response.body.data.apiKey.permissions).toEqual(['search', 'analytics']);
+      expect(response.body.data.apiKey.permissions).toEqual([
+        'search',
+        'analytics',
+      ]);
     });
   });
 });
@@ -446,7 +456,11 @@ describe('Authentication Integration', () => {
 // tests/integration/api/search.test.ts
 import request from 'supertest';
 import { TestServer } from '../../helpers/test-server';
-import { createTestUser, createTestApiKey, createTestDatabase } from '../../helpers/auth-helpers';
+import {
+  createTestUser,
+  createTestApiKey,
+  createTestDatabase,
+} from '../../helpers/auth-helpers';
 
 describe('Search API Integration', () => {
   let testServer: TestServer;
@@ -1215,7 +1229,11 @@ describe('Search Service Integration', () => {
 // tests/integration/performance/api-performance.test.ts
 import request from 'supertest';
 import { TestServer } from '../../helpers/test-server';
-import { createTestUser, createTestApiKey, createTestDatabase } from '../../helpers/auth-helpers';
+import {
+  createTestUser,
+  createTestApiKey,
+  createTestDatabase,
+} from '../../helpers/auth-helpers';
 import { performance } from 'perf_hooks';
 
 describe('API Performance Integration', () => {
@@ -1241,15 +1259,17 @@ describe('API Performance Integration', () => {
   describe('Search Performance', () => {
     it('should handle concurrent search requests', async () => {
       const concurrentRequests = 10;
-      const searchPromises = Array.from({ length: concurrentRequests }, (_, i) =>
-        request(baseUrl)
-          .post('/api/v1/search')
-          .set('Authorization', `Bearer ${testApiKey}`)
-          .send({
-            query: `performance test query ${i}`,
-            databases: [testDatabaseId],
-            limit: 10,
-          })
+      const searchPromises = Array.from(
+        { length: concurrentRequests },
+        (_, i) =>
+          request(baseUrl)
+            .post('/api/v1/search')
+            .set('Authorization', `Bearer ${testApiKey}`)
+            .send({
+              query: `performance test query ${i}`,
+              databases: [testDatabaseId],
+              limit: 10,
+            })
       );
 
       const startTime = performance.now();
@@ -1305,13 +1325,16 @@ describe('API Performance Integration', () => {
       }
 
       // All requests should succeed
-      const successfulRequests = allResults.filter(r => r.status === 200).length;
+      const successfulRequests = allResults.filter(
+        r => r.status === 200
+      ).length;
       const successRate = (successfulRequests / requestCount) * 100;
 
       expect(successRate).toBeGreaterThan(95); // 95% success rate
 
       // Performance metrics
-      const averageTime = executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length;
+      const averageTime =
+        executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length;
       const p95Time = executionTimes.sort((a, b) => a - b)[
         Math.floor(executionTimes.length * 0.95)
       ];
@@ -1337,7 +1360,11 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/tests/integration-setup.ts'],
   testTimeout: 30000, // 30 seconds for integration tests
   maxWorkers: 1, // Run tests sequentially to avoid database conflicts
-  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts', '!src/**/__tests__/**'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*.d.ts',
+    '!src/**/__tests__/**',
+  ],
   coverageDirectory: 'coverage/integration',
   globalSetup: '<rootDir>/tests/global-setup.ts',
   globalTeardown: '<rootDir>/tests/global-teardown.ts',
@@ -1411,7 +1438,9 @@ describe('Feature Integration', () => {
 // Pattern: Error handling verification
 it('should handle service failures gracefully', async () => {
   // Simulate service failure
-  jest.spyOn(externalService, 'method').mockRejectedValue(new Error('Service down'));
+  jest
+    .spyOn(externalService, 'method')
+    .mockRejectedValue(new Error('Service down'));
 
   // Verify graceful handling
   const result = await serviceUnderTest.operation();

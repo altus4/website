@@ -326,7 +326,14 @@ services:
           cpus: '0.25'
           memory: 256M
     healthcheck:
-      test: ['CMD', 'redis-cli', '--pass', '$$(cat /run/secrets/redis_password)', 'ping']
+      test:
+        [
+          'CMD',
+          'redis-cli',
+          '--pass',
+          '$$(cat /run/secrets/redis_password)',
+          'ping',
+        ]
       interval: 30s
       timeout: 10s
       retries: 3

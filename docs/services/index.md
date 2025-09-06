@@ -230,7 +230,11 @@ describe('SearchService', () => {
     mockAIService = createMockAIService();
     mockCacheService = createMockCacheService();
 
-    searchService = new SearchService(mockDatabaseService, mockAIService, mockCacheService);
+    searchService = new SearchService(
+      mockDatabaseService,
+      mockAIService,
+      mockCacheService
+    );
   });
 
   it('should perform search successfully', async () => {
@@ -298,7 +302,10 @@ export class SearchService {
     }
 
     // 3. Execute database searches
-    const results = await this.databaseService.executeSearch(processedQuery, request.databases);
+    const results = await this.databaseService.executeSearch(
+      processedQuery,
+      request.databases
+    );
 
     // 4. Enhance results with AI
     const categorized = await this.aiService.categorizeResults(results);

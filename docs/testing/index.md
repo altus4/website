@@ -203,7 +203,11 @@ describe('SearchService', () => {
     };
 
     // Initialize service with mocks
-    searchService = new SearchService(mockDatabaseService, mockAIService, mockCacheService);
+    searchService = new SearchService(
+      mockDatabaseService,
+      mockAIService,
+      mockCacheService
+    );
   });
 
   describe('performSearch', () => {
@@ -227,7 +231,9 @@ describe('SearchService', () => {
 
     it('should handle database search when cache misses', async () => {
       // Arrange
-      const rawResults = [{ id: 1, title: 'Test Result', content: 'Test content', score: 0.9 }];
+      const rawResults = [
+        { id: 1, title: 'Test Result', content: 'Test content', score: 0.9 },
+      ];
       mockCacheService.get.mockResolvedValue(null);
       mockDatabaseService.executeFullTextSearch.mockResolvedValue(rawResults);
 
@@ -281,7 +287,10 @@ describe('EncryptionUtil', () => {
       const password = 'testPassword123';
       const hashedPassword = await EncryptionUtil.hashPassword(password);
 
-      const isValid = await EncryptionUtil.comparePassword(password, hashedPassword);
+      const isValid = await EncryptionUtil.comparePassword(
+        password,
+        hashedPassword
+      );
       expect(isValid).toBe(true);
     });
 
@@ -290,7 +299,10 @@ describe('EncryptionUtil', () => {
       const wrongPassword = 'wrongPassword';
       const hashedPassword = await EncryptionUtil.hashPassword(password);
 
-      const isValid = await EncryptionUtil.comparePassword(wrongPassword, hashedPassword);
+      const isValid = await EncryptionUtil.comparePassword(
+        wrongPassword,
+        hashedPassword
+      );
       expect(isValid).toBe(false);
     });
   });
@@ -345,7 +357,10 @@ describe('Authentication API', () => {
         name: 'Test User',
       };
 
-      const response = await request(app).post('/api/auth/register').send(userData).expect(201);
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send(userData)
+        .expect(201);
 
       expect(response.body.success).toBe(true);
       expect(response.body.data.user.email).toBe(userData.email);
@@ -360,7 +375,10 @@ describe('Authentication API', () => {
         name: 'Test User',
       };
 
-      const response = await request(app).post('/api/auth/register').send(userData).expect(400);
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send(userData)
+        .expect(400);
 
       expect(response.body.success).toBe(false);
       expect(response.body.error.code).toBe('VALIDATION_ERROR');
@@ -377,7 +395,10 @@ describe('Authentication API', () => {
       await request(app).post('/api/auth/register').send(userData).expect(201);
 
       // Duplicate registration
-      const response = await request(app).post('/api/auth/register').send(userData).expect(409);
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send(userData)
+        .expect(409);
 
       expect(response.body.success).toBe(false);
       expect(response.body.error.code).toBe('USER_ALREADY_EXISTS');
@@ -540,8 +561,9 @@ describe('Search Performance Tests', () => {
 
     // Process in batches to avoid overwhelming the system
     for (let i = 0; i < requestCount; i += batchSize) {
-      const batch = Array.from({ length: Math.min(batchSize, requestCount - i) }, (_, j) =>
-        searchService.performSearch(`volume test ${i + j}`)
+      const batch = Array.from(
+        { length: Math.min(batchSize, requestCount - i) },
+        (_, j) => searchService.performSearch(`volume test ${i + j}`)
       );
       batches.push(Promise.all(batch));
     }

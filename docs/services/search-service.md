@@ -488,7 +488,11 @@ describe('SearchService', () => {
       // ... other methods
     };
 
-    searchService = new SearchService(mockDatabaseService, mockAIService, mockCacheService);
+    searchService = new SearchService(
+      mockDatabaseService,
+      mockAIService,
+      mockCacheService
+    );
   });
 
   it('should return cached results when available', async () => {
