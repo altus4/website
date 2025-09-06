@@ -86,11 +86,7 @@ export const performanceTargets = {
 import { performance } from 'perf_hooks';
 import request from 'supertest';
 import { TestServer } from '../../helpers/test-server';
-import {
-  createTestUser,
-  createTestApiKey,
-  createTestDatabase,
-} from '../../helpers/auth-helpers';
+import { createTestUser, createTestApiKey, createTestDatabase } from '../../helpers/auth-helpers';
 
 describe('Basic Load Testing', () => {
   let testServer: TestServer;
@@ -181,51 +177,48 @@ describe('Basic Load Testing', () => {
       const requestsPerUser = 10;
 
       // Create concurrent user simulations
-      const userPromises = Array.from(
-        { length: concurrentUsers },
-        async (_, userId) => {
-          const userResults: PerformanceResult[] = [];
+      const userPromises = Array.from({ length: concurrentUsers }, async (_, userId) => {
+        const userResults: PerformanceResult[] = [];
 
-          for (let requestId = 0; requestId < requestsPerUser; requestId++) {
-            const startTime = performance.now();
+        for (let requestId = 0; requestId < requestsPerUser; requestId++) {
+          const startTime = performance.now();
 
-            try {
-              const response = await request(baseUrl)
-                .post('/api/v1/search')
-                .set('Authorization', `Bearer ${testApiKey}`)
-                .send({
-                  query: `concurrent user ${userId} request ${requestId}`,
-                  databases: [testDatabaseId],
-                  limit: 10,
-                });
-
-              const endTime = performance.now();
-
-              userResults.push({
-                requestId: `${userId}-${requestId}`,
-                responseTime: endTime - startTime,
-                statusCode: response.status,
-                success: response.status === 200,
-                timestamp: Date.now(),
+          try {
+            const response = await request(baseUrl)
+              .post('/api/v1/search')
+              .set('Authorization', `Bearer ${testApiKey}`)
+              .send({
+                query: `concurrent user ${userId} request ${requestId}`,
+                databases: [testDatabaseId],
+                limit: 10,
               });
-            } catch (error) {
-              userResults.push({
-                requestId: `${userId}-${requestId}`,
-                responseTime: -1,
-                statusCode: 0,
-                success: false,
-                error: error.message,
-                timestamp: Date.now(),
-              });
-            }
 
-            // Small delay between requests from same user
-            await new Promise(resolve => setTimeout(resolve, 100));
+            const endTime = performance.now();
+
+            userResults.push({
+              requestId: `${userId}-${requestId}`,
+              responseTime: endTime - startTime,
+              statusCode: response.status,
+              success: response.status === 200,
+              timestamp: Date.now(),
+            });
+          } catch (error) {
+            userResults.push({
+              requestId: `${userId}-${requestId}`,
+              responseTime: -1,
+              statusCode: 0,
+              success: false,
+              error: error.message,
+              timestamp: Date.now(),
+            });
           }
 
-          return userResults;
+          // Small delay between requests from same user
+          await new Promise(resolve => setTimeout(resolve, 100));
         }
-      );
+
+        return userResults;
+      });
 
       // Execute all user simulations concurrently
       const allUserResults = await Promise.all(userPromises);
@@ -256,46 +249,43 @@ describe('Basic Load Testing', () => {
       const results: PerformanceResult[] = [];
 
       for (let batch = 0; batch < batches; batch++) {
-        const batchPromises = Array.from(
-          { length: concurrentQueries },
-          async (_, queryId) => {
-            const globalQueryId = batch * concurrentQueries + queryId;
-            const startTime = performance.now();
+        const batchPromises = Array.from({ length: concurrentQueries }, async (_, queryId) => {
+          const globalQueryId = batch * concurrentQueries + queryId;
+          const startTime = performance.now();
 
-            try {
-              const queryResults = await databaseService.executeFullTextSearch(
-                testDatabaseId,
-                `database load test query ${globalQueryId}`,
-                ['test_articles'],
-                ['title', 'content'],
-                10,
-                0
-              );
+          try {
+            const queryResults = await databaseService.executeFullTextSearch(
+              testDatabaseId,
+              `database load test query ${globalQueryId}`,
+              ['test_articles'],
+              ['title', 'content'],
+              10,
+              0
+            );
 
-              const endTime = performance.now();
+            const endTime = performance.now();
 
-              return {
-                requestId: globalQueryId,
-                responseTime: endTime - startTime,
-                statusCode: 200,
-                success: true,
-                resultCount: queryResults.length,
-                timestamp: Date.now(),
-              };
-            } catch (error) {
-              const endTime = performance.now();
+            return {
+              requestId: globalQueryId,
+              responseTime: endTime - startTime,
+              statusCode: 200,
+              success: true,
+              resultCount: queryResults.length,
+              timestamp: Date.now(),
+            };
+          } catch (error) {
+            const endTime = performance.now();
 
-              return {
-                requestId: globalQueryId,
-                responseTime: endTime - startTime,
-                statusCode: 500,
-                success: false,
-                error: error.message,
-                timestamp: Date.now(),
-              };
-            }
+            return {
+              requestId: globalQueryId,
+              responseTime: endTime - startTime,
+              statusCode: 500,
+              success: false,
+              error: error.message,
+              timestamp: Date.now(),
+            };
           }
-        );
+        });
 
         const batchResults = await Promise.all(batchPromises);
         results.push(...batchResults);
@@ -326,29 +316,22 @@ interface PerformanceResult {
 function analyzePerformanceResults(results: PerformanceResult[]) {
   const successfulResults = results.filter(r => r.success);
   const failedResults = results.filter(r => !r.success);
-  const responseTimes = successfulResults
-    .map(r => r.responseTime)
-    .sort((a, b) => a - b);
+  const responseTimes = successfulResults.map(r => r.responseTime).sort((a, b) => a - b);
 
   const totalRequests = results.length;
   const successfulRequests = successfulResults.length;
   const successRate = successfulRequests / totalRequests;
 
-  const averageResponseTime =
-    responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+  const averageResponseTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
   const minResponseTime = responseTimes[0] || 0;
   const maxResponseTime = responseTimes[responseTimes.length - 1] || 0;
-  const p50ResponseTime =
-    responseTimes[Math.floor(responseTimes.length * 0.5)] || 0;
-  const p95ResponseTime =
-    responseTimes[Math.floor(responseTimes.length * 0.95)] || 0;
-  const p99ResponseTime =
-    responseTimes[Math.floor(responseTimes.length * 0.99)] || 0;
+  const p50ResponseTime = responseTimes[Math.floor(responseTimes.length * 0.5)] || 0;
+  const p95ResponseTime = responseTimes[Math.floor(responseTimes.length * 0.95)] || 0;
+  const p99ResponseTime = responseTimes[Math.floor(responseTimes.length * 0.99)] || 0;
 
   // Calculate RPS
   const timeSpan =
-    Math.max(...results.map(r => r.timestamp)) -
-    Math.min(...results.map(r => r.timestamp));
+    Math.max(...results.map(r => r.timestamp)) - Math.min(...results.map(r => r.timestamp));
   const actualRPS = (totalRequests / timeSpan) * 1000; // Convert to per second
 
   return {
@@ -404,14 +387,11 @@ describe('Advanced Load Testing', () => {
         expect(phase.successRate).toBeGreaterThan(0.95);
         expect(phase.averageResponseTime).toBeLessThan(1000);
 
-        console.log(
-          `Phase ${index + 1} (${testConfig.phases[index].targetRPS} RPS):`,
-          {
-            successRate: phase.successRate,
-            avgResponseTime: phase.averageResponseTime,
-            p95ResponseTime: phase.p95ResponseTime,
-          }
-        );
+        console.log(`Phase ${index + 1} (${testConfig.phases[index].targetRPS} RPS):`, {
+          successRate: phase.successRate,
+          avgResponseTime: phase.averageResponseTime,
+          p95ResponseTime: phase.p95ResponseTime,
+        });
       });
     });
   });
@@ -504,9 +484,7 @@ describe('System Stress Testing', () => {
       const results = await stressTestRunner.findBreakingPoint(stressConfig);
 
       expect(results.breakingPointRPS).toBeGreaterThan(stressConfig.startRPS);
-      expect(results.maxStableRPS).toBeLessThanOrEqual(
-        results.breakingPointRPS
-      );
+      expect(results.maxStableRPS).toBeLessThanOrEqual(results.breakingPointRPS);
 
       console.log('Stress Test Results:', {
         maxStableRPS: results.maxStableRPS,
@@ -529,8 +507,7 @@ describe('System Stress Testing', () => {
         monitorMemory: true,
       };
 
-      const results =
-        await stressTestRunner.runMemoryStressTest(memoryStressConfig);
+      const results = await stressTestRunner.runMemoryStressTest(memoryStressConfig);
 
       // System should not crash under memory pressure
       expect(results.systemCrashed).toBe(false);
@@ -552,14 +529,10 @@ describe('System Stress Testing', () => {
         maxConcurrentConnections: 100,
       };
 
-      const results = await stressTestRunner.runConnectionStressTest(
-        connectionStressConfig
-      );
+      const results = await stressTestRunner.runConnectionStressTest(connectionStressConfig);
 
       // System should gracefully handle connection limits
-      expect(results.connectionErrors).toBeLessThan(
-        results.totalRequests * 0.1
-      );
+      expect(results.connectionErrors).toBeLessThan(results.totalRequests * 0.1);
       expect(results.timeoutErrors).toBeLessThan(results.totalRequests * 0.05);
 
       console.log('Connection Stress Results:', {
@@ -585,9 +558,7 @@ describe('System Stress Testing', () => {
       // System should recover from spikes
       results.spikes.forEach((spike, index) => {
         expect(spike.recoveryTime).toBeLessThan(30000); // Recover within 30 seconds
-        expect(spike.errorsDuringSpike).toBeLessThan(
-          spike.requestsDuringSpike * 0.2
-        );
+        expect(spike.errorsDuringSpike).toBeLessThan(spike.requestsDuringSpike * 0.2);
 
         console.log(`Spike ${index + 1}:`, {
           peakRPS: spike.peakRPS,
@@ -637,9 +608,7 @@ export class PerformanceMonitor {
     this.isMonitoring = false;
   }
 
-  private async collectApplicationMetrics(): Promise<
-    Partial<PerformanceMetrics>
-  > {
+  private async collectApplicationMetrics(): Promise<Partial<PerformanceMetrics>> {
     const memUsage = process.memoryUsage();
 
     return {
@@ -675,18 +644,13 @@ export class PerformanceMonitor {
   }
 
   getMetricsSummary(): PerformanceSummary {
-    const heapUsages = this.metrics
-      .map(m => m.heapUsed)
-      .filter(Boolean) as number[];
-    const eventLoopDelays = this.metrics
-      .map(m => m.eventLoopDelay)
-      .filter(Boolean) as number[];
+    const heapUsages = this.metrics.map(m => m.heapUsed).filter(Boolean) as number[];
+    const eventLoopDelays = this.metrics.map(m => m.eventLoopDelay).filter(Boolean) as number[];
 
     return {
       duration:
         this.metrics.length > 0
-          ? this.metrics[this.metrics.length - 1].timestamp -
-            this.metrics[0].timestamp
+          ? this.metrics[this.metrics.length - 1].timestamp - this.metrics[0].timestamp
           : 0,
 
       memory: {
@@ -702,13 +666,9 @@ export class PerformanceMonitor {
       },
 
       handles: {
-        avgActive: this.average(
-          this.metrics.map(m => m.activeHandles).filter(Boolean) as number[]
-        ),
+        avgActive: this.average(this.metrics.map(m => m.activeHandles).filter(Boolean) as number[]),
         maxActive: Math.max(
-          ...(this.metrics
-            .map(m => m.activeHandles)
-            .filter(Boolean) as number[])
+          ...(this.metrics.map(m => m.activeHandles).filter(Boolean) as number[])
         ),
       },
     };
@@ -813,8 +773,7 @@ describe('Database Performance Testing', () => {
           queryTimes.push(endTime - startTime);
         }
 
-        const avgTime =
-          queryTimes.reduce((a, b) => a + b, 0) / queryTimes.length;
+        const avgTime = queryTimes.reduce((a, b) => a + b, 0) / queryTimes.length;
         const maxTime = Math.max(...queryTimes);
         const minTime = Math.min(...queryTimes);
 
@@ -898,8 +857,7 @@ describe('Database Performance Testing', () => {
       const successRate = successfulQueries.length / allResults.length;
 
       const responseTimes = successfulQueries.map(r => r.responseTime);
-      const avgResponseTime =
-        responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+      const avgResponseTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
       const maxResponseTime = Math.max(...responseTimes);
 
       // Performance assertions
@@ -972,10 +930,7 @@ describe('Bottleneck Analysis', () => {
     }
 
     // Performance optimization suggestions
-    const suggestions = generateOptimizationSuggestions(
-      timingBreakdown,
-      result.totalExecutionTime
-    );
+    const suggestions = generateOptimizationSuggestions(timingBreakdown, result.totalExecutionTime);
     console.log('Optimization Suggestions:', suggestions);
 
     // Assert reasonable performance
@@ -984,10 +939,7 @@ describe('Bottleneck Analysis', () => {
   });
 });
 
-function generateOptimizationSuggestions(
-  breakdown: any,
-  totalTime: number
-): string[] {
+function generateOptimizationSuggestions(breakdown: any, totalTime: number): string[] {
   const suggestions = [];
 
   if (breakdown.databaseQueries > totalTime * 0.5) {
@@ -1070,8 +1022,7 @@ describe('Performance Regression Testing', () => {
         executionTimes.push(endTime - startTime);
       }
 
-      const avgTime =
-        executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length;
+      const avgTime = executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length;
       const regressionPercentage =
         ((avgTime - scenario.baselineTime) / scenario.baselineTime) * 100;
 
@@ -1096,9 +1047,7 @@ describe('Performance Regression Testing', () => {
     console.log('Performance Regression Results:', regressionResults);
 
     // Update baseline if performance improved
-    const improvements = regressionResults.filter(
-      r => r.regressionPercentage < -5
-    ); // >5% improvement
+    const improvements = regressionResults.filter(r => r.regressionPercentage < -5); // >5% improvement
     if (improvements.length > 0) {
       console.log('Performance improvements detected:', improvements);
       await benchmark.updateBaselineMetrics(regressionResults);

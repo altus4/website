@@ -35,21 +35,12 @@ export class AIService {
   // Core Methods
   async processQuery(query: string, mode: SearchMode): Promise<ProcessedQuery>;
   async generateEmbedding(text: string): Promise<number[]>;
-  async enhanceResults(
-    results: SearchResult[],
-    query: string
-  ): Promise<EnhancedResult[]>;
+  async enhanceResults(results: SearchResult[], query: string): Promise<EnhancedResult[]>;
   async generateInsights(data: AnalyticsData): Promise<AIInsights>;
-  async optimizeQuery(
-    query: string,
-    context?: QueryContext
-  ): Promise<OptimizedQuery>;
+  async optimizeQuery(query: string, context?: QueryContext): Promise<OptimizedQuery>;
 
   // Utility Methods
-  private async callOpenAI(
-    messages: ChatMessage[],
-    options?: OpenAIOptions
-  ): Promise<string>;
+  private async callOpenAI(messages: ChatMessage[], options?: OpenAIOptions): Promise<string>;
   private async handleRateLimit(error: OpenAIError): Promise<void>;
   private validateQuery(query: string): boolean;
 }
@@ -941,15 +932,10 @@ describe('AIService', () => {
         data: [{ embedding: [0.1, 0.2, 0.3] }],
       });
       mockOpenAI.chat.completions.create.mockResolvedValue({
-        choices: [
-          { message: { content: '{"type": "search", "domain": "database"}' } },
-        ],
+        choices: [{ message: { content: '{"type": "search", "domain": "database"}' } }],
       });
 
-      const result = await aiService.processQuery(
-        'database optimization',
-        'semantic'
-      );
+      const result = await aiService.processQuery('database optimization', 'semantic');
 
       expect(result).toHaveProperty('originalQuery', 'database optimization');
       expect(result).toHaveProperty('embedding');

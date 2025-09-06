@@ -48,14 +48,12 @@ const advancedBooleanQueries = [
   {
     name: 'Exact phrase with context',
     query: '"database optimization" +(mysql postgresql)',
-    description:
-      "Exact phrase 'database optimization' with either mysql or postgresql",
+    description: "Exact phrase 'database optimization' with either mysql or postgresql",
   },
   {
     name: 'Word proximity',
     query: 'performance NEAR/5 optimization',
-    description:
-      "Words 'performance' and 'optimization' within 5 words of each other",
+    description: "Words 'performance' and 'optimization' within 5 words of each other",
   },
   {
     name: 'Wildcard matching',
@@ -266,10 +264,7 @@ class DatabaseOptimizer {
         estimatedRows: table.estimatedRows,
         searchWeight: this.calculateTableWeight(table),
       })),
-      totalRows: schema.data.tables.reduce(
-        (sum, table) => sum + table.estimatedRows,
-        0
-      ),
+      totalRows: schema.data.tables.reduce((sum, table) => sum + table.estimatedRows, 0),
       lastProfiled: new Date(),
     };
 
@@ -295,11 +290,7 @@ class DatabaseOptimizer {
     // Create optimized search strategy for each database
     const searchPromises = databaseIds.map(async dbId => {
       const profile = this.databaseProfiles.get(dbId);
-      const optimizedRequest = this.createOptimizedRequest(
-        query,
-        profile,
-        options
-      );
+      const optimizedRequest = this.createOptimizedRequest(query, profile, options);
 
       return fetch('https://api.altus4.com/api/v1/search', {
         method: 'POST',
@@ -372,14 +363,10 @@ class DatabaseOptimizer {
 
 // Usage
 const optimizer = new DatabaseOptimizer(apiKey);
-const results = await optimizer.optimizedSearch(
-  'mysql performance tuning',
-  ['db1', 'db2', 'db3'],
-  {
-    searchMode: 'semantic',
-    limit: 30,
-  }
-);
+const results = await optimizer.optimizedSearch('mysql performance tuning', ['db1', 'db2', 'db3'], {
+  searchMode: 'semantic',
+  limit: 30,
+});
 ```
 
 ## Advanced Filtering and Faceting
@@ -555,17 +542,14 @@ class SearchPerformanceAnalyzer {
       ...options,
     };
 
-    const response = await fetch(
-      'https://api.altus4.com/api/v1/search/analyze',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(searchRequest),
-      }
-    );
+    const response = await fetch('https://api.altus4.com/api/v1/search/analyze', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(searchRequest),
+    });
 
     const result = await response.json();
     const totalTime = Date.now() - startTime;
@@ -593,10 +577,8 @@ class SearchPerformanceAnalyzer {
     if (this.performanceHistory.length === 0) return null;
 
     const avgExecutionTime =
-      this.performanceHistory.reduce(
-        (sum, item) => sum + item.executionTime,
-        0
-      ) / this.performanceHistory.length;
+      this.performanceHistory.reduce((sum, item) => sum + item.executionTime, 0) /
+      this.performanceHistory.length;
 
     const slowQueries = this.performanceHistory
       .filter(item => item.executionTime > avgExecutionTime * 2)
@@ -624,9 +606,7 @@ class SearchPerformanceAnalyzer {
       recommendations.push({
         type: 'query_length',
         message: 'Consider shortening very long queries for better performance',
-        examples: longQueries
-          .slice(0, 2)
-          .map(q => q.query.substring(0, 50) + '...'),
+        examples: longQueries.slice(0, 2).map(q => q.query.substring(0, 50) + '...'),
       });
     }
 
@@ -636,8 +616,7 @@ class SearchPerformanceAnalyzer {
     if (broadQueries.length > 0) {
       recommendations.push({
         type: 'query_specificity',
-        message:
-          'Add more specific terms to broad queries that return many results',
+        message: 'Add more specific terms to broad queries that return many results',
         examples: broadQueries.slice(0, 2).map(q => q.query),
       });
     }
@@ -647,21 +626,18 @@ class SearchPerformanceAnalyzer {
 
   async optimizeQuery(originalQuery, databases) {
     // Get AI-powered query optimization suggestions
-    const response = await fetch(
-      'https://api.altus4.com/api/v1/search/optimize',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: originalQuery,
-          databases,
-          includeAlternatives: true,
-        }),
-      }
-    );
+    const response = await fetch('https://api.altus4.com/api/v1/search/optimize', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: originalQuery,
+        databases,
+        includeAlternatives: true,
+      }),
+    });
 
     return await response.json();
   }
@@ -680,9 +656,7 @@ const queries = [
 
 for (const query of queries) {
   const result = await analyzer.analyzeQuery(query, ['tech_db']);
-  console.log(
-    `Query: "${query}" took ${result.performanceData.executionTime}ms`
-  );
+  console.log(`Query: "${query}" took ${result.performanceData.executionTime}ms`);
 }
 
 // Get insights
@@ -906,20 +880,17 @@ class SearchResultEnhancer {
   }
 
   async addSemanticCategories(searchResults) {
-    const response = await fetch(
-      'https://api.altus4.com/api/v1/search/categorize',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          results: searchResults.data.results.slice(0, 20), // Limit for API efficiency
-          categoryTypes: ['topic', 'content_type', 'difficulty_level'],
-        }),
-      }
-    );
+    const response = await fetch('https://api.altus4.com/api/v1/search/categorize', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        results: searchResults.data.results.slice(0, 20), // Limit for API efficiency
+        categoryTypes: ['topic', 'content_type', 'difficulty_level'],
+      }),
+    });
 
     return await response.json();
   }
@@ -960,20 +931,17 @@ class SearchResultEnhancer {
     const topResults = searchResults.data.results.slice(0, 5);
     const keyTerms = this.extractKeyTerms(topResults);
 
-    const response = await fetch(
-      'https://api.altus4.com/api/v1/search/suggestions',
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${this.apiKey}`,
-        },
-        params: {
-          query: keyTerms.join(' '),
-          type: 'related',
-          limit: 5,
-        },
-      }
-    );
+    const response = await fetch('https://api.altus4.com/api/v1/search/suggestions', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+      params: {
+        query: keyTerms.join(' '),
+        type: 'related',
+        limit: 5,
+      },
+    });
 
     return await response.json();
   }
@@ -982,8 +950,7 @@ class SearchResultEnhancer {
     const termFrequency = new Map();
 
     results.forEach(result => {
-      const text =
-        `${result.data.title || ''} ${result.snippet || ''}`.toLowerCase();
+      const text = `${result.data.title || ''} ${result.snippet || ''}`.toLowerCase();
       const words = text.match(/\b\w{4,}\b/g) || []; // Words with 4+ characters
 
       words.forEach(word => {
@@ -1006,21 +973,18 @@ class SearchResultEnhancer {
         }
 
         // Use AI to generate summary
-        const response = await fetch(
-          'https://api.altus4.com/api/v1/ai/summarize',
-          {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${this.apiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              text: result.data.content,
-              maxLength: 150,
-              style: 'informative',
-            }),
-          }
-        );
+        const response = await fetch('https://api.altus4.com/api/v1/ai/summarize', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: result.data.content,
+            maxLength: 150,
+            style: 'informative',
+          }),
+        });
 
         const summaryData = await response.json();
         return {
@@ -1039,9 +1003,7 @@ class SearchResultEnhancer {
     enhancements.forEach(enhancement => {
       if (enhancement.explanations) {
         enhancement.explanations.forEach(explanation => {
-          const result = enhanced.data.results.find(
-            r => r.id === explanation.resultId
-          );
+          const result = enhanced.data.results.find(r => r.id === explanation.resultId);
           if (result) {
             result.relevanceExplanation = explanation;
           }
@@ -1050,9 +1012,7 @@ class SearchResultEnhancer {
 
       if (enhancement.summaries) {
         enhancement.summaries.forEach(summary => {
-          const result = enhanced.data.results.find(
-            r => r.id === summary.resultId
-          );
+          const result = enhanced.data.results.find(r => r.id === summary.resultId);
           if (result) {
             result.aiSummary = summary.summary;
           }
@@ -1097,10 +1057,7 @@ const enhancedResults = await enhancer.enhanceResults(searchResults, {
   summarize: true,
 });
 
-console.log(
-  'Enhanced results with AI categorization and summaries:',
-  enhancedResults
-);
+console.log('Enhanced results with AI categorization and summaries:', enhancedResults);
 ```
 
 ## Next Steps

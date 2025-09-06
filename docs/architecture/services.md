@@ -206,10 +206,7 @@ class DatabaseService {
   async testConnection(config: DatabaseConfig): Promise<boolean>;
 
   // Query execution
-  async executeFullTextSearch(
-    dbId: string,
-    query: string
-  ): Promise<SearchResult[]>;
+  async executeFullTextSearch(dbId: string, query: string): Promise<SearchResult[]>;
   async executeQuery(dbId: string, sql: string, params: any[]): Promise<any[]>;
 
   // Schema operations
@@ -334,11 +331,7 @@ class UserService {
 
   // Authentication
   async authenticateUser(email: string, password: string): Promise<AuthResult>;
-  async changePassword(
-    userId: string,
-    oldPassword: string,
-    newPassword: string
-  ): Promise<void>;
+  async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<void>;
 
   // Authorization
   async getUserPermissions(userId: string): Promise<Permission[]>;
@@ -629,11 +622,7 @@ describe('SearchService', () => {
       enhanceResults: jest.fn(),
     } as any;
 
-    searchService = new SearchService(
-      mockDatabaseService,
-      mockAIService,
-      mockCacheService
-    );
+    searchService = new SearchService(mockDatabaseService, mockAIService, mockCacheService);
   });
 
   it('should aggregate results from multiple databases', async () => {
@@ -671,9 +660,7 @@ describe('SearchService Integration', () => {
 
   it('should perform end-to-end search', async () => {
     await testDatabase.seed({
-      articles: [
-        { id: 1, title: 'MySQL Performance', content: 'Optimization tips...' },
-      ],
+      articles: [{ id: 1, title: 'MySQL Performance', content: 'Optimization tips...' }],
     });
 
     const result = await searchService.search({
@@ -730,12 +717,8 @@ export class DatabaseService {
 
     return {
       service: 'DatabaseService',
-      status: checks.every(c => c.status === 'fulfilled')
-        ? 'healthy'
-        : 'degraded',
-      checks: checks.map(c =>
-        c.status === 'fulfilled' ? c.value : { error: c.reason }
-      ),
+      status: checks.every(c => c.status === 'fulfilled') ? 'healthy' : 'degraded',
+      checks: checks.map(c => (c.status === 'fulfilled' ? c.value : { error: c.reason })),
     };
   }
 }

@@ -203,10 +203,7 @@ export class SearchService {
     }
 
     if (!request.databases?.length) {
-      throw new ValidationError(
-        'At least one database must be specified',
-        'databases'
-      );
+      throw new ValidationError('At least one database must be specified', 'databases');
     }
   }
 }
@@ -233,9 +230,7 @@ async function fetchUserData(userId: string): Promise<User> {
 function fetchUserDataBad(userId: string): Promise<User> {
   return userRepository
     .findById(userId)
-    .then(user =>
-      profileService.getProfile(userId).then(profile => ({ ...user, profile }))
-    )
+    .then(user => profileService.getProfile(userId).then(profile => ({ ...user, profile })))
     .catch(error => {
       logger.error('Failed to fetch user data', { userId, error });
       throw error;
@@ -263,16 +258,11 @@ async function fetchWithPartialFailure(): Promise<PartialResults> {
   ]);
 
   const successful = results
-    .filter(
-      (result): result is PromiseFulfilledResult<any> =>
-        result.status === 'fulfilled'
-    )
+    .filter((result): result is PromiseFulfilledResult<any> => result.status === 'fulfilled')
     .map(result => result.value);
 
   const failed = results
-    .filter(
-      (result): result is PromiseRejectedResult => result.status === 'rejected'
-    )
+    .filter((result): result is PromiseRejectedResult => result.status === 'rejected')
     .map(result => result.reason);
 
   return { successful, failed };
@@ -379,21 +369,11 @@ router.use(authenticateApiKey);
 router.use(rateLimiter);
 
 // Use descriptive route names and consistent patterns
-router.post(
-  '/search',
-  validateSearchRequest,
-  searchController.search.bind(searchController)
-);
+router.post('/search', validateSearchRequest, searchController.search.bind(searchController));
 
-router.get(
-  '/search/suggestions',
-  searchController.getSuggestions.bind(searchController)
-);
+router.get('/search/suggestions', searchController.getSuggestions.bind(searchController));
 
-router.get(
-  '/search/history',
-  searchController.getHistory.bind(searchController)
-);
+router.get('/search/history', searchController.getHistory.bind(searchController));
 
 export { router as searchRoutes };
 ```
@@ -548,11 +528,7 @@ describe('SearchService', () => {
     } as any;
 
     // Initialize service with mocks
-    searchService = new SearchService(
-      mockDatabaseService,
-      mockAIService,
-      mockCacheService
-    );
+    searchService = new SearchService(mockDatabaseService, mockAIService, mockCacheService);
   });
 
   afterEach(() => {
@@ -579,9 +555,7 @@ describe('SearchService', () => {
 
       // Assert
       expect(result).toBe(cachedResults);
-      expect(mockCacheService.get).toHaveBeenCalledWith(
-        expect.stringContaining('search:')
-      );
+      expect(mockCacheService.get).toHaveBeenCalledWith(expect.stringContaining('search:'));
       expect(mockDatabaseService.executeFullTextSearch).not.toHaveBeenCalled();
     });
 
@@ -628,9 +602,7 @@ describe('SearchService', () => {
       );
 
       // Act & Assert
-      await expect(searchService.search(searchRequest)).rejects.toThrow(
-        'Search failed'
-      );
+      await expect(searchService.search(searchRequest)).rejects.toThrow('Search failed');
     });
   });
 
@@ -858,11 +830,7 @@ The SearchService orchestrates searches across multiple MySQL databases with opt
 ### Basic Search
 
 ```typescript
-const searchService = new SearchService(
-  databaseService,
-  aiService,
-  cacheService
-);
+const searchService = new SearchService(databaseService, aiService, cacheService);
 
 const results = await searchService.search({
   query: 'mysql performance optimization',

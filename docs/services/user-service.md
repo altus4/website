@@ -44,19 +44,12 @@ export class UserService {
   async authenticateUser(email: string, password: string): Promise<AuthResult>;
   async hashPassword(password: string): Promise<string>;
   async validatePassword(password: string, hash: string): Promise<boolean>;
-  async changePassword(
-    userId: string,
-    currentPassword: string,
-    newPassword: string
-  ): Promise<void>;
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void>;
 
   // Profile Management
   async updateProfile(userId: string, profile: UserProfile): Promise<void>;
   async getProfile(userId: string): Promise<UserProfile | null>;
-  async updatePreferences(
-    userId: string,
-    preferences: UserPreferences
-  ): Promise<void>;
+  async updatePreferences(userId: string, preferences: UserPreferences): Promise<void>;
 
   // Security Methods
   async lockAccount(userId: string, reason: string): Promise<void>;
@@ -1074,9 +1067,7 @@ describe('UserService', () => {
 
       mockDatabaseService.query.mockResolvedValue([{ id: 'existing-user' }]);
 
-      await expect(userService.createUser(userData)).rejects.toThrow(
-        'USER_ALREADY_EXISTS'
-      );
+      await expect(userService.createUser(userData)).rejects.toThrow('USER_ALREADY_EXISTS');
     });
   });
 
@@ -1086,10 +1077,7 @@ describe('UserService', () => {
       mockDatabaseService.query.mockResolvedValue([mockUser]);
       jest.spyOn(userService, 'validatePassword').mockResolvedValue(true);
 
-      const result = await userService.authenticateUser(
-        'test@example.com',
-        'password'
-      );
+      const result = await userService.authenticateUser('test@example.com', 'password');
 
       expect(result.success).toBe(true);
       expect(result.user).toBeDefined();
@@ -1100,10 +1088,7 @@ describe('UserService', () => {
       mockDatabaseService.query.mockResolvedValue([mockUser]);
       jest.spyOn(userService, 'validatePassword').mockResolvedValue(false);
 
-      const result = await userService.authenticateUser(
-        'test@example.com',
-        'wrongpassword'
-      );
+      const result = await userService.authenticateUser('test@example.com', 'wrongpassword');
 
       expect(result.success).toBe(false);
       expect(result.reason).toBe('Invalid email or password');

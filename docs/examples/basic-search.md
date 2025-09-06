@@ -228,19 +228,14 @@ async function searchWithPagination(query, databases, pageSize = 20) {
     hasMore = results.length === pageSize;
     offset += pageSize;
 
-    console.log(
-      `Fetched ${results.length} results (total: ${allResults.length})`
-    );
+    console.log(`Fetched ${results.length} results (total: ${allResults.length})`);
   }
 
   return allResults;
 }
 
 // Usage
-const allResults = await searchWithPagination('database optimization', [
-  'db-uuid-1',
-  'db-uuid-2',
-]);
+const allResults = await searchWithPagination('database optimization', ['db-uuid-1', 'db-uuid-2']);
 ```
 
 ## Working with Results
@@ -607,12 +602,9 @@ Now that you understand basic search operations, explore:
 
 ```javascript
 // Check if your database has FULLTEXT indexes
-const schemaResponse = await fetch(
-  `https://api.altus4.com/api/v1/databases/${databaseId}/schema`,
-  {
-    headers: { Authorization: `Bearer ${apiKey}` },
-  }
-);
+const schemaResponse = await fetch(`https://api.altus4.com/api/v1/databases/${databaseId}/schema`, {
+  headers: { Authorization: `Bearer ${apiKey}` },
+});
 const schema = await schemaResponse.json();
 console.log('FULLTEXT indexes:', schema.data.fulltextIndexes);
 ```
