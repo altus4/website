@@ -82,13 +82,13 @@ Execute searches across connected databases with AI enhancements.
 
 ### Search Endpoints
 
-| Method | Endpoint                     | Description               | Auth Required       | Status     |
-| ------ | ---------------------------- | ------------------------- | ------------------- | ---------- |
-| `POST` | `/api/v1/search`             | Execute search            | API Key             | Tested     |
-| `GET`  | `/api/v1/search/suggestions` | Get search suggestions    | API Key             | Tested     |
-| `POST` | `/api/v1/search/analyze`     | Analyze query performance | API Key (analytics) | Tested     |
-| `GET`  | `/api/v1/search/history`     | Get search history        | API Key             | Tested     |
-| `GET`  | `/api/v1/search/trends`      | Get user search trends    | API Key (analytics) | Tested     |
+| Method | Endpoint                     | Description               | Auth Required       | Status |
+| ------ | ---------------------------- | ------------------------- | ------------------- | ------ |
+| `POST` | `/api/v1/search`             | Execute search            | API Key             | Tested |
+| `GET`  | `/api/v1/search/suggestions` | Get search suggestions    | API Key             | Tested |
+| `POST` | `/api/v1/search/analyze`     | Analyze query performance | API Key (analytics) | Tested |
+| `GET`  | `/api/v1/search/history`     | Get search history        | API Key             | Tested |
+| `GET`  | `/api/v1/search/trends`      | Get user search trends    | API Key (analytics) | Tested |
 
 [**Complete Search Documentation**](./search.md)
 
