@@ -46,7 +46,7 @@ Connect a new MySQL database to your Altus 4 account.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 Content-Type: application/json
 ```
 
@@ -60,64 +60,21 @@ Content-Type: application/json
   "database": "app_production",
   "username": "altus4_user",
   "password": "secure_password_123",
-  "ssl": {
-    "enabled": true,
-    "rejectUnauthorized": true,
-    "ca": "-----BEGIN CERTIFICATE-----\n...",
-    "cert": "-----BEGIN CERTIFICATE-----\n...",
-    "key": "-----BEGIN PRIVATE KEY-----\n..."
-  },
-  "connectionOptions": {
-    "connectionLimit": 10,
-    "acquireTimeout": 60000,
-    "timeout": 60000,
-    "charset": "utf8mb4"
-  },
-  "searchOptions": {
-    "enableFullTextSearch": true,
-    "autoCreateIndexes": false,
-    "defaultSearchTables": ["articles", "posts", "documentation"]
-  }
+  "ssl": false
 }
 ```
 
 **Request Parameters**:
 
-| Parameter           | Type   | Required | Description                                  |
-| ------------------- | ------ | -------- | -------------------------------------------- |
-| `name`              | string | Yes      | Friendly name for the database (1-100 chars) |
-| `host`              | string | Yes      | Database server hostname or IP address       |
-| `port`              | number | No       | Port number (default: 3306)                  |
-| `database`          | string | Yes      | Database name                                |
-| `username`          | string | Yes      | MySQL username                               |
-| `password`          | string | Yes      | MySQL password                               |
-| `ssl`               | object | No       | SSL/TLS configuration                        |
-| `connectionOptions` | object | No       | Advanced connection settings                 |
-| `searchOptions`     | object | No       | Search-specific configuration                |
-
-**SSL Configuration**:
-
-```json
-{
-  "enabled": true, // Enable SSL/TLS
-  "rejectUnauthorized": true, // Verify server certificates
-  "ca": "certificate_authority_cert", // CA certificate (PEM format)
-  "cert": "client_certificate", // Client certificate (optional)
-  "key": "private_key" // Client private key (optional)
-}
-```
-
-**Connection Options**:
-
-```json
-{
-  "connectionLimit": 10, // Max concurrent connections
-  "acquireTimeout": 60000, // Connection acquisition timeout (ms)
-  "timeout": 60000, // Query timeout (ms)
-  "charset": "utf8mb4", // Character set
-  "timezone": "UTC" // Timezone for date operations
-}
-```
+| Parameter  | Type    | Required | Description                                  |
+| ---------- | ------- | -------- | -------------------------------------------- |
+| `name`     | string  | Yes      | Friendly name for the database (1-100 chars) |
+| `host`     | string  | Yes      | Database server hostname or IP address       |
+| `port`     | number  | No       | Port number (default: 3306)                  |
+| `database` | string  | Yes      | Database name                                |
+| `username` | string  | Yes      | MySQL username                               |
+| `password` | string  | Yes      | MySQL password                               |
+| `ssl`      | boolean | No       | Enable SSL/TLS (default: false)              |
 
 **Response**:
 
@@ -125,31 +82,15 @@ Content-Type: application/json
 {
   "success": true,
   "data": {
-    "database": {
-      "id": "db_abc123def456",
-      "name": "Production Database",
-      "host": "db.example.com",
-      "port": 3306,
-      "database": "app_production",
-      "username": "altus4_user",
-      "ssl": {
-        "enabled": true
-      },
-      "status": "connected",
-      "createdAt": "2024-01-15T10:30:00.000Z",
-      "lastTested": "2024-01-15T10:30:00.000Z",
-      "connectionHealth": {
-        "status": "healthy",
-        "responseTime": 45,
-        "activeConnections": 2,
-        "maxConnections": 10
-      },
-      "searchCapabilities": {
-        "fullTextSupported": true,
-        "tablesWithIndexes": 3,
-        "totalSearchableTables": 5
-      }
-    }
+    "id": "db_abc123def456",
+    "name": "Production Database",
+    "host": "db.example.com",
+    "port": 3306,
+    "database": "app_production",
+    "username": "altus4_user",
+    "ssl": false,
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2024-01-15T10:30:00.000Z"
   }
 }
 ```
@@ -157,8 +98,8 @@ Content-Type: application/json
 **cURL Example**:
 
 ```bash
-curl -X POST https://api.altus4.dev/api/v1/databases \
-  -H "Authorization: Bearer altus4_sk_live_abc123..." \
+curl -X POST http://localhost:3000/api/v1/databases \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Production Database",
@@ -167,9 +108,7 @@ curl -X POST https://api.altus4.dev/api/v1/databases \
     "database": "app_production",
     "username": "altus4_user",
     "password": "secure_password_123",
-    "ssl": {
-      "enabled": true
-    }
+    "ssl": false
   }'
 ```
 
@@ -181,15 +120,12 @@ Retrieve all database connections associated with your account.
 
 **Query Parameters**:
 
-- `limit` - Number of databases to return (1-100, default: 50)
-- `offset` - Pagination offset (default: 0)
-- `status` - Filter by status: `connected`, `disconnected`, `error`
-- `search` - Search database names
+No query parameters supported
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -198,32 +134,19 @@ Authorization: Bearer <YOUR_API_KEY>
 {
   "success": true,
   "data": {
-    "databases": [
+    [
       {
         "id": "db_abc123def456",
         "name": "Production Database",
         "host": "db.example.com",
+        "port": 3306,
         "database": "app_production",
-        "status": "connected",
-        "lastTested": "2024-01-15T10:30:00.000Z",
+        "username": "altus4_user",
+        "ssl": false,
         "createdAt": "2024-01-15T09:30:00.000Z",
-        "searchCapabilities": {
-          "fullTextSupported": true,
-          "tablesWithIndexes": 3,
-          "totalSearchableTables": 5
-        },
-        "usage": {
-          "totalSearches": 1250,
-          "lastSearchAt": "2024-01-15T10:25:00.000Z"
-        }
+        "updatedAt": "2024-01-15T10:30:00.000Z"
       }
-    ],
-    "pagination": {
-      "total": 1,
-      "limit": 50,
-      "offset": 0,
-      "hasMore": false
-    }
+    ]
   }
 }
 ```
@@ -232,12 +155,12 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Retrieve detailed information about a specific database connection.
 
-**Endpoint**: `GET /api/v1/databases/:databaseId`
+**Endpoint**: `GET /api/v1/databases/:connectionId`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -306,12 +229,12 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Update an existing database connection's settings.
 
-**Endpoint**: `PUT /api/v1/databases/:databaseId`
+**Endpoint**: `PUT /api/v1/databases/:connectionId`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 Content-Type: application/json
 ```
 
@@ -352,12 +275,12 @@ Content-Type: application/json
 
 Remove a database connection from your account.
 
-**Endpoint**: `DELETE /api/v1/databases/:databaseId`
+**Endpoint**: `DELETE /api/v1/databases/:connectionId`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -385,12 +308,12 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Test connectivity to a specific database.
 
-**Endpoint**: `POST /api/v1/databases/:databaseId/test`
+**Endpoint**: `POST /api/v1/databases/:connectionId/test`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -399,18 +322,8 @@ Authorization: Bearer <YOUR_API_KEY>
 {
   "success": true,
   "data": {
-    "connectionTest": {
-      "status": "success",
-      "responseTime": 42,
-      "timestamp": "2024-01-15T10:30:00.000Z",
-      "details": {
-        "serverVersion": "8.0.32-0ubuntu0.20.04.2",
-        "characterSet": "utf8mb4",
-        "collation": "utf8mb4_unicode_ci",
-        "timezone": "UTC",
-        "sslStatus": "enabled"
-      }
-    }
+    "connected": true,
+    "message": "Connection successful"
   }
 }
 ```
@@ -434,14 +347,14 @@ Authorization: Bearer <YOUR_API_KEY>
 
 ### Get Connection Status
 
-Get real-time connection health status.
+Get status of all database connections.
 
-**Endpoint**: `GET /api/v1/databases/:databaseId/status`
+**Endpoint**: `GET /api/v1/databases/status`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -450,30 +363,9 @@ Authorization: Bearer <YOUR_API_KEY>
 {
   "success": true,
   "data": {
-    "status": {
-      "overall": "healthy",
-      "lastChecked": "2024-01-15T10:30:00.000Z",
-      "connection": {
-        "status": "connected",
-        "activeConnections": 3,
-        "maxConnections": 10,
-        "connectionPoolUtilization": 0.3
-      },
-      "performance": {
-        "averageResponseTime": 45,
-        "slowQueryCount": 2,
-        "lastSlowQuery": "2024-01-15T10:25:00.000Z"
-      },
-      "health": {
-        "cpuUsage": 25.5,
-        "memoryUsage": 67.8,
-        "diskSpace": {
-          "used": "45.2GB",
-          "available": "154.8GB",
-          "utilization": 0.23
-        }
-      }
-    }
+    "db_abc123def456": true,
+    "db_def456ghi789": false,
+    "db_ghi789jkl012": true
   }
 }
 ```
@@ -484,18 +376,16 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Discover the database schema including tables, columns, and indexes.
 
-**Endpoint**: `GET /api/v1/databases/:databaseId/schema`
+**Endpoint**: `GET /api/v1/databases/:connectionId/schema`
 
 **Query Parameters**:
 
-- `tables` - Comma-separated list of specific tables to include
-- `includeData` - Include sample data for each table (default: false)
-- `includeIndexes` - Include detailed index information (default: true)
+No query parameters supported
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -608,8 +498,8 @@ Authorization: Bearer <YOUR_API_KEY>
 **cURL Example**:
 
 ```bash
-curl -X GET "https://api.altus4.dev/api/v1/databases/db_abc123def456/schema?includeData=true&tables=articles,posts" \
-  -H "Authorization: Bearer altus4_sk_live_abc123..."
+curl -X GET "http://localhost:3000/api/v1/databases/db_abc123def456/schema" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 ## Code Examples

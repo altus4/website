@@ -14,9 +14,10 @@ Altus 4 uses API key-based authentication for all service integration. This prov
 ### Authentication Flow
 
 1. **Register** a new user account
-2. **Login** to get a bootstrap JWT token (one-time use)
-3. **Create** your first API key using the JWT token
-4. **Use API key** for all subsequent requests
+2. **Login** to get a JWT token
+3. **Create** API keys using the JWT token for search operations
+4. **Use JWT tokens** for user management and database operations
+5. **Use API keys** for search operations and analytics
 
 ```mermaid
 graph TD
@@ -71,14 +72,21 @@ Content-Type: application/json
 {
   "success": true,
   "data": {
-    "id": "user_abc123",
-    "email": "user@example.com",
-    "name": "John Doe",
-    "createdAt": "2024-01-15T10:30:00.000Z"
+    "user": {
+      "id": "dc6e0cee-efe8-4134-be55-249d6a36ae19",
+      "email": "user@example.com",
+      "name": "John Doe",
+      "role": "user",
+      "connectedDatabases": [],
+      "createdAt": "2025-09-06T16:19:56.195Z",
+      "lastActive": "2025-09-06T16:19:56.195Z"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
   },
   "meta": {
-    "timestamp": "2024-01-15T10:30:00.000Z",
-    "requestId": "req_abc123"
+    "timestamp": "2025-09-06T16:19:56.197Z",
+    "requestId": "1b53d9d6-ca2e-4b99-959b-8459820475b4",
+    "version": "0.3.0"
   }
 }
 ```
@@ -86,7 +94,7 @@ Content-Type: application/json
 **cURL Example**:
 
 ```bash
-curl -X POST https://api.altus4.dev/api/v1/auth/register \
+curl -X POST http://localhost:3000/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -123,15 +131,20 @@ Content-Type: application/json
   "success": true,
   "data": {
     "user": {
-      "id": "user_abc123",
+      "id": "dc6e0cee-efe8-4134-be55-249d6a36ae19",
       "email": "user@example.com",
-      "name": "John Doe"
+      "name": "John Doe",
+      "role": "user",
+      "connectedDatabases": [],
+      "createdAt": "2025-09-06T16:19:56.195Z",
+      "lastActive": "2025-09-06T16:19:56.195Z"
     },
-    "tokens": {
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-      "refreshToken": "rt_def456...",
-      "expiresIn": 604800
-    }
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  },
+  "meta": {
+    "timestamp": "2025-09-06T16:19:56.197Z",
+    "requestId": "1b53d9d6-ca2e-4b99-959b-8459820475b4",
+    "version": "0.3.0"
   }
 }
 ```
@@ -139,7 +152,7 @@ Content-Type: application/json
 **cURL Example**:
 
 ```bash
-curl -X POST https://api.altus4.dev/api/v1/auth/login \
+curl -X POST http://localhost:3000/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -166,14 +179,21 @@ Authorization: Bearer <JWT_TOKEN_FROM_LOGIN>
   "success": true,
   "data": {
     "apiKey": {
-      "id": "key_abc123",
-      "key": "altus4_sk_live_abc123def456...",
-      "name": "My First API Key",
-      "tier": "free",
-      "permissions": ["search", "database:read"],
-      "environment": "live",
-      "createdAt": "2024-01-15T10:30:00.000Z"
-    }
+      "id": "9c81d4cf-fff8-48d0-994a-adc07e56bff3",
+      "name": "Initial API Key",
+      "keyPrefix": "altus4_sk_test_8wEp0HQVYpT6POU",
+      "environment": "test",
+      "permissions": ["search", "analytics"],
+      "rateLimitTier": "free",
+      "createdAt": "2025-09-06T16:20:01.401Z"
+    },
+    "secretKey": "altus4_sk_test_8wEp0HQVYpT6POUumHNuFdvK9gMw3y2Wa9a_BjVoOJw",
+    "warning": "This is the only time the full API key will be shown. Please store it securely."
+  },
+  "meta": {
+    "timestamp": "2025-09-06T16:20:01.403Z",
+    "requestId": "fb62455b-8ccd-4cbb-898a-606ba936e25c",
+    "version": "0.3.0"
   }
 }
 ```
@@ -181,7 +201,7 @@ Authorization: Bearer <JWT_TOKEN_FROM_LOGIN>
 **cURL Example**:
 
 ```bash
-curl -X POST https://api.altus4.dev/api/v1/management/setup \
+curl -X POST http://localhost:3000/api/v1/management/setup \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 ```
 
@@ -198,7 +218,7 @@ Create additional API keys for different environments or use cases.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 Content-Type: application/json
 ```
 
@@ -245,7 +265,7 @@ Retrieve all API keys associated with your account.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -280,7 +300,7 @@ Update an existing API key's name, tier, or permissions.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 Content-Type: application/json
 ```
 
@@ -303,7 +323,7 @@ Permanently revoke an API key. This action cannot be undone.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -327,7 +347,7 @@ Generate a new secret for an existing API key while maintaining the same ID and 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -361,7 +381,7 @@ Get detailed usage statistics for a specific API key.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -408,7 +428,7 @@ Authorization: Bearer altus4_sk_live_abc123def456...
 ```javascript
 const apiKey = 'altus4_sk_live_abc123def456...';
 
-const response = await fetch('https://api.altus4.dev/api/v1/search', {
+const response = await fetch('http://localhost:3000/api/v1/search', {
   method: 'POST',
   headers: {
     Authorization: `Bearer ${apiKey}`,
@@ -432,7 +452,7 @@ import requests
 api_key = 'altus4_sk_live_abc123def456...'
 
 response = requests.post(
-    'https://api.altus4.dev/api/v1/search',
+    'http://localhost:3000/api/v1/search',
     headers={
         'Authorization': f'Bearer {api_key}',
         'Content-Type': 'application/json'
@@ -559,7 +579,7 @@ const makeApiRequest = async (endpoint, data) => {
 Test your API key with a simple health check:
 
 ```bash
-curl -X GET https://api.altus4.dev/health \
+curl -X GET http://localhost:3000/health \
   -H "Authorization: Bearer altus4_sk_live_abc123..."
 ```
 

@@ -49,7 +49,7 @@ Get a comprehensive dashboard view of your search analytics.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -136,7 +136,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Get detailed search trend analysis over time.
 
-**Endpoint**: `GET /api/v1/analytics/trends`
+**Endpoint**: `GET /api/v1/analytics/search-trends`
 
 **Query Parameters**:
 
@@ -481,7 +481,7 @@ Get AI-powered insights and recommendations based on your search patterns.
 
 Get comprehensive system-wide analytics and health metrics.
 
-**Endpoint**: `GET /api/v1/analytics/overview`
+**Endpoint**: `GET /api/v1/analytics/admin/system-overview`
 
 **Response**:
 
@@ -545,7 +545,7 @@ Get comprehensive system-wide analytics and health metrics.
 
 Get detailed user activity and engagement metrics.
 
-**Endpoint**: `GET /api/v1/analytics/user-activity`
+**Endpoint**: `GET /api/v1/analytics/admin/user-activity`
 
 **Query Parameters**:
 
@@ -618,9 +618,7 @@ Get detailed user activity and engagement metrics.
 
 ### Create Custom Metrics
 
-Define custom metrics for tracking specific KPIs.
-
-**Endpoint**: `POST /api/v1/analytics/custom-metrics`
+_This feature is not currently implemented._
 
 **Request Body**:
 
@@ -644,9 +642,7 @@ Define custom metrics for tracking specific KPIs.
 
 ### Export Analytics Data
 
-Export analytics data in various formats for external analysis.
-
-**Endpoint**: `GET /api/v1/analytics/export`
+_This feature is not currently implemented._
 
 **Query Parameters**:
 
@@ -665,7 +661,7 @@ Export analytics data in various formats for external analysis.
 class Altus4Analytics {
   constructor(apiKey) {
     this.apiKey = apiKey;
-    this.baseUrl = 'https://api.altus4.dev';
+    this.baseUrl = 'http://localhost:3000';
     this.headers = {
       Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
@@ -776,7 +772,7 @@ from datetime import datetime, timedelta
 class Altus4AnalyticsDashboard:
     def __init__(self, api_key):
         self.api_key = api_key
-        self.base_url = 'https://api.altus4.dev'
+        self.base_url = 'http://localhost:3000'
         self.headers = {'Authorization': f'Bearer {api_key}'}
 
     def get_dashboard_data(self, period='week'):
