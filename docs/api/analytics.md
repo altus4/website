@@ -34,6 +34,8 @@ graph TD
 
 ## Analytics Endpoints
 
+All analytics endpoints require an API key with the 'analytics' permission. Admin analytics endpoints additionally require the 'admin' permission. Include your API key in the Authorization header as `Bearer <YOUR_API_KEY>`.
+
 ### Dashboard Overview
 
 Get a comprehensive dashboard view of your search analytics.
@@ -49,7 +51,7 @@ Get a comprehensive dashboard view of your search analytics.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY>
 ```
 
 **Response**:
@@ -76,20 +78,10 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
       ]
     },
     "popularQueries": [
-      {
-        "query_text": "database optimization",
-        "frequency": 89,
-        "avg_time": 245
-      }
+      { "query_text": "database optimization", "frequency": 89, "avg_time": 245 }
     ],
     "insights": [
-      {
-        "type": "query_optimization",
-        "confidence": 0.9,
-        "description": "Consider FULLTEXT index",
-        "actionable": true,
-        "data": {}
-      }
+      { "type": "query_optimization", "confidence": 0.9, "description": "Consider FULLTEXT index", "actionable": true, "data": {} }
     ],
     "summary": {
       "period": "week",
@@ -157,12 +149,7 @@ Get detailed performance analytics including response times, error rates, and re
       { "date": "2024-01-15", "query_count": 100, "avg_response_time": 200 }
     ],
     "slowestQueries": [
-      {
-        "query_text": "complex join",
-        "execution_time_ms": 1200,
-        "result_count": 0,
-        "user_email": "user@example.com"
-      }
+      { "query_text": "complex join", "execution_time_ms": 1200, "result_count": 0, "user_email": "user@example.com" }
     ]
   }
 }
@@ -330,7 +317,9 @@ Get system-wide overview (admin only).
       "avg_response_time": 234,
       "avg_results": 67
     },
-    "userGrowth": [{ "date": "2024-01-10", "new_users": 3 }],
+    "userGrowth": [
+      { "date": "2024-01-10", "new_users": 3 }
+    ],
     "queryVolume": [
       { "date": "2024-01-10", "query_count": 100, "active_users": 15 }
     ],
@@ -507,17 +496,12 @@ console.log('Top weekly queries:', trends.data[0].topQueries);
 // Get AI insights
 const insights = await analytics.getInsights({ period: 'week' });
 insights.data.forEach(insight => {
-  console.log(
-    `${insight.type}: ${insight.description} (conf: ${insight.confidence})`
-  );
+  console.log(`${insight.type}: ${insight.description} (conf: ${insight.confidence})`);
 });
 
 // Monitor performance
 const performance = await analytics.getPerformanceMetrics({ period: 'day' });
-console.log(
-  'Average response time:',
-  performance.data.summary.averageResponseTime
-);
+console.log('Average response time:', performance.data.summary.averageResponseTime);
 ```
 
 ### Python Analytics Dashboard

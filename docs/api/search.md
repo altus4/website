@@ -104,9 +104,7 @@ Content-Type: application/json
       }
     ],
     "categories": [{ "name": "Performance", "count": 1, "confidence": 0.9 }],
-    "suggestions": [
-      { "text": "mysql indexing", "score": 0.82, "type": "semantic" }
-    ],
+    "suggestions": [{ "text": "mysql indexing", "score": 0.82, "type": "semantic" }],
     "totalCount": 1,
     "executionTime": 234,
     "page": 1,
@@ -241,11 +239,7 @@ Authorization: Bearer <YOUR_API_KEY>
   "success": true,
   "data": {
     "suggestions": [
-      {
-        "text": "database performance optimization",
-        "score": 0.91,
-        "type": "popular"
-      },
+      { "text": "database performance optimization", "score": 0.91, "type": "popular" },
       { "text": "mysql indexing strategies", "score": 0.87, "type": "semantic" }
     ]
   },
@@ -291,11 +285,7 @@ Get detailed performance analysis for a search query.
     "recommendations": ["Add FULLTEXT index to articles.content"],
     "performance": { "db_uuid_1": { "avgTime": 120 } },
     "optimization": [
-      {
-        "type": "index",
-        "description": "Create FULLTEXT index on content",
-        "impact": "high"
-      }
+      { "type": "index", "description": "Create FULLTEXT index on content", "impact": "high" }
     ]
   }
 }

@@ -13,16 +13,16 @@ Altus 4 provides a RESTful API for managing database connections, executing sear
 
 Altus 4 uses **dual authentication** depending on the endpoint type:
 
-- **JWT Tokens**: For user management, API key management, database management, and analytics endpoints under `/api/v1/analytics/*`
-- **API Keys**: For search routes under `/api/v1/search*` (service-to-service)
+- **JWT Tokens**: For user management and the initial API key setup endpoint under `/api/v1/management/setup`
+- **API Keys**: For search, database management, and analytics endpoints (service-to-service)
 
 ### Authentication Flow
 
 1. **Register** a new user account
 2. **Login** to receive a JWT token
-3. **Create** your first API key using the JWT token
-4. **Use JWT tokens** for account management (profile, API key management)
-5. **Use API keys** for search operations and analytics
+3. **Create** your first API key using the JWT token via `/api/v1/management/setup`
+4. **Use JWT tokens** for user management only (profile, password changes)
+5. **Use API keys** for all service operations (search, database management, analytics, additional API key management)
 
 ```bash
 # Use JWT token for account management
@@ -63,16 +63,16 @@ Manage MySQL database connections for searching.
 
 ### Database Endpoints
 
-| Method   | Endpoint                                 | Description                | Auth |
-| -------- | ---------------------------------------- | -------------------------- | ---- |
-| `GET`    | `/api/v1/databases`                      | List user databases        | JWT  |
-| `POST`   | `/api/v1/databases`                      | Add database connection    | JWT  |
-| `GET`    | `/api/v1/databases/:connectionId`        | Get database details       | JWT  |
-| `PUT`    | `/api/v1/databases/:connectionId`        | Update database connection | JWT  |
-| `DELETE` | `/api/v1/databases/:connectionId`        | Remove database connection | JWT  |
-| `POST`   | `/api/v1/databases/:connectionId/test`   | Test database connection   | JWT  |
-| `GET`    | `/api/v1/databases/:connectionId/schema` | Get database schema        | JWT  |
-| `GET`    | `/api/v1/databases/status`               | Get connection statuses    | JWT  |
+| Method   | Endpoint                                 | Description                | Auth            |
+| -------- | ---------------------------------------- | -------------------------- | --------------- |
+| `GET`    | `/api/v1/databases`                      | List user databases        | API Key (admin) |
+| `POST`   | `/api/v1/databases`                      | Add database connection    | API Key (admin) |
+| `GET`    | `/api/v1/databases/:connectionId`        | Get database details       | API Key (admin) |
+| `PUT`    | `/api/v1/databases/:connectionId`        | Update database connection | API Key (admin) |
+| `DELETE` | `/api/v1/databases/:connectionId`        | Remove database connection | API Key (admin) |
+| `POST`   | `/api/v1/databases/:connectionId/test`   | Test database connection   | API Key (admin) |
+| `GET`    | `/api/v1/databases/:connectionId/schema` | Get database schema        | API Key (admin) |
+| `GET`    | `/api/v1/databases/status`               | Get connection statuses    | API Key (admin) |
 
 [**Complete Database Documentation**](./database.md)
 
@@ -100,17 +100,17 @@ Access search analytics, performance metrics, and trend data.
 
 ### Analytics Endpoints
 
-| Method | Endpoint                                      | Description                    | Auth        |
-| ------ | --------------------------------------------- | ------------------------------ | ----------- |
-| `GET`  | `/api/v1/analytics/dashboard`                 | Get dashboard data             | JWT         |
-| `GET`  | `/api/v1/analytics/search-trends`             | Get search trends              | JWT         |
-| `GET`  | `/api/v1/analytics/performance`               | Get performance metrics        | JWT         |
-| `GET`  | `/api/v1/analytics/popular-queries`           | Get popular queries            | JWT         |
-| `GET`  | `/api/v1/analytics/search-history`            | Get search history             | JWT         |
-| `GET`  | `/api/v1/analytics/insights`                  | Get AI-generated insights      | JWT         |
-| `GET`  | `/api/v1/analytics/admin/system-overview`     | Get system overview (admin)    | JWT (admin) |
-| `GET`  | `/api/v1/analytics/admin/user-activity`       | Get user activity (admin)      | JWT (admin) |
-| `GET`  | `/api/v1/analytics/admin/performance-metrics` | Get system performance (admin) | JWT (admin) |
+| Method | Endpoint                                      | Description                    | Auth                |
+| ------ | --------------------------------------------- | ------------------------------ | ------------------- |
+| `GET`  | `/api/v1/analytics/dashboard`                 | Get dashboard data             | API Key (analytics) |
+| `GET`  | `/api/v1/analytics/search-trends`             | Get search trends              | API Key (analytics) |
+| `GET`  | `/api/v1/analytics/performance`               | Get performance metrics        | API Key (analytics) |
+| `GET`  | `/api/v1/analytics/popular-queries`           | Get popular queries            | API Key (analytics) |
+| `GET`  | `/api/v1/analytics/search-history`            | Get search history             | API Key (analytics) |
+| `GET`  | `/api/v1/analytics/insights`                  | Get AI-generated insights      | API Key (analytics) |
+| `GET`  | `/api/v1/analytics/admin/system-overview`     | Get system overview (admin)    | API Key (admin)     |
+| `GET`  | `/api/v1/analytics/admin/user-activity`       | Get user activity (admin)      | API Key (admin)     |
+| `GET`  | `/api/v1/analytics/admin/performance-metrics` | Get system performance (admin) | API Key (admin)     |
 
 [**Complete Analytics Documentation**](./analytics.md)
 
@@ -398,4 +398,4 @@ Check out:
 - [Search Operations](./search.md)
 - [Database Management](./database.md)
 - [Analytics API](./analytics.md)
-  Or open an issue if you find problems.
+Or open an issue if you find problems.

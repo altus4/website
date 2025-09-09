@@ -37,6 +37,8 @@ graph TD
 
 ## Database Endpoints
 
+All database endpoints require an API key with the 'admin' permission. Include your key in the Authorization header as `Bearer <YOUR_API_KEY>`.
+
 ### Add Database Connection
 
 Connect a new MySQL database to your Altus 4 account.
@@ -46,7 +48,7 @@ Connect a new MySQL database to your Altus 4 account.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
@@ -99,7 +101,7 @@ Content-Type: application/json
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/databases \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Production Database",
@@ -125,7 +127,7 @@ No query parameters supported
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY>
 ```
 
 **Response**:
@@ -160,7 +162,7 @@ Retrieve detailed information about a specific database connection.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY>
 ```
 
 **Response**:
@@ -191,7 +193,7 @@ Update an existing database connection's settings.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY>
 Content-Type: application/json
 ```
 
@@ -237,7 +239,7 @@ Remove a database connection from your account.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY>
 ```
 
 **Response**:
@@ -270,7 +272,7 @@ Test connectivity to a specific database.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY>
 ```
 
 **Response**:
@@ -311,7 +313,7 @@ Get status of all database connections.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY>
 ```
 
 **Response**:
@@ -342,7 +344,7 @@ No query parameters supported
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY>
 ```
 
 **Response**:
@@ -355,31 +357,12 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
       "database": "app_production",
       "table": "articles",
       "columns": [
-        {
-          "name": "id",
-          "type": "INT",
-          "isFullTextIndexed": false,
-          "isSearchable": true
-        },
-        {
-          "name": "title",
-          "type": "VARCHAR(255)",
-          "isFullTextIndexed": true,
-          "isSearchable": true
-        },
-        {
-          "name": "content",
-          "type": "TEXT",
-          "isFullTextIndexed": true,
-          "isSearchable": true
-        }
+        { "name": "id", "type": "INT", "isFullTextIndexed": false, "isSearchable": true },
+        { "name": "title", "type": "VARCHAR(255)", "isFullTextIndexed": true, "isSearchable": true },
+        { "name": "content", "type": "TEXT", "isFullTextIndexed": true, "isSearchable": true }
       ],
       "fullTextIndexes": [
-        {
-          "name": "idx_title_content",
-          "columns": ["title", "content"],
-          "type": "FULLTEXT"
-        }
+        { "name": "idx_title_content", "columns": ["title", "content"], "type": "FULLTEXT" }
       ],
       "estimatedRows": 15420,
       "lastAnalyzed": "2024-01-15T10:30:00.000Z"
@@ -392,7 +375,7 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
 
 ```bash
 curl -X GET "http://localhost:3000/api/v1/databases/db_abc123def456/schema" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ## Code Examples

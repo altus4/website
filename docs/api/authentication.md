@@ -1,36 +1,53 @@
 ---
 title: API Authentication
-description: Complete guide to authenticating with the Altus 4 API using API keys and managing authentication lifecycle.
+description: Complete guide to authenticating with the Altus 4 API using API keys and JWT tokens with clear usage guidelines.
 ---
 
 # API Authentication
 
 Complete Authentication Guide for Altus 4 API
 
-Altus 4 uses API key-based authentication for all service integration. This provides secure, long-lived credentials perfect for B2B service integration with tiered permissions and rate limiting.
+Altus 4 uses a dual authentication system optimized for different use cases: JWT tokens for user management and API keys for service operations.
 
 ## Authentication Overview
 
+### Authentication Methods
+
+**JWT Authentication**
+
+- **Use Cases**: User management, profile operations, initial API key setup
+- **Endpoints**: `/api/v1/auth/*`, `/api/v1/management/setup`, `/api/v1/management/migration-status`
+- **Ideal For**: Web applications, user-facing operations, bootstrapping
+
+**API Key Authentication**
+
+- **Use Cases**: Search operations, database operations, analytics, AI services, API key management
+- **Endpoints**: `/api/v1/search/*`, `/api/v1/databases/*`, `/api/v1/analytics/*`, `/api/v1/keys/*`
+- **Ideal For**: B2B integrations, automated services, microservices
+
 ### Authentication Flow
 
-1. **Register** a new user account
-2. **Login** to get a JWT token
-3. **Create** API keys using the JWT token for search operations
-4. **Use JWT tokens** for user management and database operations
-5. **Use API keys** for search operations and analytics
+1. **Register** a new user account with email/password
+2. **Login** to receive a JWT token
+3. **Create initial API key** using JWT token via `/api/v1/management/setup`
+4. **Use API keys** for all service operations (search, database, analytics, AI)
+5. **Use JWT tokens** only for user management and additional API key creation
 
 ```mermaid
 graph TD
     A[User Registration] --> B[Login with Password]
-    B --> C[Receive JWT Token<br/>Bootstrap Only]
-    C --> D[Create API Key<br/>Using JWT Token]
-    D --> E[Use API Key for All Requests]
-    E --> F[API Key Validation<br/>Every Request]
+    B --> C[Receive JWT Token]
+    C --> D[Create Initial API Key<br/>via /management/setup]
+    D --> E[Use API Key for Service Operations]
+    E --> F{Operation Type}
+    F -->|Search/DB/Analytics/AI| G[API Key Auth Required]
+    F -->|User Management| H[JWT Auth Required]
+    F -->|More API Keys| I[API Key Auth + Admin Permission]
 ```
 
 ### API Key Format
 
-API keys follow a structured format for easy identification:
+API keys follow a structured format for easy identification and security:
 
 - **Live Environment**: `altus4_sk_live_abc123def456...`
 - **Test Environment**: `altus4_sk_test_xyz789abc123...`
@@ -207,18 +224,18 @@ curl -X POST http://localhost:3000/api/v1/management/setup \
 
 ## API Key Management
 
-Once you have your initial API key, use it to manage additional keys and your account.
+Once you have your initial API key, use it (with admin permissions) to manage additional keys and your account.
 
 ### Create New API Key
 
-Create additional API keys for different environments or use cases.
+Create additional API keys for different environments or use cases. Requires admin permission on your current API key.
 
 **Endpoint**: `POST /api/v1/keys`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
 Content-Type: application/json
 ```
 
@@ -259,14 +276,14 @@ Content-Type: application/json
 
 ### List API Keys
 
-Retrieve all API keys associated with your account.
+Retrieve all API keys associated with your account. Requires admin permission on your current API key.
 
 **Endpoint**: `GET /api/v1/keys`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
 ```
 
 **Response**:
@@ -298,14 +315,14 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
 
 ### Update API Key
 
-Update an existing API key's name, tier, or permissions.
+Update an existing API key's name, tier, or permissions. Requires admin permission on your current API key.
 
 **Endpoint**: `PUT /api/v1/keys/:keyId`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
 Content-Type: application/json
 ```
 
@@ -322,14 +339,14 @@ Content-Type: application/json
 
 ### Revoke API Key
 
-Permanently revoke an API key. This action cannot be undone.
+Permanently revoke an API key. This action cannot be undone. Requires admin permission on your current API key.
 
 **Endpoint**: `DELETE /api/v1/keys/:keyId`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
 ```
 
 **Response**:
@@ -346,14 +363,14 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
 
 ### Regenerate API Key
 
-Generate a new secret for an existing API key while maintaining the same ID and settings.
+Generate a new secret for an existing API key while maintaining the same ID and settings. Requires admin permission on your current API key.
 
 **Endpoint**: `POST /api/v1/keys/:keyId/regenerate`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
 ```
 
 **Response**:
@@ -392,7 +409,7 @@ Get detailed usage statistics for a specific API key.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_JWT_TOKEN>
+Authorization: Bearer <YOUR_API_KEY>
 ```
 
 **Response**:
@@ -478,6 +495,43 @@ response = requests.post(
 data = response.json()
 ```
 
+## Endpoints by Authentication Type
+
+### JWT Authentication Required
+
+These endpoints require a JWT token from login:
+
+| Endpoint                              | Method  | Purpose                  |
+| ------------------------------------- | ------- | ------------------------ |
+| `/api/v1/auth/register`               | POST    | User registration        |
+| `/api/v1/auth/login`                  | POST    | User login               |
+| `/api/v1/auth/profile`                | GET/PUT | User profile management  |
+| `/api/v1/auth/change-password`        | POST    | Password changes         |
+| `/api/v1/auth/refresh`                | POST    | JWT token refresh        |
+| `/api/v1/management/setup`            | POST    | Initial API key creation |
+| `/api/v1/management/migration-status` | GET     | Check migration status   |
+
+### API Key Authentication Required
+
+These endpoints require an API key with appropriate permissions:
+
+| Endpoint                     | Method              | Permissions | Purpose                |
+| ---------------------------- | ------------------- | ----------- | ---------------------- |
+| `/api/v1/search/*`           | POST/GET            | `search`    | Search operations      |
+| `/api/v1/databases/*`        | GET/POST/PUT/DELETE | `admin`     | Database connections   |
+| `/api/v1/analytics/*`        | GET                 | `analytics` | Analytics and insights |
+| `/api/v1/analytics/insights` | GET                 | `analytics` | AI-powered insights    |
+| `/api/v1/keys/*`             | GET/POST/PUT/DELETE | `admin`     | API key management     |
+
+### Public Endpoints
+
+These endpoints require no authentication:
+
+| Endpoint                    | Method | Purpose                        |
+| --------------------------- | ------ | ------------------------------ |
+| `/health`                   | GET    | Health check                   |
+| `/api/v1/management/health` | GET    | Detailed health with auth info |
+
 ## API Key Tiers and Permissions
 
 ### Tier Comparison
@@ -495,19 +549,23 @@ data = response.json()
 
 API keys can be scoped with specific permissions:
 
-- **`search`** - Execute search operations
-- **`database:read`** - View database connections and schema
-- **`database:write`** - Add, update, remove database connections
-- **`analytics`** - Access analytics and insights data
-- **`admin`** - Full account management (user management, billing)
+- **`search`** - Execute search operations and get suggestions
+- **`analytics`** - Access analytics data, insights, and AI-powered features
+- **`admin`** - Full API key management and database connections
 
 Example permission combinations:
 
 ```json
 {
-  "permissions": ["search", "database:read", "analytics"]
+  "permissions": ["search", "analytics"]
 }
 ```
+
+**Common Permission Sets:**
+
+- **Service Integration**: `["search"]` - For basic search functionality
+- **Analytics Dashboard**: `["search", "analytics"]` - For dashboards with insights
+- **Full Management**: `["search", "analytics", "admin"]` - For complete account control
 
 ## Security Best Practices
 
