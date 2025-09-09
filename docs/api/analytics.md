@@ -109,75 +109,24 @@ Get detailed search trend analysis over time.
 
 **Query Parameters**:
 
-- `period` - `hour`, `day`, `week`, `month` (default: `week`)
-- `limit` - Number of data points (default: 100)
-- `databases` - Filter by specific databases
-- `groupBy` - Group results by: `query`, `category`, `database`
+- `startDate` - YYYY-MM-DD (optional)
+- `endDate` - YYYY-MM-DD (optional)
+- `period` - `day`, `week`, `month`, `3months`, `6months`, `year` (default: `week`)
 
 **Response**:
 
 ```json
 {
   "success": true,
-  "data": {
-    "trends": {
+  "data": [
+    {
       "period": "week",
-      "totalDataPoints": 168,
-      "dateRange": {
-        "from": "2024-01-08T00:00:00.000Z",
-        "to": "2024-01-15T23:59:59.000Z"
-      },
-      "searchVolume": {
-        "timeline": [
-          {
-            "timestamp": "2024-01-08T00:00:00.000Z",
-            "searches": 234,
-            "uniqueQueries": 89,
-            "averageResponseTime": 245
-          }
-        ],
-        "growth": {
-          "searches": 15.2,
-          "uniqueQueries": 8.7,
-          "responseTime": -5.3
-        }
-      },
-      "queryCategories": [
-        {
-          "category": "Performance",
-          "count": 456,
-          "growth": 23.1,
-          "topQueries": [
-            "database optimization",
-            "query performance",
-            "index tuning"
-          ]
-        }
-      ],
-      "searchModeEvolution": [
-        {
-          "date": "2024-01-08",
-          "natural": 65.2,
-          "semantic": 22.8,
-          "boolean": 12.0
-        }
-      ],
-      "emergingQueries": [
-        {
-          "query": "mysql 8.0 optimization",
-          "count": 45,
-          "growthRate": 156.7,
-          "firstSeen": "2024-01-10T00:00:00.000Z"
-        }
-      ],
-      "insights": {
-        "trendingSeason": "Q1 optimization focus",
-        "peakHours": ["09:00-11:00", "14:00-16:00"],
-        "weekdayPattern": "Higher volume on Tuesday-Thursday",
-        "userBehavior": "Increasing preference for semantic search"
-      }
+      "topQueries": ["database optimization"],
+      "queryVolume": 1250,
+      "avgResponseTime": 234,
+      "popularCategories": ["Performance"]
     }
-  }
+  ]
 }
 ```
 
@@ -189,9 +138,9 @@ Get detailed performance analytics including response times, error rates, and re
 
 **Query Parameters**:
 
-- `period` - Time period for analysis
-- `breakdown` - Breakdown by: `endpoint`, `database`, `searchMode`
-- `includeErrors` - Include error analysis (default: true)
+- `startDate` - YYYY-MM-DD (optional)
+- `endDate` - YYYY-MM-DD (optional)
+- `period` - `day`, `week`, `month`, `3months`, `6months`, `year` (default: `week`)
 
 **Response**:
 
@@ -199,70 +148,22 @@ Get detailed performance analytics including response times, error rates, and re
 {
   "success": true,
   "data": {
-    "performance": {
-      "overview": {
-        "averageResponseTime": 234,
-        "p50ResponseTime": 198,
-        "p95ResponseTime": 456,
-        "p99ResponseTime": 892,
-        "successRate": 0.982,
-        "errorRate": 0.018,
-        "cacheHitRate": 0.651
-      },
-      "endpoints": [
-        {
-          "endpoint": "/api/v1/search",
-          "totalRequests": 1250,
-          "averageResponseTime": 267,
-          "successRate": 0.981,
-          "errorTypes": {
-            "timeout": 12,
-            "database_error": 8,
-            "validation_error": 3
-          }
-        }
-      ],
-      "databases": [
-        {
-          "databaseId": "db_abc123",
-          "name": "Production DB",
-          "queries": 890,
-          "averageResponseTime": 189,
-          "slowQueries": 23,
-          "connectionHealth": {
-            "activeConnections": 5,
-            "maxConnections": 10,
-            "connectionUtilization": 0.5
-          }
-        }
-      ],
-      "searchModes": [
-        {
-          "mode": "semantic",
-          "count": 350,
-          "averageResponseTime": 456,
-          "aiProcessingTime": 234,
-          "cacheHitRate": 0.42
-        }
-      ],
-      "resourceUtilization": {
-        "cpu": {
-          "average": 35.2,
-          "peak": 67.8,
-          "trend": "stable"
-        },
-        "memory": {
-          "average": 1240.5,
-          "peak": 1890.2,
-          "trend": "increasing"
-        },
-        "redis": {
-          "memoryUsage": 234.5,
-          "hitRate": 0.851,
-          "operationsPerSecond": 1250
-        }
+    "summary": {
+      "totalQueries": 1250,
+      "averageResponseTime": 234,
+      "peakResponseTime": 892
+    },
+    "timeSeriesData": [
+      { "date": "2024-01-15", "query_count": 100, "avg_response_time": 200 }
+    ],
+    "slowestQueries": [
+      {
+        "query_text": "complex join",
+        "execution_time_ms": 1200,
+        "result_count": 0,
+        "user_email": "user@example.com"
       }
-    }
+    ]
   }
 }
 ```
@@ -407,9 +308,15 @@ Get AI-powered insights and recommendations based on your search patterns.
 
 ### System Overview
 
-Get comprehensive system-wide analytics and health metrics.
+Get system-wide overview (admin only).
 
 **Endpoint**: `GET /api/v1/analytics/admin/system-overview`
+
+**Query Parameters**:
+
+- `startDate` - YYYY-MM-DD (optional)
+- `endDate` - YYYY-MM-DD (optional)
+- `period` - `day`, `week`, `month`, `3months`, `6months`, `year` (default: `week`)
 
 **Response**:
 
@@ -417,54 +324,17 @@ Get comprehensive system-wide analytics and health metrics.
 {
   "success": true,
   "data": {
-    "overview": {
-      "timeframe": "last_30_days",
-      "systemHealth": {
-        "overall": "healthy",
-        "score": 0.92,
-        "uptime": 99.8,
-        "lastIncident": "2024-01-10T15:30:00.000Z"
-      },
-      "usage": {
-        "totalSearches": 45670,
-        "totalUsers": 234,
-        "totalDatabases": 12,
-        "dataProcessed": "125.6GB",
-        "cacheUtilization": 0.73
-      },
-      "growth": {
-        "searches": {
-          "value": 23.5,
-          "trend": "up",
-          "period": "month_over_month"
-        },
-        "users": {
-          "value": 15.2,
-          "trend": "up",
-          "period": "month_over_month"
-        },
-        "databases": {
-          "value": 8.7,
-          "trend": "up",
-          "period": "month_over_month"
-        }
-      },
-      "features": {
-        "searchModes": {
-          "natural": 0.605,
-          "semantic": 0.285,
-          "boolean": 0.11
-        },
-        "aiUtilization": 0.67,
-        "cacheEfficiency": 0.851
-      },
-      "performance": {
-        "averageResponseTime": 198,
-        "p95ResponseTime": 456,
-        "errorRate": 0.012,
-        "throughput": 125.5
-      }
-    }
+    "summary": {
+      "active_users": 42,
+      "total_queries": 1250,
+      "avg_response_time": 234,
+      "avg_results": 67
+    },
+    "userGrowth": [{ "date": "2024-01-10", "new_users": 3 }],
+    "queryVolume": [
+      { "date": "2024-01-10", "query_count": 100, "active_users": 15 }
+    ],
+    "period": "week"
   }
 }
 ```
@@ -477,68 +347,29 @@ Get detailed user activity and engagement metrics.
 
 **Query Parameters**:
 
-- `segment` - User segment: `all`, `active`, `power`, `casual`
-- `period` - Analysis period
-- `includeDetails` - Include detailed user breakdown
+- `startDate` - YYYY-MM-DD (optional)
+- `endDate` - YYYY-MM-DD (optional)
+- `period` - `day`, `week`, `month`, `3months`, `6months`, `year` (default: `week`)
+- `limit` - Number of rows (default: 100)
+- `offset` - Pagination offset (default: 0)
 
 **Response**:
 
 ```json
 {
   "success": true,
-  "data": {
-    "userActivity": {
-      "totalUsers": 234,
-      "activeUsers": 189,
-      "newUsers": 23,
-      "segments": {
-        "power_users": {
-          "count": 35,
-          "percentage": 15.0,
-          "averageSearchesPerDay": 15.2,
-          "averageSessionDuration": 1240,
-          "features": {
-            "semanticSearchUsage": 0.78,
-            "advancedFiltersUsage": 0.65
-          }
-        },
-        "regular_users": {
-          "count": 154,
-          "percentage": 65.8,
-          "averageSearchesPerDay": 4.3,
-          "averageSessionDuration": 340
-        },
-        "casual_users": {
-          "count": 45,
-          "percentage": 19.2,
-          "averageSearchesPerDay": 1.2,
-          "averageSessionDuration": 120
-        }
-      },
-      "engagement": {
-        "dailyActiveUsers": 89,
-        "weeklyActiveUsers": 156,
-        "monthlyActiveUsers": 234,
-        "retention": {
-          "day1": 0.85,
-          "day7": 0.67,
-          "day30": 0.45
-        },
-        "sessionMetrics": {
-          "averageDuration": 450,
-          "searchesPerSession": 3.2,
-          "bounceRate": 0.23
-        }
-      },
-      "topUserJourneys": [
-        {
-          "pattern": "search -> refine -> export",
-          "frequency": 0.34,
-          "description": "Users search, refine results, then export data"
-        }
-      ]
+  "data": [
+    {
+      "id": "user_123",
+      "email": "user@example.com",
+      "name": "Test User",
+      "role": "user",
+      "query_count": 42,
+      "avg_response_time": 210,
+      "last_query": "2024-01-15T10:30:00.000Z",
+      "last_active": "2024-01-15T11:00:00.000Z"
     }
-  }
+  ]
 }
 ```
 

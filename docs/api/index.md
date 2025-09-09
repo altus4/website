@@ -13,8 +13,8 @@ Altus 4 provides a RESTful API for managing database connections, executing sear
 
 Altus 4 uses **dual authentication** depending on the endpoint type:
 
-- **JWT Tokens**: For user management, account operations, API key management, database management, and analytics
-- **API Keys**: For search operations and B2B service integration
+- **JWT Tokens**: For user management, API key management, database management, and analytics endpoints under `/api/v1/analytics/*`
+- **API Keys**: For search routes under `/api/v1/search*` (service-to-service)
 
 ### Authentication Flow
 
@@ -36,24 +36,24 @@ Authorization: Bearer <api-key>
 
 ### Authentication Endpoints
 
-| Method   | Endpoint                              | Description             | Auth Required | Status                    |
-| -------- | ------------------------------------- | ----------------------- | ------------- | ------------------------- |
-| `POST`   | `/api/v1/auth/register`               | Register new user       | No            | Tested                    |
-| `POST`   | `/api/v1/auth/login`                  | User login              | No            | Tested                    |
-| `GET`    | `/api/v1/auth/profile`                | Get user profile        | JWT Token     | Tested                    |
-| `PUT`    | `/api/v1/auth/profile`                | Update user profile     | JWT Token     | Tested                    |
-| `POST`   | `/api/v1/auth/change-password`        | Change user password    | JWT Token     | Tested                    |
-| `POST`   | `/api/v1/auth/refresh`                | Refresh JWT token       | JWT Token     | Tested                    |
-| `POST`   | `/api/v1/auth/logout`                 | Logout user             | JWT Token     | Tested                    |
-| `DELETE` | `/api/v1/auth/account`                | Deactivate account      | JWT Token     | Tested                    |
-| `POST`   | `/api/v1/management/setup`            | Create first API key    | JWT Token     | Tested                    |
-| `GET`    | `/api/v1/management/migration-status` | Check migration status  | JWT Token     | Tested                    |
-| `POST`   | `/api/v1/keys`                        | Create new API key      | JWT Token     | Requires admin permission |
-| `GET`    | `/api/v1/keys`                        | List API keys           | JWT Token     | Tested                    |
-| `PUT`    | `/api/v1/keys/:keyId`                 | Update API key          | JWT Token     | Requires admin permission |
-| `DELETE` | `/api/v1/keys/:keyId`                 | Revoke API key          | JWT Token     | Requires admin permission |
-| `GET`    | `/api/v1/keys/:keyId/usage`           | Get API key usage stats | JWT Token     | Not tested                |
-| `POST`   | `/api/v1/keys/:keyId/regenerate`      | Regenerate API key      | JWT Token     | Requires admin permission |
+| Method   | Endpoint                              | Description             | Auth |
+| -------- | ------------------------------------- | ----------------------- | ---- |
+| `POST`   | `/api/v1/auth/register`               | Register new user       | None |
+| `POST`   | `/api/v1/auth/login`                  | User login              | None |
+| `GET`    | `/api/v1/auth/profile`                | Get user profile        | JWT  |
+| `PUT`    | `/api/v1/auth/profile`                | Update user profile     | JWT  |
+| `POST`   | `/api/v1/auth/change-password`        | Change user password    | JWT  |
+| `POST`   | `/api/v1/auth/refresh`                | Refresh JWT token       | JWT  |
+| `POST`   | `/api/v1/auth/logout`                 | Logout user             | JWT  |
+| `DELETE` | `/api/v1/auth/account`                | Deactivate account      | JWT  |
+| `POST`   | `/api/v1/management/setup`            | Create first API key    | JWT  |
+| `GET`    | `/api/v1/management/migration-status` | Check migration status  | JWT  |
+| `POST`   | `/api/v1/keys`                        | Create new API key      | JWT  |
+| `GET`    | `/api/v1/keys`                        | List API keys           | JWT  |
+| `PUT`    | `/api/v1/keys/:keyId`                 | Update API key          | JWT  |
+| `DELETE` | `/api/v1/keys/:keyId`                 | Revoke API key          | JWT  |
+| `GET`    | `/api/v1/keys/:keyId/usage`           | Get API key usage stats | JWT  |
+| `POST`   | `/api/v1/keys/:keyId/regenerate`      | Regenerate API key      | JWT  |
 
 [**→ Complete API Key Authentication Guide**](./authentication.md)
 
@@ -63,16 +63,16 @@ Manage MySQL database connections for searching.
 
 ### Database Endpoints
 
-| Method   | Endpoint                       | Description                | Auth Required | Status     |
-| -------- | ------------------------------ | -------------------------- | ------------- | ---------- |
-| `GET`    | `/api/v1/databases`            | List user databases        | JWT Token     | Tested     |
-| `POST`   | `/api/v1/databases`            | Add database connection    | JWT Token     | Tested     |
-| `GET`    | `/api/v1/databases/:id`        | Get database details       | JWT Token     | Not tested |
-| `PUT`    | `/api/v1/databases/:id`        | Update database connection | JWT Token     | Not tested |
-| `DELETE` | `/api/v1/databases/:id`        | Remove database connection | JWT Token     | Not tested |
-| `POST`   | `/api/v1/databases/:id/test`   | Test database connection   | JWT Token     | Not tested |
-| `GET`    | `/api/v1/databases/:id/schema` | Get database schema        | JWT Token     | Not tested |
-| `GET`    | `/api/v1/databases/status`     | Get connection statuses    | JWT Token     | Tested     |
+| Method   | Endpoint                                 | Description                | Auth |
+| -------- | ---------------------------------------- | -------------------------- | ---- |
+| `GET`    | `/api/v1/databases`                      | List user databases        | JWT  |
+| `POST`   | `/api/v1/databases`                      | Add database connection    | JWT  |
+| `GET`    | `/api/v1/databases/:connectionId`        | Get database details       | JWT  |
+| `PUT`    | `/api/v1/databases/:connectionId`        | Update database connection | JWT  |
+| `DELETE` | `/api/v1/databases/:connectionId`        | Remove database connection | JWT  |
+| `POST`   | `/api/v1/databases/:connectionId/test`   | Test database connection   | JWT  |
+| `GET`    | `/api/v1/databases/:connectionId/schema` | Get database schema        | JWT  |
+| `GET`    | `/api/v1/databases/status`               | Get connection statuses    | JWT  |
 
 [**Complete Database Documentation**](./database.md)
 
@@ -82,13 +82,15 @@ Execute searches across connected databases with AI enhancements.
 
 ### Search Endpoints
 
-| Method | Endpoint                     | Description               | Auth Required       | Status |
-| ------ | ---------------------------- | ------------------------- | ------------------- | ------ |
-| `POST` | `/api/v1/search`             | Execute search            | API Key             | Tested |
-| `GET`  | `/api/v1/search/suggestions` | Get search suggestions    | API Key             | Tested |
-| `POST` | `/api/v1/search/analyze`     | Analyze query performance | API Key (analytics) | Tested |
-| `GET`  | `/api/v1/search/history`     | Get search history        | API Key             | Tested |
-| `GET`  | `/api/v1/search/trends`      | Get user search trends    | API Key (analytics) | Tested |
+| Method | Endpoint                     | Description               | Auth    |
+| ------ | ---------------------------- | ------------------------- | ------- |
+| `POST` | `/api/v1/search`             | Execute search            | API Key |
+| `GET`  | `/api/v1/search/suggestions` | Get search suggestions    | API Key |
+| `POST` | `/api/v1/search/analyze`     | Analyze query performance | API Key |
+| `GET`  | `/api/v1/search/history`     | Get search history        | API Key |
+| `GET`  | `/api/v1/search/trends`      | Get user search trends    | API Key |
+
+Note: API keys must include `search` permission for search and suggestions; `analytics` permission is required for analyze and trends.
 
 [**Complete Search Documentation**](./search.md)
 
@@ -98,17 +100,17 @@ Access search analytics, performance metrics, and trend data.
 
 ### Analytics Endpoints
 
-| Method | Endpoint                                      | Description                    | Auth Required     | Status     |
-| ------ | --------------------------------------------- | ------------------------------ | ----------------- | ---------- |
-| `GET`  | `/api/v1/analytics/dashboard`                 | Get dashboard data             | JWT Token         | Tested     |
-| `GET`  | `/api/v1/analytics/search-trends`             | Get search trends              | JWT Token         | Tested     |
-| `GET`  | `/api/v1/analytics/performance`               | Get performance metrics        | JWT Token         | Tested     |
-| `GET`  | `/api/v1/analytics/popular-queries`           | Get popular queries            | JWT Token         | Tested     |
-| `GET`  | `/api/v1/analytics/search-history`            | Get search history             | JWT Token         | Tested     |
-| `GET`  | `/api/v1/analytics/insights`                  | Get AI-generated insights      | JWT Token         | Tested     |
-| `GET`  | `/api/v1/analytics/admin/system-overview`     | Get system overview (admin)    | JWT Token (admin) | Not tested |
-| `GET`  | `/api/v1/analytics/admin/user-activity`       | Get user activity (admin)      | JWT Token (admin) | Not tested |
-| `GET`  | `/api/v1/analytics/admin/performance-metrics` | Get system performance (admin) | JWT Token (admin) | Not tested |
+| Method | Endpoint                                      | Description                    | Auth        |
+| ------ | --------------------------------------------- | ------------------------------ | ----------- |
+| `GET`  | `/api/v1/analytics/dashboard`                 | Get dashboard data             | JWT         |
+| `GET`  | `/api/v1/analytics/search-trends`             | Get search trends              | JWT         |
+| `GET`  | `/api/v1/analytics/performance`               | Get performance metrics        | JWT         |
+| `GET`  | `/api/v1/analytics/popular-queries`           | Get popular queries            | JWT         |
+| `GET`  | `/api/v1/analytics/search-history`            | Get search history             | JWT         |
+| `GET`  | `/api/v1/analytics/insights`                  | Get AI-generated insights      | JWT         |
+| `GET`  | `/api/v1/analytics/admin/system-overview`     | Get system overview (admin)    | JWT (admin) |
+| `GET`  | `/api/v1/analytics/admin/user-activity`       | Get user activity (admin)      | JWT (admin) |
+| `GET`  | `/api/v1/analytics/admin/performance-metrics` | Get system performance (admin) | JWT (admin) |
 
 [**Complete Analytics Documentation**](./analytics.md)
 
@@ -116,10 +118,10 @@ Access search analytics, performance metrics, and trend data.
 
 Health checks and system information.
 
-| Method | Endpoint                    | Description         | Auth Required | Status |
-| ------ | --------------------------- | ------------------- | ------------- | ------ |
-| `GET`  | `/health`                   | System health check | No            | Tested |
-| `GET`  | `/api/v1/management/health` | Management health   | No            | Tested |
+| Method | Endpoint                    | Description         | Auth |
+| ------ | --------------------------- | ------------------- | ---- |
+| `GET`  | `/health`                   | System health check | None |
+| `GET`  | `/api/v1/management/health` | Management health   | None |
 
 ## Request/Response Format
 
@@ -388,91 +390,12 @@ print(data['data']['results'])
 - **[Request/Response Schemas](#request-response-examples)** - Complete type definitions
 - **[Error Handling](./errors.md)** - Error codes and troubleshooting
 
-## API Testing
+## Need Help?
 
-### Automated Test Results
+Check out:
 
-**Last Updated:** September 6, 2025
-**Test Coverage:** 100% (33/33 endpoints passing)
-
-**Working Endpoints:**
-
-- Authentication flow (register, login, profile management)
-- JWT token management (refresh, logout)
-- API key creation and listing
-- Search operations (execute, suggestions, history)
-- Analytics (dashboard, trends, performance, insights)
-- Database connection listing
-- Error handling and security
-
-**All Issues Fixed:**
-
-- Database connection statuses routing issue - FIXED
-- API key permissions for analytics endpoints - FIXED
-- Analytics search history SQL parameter error - FIXED
-- Response structure documentation accuracy - FIXED
-
-**100% API Functionality Achieved!**
-All 33 endpoints are now fully functional and tested.
-
-### Final Test Results
-
-All previously failing endpoints have been successfully fixed and tested:
-
-1. **Database Status Endpoint** (`GET /api/v1/databases/status`)
-   - **Issue:** Route conflict with `:connectionId` parameter
-   - **Fix:** Reordered routes to place `/status` before `/:connectionId`
-   - **Status:** HTTP 200 - Working
-
-2. **Analytics Search History** (`GET /api/v1/analytics/search-history`)
-   - **Issue:** MySQL prepared statement error with LIMIT/OFFSET parameters
-   - **Fix:** Used string interpolation for LIMIT/OFFSET while keeping other parameters safely parameterized
-   - **Status:** HTTP 200 - Working
-
-3. **Search Trends with API Key** (`GET /api/v1/search/trends`)
-   - **Issue:** Initial API key created with insufficient permissions
-   - **Fix:** Added 'analytics' permission to default API key creation
-   - **Status:** HTTP 200 - Working
-
-### Code Changes Made
-
-- **`src/routes/database.ts`**: Reordered routes and removed duplicate `/status` route
-- **`src/controllers/AnalyticsController.ts`**: Fixed SQL query parameter handling for pagination
-- **`src/routes/management.ts`**: Updated initial API key permissions to include 'analytics'
-
-### Testing Methodology
-
-Comprehensive automated testing was performed using curl commands to verify:
-
-- User registration and JWT token generation
-- Database connection status retrieval
-- Analytics search history with proper authentication
-- API key creation and usage for search trends
-- All endpoints return proper HTTP status codes and response structures
-
-### Development Notes
-
-This API testing and documentation effort resulted in:
-
-- **3 critical bugs fixed** that were preventing proper functionality
-- **100% endpoint coverage** with all 33 routes working correctly
-- **Accurate response documentation** with real JSON examples
-- **Production-ready codebase** with comprehensive error handling
-
-The Altus4 Core API is now fully functional and ready for production deployment.
-
-- [x] Authentication flow (register, login, API key creation)
-- [x] JWT token management (refresh, logout, profile updates)
-- [x] API key authentication and permissions
-- [x] Search operations (execute, suggestions, history)
-- [x] Analytics access (dashboard, trends, performance)
-- [x] Database connection management (list, add)
-- [x] Error handling (invalid requests, authentication failures)
-- [x] Security validation (unauthorized access prevention)
-- [ ] Database operations (test, schema discovery, status)
-- [ ] API key management (update, revoke, regenerate)
-- [ ] Admin-only endpoints (system overview, user activity)
-
----
-
-**Need help?** Check out the [examples section](../examples/) for practical implementations or [report issues](https://github.com/anthropics/claude-code/issues) if you find any problems.
+- [API Key Authentication Guide](./authentication.md)
+- [Search Operations](./search.md)
+- [Database Management](./database.md)
+- [Analytics API](./analytics.md)
+  Or open an issue if you find problems.
