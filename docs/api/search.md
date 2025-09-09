@@ -58,10 +58,12 @@ Content-Type: application/json
 {
   "query": "database performance optimization techniques",
   "databases": ["db_uuid_1", "db_uuid_2"],
+  "tables": ["articles"],
+  "columns": ["title", "content"],
   "searchMode": "natural",
   "limit": 20,
   "offset": 0,
-  "includeAnalytics": true
+  "includeAnalytics": false
 }
 ```
 
@@ -89,20 +91,26 @@ Content-Type: application/json
         "id": "result_abc123",
         "table": "articles",
         "database": "production_db",
-        "content": {
+        "relevanceScore": 0.95,
+        "matchedColumns": ["title", "content"],
+        "data": {
           "id": 1001,
           "title": "MySQL Performance Optimization Guide",
           "content": "Complete guide to optimizing MySQL database performance...",
           "created_at": "2024-01-15T10:30:00.000Z"
         },
-        "relevanceScore": 0.95
+        "snippet": "... optimizing MySQL database performance ...",
+        "categories": ["Performance", "MySQL"]
       }
     ],
-    "summary": {
-      "totalResults": 1,
-      "executionTime": 234,
-      "searchMode": "natural"
-    }
+    "categories": [{ "name": "Performance", "count": 1, "confidence": 0.9 }],
+    "suggestions": [
+      { "text": "mysql indexing", "score": 0.82, "type": "semantic" }
+    ],
+    "totalCount": 1,
+    "executionTime": 234,
+    "page": 1,
+    "limit": 20
   },
   "meta": {
     "timestamp": "2024-01-15T10:30:00.000Z",
@@ -217,8 +225,8 @@ Retrieve intelligent search suggestions based on query and context.
 **Query Parameters**:
 
 - `query` - Partial query string (required, 1-100 characters)
-- `databases` - Comma-separated database IDs (optional)
-- `tables` - Comma-separated table names (optional)
+- `databases` - Repeatable: `?databases=db1&databases=db2` (optional)
+- `tables` - Repeatable: `?tables=articles&tables=docs` (optional)
 
 **Headers**:
 
@@ -233,10 +241,12 @@ Authorization: Bearer <YOUR_API_KEY>
   "success": true,
   "data": {
     "suggestions": [
-      "database performance optimization",
-      "mysql indexing strategies",
-      "query optimization techniques",
-      "database tuning guide"
+      {
+        "text": "database performance optimization",
+        "score": 0.91,
+        "type": "popular"
+      },
+      { "text": "mysql indexing strategies", "score": 0.87, "type": "semantic" }
     ]
   },
   "meta": {
@@ -250,7 +260,7 @@ Authorization: Bearer <YOUR_API_KEY>
 **cURL Example**:
 
 ```bash
-curl -X GET "http://localhost:3000/api/v1/search/suggestions?query=database%20perf&databases=db_uuid_1" \
+curl -X GET "http://localhost:3000/api/v1/search/suggestions?query=database%20perf&databases=db_uuid_1&databases=db_uuid_2" \
   -H "Authorization: Bearer altus4_sk_live_abc123..."
 ```
 
@@ -267,8 +277,7 @@ Get detailed performance analysis for a search query.
 ```json
 {
   "query": "database optimization techniques",
-  "databases": ["db_uuid_1", "db_uuid_2"],
-  "searchMode": "natural"
+  "databases": ["db_uuid_1", "db_uuid_2"]
 }
 ```
 
@@ -278,30 +287,16 @@ Get detailed performance analysis for a search query.
 {
   "success": true,
   "data": {
-    "analysis": {
-      "queryComplexity": "medium",
-      "estimatedResults": 150,
-      "optimizationSuggestions": [
-        {
-          "type": "query_refinement",
-          "suggestion": "Consider using 'mysql optimization' for more specific results",
-          "impact": "high"
-        }
-      ],
-      "indexRecommendations": [
-        {
-          "database": "db_uuid_1",
-          "table": "articles",
-          "column": "content",
-          "reason": "Full-text search performance"
-        }
-      ],
-      "performanceMetrics": {
-        "estimatedExecutionTime": 180,
-        "cacheHitProbability": 0.3,
-        "aiProcessingRequired": true
+    "query": "database optimization techniques",
+    "recommendations": ["Add FULLTEXT index to articles.content"],
+    "performance": { "db_uuid_1": { "avgTime": 120 } },
+    "optimization": [
+      {
+        "type": "index",
+        "description": "Create FULLTEXT index on content",
+        "impact": "high"
       }
-    }
+    ]
   }
 }
 ```
@@ -314,41 +309,25 @@ Retrieve user's search history with analytics.
 
 **Query Parameters**:
 
-- `limit` - Number of history entries (default: 50, max: 500)
-- `offset` - Pagination offset
-- `from` - Start date (ISO string)
-- `to` - End date (ISO string)
-- `databases` - Filter by specific databases
+- `limit` - Number of entries (default: 20, max: 100)
+- `offset` - Pagination offset (default: 0)
 
 **Response**:
 
 ```json
 {
   "success": true,
-  "data": {
-    "history": [
-      {
-        "id": "search_abc123",
-        "query": "database performance optimization",
-        "searchMode": "semantic",
-        "databases": ["db_uuid_1"],
-        "resultCount": 89,
-        "executionTime": 234,
-        "timestamp": "2024-01-15T10:30:00.000Z"
-      }
-    ],
-    "summary": {
-      "totalSearches": 1250,
-      "averageResultCount": 67,
-      "averageExecutionTime": 198,
-      "mostUsedMode": "natural",
-      "topQueries": [
-        "database optimization",
-        "mysql performance",
-        "query tuning"
-      ]
+  "data": [
+    {
+      "id": "search_abc123",
+      "userId": "user_123",
+      "query": "database performance optimization",
+      "database": "db_uuid_1",
+      "resultCount": 89,
+      "executionTime": 234,
+      "timestamp": "2024-01-15T10:30:00.000Z"
     }
-  }
+  ]
 }
 ```
 
@@ -358,11 +337,7 @@ Get user's search trends and pattern insights.
 
 **Endpoint**: `GET /api/v1/search/trends`
 
-**Query Parameters**:
-
-- `startDate` - Start date for trends (ISO string, optional)
-- `endDate` - End date for trends (ISO string, optional)
-- `period` - Aggregation period: `day`, `week`, `month` (default: `week`)
+No query parameters.
 
 **Response**:
 

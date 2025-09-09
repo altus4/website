@@ -227,9 +227,10 @@ Content-Type: application/json
 ```json
 {
   "name": "Production API Key",
-  "tier": "pro",
-  "permissions": ["search", "analytics", "database:write"],
-  "environment": "live"
+  "environment": "live",
+  "permissions": ["search", "analytics"],
+  "rateLimitTier": "pro",
+  "expiresAt": "2025-12-31"
 }
 ```
 
@@ -241,17 +242,17 @@ Content-Type: application/json
   "data": {
     "apiKey": {
       "id": "key_def456",
-      "key": "altus4_sk_live_def456ghi789...",
       "name": "Production API Key",
-      "tier": "pro",
-      "permissions": ["search", "analytics", "database:write"],
+      "keyPrefix": "altus4_sk_live_def456...",
       "environment": "live",
-      "rateLimit": {
-        "requestsPerHour": 10000,
-        "burstLimit": 100
-      },
+      "permissions": ["search", "analytics"],
+      "rateLimitTier": "pro",
+      "isActive": true,
+      "expiresAt": "2025-12-31T00:00:00.000Z",
       "createdAt": "2024-01-15T10:30:00.000Z"
-    }
+    },
+    "secretKey": "altus4_sk_live_def456ghi789...",
+    "warning": "This is the only time the full API key will be shown. Please store it securely."
   }
 }
 ```
@@ -278,12 +279,16 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
       {
         "id": "key_abc123",
         "name": "My First API Key",
-        "tier": "free",
-        "permissions": ["search", "database:read"],
+        "keyPrefix": "altus4_sk_live_abc123...",
+        "rateLimitTier": "free",
+        "permissions": ["search"],
         "environment": "live",
         "lastUsed": "2024-01-15T09:30:00.000Z",
+        "usageCount": 123,
+        "isActive": true,
+        "expiresAt": null,
         "createdAt": "2024-01-15T08:30:00.000Z",
-        "status": "active"
+        "updatedAt": "2024-01-15T10:00:00.000Z"
       }
     ],
     "total": 1
@@ -309,8 +314,9 @@ Content-Type: application/json
 ```json
 {
   "name": "Updated Production Key",
-  "tier": "enterprise",
-  "permissions": ["search", "analytics", "database:write", "admin"]
+  "rateLimitTier": "enterprise",
+  "permissions": ["search", "analytics", "admin"],
+  "expiresAt": null
 }
 ```
 
@@ -332,8 +338,8 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
 {
   "success": true,
   "data": {
-    "message": "API key revoked successfully",
-    "revokedAt": "2024-01-15T10:30:00.000Z"
+    "keyId": "key_abc123",
+    "message": "API key revoked successfully"
   }
 }
 ```
@@ -357,12 +363,18 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
   "success": true,
   "data": {
     "apiKey": {
-      "id": "key_abc123",
-      "key": "altus4_sk_live_newtoken123...",
+      "id": "key_new",
       "name": "My First API Key",
-      "regeneratedAt": "2024-01-15T10:30:00.000Z"
+      "keyPrefix": "altus4_sk_live_newtoken...",
+      "environment": "live",
+      "permissions": ["search"],
+      "rateLimitTier": "free",
+      "expiresAt": null,
+      "createdAt": "2024-01-15T10:30:00.000Z"
     },
-    "warning": "The old API key is now invalid. Update your applications immediately."
+    "secretKey": "altus4_sk_live_newtoken123...",
+    "warning": "This is the only time the full API key will be shown. Please store it securely.",
+    "oldKeyId": "key_abc123"
   }
 }
 ```
@@ -375,8 +387,7 @@ Get detailed usage statistics for a specific API key.
 
 **Query Parameters**:
 
-- `period` - `hour`, `day`, `week`, `month` (default: `day`)
-- `limit` - Number of data points to return (default: 100)
+- `days` - Limit history window to last N days (1-365, optional)
 
 **Headers**:
 
@@ -579,21 +590,7 @@ const makeApiRequest = async (endpoint, data) => {
 Test your API key with a simple health check:
 
 ```bash
-curl -X GET http://localhost:3000/health \
-  -H "Authorization: Bearer altus4_sk_live_abc123..."
-```
-
-Expected response:
-
-```json
-{
-  "status": "healthy",
-  "authenticated": true,
-  "keyInfo": {
-    "tier": "pro",
-    "permissions": ["search", "analytics"]
-  }
-}
+curl -X GET http://localhost:3000/health
 ```
 
 ---

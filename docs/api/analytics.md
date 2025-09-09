@@ -42,9 +42,9 @@ Get a comprehensive dashboard view of your search analytics.
 
 **Query Parameters**:
 
-- `period` - Time period: `hour`, `day`, `week`, `month` (default: `day`)
-- `databases` - Comma-separated database IDs to filter
-- `timezone` - Timezone for date aggregation (default: `UTC`)
+- `startDate` - YYYY-MM-DD (optional)
+- `endDate` - YYYY-MM-DD (optional)
+- `period` - `day`, `week`, `month`, `3months`, `6months`, `year` (default: `week`)
 
 **Headers**:
 
@@ -58,75 +58,44 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
 {
   "success": true,
   "data": {
-    "dashboard": {
-      "period": "day",
-      "dateRange": {
-        "from": "2024-01-15T00:00:00.000Z",
-        "to": "2024-01-15T23:59:59.000Z"
-      },
-      "overview": {
-        "totalSearches": 1250,
-        "totalResults": 45670,
-        "uniqueQueries": 320,
+    "trends": {
+      "period": "week",
+      "topQueries": ["database optimization"],
+      "queryVolume": 1250,
+      "avgResponseTime": 234,
+      "popularCategories": ["Performance"]
+    },
+    "performance": {
+      "summary": {
+        "totalQueries": 1250,
         "averageResponseTime": 234,
-        "cacheHitRate": 0.65,
-        "successRate": 0.98
+        "topQuery": "database optimization"
       },
-      "searchVolume": [
-        {
-          "timestamp": "2024-01-15T00:00:00.000Z",
-          "searches": 45,
-          "results": 1834,
-          "averageResponseTime": 198
-        }
-      ],
-      "topQueries": [
-        {
-          "query": "database optimization",
-          "count": 89,
-          "averageResults": 67,
-          "averageResponseTime": 245
-        }
-      ],
-      "searchModes": {
-        "natural": {
-          "count": 750,
-          "percentage": 60.0,
-          "averageResponseTime": 210
-        },
-        "semantic": {
-          "count": 350,
-          "percentage": 28.0,
-          "averageResponseTime": 320
-        },
-        "boolean": {
-          "count": 150,
-          "percentage": 12.0,
-          "averageResponseTime": 180
-        }
-      },
-      "databaseActivity": [
-        {
-          "databaseId": "db_abc123",
-          "name": "Production DB",
-          "searches": 890,
-          "results": 32400,
-          "averageResponseTime": 220,
-          "healthScore": 0.95
-        }
-      ],
-      "aiInsights": {
-        "topCategories": ["Performance", "Optimization", "MySQL"],
-        "emergingTopics": ["mysql 8.0", "indexing strategies"],
-        "queryComplexityTrend": "increasing",
-        "recommendations": [
-          {
-            "type": "performance",
-            "message": "Consider adding FULLTEXT index on articles.content",
-            "impact": "high"
-          }
-        ]
+      "timeSeriesData": [
+        { "date": "2024-01-15", "query_count": 100, "avg_response_time": 200 }
+      ]
+    },
+    "popularQueries": [
+      {
+        "query_text": "database optimization",
+        "frequency": 89,
+        "avg_time": 245
       }
+    ],
+    "insights": [
+      {
+        "type": "query_optimization",
+        "confidence": 0.9,
+        "description": "Consider FULLTEXT index",
+        "actionable": true,
+        "data": {}
+      }
+    ],
+    "summary": {
+      "period": "week",
+      "totalQueries": 1250,
+      "averageResponseTime": 234,
+      "topQuery": "database optimization"
     }
   }
 }
@@ -306,66 +275,24 @@ Get the most popular search queries with detailed analytics.
 
 **Query Parameters**:
 
-- `limit` - Number of queries to return (default: 50)
-- `period` - Time period for popularity calculation
-- `minCount` - Minimum search count to include
-- `category` - Filter by query category
+- `startDate` - YYYY-MM-DD (optional)
+- `endDate` - YYYY-MM-DD (optional)
+- `period` - `day`, `week`, `month`, `3months`, `6months`, `year` (default: `week`)
 
 **Response**:
 
 ```json
 {
   "success": true,
-  "data": {
-    "popularQueries": [
-      {
-        "query": "database performance optimization",
-        "count": 189,
-        "uniqueUsers": 67,
-        "averageResults": 45,
-        "averageResponseTime": 234,
-        "successRate": 0.98,
-        "category": "Performance",
-        "relatedQueries": [
-          "mysql optimization",
-          "query tuning",
-          "index optimization"
-        ],
-        "trending": {
-          "direction": "up",
-          "growth": 23.5
-        },
-        "timeDistribution": [
-          {
-            "hour": 9,
-            "count": 23
-          }
-        ]
-      }
-    ],
-    "categories": [
-      {
-        "name": "Performance",
-        "queryCount": 456,
-        "totalSearches": 1234,
-        "averageResultsPerQuery": 67
-      }
-    ],
-    "insights": {
-      "topTrends": ["mysql 8.0", "performance optimization", "indexing"],
-      "seasonalPatterns": "Q1 shows 40% increase in optimization queries",
-      "userSegments": {
-        "power_users": {
-          "percentage": 15,
-          "averageQueriesPerDay": 12
-        },
-        "casual_users": {
-          "percentage": 85,
-          "averageQueriesPerDay": 2
-        }
-      }
+  "data": [
+    {
+      "query_text": "database performance optimization",
+      "frequency": 189,
+      "avg_time": 234,
+      "avg_results": 45,
+      "last_used": "2024-01-15T10:30:00.000Z"
     }
-  }
+  ]
 }
 ```
 
@@ -377,8 +304,9 @@ Get AI-powered insights and recommendations based on your search patterns.
 
 **Query Parameters**:
 
-- `type` - Insight type: `performance`, `usage`, `optimization`, `trends`
-- `databases` - Filter by specific databases
+- `startDate` - YYYY-MM-DD (optional)
+- `endDate` - YYYY-MM-DD (optional)
+- `period` - `day`, `week`, `month`, `3months`, `6months`, `year` (default: `week`)
 - `includeRecommendations` - Include actionable recommendations
 
 **Response**:
@@ -618,7 +546,7 @@ Get detailed user activity and engagement metrics.
 
 ### Create Custom Metrics
 
-_This feature is not currently implemented._
+*This feature is not currently implemented.*
 
 **Request Body**:
 
@@ -642,7 +570,7 @@ _This feature is not currently implemented._
 
 ### Export Analytics Data
 
-_This feature is not currently implemented._
+*This feature is not currently implemented.*
 
 **Query Parameters**:
 
@@ -668,9 +596,10 @@ class Altus4Analytics {
     };
   }
 
-  async getDashboard(period = 'day', databases = null) {
+  async getDashboard(period = 'week', startDate, endDate) {
     const params = new URLSearchParams({ period });
-    if (databases) params.append('databases', databases.join(','));
+    if (startDate) params.set('startDate', startDate);
+    if (endDate) params.set('endDate', endDate);
 
     const response = await fetch(
       `${this.baseUrl}/api/v1/analytics/dashboard?${params}`,
@@ -680,24 +609,23 @@ class Altus4Analytics {
     return await response.json();
   }
 
-  async getSearchTrends(options = {}) {
-    const params = new URLSearchParams({
-      period: options.period || 'week',
-      limit: options.limit || 100,
-      ...options,
-    });
+  async getSearchTrends({ period = 'week', startDate, endDate } = {}) {
+    const params = new URLSearchParams({ period });
+    if (startDate) params.set('startDate', startDate);
+    if (endDate) params.set('endDate', endDate);
 
     const response = await fetch(
-      `${this.baseUrl}/api/v1/analytics/trends?${params}`,
+      `${this.baseUrl}/api/v1/analytics/search-trends?${params}`,
       { headers: this.headers }
     );
 
     return await response.json();
   }
 
-  async getPopularQueries(limit = 50, category = null) {
-    const params = new URLSearchParams({ limit });
-    if (category) params.append('category', category);
+  async getPopularQueries({ period = 'week', startDate, endDate } = {}) {
+    const params = new URLSearchParams({ period });
+    if (startDate) params.set('startDate', startDate);
+    if (endDate) params.set('endDate', endDate);
 
     const response = await fetch(
       `${this.baseUrl}/api/v1/analytics/popular-queries?${params}`,
@@ -707,8 +635,10 @@ class Altus4Analytics {
     return await response.json();
   }
 
-  async getInsights(type = 'all') {
-    const params = new URLSearchParams({ type });
+  async getInsights({ period = 'week', startDate, endDate } = {}) {
+    const params = new URLSearchParams({ period });
+    if (startDate) params.set('startDate', startDate);
+    if (endDate) params.set('endDate', endDate);
 
     const response = await fetch(
       `${this.baseUrl}/api/v1/analytics/insights?${params}`,
@@ -718,12 +648,10 @@ class Altus4Analytics {
     return await response.json();
   }
 
-  async getPerformanceMetrics(period = 'day') {
-    const params = new URLSearchParams({
-      period,
-      breakdown: 'endpoint,database,searchMode',
-      includeErrors: true,
-    });
+  async getPerformanceMetrics({ period = 'week', startDate, endDate } = {}) {
+    const params = new URLSearchParams({ period });
+    if (startDate) params.set('startDate', startDate);
+    if (endDate) params.set('endDate', endDate);
 
     const response = await fetch(
       `${this.baseUrl}/api/v1/analytics/performance?${params}`,
@@ -738,26 +666,26 @@ class Altus4Analytics {
 const analytics = new Altus4Analytics('altus4_sk_live_abc123...');
 
 // Get dashboard overview
-const dashboard = await analytics.getDashboard('week', ['db_abc123']);
-console.log('Total searches:', dashboard.data.dashboard.overview.totalSearches);
+const dashboard = await analytics.getDashboard('week');
+console.log('Total queries:', dashboard.data.performance.summary.totalQueries);
 
 // Get trending searches
-const trends = await analytics.getSearchTrends({
-  period: 'month',
-  groupBy: 'category',
-});
+const trends = await analytics.getSearchTrends({ period: 'month' });
+console.log('Top weekly queries:', trends.data[0].topQueries);
 
 // Get AI insights
-const insights = await analytics.getInsights('performance');
-insights.data.insights.performanceInsights.forEach(insight => {
-  console.log(`${insight.title}: ${insight.recommendation.action}`);
+const insights = await analytics.getInsights({ period: 'week' });
+insights.data.forEach(insight => {
+  console.log(
+    `${insight.type}: ${insight.description} (conf: ${insight.confidence})`
+  );
 });
 
 // Monitor performance
-const performance = await analytics.getPerformanceMetrics('day');
+const performance = await analytics.getPerformanceMetrics({ period: 'day' });
 console.log(
   'Average response time:',
-  performance.data.performance.overview.averageResponseTime
+  performance.data.summary.averageResponseTime
 );
 ```
 
@@ -781,23 +709,23 @@ class Altus4AnalyticsDashboard:
             headers=self.headers,
             params={'period': period}
         )
-        return response.json()['data']['dashboard']
+        return response.json()['data']
 
-    def get_search_trends(self, period='month', limit=100):
+    def get_search_trends(self, period='month'):
         response = requests.get(
-            f'{self.base_url}/api/v1/analytics/trends',
+            f'{self.base_url}/api/v1/analytics/search-trends',
             headers=self.headers,
-            params={'period': period, 'limit': limit}
+            params={'period': period}
         )
-        return response.json()['data']['trends']
+        return response.json()['data']
 
     def get_performance_metrics(self, period='day'):
         response = requests.get(
             f'{self.base_url}/api/v1/analytics/performance',
             headers=self.headers,
-            params={'period': period, 'breakdown': 'endpoint,database'}
+            params={'period': period}
         )
-        return response.json()['data']['performance']
+        return response.json()['data']
 
     def generate_report(self):
         # Get dashboard data
@@ -806,49 +734,37 @@ class Altus4AnalyticsDashboard:
         performance = self.get_performance_metrics('week')
 
         # Create visualizations
-        self._plot_search_volume(trends['searchVolume']['timeline'])
-        self._plot_response_times(performance['endpoints'])
-        self._plot_popular_queries(dashboard['topQueries'])
+        # Trends is a list of TrendInsight; approximate a series from queryVolume
+        self._plot_search_volume([{'date': 'period', 'count': trends[0]['queryVolume']}])
+        self._plot_response_times(performance['timeSeriesData'])
+        self._plot_popular_queries(dashboard['popularQueries'])
 
         return {
-            'total_searches': dashboard['overview']['totalSearches'],
-            'average_response_time': performance['overview']['averageResponseTime'],
-            'success_rate': performance['overview']['successRate'],
-            'cache_hit_rate': dashboard['overview']['cacheHitRate']
+            'total_searches': dashboard['performance']['summary']['totalQueries'],
+            'average_response_time': dashboard['performance']['summary']['averageResponseTime']
         }
 
-    def _plot_search_volume(self, timeline):
-        df = pd.DataFrame(timeline)
-        df['timestamp'] = pd.to_datetime(df['timestamp'])
-
-        plt.figure(figsize=(12, 6))
-        plt.plot(df['timestamp'], df['searches'], marker='o')
-        plt.title('Search Volume Over Time')
-        plt.xlabel('Date')
-        plt.ylabel('Number of Searches')
-        plt.xticks(rotation=45)
+    def _plot_search_volume(self, items):
+        df = pd.DataFrame(items)
+        plt.figure(figsize=(6, 4))
+        plt.bar([str(x) for x in df['date']], df['count'])
+        plt.title('Search Volume (approx)')
         plt.tight_layout()
         plt.show()
 
-    def _plot_response_times(self, endpoints):
-        endpoints_df = pd.DataFrame(endpoints)
-
-        plt.figure(figsize=(10, 6))
-        plt.bar(endpoints_df['endpoint'], endpoints_df['averageResponseTime'])
-        plt.title('Average Response Time by Endpoint')
-        plt.xlabel('Endpoint')
-        plt.ylabel('Response Time (ms)')
-        plt.xticks(rotation=45)
+    def _plot_response_times(self, series):
+        df = pd.DataFrame(series)
+        plt.figure(figsize=(8, 4))
+        plt.plot(df['date'], df['avg_response_time'])
+        plt.title('Avg Response Time By Day')
         plt.tight_layout()
         plt.show()
 
     def _plot_popular_queries(self, queries):
-        queries_df = pd.DataFrame(queries)
-
-        plt.figure(figsize=(12, 8))
-        plt.barh(queries_df['query'], queries_df['count'])
+        df = pd.DataFrame(queries)
+        plt.figure(figsize=(8, 6))
+        plt.barh(df['query_text'], df['frequency'])
         plt.title('Most Popular Search Queries')
-        plt.xlabel('Search Count')
         plt.tight_layout()
         plt.show()
 
@@ -860,8 +776,7 @@ report = dashboard.generate_report()
 print(f"Weekly Report:")
 print(f"Total Searches: {report['total_searches']:,}")
 print(f"Avg Response Time: {report['average_response_time']}ms")
-print(f"Success Rate: {report['success_rate']:.1%}")
-print(f"Cache Hit Rate: {report['cache_hit_rate']:.1%}")
+print()
 ```
 
 ## Analytics Best Practices

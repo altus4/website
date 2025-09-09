@@ -169,58 +169,15 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
 {
   "success": true,
   "data": {
-    "database": {
-      "id": "db_abc123def456",
-      "name": "Production Database",
-      "host": "db.example.com",
-      "port": 3306,
-      "database": "app_production",
-      "username": "altus4_user",
-      "status": "connected",
-      "ssl": {
-        "enabled": true,
-        "verified": true
-      },
-      "connectionOptions": {
-        "connectionLimit": 10,
-        "acquireTimeout": 60000,
-        "timeout": 60000
-      },
-      "createdAt": "2024-01-15T09:30:00.000Z",
-      "updatedAt": "2024-01-15T10:30:00.000Z",
-      "lastTested": "2024-01-15T10:30:00.000Z",
-      "connectionHealth": {
-        "status": "healthy",
-        "responseTime": 45,
-        "activeConnections": 2,
-        "maxConnections": 10,
-        "uptime": 86400,
-        "lastError": null
-      },
-      "searchCapabilities": {
-        "fullTextSupported": true,
-        "mysqlVersion": "8.0.32",
-        "tablesWithIndexes": 3,
-        "totalSearchableTables": 5,
-        "indexOptimizations": [
-          {
-            "table": "articles",
-            "recommendation": "Consider adding FULLTEXT index on content column"
-          }
-        ]
-      },
-      "usage": {
-        "totalSearches": 1250,
-        "totalResults": 45670,
-        "averageResponseTime": 234,
-        "lastSearchAt": "2024-01-15T10:25:00.000Z",
-        "topQueries": [
-          "optimization techniques",
-          "performance tuning",
-          "database indexing"
-        ]
-      }
-    }
+    "id": "db_abc123def456",
+    "name": "Production Database",
+    "host": "db.example.com",
+    "port": 3306,
+    "database": "app_production",
+    "username": "altus4_user",
+    "ssl": false,
+    "createdAt": "2024-01-15T09:30:00.000Z",
+    "updatedAt": "2024-01-15T10:30:00.000Z"
   }
 }
 ```
@@ -393,105 +350,41 @@ Authorization: Bearer <YOUR_JWT_TOKEN>
 ```json
 {
   "success": true,
-  "data": {
-    "schema": {
+  "data": [
+    {
       "database": "app_production",
-      "version": "8.0.32",
-      "characterSet": "utf8mb4",
-      "collation": "utf8mb4_unicode_ci",
-      "tables": [
+      "table": "articles",
+      "columns": [
         {
-          "name": "articles",
-          "engine": "InnoDB",
-          "rowCount": 15420,
-          "dataSize": "45.2MB",
-          "indexSize": "12.8MB",
-          "columns": [
-            {
-              "name": "id",
-              "type": "int",
-              "nullable": false,
-              "key": "PRI",
-              "default": null,
-              "extra": "auto_increment"
-            },
-            {
-              "name": "title",
-              "type": "varchar(255)",
-              "nullable": false,
-              "key": "",
-              "default": null,
-              "extra": ""
-            },
-            {
-              "name": "content",
-              "type": "longtext",
-              "nullable": true,
-              "key": "",
-              "default": null,
-              "extra": ""
-            },
-            {
-              "name": "created_at",
-              "type": "timestamp",
-              "nullable": false,
-              "key": "",
-              "default": "CURRENT_TIMESTAMP",
-              "extra": ""
-            }
-          ],
-          "indexes": [
-            {
-              "name": "PRIMARY",
-              "type": "BTREE",
-              "unique": true,
-              "columns": ["id"]
-            },
-            {
-              "name": "idx_title_content",
-              "type": "FULLTEXT",
-              "unique": false,
-              "columns": ["title", "content"]
-            },
-            {
-              "name": "idx_created_at",
-              "type": "BTREE",
-              "unique": false,
-              "columns": ["created_at"]
-            }
-          ],
-          "searchable": true,
-          "fullTextColumns": ["title", "content"],
-          "sampleData": [
-            {
-              "id": 1,
-              "title": "Getting Started with MySQL",
-              "content": "This is a comprehensive guide...",
-              "created_at": "2024-01-15T10:30:00.000Z"
-            }
-          ]
+          "name": "id",
+          "type": "INT",
+          "isFullTextIndexed": false,
+          "isSearchable": true
+        },
+        {
+          "name": "title",
+          "type": "VARCHAR(255)",
+          "isFullTextIndexed": true,
+          "isSearchable": true
+        },
+        {
+          "name": "content",
+          "type": "TEXT",
+          "isFullTextIndexed": true,
+          "isSearchable": true
         }
       ],
-      "searchOptimizations": {
-        "recommendedIndexes": [
-          {
-            "table": "posts",
-            "columns": ["title", "body"],
-            "type": "FULLTEXT",
-            "reason": "Improve search performance on posts table",
-            "estimatedImprovement": "65% faster searches"
-          }
-        ],
-        "existingFullTextTables": ["articles"],
-        "searchableColumns": 12,
-        "totalTables": 8
-      }
-    },
-    "meta": {
-      "discoveredAt": "2024-01-15T10:30:00.000Z",
-      "discoveryTime": 1250
+      "fullTextIndexes": [
+        {
+          "name": "idx_title_content",
+          "columns": ["title", "content"],
+          "type": "FULLTEXT"
+        }
+      ],
+      "estimatedRows": 15420,
+      "lastAnalyzed": "2024-01-15T10:30:00.000Z"
     }
-  }
+  ]
 }
 ```
 
