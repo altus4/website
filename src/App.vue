@@ -25,12 +25,12 @@
             <a
               href="/#architecture"
               class="text-gray-600 hover:text-gray-900 transition-colors"
-              >For Developers</a
+              >Architecture</a
             >
             <a
               href="/#status"
               class="text-gray-600 hover:text-gray-900 transition-colors"
-              >Why Altus</a
+              >Status</a
             >
             <a
               href="/docs/"
