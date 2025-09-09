@@ -4,12 +4,11 @@
       <div class="mx-auto max-w-4xl text-center">
         <!-- Main CTA -->
         <h2 class="text-3xl font-bold text-white sm:text-4xl mb-6">
-          Ready to Deploy Production-Grade AI Search?
+          Ship better search this week.
         </h2>
         <p class="text-xl text-blue-100 mb-8">
-          Join enterprises already using Altus 4 for AI-enhanced MySQL search.
-          Production-ready with comprehensive documentation, deployment guides,
-          and extensive testing.
+          Start with your current MySQL, add AI relevance when ready. No
+          migrations, no new cluster, clear docs under /docs.
         </p>
 
         <!-- CTA Buttons -->
@@ -21,12 +20,10 @@
             size="lg"
             class="min-w-48 bg-white text-blue-600 hover:bg-gray-50 hover:text-blue-800"
             as="a"
-            href="https://github.com/altus4/core"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/docs/setup/quickstart"
           >
-            <GitHubIcon class="mr-2 h-5 w-5" />
-            View on GitHub
+            <DownloadIcon class="mr-2 h-5 w-5" />
+            Quick Start Guide
           </Button>
           <Button
             variant="outline"
@@ -36,17 +33,19 @@
             href="/docs/"
           >
             <BookOpenIcon class="mr-2 h-5 w-5" />
-            Read Documentation
+            Documentation
           </Button>
           <Button
             variant="outline"
             size="lg"
             class="min-w-48 bg-white text-blue-600 hover:bg-gray-50 hover:text-blue-800"
             as="a"
-            href="/docs/setup/quickstart"
+            href="https://github.com/altus4/core"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <DownloadIcon class="mr-2 h-5 w-5" />
-            Quick Start Guide
+            <GitHubIcon class="mr-2 h-5 w-5" />
+            View on GitHub
           </Button>
         </div>
 
@@ -89,6 +88,13 @@
             >
               <MessageCircleIcon class="h-5 w-5" />
               <span>Discussions</span>
+            </a>
+            <a
+              href="/docs/development/contributing"
+              class="flex items-center space-x-2 text-blue-200 hover:text-white transition-colors"
+            >
+              <BookOpenIcon class="h-5 w-5" />
+              <span>Contributing Guide</span>
             </a>
             <a
               href="https://twitter.com/altus4dev"

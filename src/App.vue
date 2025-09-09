@@ -20,17 +20,17 @@
             <a
               href="/#features"
               class="text-gray-600 hover:text-gray-900 transition-colors"
-              >Features</a
+              >Benefits</a
             >
             <a
               href="/#architecture"
               class="text-gray-600 hover:text-gray-900 transition-colors"
-              >Architecture</a
+              >For Developers</a
             >
             <a
               href="/#status"
               class="text-gray-600 hover:text-gray-900 transition-colors"
-              >Status</a
+              >Why Altus</a
             >
             <a
               href="/docs/"
@@ -70,19 +70,19 @@
               href="/#features"
               class="text-gray-600 hover:text-gray-900 transition-colors"
               @click="mobileMenuOpen = false"
-              >Features</a
+              >Benefits</a
             >
             <a
               href="/#architecture"
               class="text-gray-600 hover:text-gray-900 transition-colors"
               @click="mobileMenuOpen = false"
-              >Architecture</a
+              >For Developers</a
             >
             <a
               href="/#status"
               class="text-gray-600 hover:text-gray-900 transition-colors"
               @click="mobileMenuOpen = false"
-              >Status</a
+              >Why Altus</a
             >
             <a
               href="/docs/"

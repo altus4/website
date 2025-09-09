@@ -14,7 +14,7 @@
           </a>
           <p class="text-gray-300 mb-6 max-w-md">
             Production-ready AI-enhanced MySQL search platform trusted by
-            enterprises. 87% test coverage, comprehensive security, and
+            enterprises. Comprehensive test suite, robust security, and
             zero-migration deployment.
           </p>
           <div class="flex space-x-4">
@@ -84,32 +84,34 @@
           <h4 class="text-lg font-semibold mb-4">Resources</h4>
           <div class="space-y-3">
             <a
-              href="https://github.com/altus4/core#readme"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/"
               class="block text-gray-300 hover:text-white transition-colors"
               >Documentation</a
             >
             <a
-              href="https://github.com/altus4/core/tree/main/docs/api"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/api/"
               class="block text-gray-300 hover:text-white transition-colors"
               >API Reference</a
             >
             <a
-              href="https://github.com/altus4/core/tree/main/docs/setup"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/setup/quickstart"
               class="block text-gray-300 hover:text-white transition-colors"
               >Quick Start</a
             >
             <a
-              href="https://github.com/altus4/core/tree/main/docs/examples"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/examples/"
               class="block text-gray-300 hover:text-white transition-colors"
               >Examples & Tutorials</a
+            >
+            <a
+              href="/docs/development/contributing"
+              class="block text-gray-300 hover:text-white transition-colors"
+              >Contributing</a
+            >
+            <a
+              href="/docs/development/"
+              class="block text-gray-300 hover:text-white transition-colors"
+              >Developer Guide</a
             >
           </div>
         </div>

@@ -4,11 +4,11 @@
       <!-- Section Header -->
       <div class="mx-auto max-w-3xl text-center mb-16">
         <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
-          Production-Ready Features
+          Benefits That Drive Adoption
         </h2>
         <p class="text-xl text-gray-600">
-          Fully implemented and tested features ready for enterprise deployment
-          with comprehensive security and monitoring.
+          Ship AI‑quality search without a costly migration. Keep MySQL, reduce
+          complexity, and deliver better results—fast.
         </p>
       </div>
 
@@ -25,17 +25,17 @@
               </div>
             </div>
             <h3 class="text-xl font-semibold text-gray-900">
-              AI-Enhanced Search
+              AI Relevance, Safely
             </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              Leverage OpenAI API integration to enhance search results with
-              semantic understanding and contextual relevance.
+              Semantic expansion and intent detection via an OpenAI proxy with
+              built‑in timeouts and robust error handling.
             </p>
             <div class="flex items-center text-sm text-blue-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
-              Semantic search capabilities
+              Semantic + intent recognition
             </div>
           </CardContent>
         </Card>
@@ -51,17 +51,17 @@
               </div>
             </div>
             <h3 class="text-xl font-semibold text-gray-900">
-              High Performance
+              Lower Total Cost
             </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              Optimized MySQL full-text search with Redis caching for
-              lightning-fast query responses and scalability.
+              Stay on MySQL—avoid running and tuning a separate search cluster.
+              Use caching to scale without complexity.
             </p>
             <div class="flex items-center text-sm text-green-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
-              Redis caching layer
+              Reduce infra and ops overhead
             </div>
           </CardContent>
         </Card>
@@ -82,12 +82,12 @@
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              Production-ready API key authentication system, bcrypt password
-              hashing, and secure API endpoints for B2B service integration.
+              API keys with scoped permissions, tiered rate limits, bcrypt, and
+              auditable logs for B2B service access.
             </p>
             <div class="flex items-center text-sm text-purple-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
-              API Key & bcrypt security
+              Scoped permissions & tiered limits
             </div>
           </CardContent>
         </Card>
@@ -103,17 +103,17 @@
               </div>
             </div>
             <h3 class="text-xl font-semibold text-gray-900">
-              MySQL Integration
+              No‑Migration Setup
             </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              Native MySQL full-text search capabilities with advanced indexing
-              and query optimization for complex searches.
+              Works with your existing schema and FULLTEXT. Deploy in hours—not
+              weeks.
             </p>
             <div class="flex items-center text-sm text-orange-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
-              Full-text indexing
+              Zero data migration
             </div>
           </CardContent>
         </Card>
@@ -129,17 +129,17 @@
               </div>
             </div>
             <h3 class="text-xl font-semibold text-gray-900">
-              Developer Friendly
+              Developer Experience
             </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              TypeScript-first approach with comprehensive testing, clear
-              documentation, and Express.js REST API.
+              REST API + TypeScript, one‑command Docker dev, and comprehensive
+              docs under /docs. Open source and self‑hosted.
             </p>
             <div class="flex items-center text-sm text-teal-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
-              TypeScript & REST API
+              Quick start at /docs/setup/quickstart
             </div>
           </CardContent>
         </Card>
@@ -155,18 +155,17 @@
               </div>
             </div>
             <h3 class="text-xl font-semibold text-gray-900">
-              Production Ready
+              Search Analytics
             </h3>
           </CardHeader>
           <CardContent>
             <p class="text-gray-600 mb-4">
-              Complete deployment documentation with Docker guides, production
-              setup, monitoring, and scaling strategies for enterprise
-              environments.
+              Track zero‑result queries and usage patterns to continuously
+              improve relevance.
             </p>
             <div class="flex items-center text-sm text-rose-600 font-medium">
               <CheckIcon class="h-4 w-4 mr-2" />
-              Comprehensive deployment guides
+              Built‑in analytics endpoints
             </div>
           </CardContent>
         </Card>

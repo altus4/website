@@ -58,7 +58,7 @@
                       Express.js REST API
                     </h4>
                     <p class="text-sm text-gray-600">
-                      JWT auth, rate limiting, validation
+                      API key auth, tiered rate limiting, validation
                     </p>
                   </div>
                 </div>
@@ -197,7 +197,7 @@
                   <div>
                     <p class="font-medium text-gray-900">Rate Limiting</p>
                     <p class="text-sm text-gray-600">
-                      API rate limiting and throttling
+                      Tier-based limits with Redis integration
                     </p>
                   </div>
                 </div>

@@ -9,22 +9,25 @@
           class="mb-8 inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700"
         >
           <span class="mr-2 flex h-2 w-2 rounded-full bg-green-400"></span>
-          Production Ready • 100% Test Pass Rate • 508 Tests
+          Drop‑in for MySQL • No migrations • Docker quickstart
         </div>
 
         <!-- Main Heading -->
         <h1
-          class="mb-6 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl"
+          class="mb-6 text-4xl font-bold tracking-tight text-gray-900 leading-tight sm:text-5xl lg:text-6xl sm:leading-[1.15]"
         >
-          AI-Enhanced Search Engine
-          <span class="block text-blue-600">for Modern Applications</span>
+          Turn MySQL into a
+          <span class="text-blue-600"> Smart Search Engine</span>
+          <span class="block text-lg sm:text-xl font-medium text-gray-700 mt-2"
+            >Ship in hours. No migrations.</span
+          >
         </h1>
 
         <!-- Subtitle -->
-        <p class="mb-8 text-xl text-gray-600 sm:text-2xl">
-          Production-ready AI-enhanced MySQL search platform that bridges
-          traditional database search with modern AI capabilities. No migrations
-          required - enhance your existing MySQL FULLTEXT indexes.
+        <p class="mb-8 text-base text-gray-600 sm:text-lg max-w-2xl mx-auto">
+          Ship relevant, semantic search without moving to Elasticsearch or
+          Algolia. Keep data in MySQL, cut complexity and cost, and get to value
+          in hours, not weeks.
         </p>
 
         <!-- CTA Buttons -->
@@ -35,12 +38,10 @@
             size="lg"
             class="min-w-40"
             as="a"
-            href="https://github.com/altus4/core"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/docs/setup/quickstart"
           >
-            <GitHubIcon class="mr-2 h-5 w-5" />
-            View on GitHub
+            <DownloadIcon class="mr-2 h-5 w-5" />
+            Quick Start
           </Button>
           <Button
             variant="outline"
@@ -51,6 +52,18 @@
           >
             <BookOpenIcon class="mr-2 h-5 w-5" />
             Documentation
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            class="min-w-40"
+            as="a"
+            href="https://github.com/altus4/core"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GitHubIcon class="mr-2 h-5 w-5" />
+            Star on GitHub
           </Button>
         </div>
 
@@ -116,7 +129,8 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import {
-  Github as GitHubIcon,
   BookOpen as BookOpenIcon,
+  Download as DownloadIcon,
+  Github as GitHubIcon,
 } from 'lucide-vue-next';
 </script>
