@@ -13,7 +13,7 @@ This guide will get you up and running with Altus 4 as quickly as possible. For 
 
 Before starting, ensure you have:
 
-- **Node.js 18+** installed
+- **Node.js 20+** installed
 - **MySQL 8.0+** running and accessible
 - **Redis 6.0+** running (optional but recommended)
 - **OpenAI API key** (optional, for AI features)
@@ -22,7 +22,7 @@ Before starting, ensure you have:
 
 ```bash
 # Clone the repository
-git clone https://github.com/altus4/core.git
+git clone <repository-url>
 cd altus4
 
 # Install dependencies
@@ -47,7 +47,7 @@ DB_HOST=localhost
 DB_PORT=3306
 DB_USERNAME=root
 DB_PASSWORD=
-DB_DATABASE=altus4
+DB_DATABASE=altus4_metadata
 
 # Authentication
 JWT_SECRET=your_very_long_and_secure_jwt_secret_key_here_at_least_32_characters
@@ -55,9 +55,22 @@ JWT_SECRET=your_very_long_and_secure_jwt_secret_key_here_at_least_32_characters
 # Redis Configuration (optional but recommended)
 REDIS_HOST=localhost
 REDIS_PORT=6379
+REDIS_PASSWORD=
 
 # OpenAI Integration (optional - for AI features)
 OPENAI_API_KEY=sk-your_openai_api_key_here
+OPENAI_MODEL=gpt-3.5-turbo
+OPENAI_TIMEOUT_MS=30000
+
+# CORS Configuration (optional - for frontend integration)
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
+
+# Rate Limiting (optional - customize rate limits)
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX_REQUESTS=100
+
+# Application Configuration (optional)
+PORT=3000
 ```
 
 ## Step 3: Database Setup
@@ -85,7 +98,7 @@ Create the MySQL database manually:
 mysql -u root -p
 
 -- Create database
-CREATE DATABASE altus4 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE altus4_metadata CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 ## Step 4: Run Migrations
@@ -139,7 +152,7 @@ Expected response:
 {
   "status": "healthy",
   "timestamp": "2024-01-15T10:30:00.000Z",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "uptime": 1.234
 }
 ```
@@ -186,7 +199,7 @@ curl -X POST http://localhost:3000/api/v1/management/setup \
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/databases \
-  -H "Authorization: Bearer YOUR_API_KEY_HERE" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "My Test Database",
@@ -244,7 +257,7 @@ You now have Altus 4 running locally! Here's what you can do next:
 sudo systemctl status mysql
 
 # Test connection manually
-mysql -h localhost -u altus4_user -p altus4_meta
+mysql -h localhost -u altus4_user -p altus4_metadata
 ```
 
 **Redis Connection Issues**
@@ -272,7 +285,7 @@ lsof -ti:3000 | xargs kill -9
 
 ```bash
 # Check database exists and user has permissions
-mysql -u altus4_user -p -e "SHOW DATABASES;"
+mysql -u altus4_user -p altus4_metadata -e "SHOW DATABASES;"
 
 # Reset migrations if needed
 npm run migrate:down
@@ -283,8 +296,8 @@ npm run migrate:up
 
 - **[Complete Setup Guide](./index.md)** - Detailed installation instructions
 - **[Development Guide](../development/)** - Development environment setup
-- **[GitHub Issues](https://github.com/altus4/core/issues)** - Report bugs or get help
-- **[GitHub Discussions](https://github.com/altus4/core/discussions)** - Community support
+- **[GitHub Issues](https://github.com/anthropics/claude-code/issues)** - Report bugs or get help
+- **[GitHub Discussions](https://github.com/anthropics/claude-code/discussions)** - Community support
 
 ---
 

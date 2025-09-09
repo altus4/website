@@ -24,10 +24,10 @@ Altus 4 is an advanced AI-powered MySQL full-text search engine that enhances tr
 Get Altus 4 running locally in under 5 minutes:
 
 ```bash
-# Prerequisites: Node.js 18+, MySQL 8.0+, Redis 6.0+
+# Prerequisites: Node.js 20+, MySQL 8.0+, Redis 6.0+
 
 # Clone and install
-git clone https://github.com/altus4/core.git
+git clone <repository-url>
 cd altus4
 npm install
 
@@ -91,8 +91,8 @@ Need help with Altus 4?
 
 - **Documentation**: You're in the right place!
 - **Examples**: Check out the [examples section](examples/)
-- **Issues**: [GitHub Issues](https://github.com/altus4/core/issues)
-- **Community**: [GitHub Discussions](https://github.com/altus4/core/discussions)
+- **Issues**: [GitHub Issues](https://github.com/anthropics/claude-code/issues)
+- **Community**: [GitHub Discussions](https://github.com/anthropics/claude-code/discussions)
 
 ---
 

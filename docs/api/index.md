@@ -11,17 +11,25 @@ Altus 4 provides a RESTful API for managing database connections, executing sear
 
 ## Authentication
 
-All API endpoints require API key authentication for B2B service integration.
+Altus 4 uses **dual authentication** depending on the endpoint type:
+
+- **JWT Tokens**: For user management, account operations, API key management, database management, and analytics
+- **API Keys**: For search operations and B2B service integration
 
 ### Authentication Flow
 
 1. **Register** a new user account
-2. **Create** your first API key using the management endpoint
-3. **Include API key** in `Authorization` header for all subsequent requests
+2. **Login** to receive a JWT token
+3. **Create** your first API key using the JWT token
+4. **Use JWT tokens** for account management (profile, API key management)
+5. **Use API keys** for search operations and analytics
 
 ```bash
-# Include API key in all requests
-Authorization: Bearer <your-api-key>
+# Use JWT token for account management
+Authorization: Bearer <jwt-token>
+
+# Use API key for search operations
+Authorization: Bearer <api-key>
 ```
 
 **API Key Format**: `altus4_sk_live_abc123def456...` (live) or `altus4_sk_test_xyz789abc123...` (test)
@@ -40,12 +48,12 @@ Authorization: Bearer <your-api-key>
 | `DELETE` | `/api/v1/auth/account`                | Deactivate account      | JWT Token     | Tested                    |
 | `POST`   | `/api/v1/management/setup`            | Create first API key    | JWT Token     | Tested                    |
 | `GET`    | `/api/v1/management/migration-status` | Check migration status  | JWT Token     | Tested                    |
-| `POST`   | `/api/v1/keys`                        | Create new API key      | API Key       | Requires admin permission |
-| `GET`    | `/api/v1/keys`                        | List API keys           | API Key       | Tested                    |
-| `PUT`    | `/api/v1/keys/:keyId`                 | Update API key          | API Key       | Requires admin permission |
-| `DELETE` | `/api/v1/keys/:keyId`                 | Revoke API key          | API Key       | Requires admin permission |
-| `GET`    | `/api/v1/keys/:keyId/usage`           | Get API key usage stats | API Key       | Not tested                |
-| `POST`   | `/api/v1/keys/:keyId/regenerate`      | Regenerate API key      | API Key       | Requires admin permission |
+| `POST`   | `/api/v1/keys`                        | Create new API key      | JWT Token     | Requires admin permission |
+| `GET`    | `/api/v1/keys`                        | List API keys           | JWT Token     | Tested                    |
+| `PUT`    | `/api/v1/keys/:keyId`                 | Update API key          | JWT Token     | Requires admin permission |
+| `DELETE` | `/api/v1/keys/:keyId`                 | Revoke API key          | JWT Token     | Requires admin permission |
+| `GET`    | `/api/v1/keys/:keyId/usage`           | Get API key usage stats | JWT Token     | Not tested                |
+| `POST`   | `/api/v1/keys/:keyId/regenerate`      | Regenerate API key      | JWT Token     | Requires admin permission |
 
 [**→ Complete API Key Authentication Guide**](./authentication.md)
 
@@ -78,7 +86,7 @@ Execute searches across connected databases with AI enhancements.
 | ------ | ---------------------------- | ------------------------- | ------------------- | ---------- |
 | `POST` | `/api/v1/search`             | Execute search            | API Key             | Tested     |
 | `GET`  | `/api/v1/search/suggestions` | Get search suggestions    | API Key             | Tested     |
-| `POST` | `/api/v1/search/analyze`     | Analyze query performance | API Key (analytics) | Not tested |
+| `POST` | `/api/v1/search/analyze`     | Analyze query performance | API Key (analytics) | Tested     |
 | `GET`  | `/api/v1/search/history`     | Get search history        | API Key             | Tested     |
 | `GET`  | `/api/v1/search/trends`      | Get user search trends    | API Key (analytics) | Tested     |
 
@@ -159,7 +167,7 @@ interface ApiResponse<T> {
   "meta": {
     "timestamp": "2025-09-06T16:19:56.197Z",
     "requestId": "1b53d9d6-ca2e-4b99-959b-8459820475b4",
-    "version": "0.1.0"
+    "version": "0.3.0"
   }
 }
 ```
@@ -185,7 +193,7 @@ interface ApiResponse<T> {
   "meta": {
     "timestamp": "2025-09-06T16:20:01.403Z",
     "requestId": "fb62455b-8ccd-4cbb-898a-606ba936e25c",
-    "version": "0.2.1"
+    "version": "0.3.0"
   }
 }
 ```
@@ -206,7 +214,7 @@ interface ApiResponse<T> {
   "meta": {
     "timestamp": "2024-01-15T10:30:00.000Z",
     "requestId": "req_abc123",
-    "version": "0.1.0"
+    "version": "0.3.0"
   }
 }
 ```
@@ -467,4 +475,4 @@ The Altus4 Core API is now fully functional and ready for production deployment.
 
 ---
 
-**Need help?** Check out the [examples section](../examples/) for practical implementations or [report issues](https://github.com/altus4/core/issues) if you find any problems.
+**Need help?** Check out the [examples section](../examples/) for practical implementations or [report issues](https://github.com/anthropics/claude-code/issues) if you find any problems.

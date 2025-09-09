@@ -11,8 +11,8 @@ This guide walks you through setting up Altus 4 for local development on your ma
 
 ### System Requirements
 
-- **Node.js**: Version 18 or higher
-- **npm**: Version 9 or higher (comes with Node.js)
+- **Node.js**: Version 20 or higher
+- **npm**: Version 10 or higher (comes with Node.js)
 - **Git**: For version control
 - **MySQL**: Version 8.0 or higher
 - **Redis**: Version 6.0 or higher (optional but recommended)
