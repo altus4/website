@@ -27,7 +27,8 @@
     "docs:sync:force": "bash scripts/sync-docs.sh 'docs: manual sync'"
   },
   "dependencies": {
-    "@vueuse/core": "^13.8.0",
+    "@vueuse/core": "^13.9.0",
+    "pinia": "^2.1.10",
     "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

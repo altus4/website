@@ -1,23 +1,48 @@
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 
-// API Response Interface
+// Window type extension for runtime environment variables
+declare global {
+  interface Window {
+    VITE_API_BASE_URL?: string;
+  }
+}
+
+// Database types
+export type DatabaseType = 'postgresql' | 'mysql' | 'mongodb' | 'sqlite';
+export type UserRole = 'admin' | 'user';
+export type Environment = 'test' | 'live';
+export type RateLimitTier = 'free' | 'pro' | 'enterprise';
+export type SearchMode = 'natural' | 'boolean' | 'semantic';
+export type SuggestionType = 'spelling' | 'semantic' | 'popular';
+export type OptimizationType = 'index' | 'query' | 'schema';
+export type Impact = 'low' | 'medium' | 'high';
+export type Period = 'day' | 'week' | 'month' | '3months' | '6months' | 'year';
+export type HealthStatus = 'healthy' | 'degraded' | 'down';
+export type Timeframe = '1h' | '24h' | '7d' | '30d';
+
+// API Response Interface - matches server-side ApiResponse
 export interface ApiResponse<T = unknown> {
   success: boolean;
-  data?: T;
+  data?: { [key: string]: T } | T;
   error?: {
     code: string;
     message: string;
     details?: unknown;
   };
-  meta?: unknown;
+  meta?: {
+    timestamp: Date;
+    requestId: string;
+    version: string;
+    apiKeyTier?: string;
+  };
 }
 
-// User Interface
+// User Interface - matches server-side User type
 export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'admin' | 'user';
+  role: UserRole;
   connectedDatabases: string[];
   createdAt: Date;
   lastActive: Date;
@@ -33,7 +58,7 @@ export interface RegisterRequest {
   name: string;
   email: string;
   password: string;
-  role?: 'admin' | 'user';
+  role?: UserRole;
 }
 
 export interface ForgotPasswordRequest {
@@ -43,7 +68,7 @@ export interface ForgotPasswordRequest {
 export interface AuthResponse {
   user: User;
   token: string;
-  expires_in: number;
+  expires_in?: number;
 }
 
 // API Key Interfaces
@@ -51,9 +76,9 @@ export interface ApiKey {
   id: string;
   name: string;
   keyPrefix: string;
-  environment: 'test' | 'live';
+  environment: Environment;
   permissions: string[];
-  rateLimitTier: 'free' | 'pro' | 'enterprise';
+  rateLimitTier: RateLimitTier;
   expiresAt?: string;
   lastUsed?: string;
   usageCount: number;
@@ -64,9 +89,9 @@ export interface ApiKey {
 
 export interface CreateApiKeyRequest {
   name: string;
-  environment: 'test' | 'live';
+  environment: Environment;
   permissions?: string[];
-  rateLimitTier?: 'free' | 'pro' | 'enterprise';
+  rateLimitTier?: RateLimitTier;
   expiresAt?: string;
 }
 
@@ -76,16 +101,106 @@ export interface CreateApiKeyResponse {
   warning: string;
 }
 
-// Database Connection Interface
+// Database Connection Interface - matches server-side DatabaseConnectionResponse
 export interface DatabaseConnection {
   id: string;
   name: string;
-  type: 'postgresql' | 'mysql' | 'mongodb' | 'sqlite';
   host: string;
   port: number;
   database: string;
-  status: 'connected' | 'disconnected' | 'error';
-  createdAt: string;
+  username: string;
+  ssl?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  isActive: boolean;
+}
+
+// Search-related interfaces
+export interface SearchRequest {
+  query: string;
+  databases?: string[];
+  tables?: string[];
+  columns?: string[];
+  filters?: Record<string, unknown>;
+  searchMode?: SearchMode;
+  limit?: number;
+  offset?: number;
+  includeAnalytics?: boolean;
+  userId: string;
+}
+
+export interface SearchResult {
+  id: string;
+  table: string;
+  database: string;
+  relevanceScore: number;
+  matchedColumns: string[];
+  data: Record<string, unknown>;
+  snippet?: string;
+  categories?: string[];
+}
+
+export interface SearchResponse {
+  results: SearchResult[];
+  categories: Category[];
+  suggestions: QuerySuggestion[];
+  trends?: TrendInsight[];
+  queryOptimization?: OptimizationSuggestion[];
+  totalCount: number;
+  executionTime: number;
+  page: number;
+  limit: number;
+}
+
+export interface Category {
+  name: string;
+  count: number;
+  confidence: number;
+}
+
+export interface QuerySuggestion {
+  text: string;
+  score: number;
+  type: SuggestionType;
+}
+
+export interface TrendInsight {
+  period: Period;
+  topQueries: string[];
+  queryVolume: number;
+  avgResponseTime: number;
+  popularCategories: string[];
+}
+
+export interface OptimizationSuggestion {
+  type: OptimizationType;
+  description: string;
+  impact: Impact;
+  sqlSuggestion?: string;
+}
+
+export interface TableSchema {
+  database: string;
+  table: string;
+  columns: ColumnInfo[];
+  fullTextIndexes: FullTextIndex[];
+  estimatedRows: number;
+  lastAnalyzed: Date;
+}
+
+export interface ColumnInfo {
+  name: string;
+  type: string;
+  isFullTextIndexed: boolean;
+  isSearchable: boolean;
+  dataPreview?: string[];
+}
+
+export interface FullTextIndex {
+  name: string;
+  columns: string[];
+  type: 'FULLTEXT';
+  cardinality?: number;
 }
 
 class ApiClient {
@@ -94,21 +209,32 @@ class ApiClient {
   constructor(baseURL?: string) {
     const apiBaseURL =
       baseURL ||
-      import.meta.env.VITE_API_BASE_URL ||
+      (typeof window !== 'undefined' && window.VITE_API_BASE_URL) ||
       'http://localhost:3000/api/v1';
 
     this.client = axios.create({
       baseURL: apiBaseURL,
       headers: {
         'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
-      timeout: 10000,
+      timeout: 30000,
+      // Enable credentials for CORS requests (cookies, auth headers)
+      withCredentials: false, // Set to true if your API uses cookies
     });
 
-    // Request interceptor to add auth token
+    // Request interceptor to add auth token (JWT or API key)
     this.client.interceptors.request.use(
       config => {
-        const token = localStorage.getItem('auth_token');
+        // First try API key (primary authentication method)
+        const apiKey = this.getStoredItem('api_key');
+        if (apiKey) {
+          config.headers.Authorization = `Bearer ${apiKey}`;
+          return config;
+        }
+
+        // Fallback to JWT token (for initial setup only)
+        const token = this.getStoredItem('auth_token');
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -121,8 +247,26 @@ class ApiClient {
     this.client.interceptors.response.use(
       (response: AxiosResponse) => response,
       error => {
-        // Handle network errors or server errors
-        const apiError = {
+        // Handle CORS errors specifically
+        if (error.code === 'ERR_NETWORK' || !error.response) {
+          const apiError: ApiResponse = {
+            success: false,
+            error: {
+              code: 'NETWORK_ERROR',
+              message:
+                'Network error - this might be a CORS issue. Check if the API server is running and CORS is properly configured.',
+              details: {
+                originalError: error.message,
+                suggestion:
+                  'Ensure your API server allows requests from this origin and has CORS enabled.',
+              },
+            },
+          };
+          return Promise.reject(apiError);
+        }
+
+        // Handle other errors
+        const apiError: ApiResponse = {
           success: false,
           error: {
             code:
@@ -135,6 +279,7 @@ class ApiClient {
               'Request failed',
             details: error.response?.data?.error?.details,
           },
+          meta: error.response?.data?.meta,
         };
         return Promise.reject(apiError);
       }
@@ -146,22 +291,42 @@ class ApiClient {
     options: {
       method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
       data?: unknown;
+      params?: Record<string, unknown>;
     } = {}
   ): Promise<ApiResponse<T>> {
     try {
-      const response = await this.client.request<T>({
+      const response = await this.client.request<ApiResponse<T>>({
         url: endpoint,
         method: options.method || 'GET',
         data: options.data,
+        params: options.params,
       });
 
-      return {
-        success: true,
-        data: response.data,
-      };
+      // Server returns the full ApiResponse structure
+      return response.data;
     } catch (error: unknown) {
       // Error is already formatted by the response interceptor
       return error as ApiResponse<T>;
+    }
+  }
+
+  // Utility method for storage that works in both Node.js and browser
+  private getStoredItem(key: string): string | null {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem(key);
+    }
+    return null;
+  }
+
+  private setStoredItem(key: string, value: string): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(key, value);
+    }
+  }
+
+  private removeStoredItem(key: string): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem(key);
     }
   }
 
@@ -244,7 +409,7 @@ class ApiClient {
 
   async addDatabaseConnection(connectionData: {
     name: string;
-    type: 'postgresql' | 'mysql' | 'mongodb' | 'sqlite';
+    type: DatabaseType;
     host: string;
     port: number;
     database: string;
@@ -285,7 +450,7 @@ class ApiClient {
 
   async getSystemHealth(): Promise<
     ApiResponse<{
-      status: 'healthy' | 'degraded' | 'down';
+      status: HealthStatus;
       version: string;
       uptime: number;
       database: { status: string; connections: number };
@@ -296,7 +461,7 @@ class ApiClient {
   }
 
   // Analytics
-  async getAnalytics(timeframe: '1h' | '24h' | '7d' | '30d' = '24h'): Promise<
+  async getAnalytics(timeframe: Timeframe = '24h'): Promise<
     ApiResponse<{
       requests: { total: number; successful: number; failed: number };
       responseTime: { average: number; p95: number; p99: number };
@@ -308,25 +473,50 @@ class ApiClient {
 
   // Utilities
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('auth_token');
-    const expiresAt = localStorage.getItem('token_expires_at');
+    const token = this.getStoredItem('auth_token');
+    const expiresAt = this.getStoredItem('token_expires_at');
 
     if (!token || !expiresAt) {
       return false;
     }
 
-    return Date.now() < parseInt(expiresAt);
+    return Date.now() < parseInt(expiresAt, 10);
   }
 
-  setToken(token: string, expiresIn: number): void {
-    localStorage.setItem('auth_token', token);
+  setToken(token: string, expiresIn?: number | undefined): void {
+    if (expiresIn === undefined) {
+      expiresIn = 3600; // Default to 1 hour if not provided
+    }
+    this.setStoredItem('auth_token', token);
     const expiresAt = Date.now() + expiresIn * 1000;
-    localStorage.setItem('token_expires_at', expiresAt.toString());
+    this.setStoredItem('token_expires_at', expiresAt.toString());
   }
 
   clearToken(): void {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('token_expires_at');
+    this.removeStoredItem('auth_token');
+    this.removeStoredItem('token_expires_at');
+  }
+
+  // CORS debugging utility
+  async testConnection(): Promise<{
+    success: boolean;
+    baseURL: string;
+    error?: string;
+  }> {
+    try {
+      const response = await this.getSystemHealth();
+      return {
+        success: response.success,
+        baseURL: this.client.defaults.baseURL || 'unknown',
+      };
+    } catch (error: unknown) {
+      const apiError = error as ApiResponse;
+      return {
+        success: false,
+        baseURL: this.client.defaults.baseURL || 'unknown',
+        error: apiError.error?.message || 'Connection failed',
+      };
+    }
   }
 }
 

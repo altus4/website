@@ -16,7 +16,7 @@
         <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center space-x-1">
           <!-- Main Navigation Links -->
-          <div class="flex items-center space-x-2 mr-6">
+          <div class="flex items-center space-x-2 mr-2">
             <Button variant="ghost" as="a" href="/#features"> Benefits </Button>
             <Button variant="ghost" as="a" href="/#architecture">
               Architecture
@@ -29,7 +29,7 @@
 
           <!-- Secondary Actions -->
           <div
-            class="flex items-center space-x-3 border-l border-gray-200 pl-6"
+            class="flex items-center space-x-3 border-l border-gray-200 pl-3"
           >
             <Button
               variant="ghost"
@@ -51,10 +51,6 @@
                   <LayoutDashboardIcon class="mr-2 h-4 w-4" />
                   Dashboard
                 </Button>
-                <div class="flex items-center space-x-2">
-                  <UserIcon class="h-4 w-4 text-gray-600" />
-                  <span class="text-sm text-gray-600">{{ user?.name }}</span>
-                </div>
                 <Button variant="ghost" @click="$emit('logout')">
                   <LogOutIcon class="mr-2 h-4 w-4" />
                   Logout

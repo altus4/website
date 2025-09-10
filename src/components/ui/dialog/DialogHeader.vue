@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue';
-import type { AlertVariants } from '.';
 import { cn } from '@/lib/utils';
-import { alertVariants } from '.';
 
 const props = defineProps<{
   class?: HTMLAttributes['class'];
-  variant?: AlertVariants['variant'];
 }>();
 </script>
 
 <template>
-  <div :class="cn(alertVariants({ variant }), props.class)" role="alert">
+  <div
+    :class="cn('flex flex-col gap-y-1.5 text-center sm:text-left', props.class)"
+  >
     <slot />
   </div>
 </template>
