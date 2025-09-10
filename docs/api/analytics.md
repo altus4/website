@@ -51,7 +51,7 @@ Get a comprehensive dashboard view of your search analytics.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
