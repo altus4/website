@@ -15,34 +15,35 @@ Altus 4 uses a dual authentication system optimized for different use cases: JWT
 
 **JWT Authentication**
 
-- **Use Cases**: User management, profile operations, initial API key setup
-- **Endpoints**: `/api/v1/auth/*`, `/api/v1/management/setup`, `/api/v1/management/migration-status`
-- **Ideal For**: Web applications, user-facing operations, bootstrapping
+- **Use Cases**: User management, profile operations, database connections, analytics dashboards, API key management
+- **Endpoints**: `/api/v1/auth/*`, `/api/v1/databases/*`, `/api/v1/analytics/*`, `/api/v1/keys/*`, `/api/v1/management/*`
+- **Ideal For**: Web applications, user dashboards, administrative operations
 
 **API Key Authentication**
 
-- **Use Cases**: Search operations, database operations, analytics, AI services, API key management
-- **Endpoints**: `/api/v1/search/*`, `/api/v1/databases/*`, `/api/v1/analytics/*`, `/api/v1/keys/*`
-- **Ideal For**: B2B integrations, automated services, microservices
+- **Use Cases**: Search operations, query suggestions, search trends
+- **Endpoints**: `/api/v1/search/*`
+- **Ideal For**: B2B integrations, service-to-service communication, external applications
 
 ### Authentication Flow
 
 1. **Register** a new user account with email/password
 2. **Login** to receive a JWT token
 3. **Create initial API key** using JWT token via `/api/v1/management/setup`
-4. **Use API keys** for all service operations (search, database, analytics, AI)
-5. **Use JWT tokens** only for user management and additional API key creation
+4. **Use JWT tokens** for dashboard operations (database management, analytics, API key management)
+5. **Use API keys** for search operations and external service integrations
 
 ```mermaid
 graph TD
     A[User Registration] --> B[Login with Password]
     B --> C[Receive JWT Token]
     C --> D[Create Initial API Key<br/>via /management/setup]
-    D --> E[Use API Key for Service Operations]
-    E --> F{Operation Type}
-    F -->|Search/DB/Analytics/AI| G[API Key Auth Required]
-    F -->|User Management| H[JWT Auth Required]
-    F -->|More API Keys| I[API Key Auth + Admin Permission]
+    D --> E{Operation Type}
+    E -->|Search Operations| F[API Key Auth Required]
+    E -->|Database Management| G[JWT Auth Required]
+    E -->|Analytics Dashboard| H[JWT Auth Required]
+    E -->|API Key Management| I[JWT Auth Required]
+    E -->|User Profile| J[JWT Auth Required]
 ```
 
 ### API Key Format
@@ -224,18 +225,18 @@ curl -X POST http://localhost:3000/api/v1/management/setup \
 
 ## API Key Management
 
-Once you have your initial API key, use it (with admin permissions) to manage additional keys and your account.
+Once you have your initial API key, use your JWT token to manage additional keys and your account.
 
 ### Create New API Key
 
-Create additional API keys for different environments or use cases. Requires admin permission on your current API key.
+Create additional API keys for different environments or use cases. Requires JWT authentication.
 
 **Endpoint**: `POST /api/v1/keys`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 Content-Type: application/json
 ```
 
@@ -276,14 +277,14 @@ Content-Type: application/json
 
 ### List API Keys
 
-Retrieve all API keys associated with your account. Requires admin permission on your current API key.
+Retrieve all API keys associated with your account. Requires JWT authentication.
 
 **Endpoint**: `GET /api/v1/keys`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -315,14 +316,14 @@ Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
 
 ### Update API Key
 
-Update an existing API key's name, tier, or permissions. Requires admin permission on your current API key.
+Update an existing API key's name, tier, or permissions. Requires JWT authentication.
 
 **Endpoint**: `PUT /api/v1/keys/:keyId`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 Content-Type: application/json
 ```
 
@@ -339,14 +340,14 @@ Content-Type: application/json
 
 ### Revoke API Key
 
-Permanently revoke an API key. This action cannot be undone. Requires admin permission on your current API key.
+Permanently revoke an API key. This action cannot be undone. Requires JWT authentication.
 
 **Endpoint**: `DELETE /api/v1/keys/:keyId`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -363,14 +364,14 @@ Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
 
 ### Regenerate API Key
 
-Generate a new secret for an existing API key while maintaining the same ID and settings. Requires admin permission on your current API key.
+Generate a new secret for an existing API key while maintaining the same ID and settings. Requires JWT authentication.
 
 **Endpoint**: `POST /api/v1/keys/:keyId/regenerate`
 
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY_WITH_ADMIN_PERMISSION>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -501,27 +502,26 @@ data = response.json()
 
 These endpoints require a JWT token from login:
 
-| Endpoint                              | Method  | Purpose                  |
-| ------------------------------------- | ------- | ------------------------ |
-| `/api/v1/auth/register`               | POST    | User registration        |
-| `/api/v1/auth/login`                  | POST    | User login               |
-| `/api/v1/auth/profile`                | GET/PUT | User profile management  |
-| `/api/v1/auth/change-password`        | POST    | Password changes         |
-| `/api/v1/auth/refresh`                | POST    | JWT token refresh        |
-| `/api/v1/management/setup`            | POST    | Initial API key creation |
-| `/api/v1/management/migration-status` | GET     | Check migration status   |
+| Endpoint                              | Method              | Purpose                  |
+| ------------------------------------- | ------------------- | ------------------------ |
+| `/api/v1/auth/register`               | POST                | User registration        |
+| `/api/v1/auth/login`                  | POST                | User login               |
+| `/api/v1/auth/profile`                | GET/PUT             | User profile management  |
+| `/api/v1/auth/change-password`        | POST                | Password changes         |
+| `/api/v1/auth/refresh`                | POST                | JWT token refresh        |
+| `/api/v1/management/setup`            | POST                | Initial API key creation |
+| `/api/v1/management/migration-status` | GET                 | Check migration status   |
+| `/api/v1/databases/*`                 | GET/POST/PUT/DELETE | Database connections     |
+| `/api/v1/analytics/*`                 | GET                 | Analytics and dashboards |
+| `/api/v1/keys/*`                      | GET/POST/PUT/DELETE | API key management       |
 
 ### API Key Authentication Required
 
 These endpoints require an API key with appropriate permissions:
 
-| Endpoint                     | Method              | Permissions | Purpose                |
-| ---------------------------- | ------------------- | ----------- | ---------------------- |
-| `/api/v1/search/*`           | POST/GET            | `search`    | Search operations      |
-| `/api/v1/databases/*`        | GET/POST/PUT/DELETE | `admin`     | Database connections   |
-| `/api/v1/analytics/*`        | GET                 | `analytics` | Analytics and insights |
-| `/api/v1/analytics/insights` | GET                 | `analytics` | AI-powered insights    |
-| `/api/v1/keys/*`             | GET/POST/PUT/DELETE | `admin`     | API key management     |
+| Endpoint           | Method   | Permissions | Purpose           |
+| ------------------ | -------- | ----------- | ----------------- |
+| `/api/v1/search/*` | POST/GET | `search`    | Search operations |
 
 ### Public Endpoints
 
@@ -701,6 +701,29 @@ curl -X POST http://localhost:3000/api/v1/search \
     "databases": [],
     "limit": 5
   }'
+```
+
+4. **Use JWT for database management**:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/databases \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "name": "Test Database",
+    "host": "localhost",
+    "port": 3306,
+    "database": "test_db",
+    "username": "user",
+    "password": "password"
+  }'
+```
+
+5. **Use JWT for analytics**:
+
+```bash
+curl -X GET "http://localhost:3000/api/v1/analytics/dashboard?period=week" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 ### Postman Collection
