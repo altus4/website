@@ -19,13 +19,11 @@
               <div class="relative flex space-x-3">
                 <div>
                   <span
-                    class="h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
-                    :class="activity.iconBg"
+                    class="h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white bg-muted"
                   >
                     <component
                       :is="activity.icon"
-                      class="h-5 w-5"
-                      :class="activity.iconColor"
+                      class="h-5 w-5 text-muted-foreground"
                     />
                   </span>
                 </div>
@@ -43,7 +41,7 @@
                     </p>
                   </div>
                   <div
-                    class="text-right text-sm whitespace-nowrap text-gray-500"
+                    class="text-right text-xs whitespace-nowrap text-gray-500"
                   >
                     <time :datetime="activity.datetime">{{
                       activity.date
@@ -76,8 +74,6 @@ const activities = [
     date: '2 hours ago',
     datetime: '2023-01-23T15:56',
     icon: CheckCircleIcon,
-    iconColor: 'text-green-500',
-    iconBg: 'bg-green-100',
   },
   {
     id: 2,
@@ -87,8 +83,6 @@ const activities = [
     date: '4 hours ago',
     datetime: '2023-01-23T13:34',
     icon: GitBranchIcon,
-    iconColor: 'text-blue-500',
-    iconBg: 'bg-blue-100',
   },
   {
     id: 3,
@@ -98,8 +92,6 @@ const activities = [
     date: '1 day ago',
     datetime: '2023-01-22T12:32',
     icon: MessageSquareIcon,
-    iconColor: 'text-purple-500',
-    iconBg: 'bg-purple-100',
   },
   {
     id: 4,
@@ -109,8 +101,6 @@ const activities = [
     date: '2 days ago',
     datetime: '2023-01-21T09:15',
     icon: UserPlusIcon,
-    iconColor: 'text-orange-500',
-    iconBg: 'bg-orange-100',
   },
 ];
 </script>

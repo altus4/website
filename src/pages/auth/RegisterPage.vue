@@ -80,13 +80,12 @@
 
           <div class="flex items-start">
             <div class="flex items-center h-5">
-              <input
+              <Checkbox
                 id="terms"
                 v-model="form.agreeToTerms"
                 name="terms"
                 type="checkbox"
                 required
-                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
             </div>
             <div class="ml-3 text-sm">
@@ -170,6 +169,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert } from '@/components/ui/alert';
 import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import AltusLogo from '@/components/ui/AltusLogo.vue';
 import { Loader2, Github } from 'lucide-vue-next';
 

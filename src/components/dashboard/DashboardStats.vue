@@ -4,9 +4,9 @@
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <div
-            class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center"
+            class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center"
           >
-            <ActivityIcon class="w-5 h-5 text-blue-600" />
+            <ActivityIcon class="w-5 h-5 text-primary-foreground" />
           </div>
         </div>
         <div class="ml-4">
@@ -20,9 +20,9 @@
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <div
-            class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center"
+            class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center"
           >
-            <CheckCircleIcon class="w-5 h-5 text-green-600" />
+            <CheckCircleIcon class="w-5 h-5 text-primary-foreground" />
           </div>
         </div>
         <div class="ml-4">
@@ -36,14 +36,16 @@
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <div
-            class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center"
+            class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center"
           >
-            <ClockIcon class="w-5 h-5 text-yellow-600" />
+            <ClockIcon class="w-5 h-5 text-primary-foreground" />
           </div>
         </div>
         <div class="ml-4">
           <p class="text-sm font-medium text-gray-600">Top Query</p>
-          <p class="text-2xl font-semibold text-gray-900">{{ topQuery }}</p>
+          <Badge variant="secondary">
+            {{ topQuery }}
+          </Badge>
         </div>
       </div>
     </div>
@@ -52,9 +54,9 @@
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <div
-            class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center"
+            class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center"
           >
-            <UsersIcon class="w-5 h-5 text-purple-600" />
+            <UsersIcon class="w-5 h-5 text-primary-foreground" />
           </div>
         </div>
         <div class="ml-4">
@@ -67,6 +69,7 @@
 </template>
 
 <script setup lang="ts">
+import { Badge } from '@/components/ui/badge';
 import { ref, onMounted, computed } from 'vue';
 import {
   Activity as ActivityIcon,
