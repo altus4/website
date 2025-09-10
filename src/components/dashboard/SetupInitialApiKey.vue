@@ -1,5 +1,5 @@
 <template>
-  <Dialog>
+  <Dialog v-model:open="showInitDialog">
     <template v-if="!hasInitialKey">
       <DialogTrigger as-child>
         <Button size="sm">
@@ -35,14 +35,16 @@
             Secret Key
           </label>
           <div class="relative">
-            <code class="text-sm text-red-600 font-mono break-all">{{
-              createdApiKey.secretKey
-            }}</code>
+            <div class="p-3 pr-16 border border-gray-300 rounded-lg bg-gray-50">
+              <code class="text-sm text-red-600 font-mono break-all">{{
+                createdApiKey?.secretKey
+              }}</code>
+            </div>
             <Button
               variant="ghost"
               size="sm"
-              class="absolute top-0 right-0"
-              @click="copyToClipboard(createdApiKey.secretKey || '')"
+              class="absolute top-1 right-1 border border-transparent hover:border-gray-300"
+              @click="copyToClipboard(createdApiKey?.secretKey || '')"
             >
               <CopyIcon v-if="!copied" class="h-4 w-4" />
               <CheckIcon v-else class="h-4 w-4 text-green-600" />
@@ -101,6 +103,7 @@ import { useApiKeysStore } from '@/stores/apiKeys';
 import type { CreateApiKeyResponse, ApiKey } from '@/lib/api';
 
 const isCreating = ref(false);
+const showInitDialog = ref(false);
 const createdApiKey = ref<CreateApiKeyResponse | null>(null);
 const error = ref<string | null>(null);
 const { copy, copied } = useClipboard();
@@ -136,6 +139,7 @@ const copyToClipboard = async (text: string) => {
 
 const closeDialog = () => {
   // Reset state when dialog closes so trigger can be used again
+  showInitDialog.value = false;
   createdApiKey.value = null;
   error.value = null;
 };
