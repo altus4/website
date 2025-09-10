@@ -203,6 +203,54 @@ export interface FullTextIndex {
   cardinality?: number;
 }
 
+// Dashboard analytics types (added to support GET /analytics/dashboard)
+export interface DashboardTrends {
+  period: Period;
+  topQueries: string[];
+  queryVolume: number;
+  avgResponseTime: number;
+  popularCategories: string[];
+}
+
+export interface DashboardPerformanceSummary {
+  totalQueries: number;
+  averageResponseTime: number;
+  topQuery: string;
+}
+
+export interface DashboardPerformancePoint {
+  date: string; // YYYY-MM-DD
+  query_count: number;
+  avg_response_time: number;
+}
+
+export interface DashboardPerformance {
+  summary: DashboardPerformanceSummary;
+  timeSeriesData: DashboardPerformancePoint[];
+}
+
+export interface PopularQuery {
+  query_text: string;
+  frequency: number;
+  avg_time: number;
+}
+
+export interface Insight {
+  type: string;
+  confidence: number;
+  description: string;
+  actionable: boolean;
+  data: Record<string, unknown>;
+}
+
+export interface DashboardAnalytics {
+  trends?: DashboardTrends;
+  performance?: DashboardPerformance;
+  popularQueries?: PopularQuery[];
+  insights?: Insight[];
+  summary?: DashboardPerformanceSummary;
+}
+
 class ApiClient {
   private client: AxiosInstance;
 
@@ -469,6 +517,23 @@ class ApiClient {
     }>
   > {
     return this.request(`/analytics?timeframe=${timeframe}`);
+  }
+
+  // Get a comprehensive dashboard view of search analytics
+  async getAnalyticsDashboard(params?: {
+    startDate?: string;
+    endDate?: string;
+    period?: Period;
+  }): Promise<ApiResponse<DashboardAnalytics>> {
+    const query: Record<string, unknown> = {};
+    if (params?.startDate) query.startDate = params.startDate;
+    if (params?.endDate) query.endDate = params.endDate;
+    if (params?.period) query.period = params.period;
+
+    return this.request<DashboardAnalytics>('/analytics/dashboard', {
+      method: 'GET',
+      params: query,
+    });
   }
 
   // Utilities

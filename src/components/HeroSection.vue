@@ -1,6 +1,6 @@
 <template>
   <section
-    class="relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 py-16 md:py-24"
+    class="relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 py-16 md:py-24 mt-16 md:md-24"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="relative z-10 mx-auto max-w-4xl text-center">
@@ -31,13 +31,8 @@
         <div
           class="flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
-          <Button
-            size="lg"
-            class="min-w-40"
-            as="a"
-            href="/docs/setup/quickstart"
-          >
-            <DownloadIcon class="mr-2 h-5 w-5" />
+          <Button size="lg" class="min-w-40" as="a" href="/register">
+            <Zap class="mr-2 h-5 w-5" />
             Get Started
           </Button>
           <Button
@@ -127,7 +122,7 @@
 import { Button } from '@/components/ui/button';
 import {
   BookOpen as BookOpenIcon,
-  Download as DownloadIcon,
   Github as GitHubIcon,
+  Zap,
 } from 'lucide-vue-next';
 </script>

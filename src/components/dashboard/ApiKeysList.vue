@@ -4,7 +4,7 @@
       <div class="flex items-center justify-between">
         <CardTitle class="text-lg font-semibold">Your API Keys</CardTitle>
 
-        <Dialog>
+        <Dialog v-model:open="showCreateDialog">
           <DialogTrigger as-child>
             <Button size="sm">
               <PlusIcon class="mr-2 h-4 w-4" />
@@ -256,7 +256,7 @@
 
   <!-- Secret Key Display Dialog -->
   <Dialog v-model:open="showSecretDialog">
-    <DialogContent class="sm:max-w-[500px]">
+    <DialogContent class="sm:max-w-[600px]">
       <DialogHeader>
         <DialogTitle>API Key Created Successfully</DialogTitle>
         <DialogDescription>
@@ -271,13 +271,15 @@
             >Secret Key</Label
           >
           <div class="relative">
-            <code class="text-sm text-red-600 font-mono break-all">{{
-              createdApiKey?.secretKey
-            }}</code>
+            <div class="p-3 pr-16 border border-gray-300 rounded-lg bg-gray-50">
+              <code class="text-sm text-red-600 font-mono break-all">{{
+                createdApiKey?.secretKey
+              }}</code>
+            </div>
             <Button
               variant="ghost"
               size="sm"
-              class="absolute top-0 right-0"
+              class="absolute top-1 right-1 border border-transparent hover:border-gray-300"
               @click="copyToClipboard(createdApiKey?.secretKey || '')"
             >
               <CopyIcon v-if="!copied" class="h-4 w-4" />
@@ -451,6 +453,7 @@ const showSecretDialog = ref(false);
 const showDetailsDialog = ref(false);
 const createdApiKey = ref<CreateApiKeyResponse | null>(null);
 const selectedApiKey = ref<ApiKey | null>(null);
+const showCreateDialog = ref(false);
 
 // Form data
 const newApiKey = reactive<CreateApiKeyRequest>({
@@ -552,6 +555,8 @@ const resetForm = () => {
   newApiKey.environment = 'test';
   newApiKey.rateLimitTier = 'free';
   newApiKey.expiresAt = '';
+
+  showCreateDialog.value = false;
 };
 
 const closeSecretDialog = () => {

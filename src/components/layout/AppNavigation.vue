@@ -62,7 +62,10 @@
                 class="flex items-center space-x-2 border-l border-gray-200 pl-3"
               >
                 <Button variant="ghost" as="a" href="/login"> Sign in </Button>
-                <Button as="a" href="/register">Get started</Button>
+                <Button as="a" href="/register">
+                  Get started
+                  <ArrowRight class="ml-2 h-4 w-4" />
+                </Button>
               </div>
             </template>
           </div>
@@ -206,6 +209,7 @@ import {
   User as UserIcon,
   LogOut as LogOutIcon,
   LayoutDashboard as LayoutDashboardIcon,
+  ArrowRight,
 } from 'lucide-vue-next';
 
 interface Props {
