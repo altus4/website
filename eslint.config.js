@@ -27,6 +27,7 @@ export default [
         HTMLElement: 'readonly',
         HTMLAnchorElement: 'readonly',
         console: 'readonly',
+        localStorage: 'readonly',
       },
     },
     plugins: {
