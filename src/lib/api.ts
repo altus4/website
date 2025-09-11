@@ -1,3 +1,58 @@
+/**
+ * Altus 4 Dashboard API Client
+ *
+ * Complete TypeScript client for the Altus 4 API, designed specifically for dashboard applications.
+ * This client supports JWT authentication for user management and provides methods for:
+ *
+ * - User authentication (login, register, profile management)
+ * - API key management (create, list, update, revoke, regenerate)
+ * - Database connection management (add, test, update, remove, schema discovery)
+ * - Analytics and insights (search trends, performance metrics, dashboard data)
+ * - System management and health monitoring
+ *
+ * Usage:
+ * ```typescript
+ * import { apiClient } from './api';
+ *
+ * // Login and automatic token management
+ * const loginResult = await apiClient.handleLogin({ email, password });
+ * if (loginResult.success) {
+ *   console.log('Logged in user:', loginResult.user);
+ * }
+ *
+ * // API key management
+ * const apiKeys = await apiClient.listApiKeys();
+ * const newKey = await apiClient.createApiKey({
+ *   name: 'My API Key',
+ *   environment: 'test',
+ *   permissions: ['search', 'analytics']
+ * });
+ *
+ * // Database management
+ * const connections = await apiClient.listDatabaseConnections();
+ * const newConnection = await apiClient.addDatabaseConnection({
+ *   name: 'My Database',
+ *   host: 'localhost',
+ *   port: 3306,
+ *   database: 'mydb',
+ *   username: 'user',
+ *   password: 'pass'
+ * });
+ *
+ * // Analytics
+ * const dashboard = await apiClient.getAnalyticsDashboard({ period: 'week' });
+ * const trends = await apiClient.getSearchTrends({ period: 'month' });
+ * ```
+ *
+ * The client automatically handles:
+ * - JWT token storage and refresh
+ * - Error formatting and CORS debugging
+ * - Request/response type safety
+ * - Authentication state management
+ *
+ * @version 1.0.0
+ * @author Altus 4 Team
+ */
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 
 // Window type extension for runtime environment variables
@@ -85,6 +140,23 @@ export interface ApiKey {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface UpdateApiKeyRequest {
+  name?: string;
+  permissions?: string[];
+  rateLimitTier?: RateLimitTier;
+  expiresAt?: string;
+}
+
+export interface ApiKeyUsage {
+  keyId: string;
+  totalRequests: number;
+  requestsThisMonth: number;
+  lastUsed?: string;
+  rateLimitTier: RateLimitTier;
+  quotaUsed: number;
+  quotaLimit: number;
 }
 
 export interface CreateApiKeyRequest {
@@ -251,6 +323,108 @@ export interface DashboardAnalytics {
   summary?: DashboardPerformanceSummary;
 }
 
+// Analytics interfaces
+export interface SearchAnalyticsItem {
+  id: string;
+  query: string;
+  searchMode?: SearchMode;
+  resultCount: number;
+  executionTime: number;
+  database: string;
+  timestamp: Date;
+}
+
+export interface SearchHistoryResponse {
+  items: SearchAnalyticsItem[];
+  total: number;
+}
+
+export interface PerformanceMetrics {
+  timeSeriesData: DashboardPerformancePoint[];
+  searchModeDistribution: Array<{
+    search_mode: string;
+    count: number;
+    avg_time: number;
+  }>;
+  summary: {
+    totalQueries: number;
+    averageResponseTime: number;
+    averageResults: number;
+  };
+}
+
+// Management interfaces
+export interface MigrationStatus {
+  userId: string;
+  hasMigrated: boolean;
+  recommendedAction: string;
+  documentation: string;
+}
+
+// Admin analytics interfaces
+export interface SystemOverview {
+  summary: {
+    active_users: number;
+    total_queries: number;
+    avg_response_time: number;
+    avg_results: number;
+  };
+  userGrowth: Array<{
+    date: string;
+    new_users: number;
+  }>;
+  queryVolume: Array<{
+    date: string;
+    query_count: number;
+    active_users: number;
+  }>;
+  period: Period;
+}
+
+export interface UserActivity {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  query_count: number;
+  avg_response_time: number;
+  last_query?: string;
+  last_active?: string;
+}
+
+export interface SystemPerformanceMetrics {
+  timeSeriesData: Array<{
+    date: string;
+    query_count: number;
+    avg_response_time: number;
+    max_response_time: number;
+    active_users: number;
+  }>;
+  slowestQueries: Array<{
+    query_text: string;
+    execution_time_ms: number;
+    result_count: number;
+    created_at: string;
+    user_email: string;
+  }>;
+  summary: {
+    totalQueries: number;
+    averageResponseTime: number;
+    peakResponseTime: number;
+  };
+}
+
+// Profile update interfaces
+export interface UpdateProfileRequest {
+  name?: string;
+  email?: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
 class ApiClient {
   private client: AxiosInstance;
 
@@ -271,17 +445,10 @@ class ApiClient {
       withCredentials: false, // Set to true if your API uses cookies
     });
 
-    // Request interceptor to add auth token (JWT or API key)
+    // Request interceptor to add auth token (JWT for dashboard)
     this.client.interceptors.request.use(
       config => {
-        // First try API key (primary authentication method)
-        const apiKey = this.getStoredItem('api_key');
-        if (apiKey) {
-          config.headers.Authorization = `Bearer ${apiKey}`;
-          return config;
-        }
-
-        // Fallback to JWT token (for initial setup only)
+        // Use JWT token (primary authentication method for dashboard)
         const token = this.getStoredItem('auth_token');
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
@@ -419,10 +586,44 @@ class ApiClient {
     return this.request<User>('/auth/profile');
   }
 
-  async logout(): Promise<ApiResponse<{ message: string }>> {
-    return this.request<{ message: string }>('/auth/logout', {
+  async logout(): Promise<ApiResponse<{ success: boolean }>> {
+    const response = await this.request<{ success: boolean }>('/auth/logout', {
       method: 'POST',
     });
+    // Clear token on successful logout
+    if (response.success) {
+      this.clearToken();
+    }
+    return response;
+  }
+
+  async updateProfile(
+    profileData: UpdateProfileRequest
+  ): Promise<ApiResponse<User>> {
+    return this.request<User>('/auth/profile', {
+      method: 'PUT',
+      data: profileData,
+    });
+  }
+
+  async changePassword(
+    passwordData: ChangePasswordRequest
+  ): Promise<ApiResponse<{ success: boolean }>> {
+    return this.request<{ success: boolean }>('/auth/change-password', {
+      method: 'POST',
+      data: passwordData,
+    });
+  }
+
+  async deactivateAccount(): Promise<ApiResponse<{ success: boolean }>> {
+    const response = await this.request<{ success: boolean }>('/auth/account', {
+      method: 'DELETE',
+    });
+    // Clear token on successful account deactivation
+    if (response.success) {
+      this.clearToken();
+    }
+    return response;
   }
 
   // API Key Management
@@ -441,11 +642,42 @@ class ApiClient {
 
   async revokeApiKey(
     keyId: string
-  ): Promise<ApiResponse<{ revoked: boolean; message: string }>> {
-    return this.request<{ revoked: boolean; message: string }>(
-      `/keys/${keyId}`,
+  ): Promise<ApiResponse<{ keyId: string; message: string }>> {
+    return this.request<{ keyId: string; message: string }>(`/keys/${keyId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async updateApiKey(
+    keyId: string,
+    updateData: UpdateApiKeyRequest
+  ): Promise<ApiResponse<{ apiKey: ApiKey }>> {
+    return this.request<{ apiKey: ApiKey }>(`/keys/${keyId}`, {
+      method: 'PUT',
+      data: updateData,
+    });
+  }
+
+  async getApiKeyUsage(
+    keyId: string,
+    days?: number
+  ): Promise<ApiResponse<{ usage: ApiKeyUsage }>> {
+    const params: Record<string, unknown> = {};
+    if (days !== undefined) {
+      params.days = days;
+    }
+    return this.request<{ usage: ApiKeyUsage }>(`/keys/${keyId}/usage`, {
+      params,
+    });
+  }
+
+  async regenerateApiKey(
+    keyId: string
+  ): Promise<ApiResponse<CreateApiKeyResponse & { oldKeyId: string }>> {
+    return this.request<CreateApiKeyResponse & { oldKeyId: string }>(
+      `/keys/${keyId}/regenerate`,
       {
-        method: 'DELETE',
+        method: 'POST',
       }
     );
   }
@@ -457,12 +689,12 @@ class ApiClient {
 
   async addDatabaseConnection(connectionData: {
     name: string;
-    type: DatabaseType;
     host: string;
     port: number;
     database: string;
     username: string;
     password: string;
+    ssl?: boolean;
   }): Promise<ApiResponse<DatabaseConnection>> {
     return this.request<DatabaseConnection>('/databases', {
       method: 'POST',
@@ -472,8 +704,8 @@ class ApiClient {
 
   async testDatabaseConnection(
     connectionId: string
-  ): Promise<ApiResponse<{ status: string; message: string }>> {
-    return this.request<{ status: string; message: string }>(
+  ): Promise<ApiResponse<{ connected: boolean; message?: string }>> {
+    return this.request<{ connected: boolean; message?: string }>(
       `/databases/${connectionId}/test`,
       {
         method: 'POST',
@@ -483,10 +715,46 @@ class ApiClient {
 
   async removeDatabaseConnection(
     connectionId: string
-  ): Promise<ApiResponse<{ message: string }>> {
-    return this.request<{ message: string }>(`/databases/${connectionId}`, {
+  ): Promise<ApiResponse<{ success: boolean }>> {
+    return this.request<{ success: boolean }>(`/databases/${connectionId}`, {
       method: 'DELETE',
     });
+  }
+
+  async getDatabaseConnectionStatuses(): Promise<
+    ApiResponse<Record<string, boolean>>
+  > {
+    return this.request<Record<string, boolean>>('/databases/status');
+  }
+
+  async getDatabaseConnection(
+    connectionId: string
+  ): Promise<ApiResponse<DatabaseConnection>> {
+    return this.request<DatabaseConnection>(`/databases/${connectionId}`);
+  }
+
+  async updateDatabaseConnection(
+    connectionId: string,
+    updateData: {
+      name?: string;
+      host?: string;
+      port?: number;
+      database?: string;
+      username?: string;
+      password?: string;
+      ssl?: boolean;
+    }
+  ): Promise<ApiResponse<DatabaseConnection>> {
+    return this.request<DatabaseConnection>(`/databases/${connectionId}`, {
+      method: 'PUT',
+      data: updateData,
+    });
+  }
+
+  async getDatabaseSchema(
+    connectionId: string
+  ): Promise<ApiResponse<TableSchema[]>> {
+    return this.request<TableSchema[]>(`/databases/${connectionId}/schema`);
   }
 
   // Management
@@ -498,14 +766,18 @@ class ApiClient {
 
   async getSystemHealth(): Promise<
     ApiResponse<{
-      status: HealthStatus;
+      status: string;
+      timestamp: string;
       version: string;
       uptime: number;
-      database: { status: string; connections: number };
-      memory: { used: number; total: number };
+      authenticationMethods: string[];
     }>
   > {
     return this.request('/management/health');
+  }
+
+  async getMigrationStatus(): Promise<ApiResponse<MigrationStatus>> {
+    return this.request<MigrationStatus>('/management/migration-status');
   }
 
   // Analytics
@@ -526,14 +798,208 @@ class ApiClient {
     period?: Period;
   }): Promise<ApiResponse<DashboardAnalytics>> {
     const query: Record<string, unknown> = {};
-    if (params?.startDate) query.startDate = params.startDate;
-    if (params?.endDate) query.endDate = params.endDate;
-    if (params?.period) query.period = params.period;
+    if (params?.startDate) {
+      query.startDate = params.startDate;
+    }
+    if (params?.endDate) {
+      query.endDate = params.endDate;
+    }
+    if (params?.period) {
+      query.period = params.period;
+    }
 
     return this.request<DashboardAnalytics>('/analytics/dashboard', {
       method: 'GET',
       params: query,
     });
+  }
+
+  async getSearchTrends(params?: {
+    startDate?: string;
+    endDate?: string;
+    period?: Period;
+  }): Promise<ApiResponse<TrendInsight[]>> {
+    const query: Record<string, unknown> = {};
+    if (params?.startDate) {
+      query.startDate = params.startDate;
+    }
+    if (params?.endDate) {
+      query.endDate = params.endDate;
+    }
+    if (params?.period) {
+      query.period = params.period;
+    }
+
+    return this.request<TrendInsight[]>('/analytics/search-trends', {
+      params: query,
+    });
+  }
+
+  async getPerformanceMetrics(params?: {
+    startDate?: string;
+    endDate?: string;
+    period?: Period;
+  }): Promise<ApiResponse<PerformanceMetrics>> {
+    const query: Record<string, unknown> = {};
+    if (params?.startDate) {
+      query.startDate = params.startDate;
+    }
+    if (params?.endDate) {
+      query.endDate = params.endDate;
+    }
+    if (params?.period) {
+      query.period = params.period;
+    }
+
+    return this.request<PerformanceMetrics>('/analytics/performance', {
+      params: query,
+    });
+  }
+
+  async getPopularQueries(params?: {
+    startDate?: string;
+    endDate?: string;
+    period?: Period;
+  }): Promise<ApiResponse<PopularQuery[]>> {
+    const query: Record<string, unknown> = {};
+    if (params?.startDate) {
+      query.startDate = params.startDate;
+    }
+    if (params?.endDate) {
+      query.endDate = params.endDate;
+    }
+    if (params?.period) {
+      query.period = params.period;
+    }
+
+    return this.request<PopularQuery[]>('/analytics/popular-queries', {
+      params: query,
+    });
+  }
+
+  async getSearchHistory(params?: {
+    startDate?: string;
+    endDate?: string;
+    period?: Period;
+    limit?: number;
+    offset?: number;
+  }): Promise<ApiResponse<SearchHistoryResponse>> {
+    const query: Record<string, unknown> = {};
+    if (params?.startDate) {
+      query.startDate = params.startDate;
+    }
+    if (params?.endDate) {
+      query.endDate = params.endDate;
+    }
+    if (params?.period) {
+      query.period = params.period;
+    }
+    if (params?.limit) {
+      query.limit = params.limit;
+    }
+    if (params?.offset) {
+      query.offset = params.offset;
+    }
+
+    return this.request<SearchHistoryResponse>('/analytics/search-history', {
+      params: query,
+    });
+  }
+
+  async getInsights(params?: {
+    startDate?: string;
+    endDate?: string;
+    period?: Period;
+  }): Promise<ApiResponse<Insight[]>> {
+    const query: Record<string, unknown> = {};
+    if (params?.startDate) {
+      query.startDate = params.startDate;
+    }
+    if (params?.endDate) {
+      query.endDate = params.endDate;
+    }
+    if (params?.period) {
+      query.period = params.period;
+    }
+
+    return this.request<Insight[]>('/analytics/insights', {
+      params: query,
+    });
+  }
+
+  // Admin Analytics Methods
+  async getSystemOverview(params?: {
+    startDate?: string;
+    endDate?: string;
+    period?: Period;
+  }): Promise<ApiResponse<SystemOverview>> {
+    const query: Record<string, unknown> = {};
+    if (params?.startDate) {
+      query.startDate = params.startDate;
+    }
+    if (params?.endDate) {
+      query.endDate = params.endDate;
+    }
+    if (params?.period) {
+      query.period = params.period;
+    }
+
+    return this.request<SystemOverview>('/analytics/admin/system-overview', {
+      params: query,
+    });
+  }
+
+  async getUserActivity(params?: {
+    startDate?: string;
+    endDate?: string;
+    period?: Period;
+    limit?: number;
+    offset?: number;
+  }): Promise<ApiResponse<UserActivity[]>> {
+    const query: Record<string, unknown> = {};
+    if (params?.startDate) {
+      query.startDate = params.startDate;
+    }
+    if (params?.endDate) {
+      query.endDate = params.endDate;
+    }
+    if (params?.period) {
+      query.period = params.period;
+    }
+    if (params?.limit) {
+      query.limit = params.limit;
+    }
+    if (params?.offset) {
+      query.offset = params.offset;
+    }
+
+    return this.request<UserActivity[]>('/analytics/admin/user-activity', {
+      params: query,
+    });
+  }
+
+  async getSystemPerformanceMetrics(params?: {
+    startDate?: string;
+    endDate?: string;
+    period?: Period;
+  }): Promise<ApiResponse<SystemPerformanceMetrics>> {
+    const query: Record<string, unknown> = {};
+    if (params?.startDate) {
+      query.startDate = params.startDate;
+    }
+    if (params?.endDate) {
+      query.endDate = params.endDate;
+    }
+    if (params?.period) {
+      query.period = params.period;
+    }
+
+    return this.request<SystemPerformanceMetrics>(
+      '/analytics/admin/performance-metrics',
+      {
+        params: query,
+      }
+    );
   }
 
   // Utilities
@@ -562,6 +1028,116 @@ class ApiClient {
     this.removeStoredItem('token_expires_at');
   }
 
+  // Enhanced authentication helpers
+  async handleLogin(credentials: LoginRequest): Promise<{
+    success: boolean;
+    user?: User;
+    error?: string;
+  }> {
+    try {
+      const response = await this.login(credentials);
+      if (response.success && response.data) {
+        const authData = response.data as AuthResponse;
+        this.setToken(authData.token, authData.expires_in);
+        return {
+          success: true,
+          user: authData.user,
+        };
+      } else {
+        return {
+          success: false,
+          error: response.error?.message || 'Login failed',
+        };
+      }
+    } catch (error) {
+      const apiError = error as ApiResponse;
+      return {
+        success: false,
+        error: apiError.error?.message || 'Login failed',
+      };
+    }
+  }
+
+  async handleRegister(userData: RegisterRequest): Promise<{
+    success: boolean;
+    user?: User;
+    error?: string;
+  }> {
+    try {
+      const response = await this.register(userData);
+      if (response.success && response.data) {
+        const authData = response.data as AuthResponse;
+        this.setToken(authData.token, authData.expires_in);
+        return {
+          success: true,
+          user: authData.user,
+        };
+      } else {
+        return {
+          success: false,
+          error: response.error?.message || 'Registration failed',
+        };
+      }
+    } catch (error) {
+      const apiError = error as ApiResponse;
+      return {
+        success: false,
+        error: apiError.error?.message || 'Registration failed',
+      };
+    }
+  }
+
+  async handleLogout(): Promise<{ success: boolean; error?: string }> {
+    try {
+      const response = await this.logout();
+      return {
+        success: response.success,
+        error: response.success ? undefined : response.error?.message,
+      };
+    } catch {
+      // Even if the API call fails, clear the local token
+      this.clearToken();
+      return {
+        success: true, // Consider logout successful even if API call fails
+      };
+    }
+  }
+
+  // Token management helpers
+  async refreshTokenIfNeeded(): Promise<boolean> {
+    const token = this.getStoredItem('auth_token');
+    const expiresAt = this.getStoredItem('token_expires_at');
+
+    if (!token || !expiresAt) {
+      return false;
+    }
+
+    const expirationTime = parseInt(expiresAt, 10);
+    const currentTime = Date.now();
+    const timeUntilExpiry = expirationTime - currentTime;
+
+    // Refresh if token expires in less than 5 minutes
+    if (timeUntilExpiry < 5 * 60 * 1000) {
+      try {
+        const response = await this.refreshToken();
+        if (response.success && response.data) {
+          const tokenData = response.data as {
+            token: string;
+            expires_in: number;
+          };
+          this.setToken(tokenData.token, tokenData.expires_in);
+          return true;
+        }
+      } catch (error) {
+        console.error('Token refresh failed:', error);
+        this.clearToken();
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   // CORS debugging utility
   async testConnection(): Promise<{
     success: boolean;
@@ -582,6 +1158,220 @@ class ApiClient {
         error: apiError.error?.message || 'Connection failed',
       };
     }
+  }
+
+  // Dashboard utility methods
+
+  /**
+   * Check if the current user has admin privileges
+   */
+  async isAdmin(): Promise<boolean> {
+    try {
+      const response = await this.getProfile();
+      return response.success && response.data?.role === 'admin';
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Get the current user's profile with error handling
+   */
+  async getCurrentUser(): Promise<User | null> {
+    try {
+      const response = await this.getProfile();
+      return response.success && response.data ? (response.data as User) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Helper method to check if API key has specific permission
+   */
+  static hasPermission(apiKey: ApiKey, permission: string): boolean {
+    return (
+      apiKey.permissions.includes(permission) ||
+      apiKey.permissions.includes('admin')
+    );
+  }
+
+  /**
+   * Helper method to format API key for display (shows only prefix)
+   */
+  static formatApiKeyForDisplay(apiKey: ApiKey): string {
+    return `${apiKey.keyPrefix}...`;
+  }
+
+  /**
+   * Helper method to get rate limit info for display
+   */
+  static getRateLimitInfo(tier: RateLimitTier): {
+    limit: number;
+    name: string;
+    description: string;
+  } {
+    switch (tier) {
+      case 'free':
+        return {
+          limit: 1000,
+          name: 'Free',
+          description: '1,000 requests per hour',
+        };
+      case 'pro':
+        return {
+          limit: 10000,
+          name: 'Pro',
+          description: '10,000 requests per hour',
+        };
+      case 'enterprise':
+        return {
+          limit: 100000,
+          name: 'Enterprise',
+          description: '100,000 requests per hour',
+        };
+      default:
+        return {
+          limit: 1000,
+          name: 'Unknown',
+          description: 'Unknown rate limit',
+        };
+    }
+  }
+
+  /**
+   * Helper method to format usage percentage
+   */
+  static formatUsagePercentage(usage: ApiKeyUsage): number {
+    if (usage.quotaLimit === 0) {
+      return 0;
+    }
+    return Math.round((usage.quotaUsed / usage.quotaLimit) * 100);
+  }
+
+  /**
+   * Helper method to determine if usage is approaching limit
+   */
+  static isUsageHigh(usage: ApiKeyUsage, threshold: number = 80): boolean {
+    const percentage = this.formatUsagePercentage(usage);
+    return percentage >= threshold;
+  }
+
+  /**
+   * Helper method to format date for analytics queries
+   */
+  static formatDateForQuery(date: Date): string {
+    return date.toISOString().split('T')[0]; // YYYY-MM-DD format
+  }
+
+  /**
+   * Helper method to get date range for periods
+   */
+  static getDateRangeForPeriod(period: Period): {
+    startDate: string;
+    endDate: string;
+  } {
+    const end = new Date();
+    const start = new Date();
+
+    switch (period) {
+      case 'day':
+        start.setDate(start.getDate() - 1);
+        break;
+      case 'week':
+        start.setDate(start.getDate() - 7);
+        break;
+      case 'month':
+        start.setMonth(start.getMonth() - 1);
+        break;
+      case '3months':
+        start.setMonth(start.getMonth() - 3);
+        break;
+      case '6months':
+        start.setMonth(start.getMonth() - 6);
+        break;
+      case 'year':
+        start.setFullYear(start.getFullYear() - 1);
+        break;
+    }
+
+    return {
+      startDate: this.formatDateForQuery(start),
+      endDate: this.formatDateForQuery(end),
+    };
+  }
+
+  /**
+   * Helper method to validate database connection parameters
+   */
+  static validateDatabaseConnection(connection: {
+    name: string;
+    host: string;
+    port: number;
+    database: string;
+    username: string;
+    password: string;
+  }): { isValid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    if (!connection.name || connection.name.trim().length < 1) {
+      errors.push('Connection name is required');
+    }
+    if (!connection.host || connection.host.trim().length < 1) {
+      errors.push('Host is required');
+    }
+    if (!connection.port || connection.port < 1 || connection.port > 65535) {
+      errors.push('Port must be between 1 and 65535');
+    }
+    if (!connection.database || connection.database.trim().length < 1) {
+      errors.push('Database name is required');
+    }
+    if (!connection.username || connection.username.trim().length < 1) {
+      errors.push('Username is required');
+    }
+    // Password can be empty for local development
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+    };
+  }
+
+  /**
+   * Helper method to validate API key creation parameters
+   */
+  static validateApiKeyCreation(keyData: CreateApiKeyRequest): {
+    isValid: boolean;
+    errors: string[];
+  } {
+    const errors: string[] = [];
+
+    if (!keyData.name || keyData.name.trim().length < 3) {
+      errors.push('API key name must be at least 3 characters long');
+    }
+    if (!['test', 'live'].includes(keyData.environment)) {
+      errors.push('Environment must be either "test" or "live"');
+    }
+    if (keyData.permissions && keyData.permissions.length > 0) {
+      const validPermissions = ['search', 'analytics', 'admin'];
+      const invalidPerms = keyData.permissions.filter(
+        p => !validPermissions.includes(p)
+      );
+      if (invalidPerms.length > 0) {
+        errors.push(`Invalid permissions: ${invalidPerms.join(', ')}`);
+      }
+    }
+    if (
+      keyData.rateLimitTier &&
+      !['free', 'pro', 'enterprise'].includes(keyData.rateLimitTier)
+    ) {
+      errors.push('Rate limit tier must be "free", "pro", or "enterprise"');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+    };
   }
 }
 

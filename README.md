@@ -1,4 +1,4 @@
-# Altus 4 Marketing Website
+# Altus 4 | Marketing Website
 
 A modern, responsive marketing website for Altus 4 - an AI-enhanced MySQL full-text search engine. Built with Vue.js 3, TypeScript, and Tailwind CSS.
 
