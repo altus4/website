@@ -99,8 +99,8 @@ import {
   AlertCircleIcon,
   AlertTriangleIcon,
 } from 'lucide-vue-next';
-import { useApiKeysStore } from '@/stores/apiKeys';
-import type { CreateApiKeyResponse, ApiKey } from '@/lib/api';
+import { useApiKeysStore, type CreateApiKeyResponse } from '@/stores/apiKeys';
+import type { ApiKey } from '@altus4/sdk';
 
 const isCreating = ref(false);
 const showInitDialog = ref(false);
@@ -109,9 +109,10 @@ const error = ref<string | null>(null);
 const { copy, copied } = useClipboard();
 
 const store = useApiKeysStore();
-const hasInitialKey = computed(() =>
-  store.apiKeys.some((k: ApiKey) => k && k.name === 'Initial API Key')
-);
+const hasInitialKey = computed(() => {
+  const list = Array.isArray(store.apiKeys) ? store.apiKeys : [];
+  return list.some((k: ApiKey) => k && k.name === 'Initial API Key');
+});
 
 const emit = defineEmits<{
   (e: 'created', payload: CreateApiKeyResponse): void;

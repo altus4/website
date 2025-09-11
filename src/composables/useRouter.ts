@@ -1,7 +1,30 @@
 import { ref, computed } from 'vue';
+import { TokenStorageManager } from '@altus4/sdk';
+import { useRedirect } from './useRedirect';
 
 export function useRouter() {
   const currentRoute = ref(window.location.pathname);
+  const { setIntendedRoute } = useRedirect();
+
+  const hasValidToken = () => {
+    try {
+      return !!TokenStorageManager.hasValidToken?.();
+    } catch {
+      return false;
+    }
+  };
+
+  const guardAndRedirectIfNeeded = (path: string): string => {
+    if (path === '/dashboard' && !hasValidToken()) {
+      setIntendedRoute('/dashboard');
+      const redirectPath = '/login';
+      window.history.pushState({}, '', `${redirectPath}`);
+      currentRoute.value = redirectPath;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return redirectPath;
+    }
+    return path;
+  };
 
   const currentPage = computed(() => {
     switch (currentRoute.value) {
@@ -47,6 +70,12 @@ export function useRouter() {
     } else if (href?.startsWith('#')) {
       event.preventDefault();
       scrollToElement(href);
+    } else if (href) {
+      // Guard protected routes
+      const finalPath = guardAndRedirectIfNeeded(href);
+      if (finalPath !== href) {
+        event.preventDefault();
+      }
     }
   };
 
@@ -64,8 +93,9 @@ export function useRouter() {
   };
 
   const navigateTo = (path: string) => {
-    window.history.pushState({}, '', path);
-    currentRoute.value = path;
+    const finalPath = guardAndRedirectIfNeeded(path);
+    window.history.pushState({}, '', finalPath);
+    currentRoute.value = finalPath;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

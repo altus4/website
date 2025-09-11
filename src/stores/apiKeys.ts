@@ -1,155 +1,121 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
-import {
-  apiClient,
-  type ApiKey,
-  type CreateApiKeyRequest,
-  type CreateApiKeyResponse,
-  type ApiResponse,
-} from '@/lib/api';
+import { Altus4SDK } from '@altus4/sdk';
+import type { ApiKey, CreateApiKeyRequest } from '@altus4/sdk';
 
-export const useApiKeysStore = defineStore('apiKeys', () => {
-  const apiKeys = ref<ApiKey[]>([]);
-  const isLoading = ref(false);
-  const error = ref<string | null>(null);
+export type CreateApiKeyResponse = {
+  secretKey: string;
+  warning?: string;
+};
 
-  const loadApiKeys = async () => {
-    try {
-      isLoading.value = true;
-      error.value = null;
-      const resp = await apiClient.listApiKeys();
-      console.debug('loadApiKeys raw response', resp);
+function createSdk() {
+  const baseURL =
+    import.meta.env.VITE_ALTUS4_API_URL ||
+    import.meta.env.VITE_API_BASE_URL ||
+    'http://localhost:3000/api/v1';
+  return new Altus4SDK({ baseURL });
+}
 
-      // If the client returned an ApiResponse with success=false, surface the error
-      if (
-        resp &&
-        typeof resp === 'object' &&
-        'success' in resp &&
-        resp.success === false
-      ) {
-        error.value = resp.error?.message || 'Failed to load API keys';
-        console.debug('apiClient.listApiKeys returned error response', resp);
-        apiKeys.value = [];
-        return;
-      }
-
-      if (Array.isArray(resp.data)) {
-        apiKeys.value = resp.data as ApiKey[];
-      } else if (
-        resp.data &&
-        typeof resp.data === 'object' &&
-        'apiKeys' in resp.data
-      ) {
-        const dataObj = resp.data as { apiKeys?: ApiKey[] };
-        apiKeys.value = dataObj.apiKeys ?? [];
-      } else {
-        apiKeys.value = [];
-      }
-    } catch (err) {
-      error.value = 'Failed to load API keys';
-
-      console.warn('loadApiKeys error', err);
-    } finally {
-      isLoading.value = false;
-    }
-  };
-
-  const createApiKey = async (payload: CreateApiKeyRequest) => {
-    try {
-      isLoading.value = true;
-      error.value = null;
-      const resp = await apiClient.createApiKey(payload);
-      console.debug('createApiKey response', resp);
-      const data = resp.data as unknown as CreateApiKeyResponse;
-
-      // Optimistic update: if server returned the created apiKey, add it locally
+export const useApiKeysStore = defineStore('apiKeys', {
+  state: () => ({
+    apiKeys: [] as ApiKey[],
+    isLoading: false as boolean,
+    error: null as string | null,
+  }),
+  actions: {
+    async loadApiKeys() {
+      this.isLoading = true;
+      this.error = null;
       try {
-        const maybe = data as unknown as CreateApiKeyResponse | null;
-        if (maybe && maybe.apiKey) {
-          const created = maybe.apiKey as ApiKey;
-          apiKeys.value = [
-            created,
-            ...apiKeys.value.filter(k => k.id !== created.id),
-          ];
+        const sdk = createSdk();
+        const res = await sdk.apiKeys.listApiKeys();
+        if (res?.success) {
+          const data = res.data as unknown;
+          let list: ApiKey[] = [];
+          if (Array.isArray(data)) {
+            list = data as ApiKey[];
+          } else if (data && typeof data === 'object') {
+            const maybe = data as { items?: unknown; apiKeys?: unknown };
+            if (Array.isArray(maybe.items)) list = maybe.items as ApiKey[];
+            else if (Array.isArray(maybe.apiKeys))
+              list = maybe.apiKeys as ApiKey[];
+          }
+          this.apiKeys = list;
+        } else {
+          this.error = res?.error?.message || 'Failed to load API keys';
         }
-      } catch (e) {
-        console.debug('optimistic update failed', e);
+      } catch (e: unknown) {
+        this.error = e instanceof Error ? e.message : 'Failed to load API keys';
+      } finally {
+        this.isLoading = false;
       }
+    },
 
-      // refresh list
-      await loadApiKeys();
-      return data;
-    } catch (err) {
-      error.value = 'Failed to create API key';
-
-      console.warn('createApiKey error', err);
-      throw err;
-    } finally {
-      isLoading.value = false;
-    }
-  };
-
-  const revokeApiKey = async (id: string) => {
-    try {
-      error.value = null;
-      const resp = await apiClient.revokeApiKey(id);
-      console.debug('revokeApiKey response', resp);
-      await loadApiKeys();
-    } catch (err) {
-      error.value = 'Failed to revoke API key';
-
-      console.warn('revokeApiKey error', err);
-      throw err;
-    }
-  };
-
-  const setupInitialApiKey = async () => {
-    try {
-      error.value = null;
-      const resp = await apiClient.setupInitialApiKey();
-      console.debug('setupInitialApiKey response', resp);
-      const apiResp = resp as ApiResponse<CreateApiKeyResponse>;
-      let data: CreateApiKeyResponse | null = null;
-
-      if (apiResp && apiResp.success && apiResp.data) {
-        data = apiResp.data as CreateApiKeyResponse;
-      } else if (
-        (resp as unknown) &&
-        (resp as unknown as CreateApiKeyResponse).secretKey
-      ) {
-        data = resp as unknown as CreateApiKeyResponse;
+    async createApiKey(
+      payload: CreateApiKeyRequest
+    ): Promise<CreateApiKeyResponse> {
+      this.error = null;
+      try {
+        const sdk = createSdk();
+        const res = await sdk.apiKeys.createApiKey(payload);
+        if (res?.success) {
+          // Push the created key into local list if returned
+          const d = res.data as unknown;
+          const created =
+            d && typeof d === 'object' && (d as { apiKey?: ApiKey }).apiKey
+              ? (d as { apiKey?: ApiKey }).apiKey
+              : undefined;
+          if (created) {
+            this.apiKeys = [created, ...this.apiKeys];
+          } else {
+            // Fallback to refresh list
+            await this.loadApiKeys();
+          }
+          const secretKey =
+            d &&
+            typeof d === 'object' &&
+            (d as { secretKey?: string }).secretKey
+              ? (d as { secretKey?: string }).secretKey!
+              : '';
+          return { secretKey };
+        }
+        throw new Error(res?.error?.message || 'Failed to create API key');
+      } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : 'Failed to create API key';
+        this.error = msg;
+        throw new Error(msg);
       }
+    },
 
-      if (data) {
-        // refresh list
-        await loadApiKeys();
-        return data;
+    async setupInitialApiKey(): Promise<CreateApiKeyResponse> {
+      // avoid duplicate creation if already present
+      if (this.apiKeys.some(k => k?.name === 'Initial API Key')) {
+        return { secretKey: '', warning: 'Initial API Key already exists' };
       }
-
-      throw new Error('Unexpected response from setupInitialApiKey');
-    } catch (err) {
-      error.value = 'Failed to create initial API key';
-
-      console.warn('setupInitialApiKey error', err);
-      throw err;
-    }
-  };
-
-  return {
-    apiKeys,
-    isLoading,
-    error,
-    loadApiKeys,
-    createApiKey,
-    revokeApiKey,
-    setupInitialApiKey,
-    // dev helper: call from console via the store instance to inspect current state
-    debugState: () => {
-      console.debug('apiKeys store state', {
-        apiKeys: apiKeys.value,
-        isLoading: isLoading.value,
-        error: error.value,
+      return this.createApiKey({
+        name: 'Initial API Key',
+        environment: 'test',
+        rateLimitTier: 'free',
       });
     },
-  };
+
+    async revokeApiKey(id: string) {
+      this.error = null;
+      try {
+        const sdk = createSdk();
+        const res = await sdk.apiKeys.revokeApiKey(id);
+        if (res?.success) {
+          // Mark as inactive locally or refresh
+          this.apiKeys = this.apiKeys.map(k =>
+            k.id === id ? { ...k, isActive: false } : k
+          );
+          return true;
+        }
+        throw new Error(res?.error?.message || 'Failed to revoke API key');
+      } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : 'Failed to revoke API key';
+        this.error = msg;
+        throw new Error(msg);
+      }
+    },
+  },
 });

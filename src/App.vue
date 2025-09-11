@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, watch } from 'vue';
+import { onMounted, onUnmounted, watch, defineAsyncComponent } from 'vue';
 import { useAuth } from '@/composables/useAuth';
 import { useRouter } from '@/composables/useRouter';
 import { useScroll } from '@/composables/useScroll';
@@ -40,9 +40,11 @@ import TermsOfUse from '@/pages/TermsOfUse.vue';
 import LoginPage from '@/pages/auth/LoginPage.vue';
 import RegisterPage from '@/pages/auth/RegisterPage.vue';
 import ForgotPasswordPage from '@/pages/auth/ForgotPasswordPage.vue';
-import DashboardPage from '@/pages/DashboardPage.vue';
+const DashboardPage = defineAsyncComponent(
+  () => import('@/pages/DashboardPage.vue')
+);
 
-const { isAuthenticated, user, logout } = useAuth();
+const { isAuthenticated, user, logout, hasValidToken } = useAuth();
 const { currentPage, setupRouting, cleanupRouting, navigateTo } = useRouter();
 const { showScrollTop, setupScrollListeners, cleanupScrollListeners } =
   useScroll();
@@ -67,6 +69,11 @@ watch(
 onMounted(() => {
   setupRouting();
   setupScrollListeners();
+  // Guard direct access to dashboard on initial load
+  if (currentPage.value === 'dashboard' && !hasValidToken()) {
+    setIntendedRoute('/dashboard');
+    navigateTo('/login');
+  }
 });
 
 onUnmounted(() => {

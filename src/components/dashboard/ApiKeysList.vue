@@ -399,6 +399,13 @@
 import { ref, reactive, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useClipboard } from '@vueuse/core';
+import { useApiKeysStore } from '@/stores/apiKeys';
+import type {
+  ApiKey,
+  CreateApiKeyRequest,
+  RateLimitTier,
+  Environment,
+} from '@altus4/sdk';
 import {
   AlertCircleIcon,
   AlertTriangleIcon,
@@ -438,30 +445,32 @@ import {
   SelectItem,
   SelectValue,
 } from '@/components/ui/select';
-import { useApiKeysStore } from '@/stores/apiKeys';
-import type {
-  ApiKey,
-  CreateApiKeyRequest,
-  CreateApiKeyResponse,
-} from '@/lib/api';
 
-// State (moved to store)
+// Store
 const store = useApiKeysStore();
 const { apiKeys, isLoading, error } = storeToRefs(store);
+
+// Local UI state
 const isCreating = ref(false);
 const showSecretDialog = ref(false);
 const showDetailsDialog = ref(false);
-const createdApiKey = ref<CreateApiKeyResponse | null>(null);
-const selectedApiKey = ref<ApiKey | null>(null);
 const showCreateDialog = ref(false);
 
 // Form data
-const newApiKey = reactive<CreateApiKeyRequest>({
+const newApiKey = reactive<{
+  name: string;
+  environment: Environment;
+  rateLimitTier: RateLimitTier;
+  expiresAt: string;
+}>({
   name: '',
   environment: 'test',
   rateLimitTier: 'free',
   expiresAt: '',
 });
+
+const createdApiKey = ref<{ secretKey: string; warning?: string } | null>(null);
+const selectedApiKey = ref<ApiKey | null>(null);
 
 // Clipboard
 const { copy, copied } = useClipboard();
@@ -505,7 +514,7 @@ const createApiKey = async () => {
   try {
     isCreating.value = true;
     // clear any previous store error
-    store.error = null;
+    error.value = null;
 
     const payload: CreateApiKeyRequest = {
       name: newApiKey.name,
@@ -522,11 +531,7 @@ const createApiKey = async () => {
     const duration = Date.now() - start;
     console.debug('store.createApiKey response (ms):', duration, data);
 
-    try {
-      createdApiKey.value = data as CreateApiKeyResponse;
-    } catch (e) {
-      console.warn('Failed to assign createdApiKey.value', e, createdApiKey);
-    }
+    createdApiKey.value = data;
 
     showSecretDialog.value = true;
     resetForm();

@@ -208,25 +208,13 @@ const isFormValid = computed(() => {
 
 const handleSubmit = async () => {
   fieldErrors.value = {};
+  if (!isFormValid.value) return;
 
-  if (!isFormValid.value) {
-    return;
-  }
-
-  const result = await register({
-    name: form.name,
-    email: form.email,
-    password: form.password,
-  });
-
-  if (result.success) {
-    // Navigate to dashboard or redirect to intended page
+  const result = await register(form.name, form.email, form.password);
+  if (result?.success) {
+    // Navigate to dashboard
     window.history.pushState({}, '', '/dashboard');
-    window.location.reload(); // Simple way to update the app state
-  } else if (result.errors) {
-    fieldErrors.value = Object.fromEntries(
-      Object.entries(result.errors).map(([key, errors]) => [key, errors[0]])
-    );
+    window.location.reload();
   }
 };
 </script>

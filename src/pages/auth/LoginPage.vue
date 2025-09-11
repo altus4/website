@@ -135,8 +135,8 @@
 
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue';
-import { useAuth } from '@/composables/useAuth';
 import { useRedirect } from '@/composables/useRedirect';
+import { useAuth } from '@/composables/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert } from '@/components/ui/alert';
@@ -144,8 +144,8 @@ import { Card } from '@/components/ui/card';
 import AltusLogo from '@/components/ui/AltusLogo.vue';
 import { Loader2, Github } from 'lucide-vue-next';
 
-const { login, isLoading, error, clearError } = useAuth();
 const { redirectAfterLogin } = useRedirect();
+const { login, isLoading, error, clearError } = useAuth();
 
 const form = reactive({
   email: '',
@@ -161,23 +161,12 @@ const isFormValid = computed(() => {
 
 const handleSubmit = async () => {
   fieldErrors.value = {};
+  if (!form.email || !form.password) return;
 
-  if (!form.email || !form.password) {
-    return;
-  }
-
-  const result = await login({
-    email: form.email,
-    password: form.password,
-  });
-
-  if (result.success) {
-    // Navigate to dashboard or redirect to intended page
+  const result = await login(form.email, form.password);
+  if (result?.success) {
+    // Navigate to dashboard or intended page
     redirectAfterLogin();
-  } else if (result.errors) {
-    fieldErrors.value = Object.fromEntries(
-      Object.entries(result.errors).map(([key, errors]) => [key, errors[0]])
-    );
   }
 };
 </script>

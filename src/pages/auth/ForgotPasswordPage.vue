@@ -156,10 +156,14 @@ const handleSubmit = async () => {
   if (result.success) {
     emailSent.value = true;
     startResendCooldown();
-  } else if (result.errors) {
-    fieldErrors.value = Object.fromEntries(
-      Object.entries(result.errors).map(([key, errors]) => [key, errors[0]])
-    );
+  } else {
+    const errs = (result as unknown as { errors?: Record<string, string[]> })
+      .errors;
+    if (errs && typeof errs === 'object') {
+      fieldErrors.value = Object.fromEntries(
+        Object.entries(errs).map(([key, arr]) => [key, arr?.[0] || ''])
+      );
+    }
   }
 };
 

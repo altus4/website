@@ -1,204 +1,104 @@
-import { computed, reactive } from 'vue';
-import {
-  apiClient,
-  type LoginRequest,
-  type RegisterRequest,
-  type ForgotPasswordRequest,
-  type User,
-  type AuthResponse,
-} from '@/lib/api';
-
-interface AuthState {
-  user: User | null;
-  token: string | null;
-  isLoading: boolean;
-  error: string | null;
-}
-
-const state = reactive<AuthState>({
-  user: null,
-  token: localStorage.getItem('auth_token'),
-  isLoading: false,
-  error: null,
-});
+import { inject, computed } from 'vue';
+import type { Altus4SDK } from '@altus4/sdk';
+import { TokenStorageManager } from '@altus4/sdk';
+import type { AuthHelpers, AuthStateShape } from '@/plugins/altus4';
 
 export function useAuth() {
-  const isAuthenticated = computed(() => !!state.token && !!state.user);
+  const altus4 = inject<Altus4SDK>('altus4');
+  const authHelpers = inject<AuthHelpers>('authHelpers');
+  const authState = inject<AuthStateShape>('authState');
 
-  const setAuthData = (authData: AuthResponse) => {
-    state.user = authData.user;
-    state.token = authData.token;
-    apiClient.setToken(authData.token, authData.expires_in);
-  };
-
-  const clearAuthData = () => {
-    state.user = null;
-    state.token = null;
-    apiClient.clearToken();
-  };
-
-  const checkTokenExpiration = () => {
-    return apiClient.isAuthenticated();
-  };
-
-  const login = async (credentials: LoginRequest) => {
-    state.isLoading = true;
-    state.error = null;
-
-    try {
-      const result = await apiClient.login(credentials);
-
-      if (result.success && result.data) {
-        setAuthData(result.data);
-        return {
-          success: true,
-          data: result.data,
-        };
-      } else {
-        state.error = result.error?.message || 'Login failed';
-        return {
-          success: false,
-          message: result.error?.message || 'Login failed',
-          errors: result.error?.details,
-        };
-      }
-    } catch {
-      state.error = 'Network error occurred';
-      return { success: false, message: 'Network error occurred' };
-    } finally {
-      state.isLoading = false;
-    }
-  };
-
-  const register = async (userData: RegisterRequest) => {
-    state.isLoading = true;
-    state.error = null;
-
-    try {
-      const result = await apiClient.register(userData);
-
-      if (result.success && result.data) {
-        setAuthData(result.data);
-        return {
-          success: true,
-          data: result.data,
-        };
-      } else {
-        state.error = result.error?.message || 'Registration failed';
-        return {
-          success: false,
-          message: result.error?.message || 'Registration failed',
-          errors: result.error?.details,
-        };
-      }
-    } catch {
-      state.error = 'Network error occurred';
-      return { success: false, message: 'Network error occurred' };
-    } finally {
-      state.isLoading = false;
-    }
-  };
-
-  const forgotPassword = async (data: ForgotPasswordRequest) => {
-    state.isLoading = true;
-    state.error = null;
-
-    try {
-      const result = await apiClient.forgotPassword(data);
-
-      if (result.success) {
-        return {
-          success: true,
-          message: result.data?.message || 'Password reset email sent',
-        };
-      } else {
-        state.error = result.error?.message || 'Failed to send reset email';
-        return {
-          success: false,
-          message: result.error?.message || 'Failed to send reset email',
-          errors: result.error?.details,
-        };
-      }
-    } catch {
-      state.error = 'Network error occurred';
-      return { success: false, message: 'Network error occurred' };
-    } finally {
-      state.isLoading = false;
-    }
-  };
-
-  const logout = async () => {
-    state.isLoading = true;
-
-    try {
-      await apiClient.logout();
-    } catch {
-      console.error('Logout error occurred');
-    } finally {
-      clearAuthData();
-      state.isLoading = false;
-    }
-  };
-
-  const refreshToken = async () => {
-    try {
-      const response = await apiClient.refreshToken();
-
-      if (response.success && response.data) {
-        state.token = response.data.token;
-        apiClient.setToken(response.data.token, response.data.expires_in);
-        return true;
-      } else {
-        clearAuthData();
-        return false;
-      }
-    } catch {
-      clearAuthData();
-      return false;
-    }
-  };
-
-  const loadUserFromToken = async () => {
-    if (!state.token || !checkTokenExpiration()) {
-      clearAuthData();
-      return;
-    }
-
-    try {
-      const response = await apiClient.getProfile();
-      if (response.success && response.data) {
-        state.user = response.data;
-      } else {
-        clearAuthData();
-      }
-    } catch {
-      clearAuthData();
-    }
-  };
-
-  const clearError = () => {
-    state.error = null;
-  };
-
-  // Auto-load user on initialization
-  if (state.token && !state.user) {
-    loadUserFromToken();
+  if (!altus4 || !authHelpers || !authState) {
+    throw new Error('Altus4 plugin not properly installed');
   }
 
-  return {
-    // State
-    isAuthenticated,
-    user: computed(() => state.user),
-    isLoading: computed(() => state.isLoading),
-    error: computed(() => state.error),
+  const isAuthenticated = computed(() => authState.isAuthenticated);
+  const user = computed(() => authState.user);
+  const isLoading = computed(() => authState.isLoading);
+  const error = computed(() => authState.error);
 
-    // Actions
-    login,
-    register,
-    forgotPassword,
-    logout,
-    refreshToken,
+  // Optional utilities expected by some views
+  const clearError = () => {
+    authState.error = null;
+  };
+
+  // Forgot password (best-effort: call SDK if available)
+  const forgotPassword = async (payload: { email: string }) => {
+    try {
+      type ResetCapable = {
+        auth?: {
+          requestPasswordReset?: (p: { email: string }) => Promise<{
+            success: boolean;
+            error?: { message?: string };
+          }>;
+        };
+      };
+      const sdk = altus4 as unknown as ResetCapable;
+      if (sdk.auth?.requestPasswordReset) {
+        const res = await sdk.auth.requestPasswordReset(payload);
+        return res || { success: true };
+      }
+      return { success: false, error: { message: 'Not implemented' } };
+    } catch (e: unknown) {
+      return {
+        success: false,
+        error: {
+          message: e instanceof Error ? e.message : 'Request failed',
+        },
+      };
+    }
+  };
+
+  return {
+    // state
+    isAuthenticated,
+    user,
+    isLoading,
+    error,
+
+    // actions
+    login: authHelpers.login,
+    logout: authHelpers.logout,
+    register: authHelpers.register,
+    refreshAuth: authHelpers.refreshAuth,
+    reinitialize: authHelpers.reinitialize,
     clearError,
-    loadUserFromToken,
+    forgotPassword,
+
+    // sdk + token helpers
+    sdk: altus4,
+    hasValidToken: () => {
+      try {
+        return !!TokenStorageManager.hasValidToken?.();
+      } catch {
+        type AuthLike = { auth?: { isAuthenticated?: () => boolean } };
+        const sdk = altus4 as unknown as AuthLike;
+        return !!sdk.auth?.isAuthenticated?.();
+      }
+    },
+    isTokenExpiring: () => {
+      try {
+        return !!(
+          TokenStorageManager as unknown as {
+            isTokenExpiringSoon?: () => boolean;
+          }
+        ).isTokenExpiringSoon?.();
+      } catch {
+        return false;
+      }
+    },
+
+    // debug helpers
+    debugAuth: () => {
+      if (import.meta.env.DEV) {
+        console.log('Auth:', {
+          isAuthenticated: isAuthenticated.value,
+          hasValidToken: TokenStorageManager.hasValidToken?.(),
+        });
+        type DebugLike = { auth?: { debugTokenState?: () => void } };
+        const sdk = altus4 as unknown as DebugLike;
+        sdk.auth?.debugTokenState?.();
+      }
+    },
   };
 }

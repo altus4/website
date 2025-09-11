@@ -70,25 +70,31 @@
 
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge';
-import { ref, onMounted, computed } from 'vue';
+import { inject, ref, onMounted, computed } from 'vue';
+import type { Altus4SDK, AnalyticsData } from '@altus4/sdk';
 import {
   Activity as ActivityIcon,
   CheckCircle as CheckCircleIcon,
   Clock as ClockIcon,
   Users as UsersIcon,
 } from 'lucide-vue-next';
-import { apiClient, type DashboardAnalytics } from '@/lib/api';
 
-const analytics = ref<DashboardAnalytics | null>(null);
+const altus4 = inject<Altus4SDK>('altus4');
+
+const analytics = ref<AnalyticsData | null>(null);
 const loading = ref(false);
 const error = ref<string | null>(null);
 
 onMounted(async () => {
   loading.value = true;
   try {
-    const resp = await apiClient.getAnalyticsDashboard();
+    const resp = await altus4?.analytics?.getDashboardAnalytics({
+      period: 'week',
+      includeInsights: true,
+      includeTrends: true,
+    });
     if (resp?.success && resp.data) {
-      analytics.value = resp.data;
+      analytics.value = resp.data as AnalyticsData;
     } else {
       error.value = resp?.error?.message || 'No analytics available';
     }
@@ -100,31 +106,22 @@ onMounted(async () => {
   }
 });
 
-const totalQueries = computed(() => {
-  return (
-    analytics.value?.summary?.totalQueries ??
-    analytics.value?.performance?.summary?.totalQueries ??
-    0
-  );
-});
+const totalQueries = computed(
+  () => analytics.value?.summary?.totalQueries ?? 0
+);
 
-const avgResponse = computed(() => {
-  return (
-    analytics.value?.summary?.averageResponseTime ??
-    analytics.value?.performance?.summary?.averageResponseTime ??
-    0
-  );
-});
+const avgResponse = computed(
+  () => analytics.value?.summary?.averageResponseTime ?? 0
+);
 
-const topQuery = computed(() => {
-  return (
-    analytics.value?.summary?.topQuery ??
-    analytics.value?.performance?.summary?.topQuery ??
-    '—'
-  );
-});
+const topQuery = computed(() => analytics.value?.summary?.topQuery ?? '—');
 
 const popularCount = computed(() => {
-  return analytics.value?.popularQueries?.length ?? 0;
+  // If SDK exposes search history or popular queries differently, adjust here
+  const distribution = analytics.value?.summary?.queryDistribution;
+  if (distribution && typeof distribution === 'object') {
+    return Object.keys(distribution).length;
+  }
+  return 0;
 });
 </script>
