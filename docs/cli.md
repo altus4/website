@@ -4,6 +4,10 @@ description: "Commands and usage for the Altus4 migrations CLI"
 sidebarPosition: 2
 ---
 
+# CLI & Migrations Guide
+
+Developer console for database migrations and seeding asl well as other tasks using a Laravel-like CLI.
+
 ## Overview
 
 - Provides a Laravel-like CLI for migrations without requiring the `mysql` binary.
