@@ -36,7 +36,7 @@
           </div>
 
           <!-- Recent Activity -->
-          <div class="lg:col-span-1">
+          <div class="lg:col-span-1 space-y-4">
             <RecentActivity />
           </div>
         </div>

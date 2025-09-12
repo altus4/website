@@ -57,12 +57,11 @@
 
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <input
+              <Checkbox
                 id="remember-me"
                 v-model="form.remember"
                 name="remember-me"
                 type="checkbox"
-                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <label for="remember-me" class="ml-2 block text-sm text-gray-900">
                 Remember me
@@ -141,6 +140,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert } from '@/components/ui/alert';
 import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import AltusLogo from '@/components/ui/AltusLogo.vue';
 import { Loader2, Github } from 'lucide-vue-next';
 

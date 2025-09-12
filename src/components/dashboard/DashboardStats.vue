@@ -1,10 +1,10 @@
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <div class="bg-white rounded-lg shadow p-6 border">
+    <div class="bg-white rounded-xl shadow p-6 border">
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <div
-            class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center"
+            class="w-8 h-8 bg-primary rounded-xl flex items-center justify-center"
           >
             <ActivityIcon class="w-5 h-5 text-primary-foreground" />
           </div>
@@ -16,11 +16,11 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6 border">
+    <div class="bg-white rounded-xl shadow p-6 border">
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <div
-            class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center"
+            class="w-8 h-8 bg-primary rounded-xl flex items-center justify-center"
           >
             <CheckCircleIcon class="w-5 h-5 text-primary-foreground" />
           </div>
@@ -32,11 +32,11 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6 border">
+    <div class="bg-white rounded-xl shadow p-6 border">
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <div
-            class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center"
+            class="w-8 h-8 bg-primary rounded-xl flex items-center justify-center"
           >
             <ClockIcon class="w-5 h-5 text-primary-foreground" />
           </div>
@@ -50,11 +50,11 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6 border">
+    <div class="bg-white rounded-xl shadow p-6 border">
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <div
-            class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center"
+            class="w-8 h-8 bg-primary rounded-xl flex items-center justify-center"
           >
             <UsersIcon class="w-5 h-5 text-primary-foreground" />
           </div>
