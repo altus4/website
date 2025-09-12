@@ -13,16 +13,16 @@ Altus 4 provides a RESTful API for managing database connections, executing sear
 
 Altus 4 uses **dual authentication** depending on the endpoint type:
 
-- **JWT Tokens**: For user management and the initial API key setup endpoint under `/api/v1/management/setup`
-- **API Keys**: For search, database management, and analytics endpoints (service-to-service)
+- **JWT Tokens**: For user management, database connections, analytics dashboards, and API key management
+- **API Keys**: For search operations and service-to-service integrations
 
 ### Authentication Flow
 
 1. **Register** a new user account
 2. **Login** to receive a JWT token
 3. **Create** your first API key using the JWT token via `/api/v1/management/setup`
-4. **Use JWT tokens** for user management only (profile, password changes)
-5. **Use API keys** for all service operations (search, database management, analytics, additional API key management)
+4. **Use JWT tokens** for user management, database connections, analytics, and API key management
+5. **Use API keys** for search operations and service integrations
 
 ```bash
 # Use JWT token for account management

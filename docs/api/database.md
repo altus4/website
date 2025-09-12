@@ -37,7 +37,7 @@ graph TD
 
 ## Database Endpoints
 
-All database endpoints require an API key with the 'admin' permission. Include your key in the Authorization header as `Bearer <YOUR_API_KEY>`.
+All database endpoints require JWT authentication. Include your JWT token in the Authorization header as `Bearer <YOUR_JWT_TOKEN>`.
 
 ### Add Database Connection
 
@@ -48,7 +48,7 @@ Connect a new MySQL database to your Altus 4 account.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 Content-Type: application/json
 ```
 
@@ -127,7 +127,7 @@ No query parameters supported
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -162,7 +162,7 @@ Retrieve detailed information about a specific database connection.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -193,7 +193,7 @@ Update an existing database connection's settings.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 Content-Type: application/json
 ```
 
@@ -239,7 +239,7 @@ Remove a database connection from your account.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -272,7 +272,7 @@ Test connectivity to a specific database.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -313,7 +313,7 @@ Get status of all database connections.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
@@ -344,7 +344,7 @@ No query parameters supported
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:

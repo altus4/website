@@ -34,7 +34,7 @@ graph TD
 
 ## Analytics Endpoints
 
-All analytics endpoints require an API key with the 'analytics' permission. Admin analytics endpoints additionally require the 'admin' permission. Include your API key in the Authorization header as `Bearer <YOUR_API_KEY>`.
+All analytics endpoints require JWT authentication. Include your JWT token in the Authorization header as `Bearer <YOUR_JWT_TOKEN>`.
 
 ### Dashboard Overview
 
@@ -51,7 +51,7 @@ Get a comprehensive dashboard view of your search analytics.
 **Headers**:
 
 ```http
-Authorization: Bearer <YOUR_API_KEY>
+Authorization: Bearer <YOUR_JWT_TOKEN>
 ```
 
 **Response**:
