@@ -107,6 +107,7 @@ export default defineConfig({
           { text: 'Git Workflow', link: '/development/git-workflow' },
           { text: 'Code Standards', link: '/development/standards' },
           { text: 'Testing Strategy', link: '/development/testing' },
+          { text: 'CLI & Migrations', link: '/cli' },
           { text: 'Contributing', link: '/development/contributing' },
         ],
       },
