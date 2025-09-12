@@ -403,6 +403,7 @@ import { useApiKeysStore } from '@/stores/apiKeys';
 import type {
   ApiKey,
   CreateApiKeyRequest,
+  CreateApiKeyResponse,
   RateLimitTier,
   Environment,
 } from '@altus4/sdk';
@@ -457,16 +458,11 @@ const showDetailsDialog = ref(false);
 const showCreateDialog = ref(false);
 
 // Form data
-const newApiKey = reactive<{
-  name: string;
-  environment: Environment;
-  rateLimitTier: RateLimitTier;
-  expiresAt: string;
-}>({
+const newApiKey = reactive({
   name: '',
   environment: 'test',
   rateLimitTier: 'free',
-  expiresAt: '',
+  expiresAt: '' as string,
 });
 
 const createdApiKey = ref<{ secretKey: string; warning?: string } | null>(null);
@@ -514,12 +510,12 @@ const createApiKey = async () => {
   try {
     isCreating.value = true;
     // clear any previous store error
-    error.value = null;
+    store.error = null;
 
     const payload: CreateApiKeyRequest = {
       name: newApiKey.name,
-      environment: newApiKey.environment,
-      rateLimitTier: newApiKey.rateLimitTier,
+      environment: newApiKey.environment as Environment,
+      rateLimitTier: newApiKey.rateLimitTier as RateLimitTier,
     };
 
     if (newApiKey.expiresAt) {
@@ -531,7 +527,11 @@ const createApiKey = async () => {
     const duration = Date.now() - start;
     console.debug('store.createApiKey response (ms):', duration, data);
 
-    createdApiKey.value = data;
+    try {
+      createdApiKey.value = data as CreateApiKeyResponse;
+    } catch (e) {
+      console.warn('Failed to assign createdApiKey.value', e, createdApiKey);
+    }
 
     showSecretDialog.value = true;
     resetForm();
