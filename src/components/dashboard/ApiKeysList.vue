@@ -2,7 +2,7 @@
   <Card>
     <CardHeader class="px-4 py-3 border-b">
       <div class="flex items-center justify-between">
-        <CardTitle class="text-lg font-semibold">Your API Keys</CardTitle>
+        <CardTitle>Your API Keys</CardTitle>
 
         <Dialog v-model:open="showCreateDialog">
           <DialogTrigger as-child>
@@ -446,6 +446,7 @@ import {
   SelectItem,
   SelectValue,
 } from '@/components/ui/select';
+import { formatDate } from '@/lib/utils';
 
 // Store
 const store = useApiKeysStore();
@@ -472,17 +473,6 @@ const selectedApiKey = ref<ApiKey | null>(null);
 const { copy, copied } = useClipboard();
 
 // Helpers
-const formatDate = (dateString?: string) => {
-  if (!dateString) return 'N/A';
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
-
 const copyToClipboard = async (text: string) => {
   await copy(text);
 };

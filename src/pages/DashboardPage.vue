@@ -37,7 +37,7 @@
 
           <!-- Recent Activity -->
           <div class="lg:col-span-1 space-y-4">
-            <RecentActivity />
+            <DatabasesList />
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
 import SetupInitialApiKey from '@/components/dashboard/SetupInitialApiKey.vue';
 import DashboardStats from '@/components/dashboard/DashboardStats.vue';
 import ApiKeysList from '@/components/dashboard/ApiKeysList.vue';
-import RecentActivity from '@/components/dashboard/RecentActivity.vue';
+import DatabasesList from '@/components/dashboard/DatabasesList.vue';
 import { ref } from 'vue';
 
 // ref to the ApiKeysList component so we can call its exposed loadApiKeys()
