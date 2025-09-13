@@ -9,7 +9,7 @@ This comprehensive guide will walk you through setting up Altus 4 and performing
 
 ## Prerequisites
 
-- Node.js 18+ installed
+- Node.js 20+ installed
 - MySQL 8.0+ database with FULLTEXT indexes
 - Redis server (optional, for caching)
 - OpenAI API key (optional, for AI features)

@@ -106,7 +106,7 @@ erDiagram
         int port
         varchar(255) database_name
         varchar(255) username
-        text password_encrypted
+        text password
         boolean ssl_enabled
         json connection_config
         boolean is_active
@@ -234,7 +234,7 @@ CREATE TABLE databases (
   port INT NOT NULL DEFAULT 3306,
   database_name VARCHAR(255) NOT NULL,
   username VARCHAR(255) NOT NULL,
-  password_encrypted TEXT NOT NULL,    -- AES-256 encrypted
+  password TEXT NOT NULL,    -- AES-256 encrypted
   ssl_enabled BOOLEAN DEFAULT false,
   connection_config JSON NULL,         -- Additional connection options
   is_active BOOLEAN DEFAULT true,

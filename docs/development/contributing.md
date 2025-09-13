@@ -15,7 +15,7 @@ Thank you for your interest in contributing to Altus 4! This guide will help you
 
 Before contributing, ensure you have:
 
-- **Node.js 18+** with npm 8+
+- **Node.js 20+** with npm 10+
 - **MySQL 8.0+** for database operations
 - **Redis 6.0+** for caching
 - **Git** for version control

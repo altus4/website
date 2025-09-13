@@ -25,12 +25,12 @@ The AIService handles:
 
 ```typescript
 export class AIService {
-  constructor(
-    private openaiClient: OpenAI,
-    private cacheService: CacheService,
-    private logger: Logger,
-    private config: AIConfig
-  ) {}
+  /**
+   * Create a new AIService instance and initialize OpenAI client.
+   */
+  constructor() {
+    this.initializeOpenAI();
+  }
 
   // Core Methods
   async processQuery(query: string, mode: SearchMode): Promise<ProcessedQuery>;

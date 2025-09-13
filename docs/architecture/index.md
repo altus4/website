@@ -43,7 +43,7 @@ graph TD
 ### Architecture Principles
 
 - **Layered Design**: Clear separation of concerns
-- **🔌 Dependency Injection**: Loose coupling between components
+- **Dependency Injection**: Loose coupling between components
 - **Async Processing**: Non-blocking operations throughout
 - **Event-Driven**: Analytics and monitoring via events
 - **Security-First**: Authentication and authorization at every layer
@@ -60,13 +60,13 @@ User-facing interfaces and integrations
 | **Mobile Apps**              | iOS/Android applications | React Native (future) |
 | **Third-party Integrations** | API consumers            | REST API clients      |
 
-### 🔌 API Layer
+### API Layer
 
 Request handling and middleware pipeline
 
 ::: details API Layer Components
 
-- **🌍 Express.js Server**: RESTful API endpoints with middleware pipeline
+- **Express.js Server**: RESTful API endpoints with middleware pipeline
 - **Authentication**: API key-based authentication with tiered rate limiting
 - **Validation**: Zod schema validation for all endpoints
 - **Rate Limiting**: Redis-backed rate limiting per API key tier

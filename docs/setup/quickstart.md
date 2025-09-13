@@ -296,8 +296,8 @@ npm run migrate:up
 
 - **[Complete Setup Guide](./index.md)** - Detailed installation instructions
 - **[Development Guide](../development/)** - Development environment setup
-- **[GitHub Issues](https://github.com/anthropics/claude-code/issues)** - Report bugs or get help
-- **[GitHub Discussions](https://github.com/anthropics/claude-code/discussions)** - Community support
+- **[GitHub Issues](https://github.com/altus4/api/issues)** - Report bugs or get help
+- **[GitHub Discussions](https://github.com/altus4/api/discussions)** - Community support
 
 ---
 
