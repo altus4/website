@@ -31,7 +31,7 @@ git clone https://github.com/YOUR_USERNAME/altus4.git
 cd altus4
 
 # Add upstream remote
-git remote add upstream https://github.com/altus4/core.git
+git remote add upstream https://github.com/altus4/api.git
 ```
 
 2. **Install Dependencies**

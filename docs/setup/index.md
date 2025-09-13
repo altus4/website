@@ -17,7 +17,7 @@ Get Altus 4 running locally in under 5 minutes:
 # Prerequisites: Node.js 18+, MySQL 8.0+, Redis 6.0+
 
 # Clone and install
-git clone https://github.com/altus4/core.git
+git clone https://github.com/altus4/api.git
 cd altus4
 npm install
 
@@ -284,7 +284,7 @@ sudo systemctl restart mysql
 #### Clone Repository
 
 ```bash
-git clone https://github.com/altus4/core.git
+git clone https://github.com/altus4/api.git
 cd altus4
 ```
 
@@ -766,8 +766,8 @@ After successful installation:
 If you encounter issues not covered in this guide:
 
 - Review the troubleshooting sections in this guide
-- Search [GitHub Issues](https://github.com/altus4/core/issues)
-- Join our [Community Discussions](https://github.com/altus4/core/discussions)
+- Search [GitHub Issues](https://github.com/altus4/api/issues)
+- Join our [Community Discussions](https://github.com/altus4/api/discussions)
 - Contact support: <support@altus4.dev>
 
 ---

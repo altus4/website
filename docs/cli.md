@@ -1,31 +1,20 @@
----
-title: "Altus4 CLI"
-description: "Commands and usage for the Altus4 migrations CLI"
-sidebarPosition: 2
----
+Altus4 CLI
+===========
 
-# CLI & Migrations Guide
-
-Developer console for database migrations and seeding asl well as other tasks using a Laravel-like CLI.
-
-## Overview
-
+Overview
 - Provides a Laravel-like CLI for migrations without requiring the `mysql` binary.
 - Uses Node.js `mysql2` to connect directly to your database.
 
 Install/Build
-
 - Ensure deps installed: `npm ci`
 - Build: `npm run build`
 
 Run
-
 - From the repo root:
   - `./bin/altus migrate`
   - or via npm: `npm run cli -- migrate`
 
 Commands
-
 - `migrate`            Run outstanding migrations
 - `migrate:install`    Create the migrations table if missing
 - `migrate:status`     Show applied and pending migrations
@@ -37,7 +26,6 @@ Commands
 - `migrate:down`       Rollback last migration or a specific file (requires `--file`)
 
 Options
-
 - `--path <dir>`       Directory containing migrations (default: `migrations`)
 - `--database <name>`  Override `DB_DATABASE`
 - `--step [n]`         For `migrate`: put each file in its own batch; for `rollback`: number of steps
@@ -49,12 +37,10 @@ Options
 - `--drop-views`       For `fresh`: also drop database views
 
 Environment
-
 - Reads `.env` automatically from the repo root.
 - Uses the same env vars as the app: `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DATABASE`, `DB_SOCKET` (optional), `APP_ENV`/`NODE_ENV`.
 
 Examples
-
 - Run migrations: `./bin/altus migrate`
 - Show status: `./bin/altus migrate:status`
 - Roll back last batch: `./bin/altus migrate:rollback`
@@ -71,6 +57,7 @@ Developer & testing
 
 - The CLI module (`src/cli/index.ts`) exports its command helpers so tests can call commands like `cmdUpOne` and `cmdDownOneOrRollback` directly. The module guards its `main()` call with `if (require.main === module)` to avoid starting when imported in tests.
 - The repository's integration tests already mock `mysql2/promise` and include a test that exercises the CLI helpers; run them with `npm run test:integration`.
+
 
 Seed files and directory layout
 
@@ -111,3 +98,4 @@ Notes:
 
 - Seeds are meant for bootstrapping local/dev instances. Avoid running production-sensitive seeds in production environments.
 - If `--pretend` is used, seeds will be printed but not executed.
+

@@ -145,6 +145,6 @@ export default defineConfig({
       },
     ],
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/altus4/core' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/altus4/api' }],
   },
 });
