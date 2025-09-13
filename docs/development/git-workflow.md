@@ -56,7 +56,7 @@ If you prefer manual setup:
 - **GitHub Support**: Fully supported with efficient handling
 - **NSA Suite B**: Approved security standard
 
-## 🪝 **Git Hooks**
+## **Git Hooks**
 
 ### Pre-Commit Hook
 
@@ -196,7 +196,7 @@ npm run hooks:test
 git verify-commit <commit-hash>
 ```
 
-## 🚨 **Troubleshooting**
+## **Troubleshooting**
 
 ### GPG Issues
 

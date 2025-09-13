@@ -408,7 +408,7 @@ The server should start on `http://localhost:3000`. You should see:
 
 ```text
 Altus 4 Server started on port 3000
-🌍 Environment: development
+ Environment: development
 Health check: http://localhost:3000/health
 Database connected successfully
 Redis connected successfully

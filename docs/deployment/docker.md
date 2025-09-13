@@ -779,9 +779,9 @@ echo "Performing health checks..."
 sleep 30
 
 if docker-compose -f $COMPOSE_FILE exec app curl -f http://localhost:3000/health; then
-    echo "✅ Deployment successful!"
+    echo "Deployment successful!"
 else
-    echo "❌ Health check failed, rolling back..."
+    echo "Health check failed, rolling back..."
     docker-compose -f $COMPOSE_FILE down
     exit 1
 fi
@@ -790,7 +790,7 @@ fi
 echo "Cleaning up old images..."
 docker image prune -f
 
-echo "🎉 Deployment completed successfully!"
+echo "Deployment completed successfully!"
 ```
 
 #### Backup Script
@@ -829,7 +829,7 @@ docker cp altus4_app:/tmp/logs_backup_$DATE.tar.gz $BACKUP_DIR/
 # Cleanup old backups (keep 30 days)
 find $BACKUP_DIR -type f -mtime +30 -delete
 
-echo "✅ Backup completed successfully!"
+echo "Backup completed successfully!"
 ```
 
 ## Performance Optimization

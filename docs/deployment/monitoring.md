@@ -1161,7 +1161,7 @@ sudo systemctl enable --now prometheus
 sudo systemctl enable --now grafana-server
 sudo systemctl enable --now alertmanager
 
-echo "✅ Monitoring stack deployed successfully!"
+echo "Monitoring stack deployed successfully!"
 ```
 
 This comprehensive monitoring and logging guide provides enterprise-grade observability for Altus 4, ensuring you can monitor performance, track issues, and maintain system health proactively.

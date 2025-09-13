@@ -106,7 +106,7 @@ curl http://localhost:3000/health
 
 Altus 4 provides a comprehensive set of npm scripts organized by functionality:
 
-### 🚀 Core Development
+### Core Development
 
 ```bash
 npm run dev              # Start development server with hot reload
@@ -115,7 +115,7 @@ npm start                # Start production server
 npm run clean            # Clean build artifacts
 ```
 
-### ✅ Quality Assurance
+### Quality Assurance
 
 ```bash
 npm run typecheck        # TypeScript type checking only
@@ -130,7 +130,7 @@ npm run validate         # Complete validation (check + test)
 npm run fix              # Fix all issues (lint:fix + format)
 ```
 
-### 🧪 Testing
+### Testing
 
 ```bash
 npm test                 # Unit tests only
@@ -141,7 +141,7 @@ npm run test:performance # Performance tests only
 npm run test:all         # All tests (unit + integration)
 ```
 
-### 🗄️ Database Management
+### Database Management
 
 ```bash
 npm run migrate          # Run pending migrations (up)
@@ -150,7 +150,7 @@ npm run migrate:down     # Rollback migrations
 npm run migrate:status   # Check migration status
 ```
 
-### 🐳 Development Environment
+### Development Environment
 
 ```bash
 npm run dev:start        # Start Docker services + migrations
@@ -159,7 +159,7 @@ npm run dev:reset        # Reset development environment
 npm run dev:logs         # View Docker service logs
 ```
 
-### 🔐 Security & Git Hooks
+### Security & Git Hooks
 
 ```bash
 npm run security:audit           # Security audit

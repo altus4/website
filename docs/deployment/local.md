@@ -184,9 +184,9 @@ npm run db:test
 Expected output:
 
 ```
-✓ Database connection successful
-✓ All required tables exist
-✓ FULLTEXT indexes are properly configured
+ Database connection successful
+ All required tables exist
+ FULLTEXT indexes are properly configured
 ```
 
 ## Development Commands
@@ -282,24 +282,24 @@ Altus 4 uses an organized script structure in the `bin/` directory:
 
 ```text
 bin/
-├── dev/                    # 🐳 Development Environment
+├── dev/                    #  Development Environment
 │   ├── start.sh           # Start Docker services + migrations
 │   ├── stop.sh            # Stop Docker services
 │   ├── reset.sh           # Reset development environment
 │   └── docker-compose.yml # Docker services configuration
-├── db/                     # 🗄️ Database Operations
+├── db/                     # Database Operations
 │   └── migrate.sh         # Database migration management
-├── security/               # 🔐 Security & Authentication
+├── security/               # Security & Authentication
 │   ├── generate-jwt-secret.sh # Generate JWT secrets
 │   ├── setup-gpg.sh       # GPG configuration
 │   └── verify-commits.sh  # Commit signature verification
-├── test/                   # 🧪 Testing Utilities
+├── test/                   #  Testing Utilities
 │   └── test-hooks.sh      # Git hooks testing
-├── dev-start*             # 🚀 Convenience shortcuts
-├── dev-stop*              # 🛑
-├── dev-reset*             # 🔄
-├── migrate*               # 📊
-└── README.md              # 📖 Documentation
+├── dev-start*             # Convenience shortcuts
+├── dev-stop*              # 
+├── dev-reset*             # 
+├── migrate*               # Migration scripts
+└── README.md              # Documentation
 ```
 
 ### Direct Script Usage

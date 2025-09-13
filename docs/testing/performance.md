@@ -1152,7 +1152,7 @@ module.exports = {
 ```typescript
 // Avoid these performance anti-patterns
 
-// ❌ N+1 Query Problem
+// AVOID: N+1 Query Problem
 async function badGetUsersWithProfiles(userIds: string[]) {
   const users = [];
   for (const userId of userIds) {
@@ -1163,7 +1163,7 @@ async function badGetUsersWithProfiles(userIds: string[]) {
   return users;
 }
 
-// ✅ Batch Queries
+// RECOMMENDED: Batch Queries
 async function goodGetUsersWithProfiles(userIds: string[]) {
   const [users, profiles] = await Promise.all([
     userService.getUsersByIds(userIds), // 1 query
@@ -1176,19 +1176,19 @@ async function goodGetUsersWithProfiles(userIds: string[]) {
   }));
 }
 
-// ❌ Blocking Operations
+// AVOID: Blocking Operations
 async function badProcessResults(results: SearchResult[]) {
   for (const result of results) {
     await processResult(result); // Blocking sequential processing
   }
 }
 
-// ✅ Concurrent Processing
+// RECOMMENDED: Concurrent Processing
 async function goodProcessResults(results: SearchResult[]) {
   await Promise.all(results.map(result => processResult(result))); // Concurrent processing
 }
 
-// ❌ Memory Leaks
+// AVOID: Memory Leaks
 class BadCacheService {
   private cache = new Map(); // Never cleaned up
 
@@ -1197,7 +1197,7 @@ class BadCacheService {
   }
 }
 
-// ✅ Proper Memory Management
+// RECOMMENDED: Proper Memory Management
 class GoodCacheService {
   private cache = new Map();
   private maxSize = 1000;

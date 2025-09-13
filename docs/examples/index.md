@@ -2390,7 +2390,7 @@ class AltusAnalyticsDashboard extends EventEmitter {
       console.log(`Cache Hit Rate: ${summary.cacheEfficiency.toFixed(1)}%`);
       console.log(`AI Search Usage: ${summary.aiUsage.toFixed(1)}%`);
 
-      console.log('\n👥 USER ACTIVITY');
+      console.log('\n USER ACTIVITY');
       console.log('─'.repeat(50));
       console.log(`Active Users: ${summary.activeUsers}`);
       console.log(`Total Users: ${snapshot.users.totalUsers || 0}`);
@@ -2416,15 +2416,15 @@ class AltusAnalyticsDashboard extends EventEmitter {
       // Check and display alerts
       const alerts = this.checkAlerts();
       if (alerts.length > 0) {
-        console.log('\n🚨 ACTIVE ALERTS');
+        console.log('\n ACTIVE ALERTS');
         console.log('─'.repeat(50));
         alerts.forEach(alert => {
           const icon =
             alert.severity === 'critical'
-              ? '🔴'
+              ? ''
               : alert.severity === 'high'
-                ? '🟠'
-                : '🟡';
+                ? ''
+                : '';
           console.log(
             `  ${icon} [${alert.severity.toUpperCase()}] ${alert.message}`
           );
@@ -2470,7 +2470,7 @@ async function startAnalyticsDashboard() {
 
     dashboard.on('alerts', alerts => {
       // Handle alerts
-      console.log(`🚨 ${alerts.length} alerts triggered`);
+      console.log(` ${alerts.length} alerts triggered`);
       alerts.forEach(alert => {
         console.log(`   - [${alert.severity}] ${alert.message}`);
       });

@@ -1233,24 +1233,24 @@ npm run test:unit -- --coverage --coverageReporters=html
 
 ### Do's
 
-- ✅ Test one thing at a time
-- ✅ Use descriptive test names
-- ✅ Follow AAA pattern (Arrange, Act, Assert)
-- ✅ Mock all external dependencies
-- ✅ Use factory functions for test data
-- ✅ Test both success and failure scenarios
-- ✅ Maintain high test coverage (>90%)
-- ✅ Keep tests fast and independent
+- Test one thing at a time
+- Use descriptive test names
+- Follow AAA pattern (Arrange, Act, Assert)
+- Mock all external dependencies
+- Use factory functions for test data
+- Test both success and failure scenarios
+- Maintain high test coverage (>90%)
+- Keep tests fast and independent
 
 ### Don'ts
 
-- ❌ Test implementation details
-- ❌ Write tests that depend on each other
-- ❌ Use real external services in unit tests
-- ❌ Ignore edge cases and error conditions
-- ❌ Write overly complex test setup
-- ❌ Test framework code (Express, Jest, etc.)
-- ❌ Duplicate test logic across files
+- AVOID: Test implementation details
+- AVOID: Write tests that depend on each other
+- AVOID: Use real external services in unit tests
+- AVOID: Ignore edge cases and error conditions
+- AVOID: Write overly complex test setup
+- AVOID: Test framework code (Express, Jest, etc.)
+- AVOID: Duplicate test logic across files
 
 ## Related Documentation
 

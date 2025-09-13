@@ -49,6 +49,14 @@ export default defineConfig({
           { text: 'Analytics', link: '/api/analytics' },
         ],
       },
+      {
+        text: 'SDK',
+        items: [
+          { text: 'Overview', link: '/sdk/' },
+          { text: 'TypeScript SDK', link: '/sdk/typescript' },
+          { text: 'Integration Examples', link: '/sdk/examples' },
+        ],
+      },
       { text: 'Architecture', link: '/architecture/' },
       { text: 'Examples', link: '/examples/' },
     ],
@@ -84,6 +92,17 @@ export default defineConfig({
           { text: 'Analytics & Insights', link: '/api/analytics' },
           { text: 'Error Handling', link: '/api/errors' },
           { text: 'Rate Limiting', link: '/api/rate-limiting' },
+        ],
+      },
+      {
+        text: 'SDK Documentation',
+        collapsed: false,
+        items: [
+          { text: 'SDK Overview', link: '/sdk/' },
+          { text: 'TypeScript SDK', link: '/sdk/typescript' },
+          { text: 'Authentication Guide', link: '/sdk/authentication' },
+          { text: 'Integration Examples', link: '/sdk/examples' },
+          { text: 'Best Practices', link: '/sdk/best-practices' },
         ],
       },
       {

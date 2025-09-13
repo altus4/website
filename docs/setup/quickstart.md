@@ -114,13 +114,13 @@ npm run migrate:status
 Expected output:
 
 ```text
-✅ Migration 001_create_users_table.up.sql applied
-✅ Migration 002_create_searches_table.up.sql applied
-✅ Migration 003_create_analytics_table.up.sql applied
-✅ Migration 004_create_api_keys_table.up.sql applied
-✅ Migration 005_update_users_table_for_api_keys.up.sql applied
-✅ Migration 006_create_database_connections_table.up.sql applied
-✅ Migration 007_create_search_analytics_table.up.sql applied
+[DONE] Migration 001_create_users_table.up.sql applied
+[DONE] Migration 002_create_searches_table.up.sql applied
+[DONE] Migration 003_create_analytics_table.up.sql applied
+[DONE] Migration 004_create_api_keys_table.up.sql applied
+[DONE] Migration 005_update_users_table_for_api_keys.up.sql applied
+[DONE] Migration 006_create_database_connections_table.up.sql applied
+[DONE] Migration 007_create_search_analytics_table.up.sql applied
 ```
 
 ## Step 5: Start the Server
@@ -133,9 +133,9 @@ npm run dev
 Expected output:
 
 ```text
-🚀 Altus 4 Server started on port 3000
-🌍 Environment: development
-📊 Health check: http://localhost:3000/health
+Altus 4 Server started on port 3000
+ Environment: development
+Health check: http://localhost:3000/health
 ```
 
 ## Step 6: Verify Installation
