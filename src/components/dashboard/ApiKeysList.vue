@@ -200,7 +200,7 @@
 
             <div class="flex items-center gap-4">
               <div class="text-right">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center justify-end gap-2">
                   <span
                     :class="apiKey.isActive ? 'text-green-500' : 'text-red-800'"
                     class="inline-flex items-center text-xs font-medium"
