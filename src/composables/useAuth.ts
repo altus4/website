@@ -1,7 +1,7 @@
 import { inject, computed } from 'vue';
 import type { Altus4SDK } from '@altus4/sdk';
 import { TokenStorageManager } from '@altus4/sdk';
-import type { AuthHelpers, AuthStateShape } from '@/plugins/altus4';
+import type { AuthHelpers, AuthStateShape } from '@/types/altus4';
 
 export function useAuth() {
   const altus4 = inject<Altus4SDK>('altus4');
