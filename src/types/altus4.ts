@@ -36,15 +36,23 @@ export interface AuthStateShape {
 
 /**
  * Standard result format for authentication operations.
- * Used to provide consistent response structure across different SDK API versions.
+ * Updated to match the actual SDK's AuthResult interface.
  */
 export interface AuthResult {
   /** Whether the operation was successful */
   success: boolean;
   /** User data if operation was successful */
   user?: User;
-  /** Error message if operation failed */
-  error?: string;
+  /** Authentication token if operation was successful */
+  token?: string;
+  /** Token expiry time in seconds */
+  expiresIn?: number;
+  /** Error details if operation failed */
+  error?: {
+    code: string;
+    message: string;
+    details?: unknown;
+  };
 }
 
 /**

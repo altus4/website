@@ -1,35 +1,51 @@
 /**
- * @fileoverview Altus4 Vue Plugin - Clean Implementation
+ * @fileoverview Altus4 Vue Plugin - Direct SDK Implementation
  *
- * This is the refactored version of the Altus4 Vue plugin that uses extracted
- * types and utilities to provide a clean, maintainable interface for authentication
- * in Vue applications.
- *
- * The previous "crude" implementation has been cleaned up by:
- * - Extracting all types to a separate file
- * - Moving SDK interaction logic to utility functions
- * - Simplifying the plugin to focus only on Vue integration
- * - Improving error handling and type safety
+ * This implementation uses the @altus4/sdk directly without any adapter layer.
+ * All the methods we need are now available in the latest SDK version.
  */
 
 import { reactive } from 'vue';
 import type { App } from 'vue';
 import { Altus4SDK, TokenStorageManager } from '@altus4/sdk';
+import type { User, AuthResult } from '@altus4/sdk';
 
-// Import extracted types and utilities
-import type {
-  AuthHelpers,
-  AuthStateShape,
-  Altus4PluginOptions,
-  Altus4DebugTools,
-  Altus4SDKExtended,
-} from '@/types/altus4';
-import { createAuthHelpers, initializeAuthState } from '@/lib/sdk-adapter';
+// Import only the types we need, reusing the existing ones where possible
+import type { AuthStateShape, Altus4PluginOptions } from '@/types/altus4';
+
+/**
+ * Helper function to extract error message from SDK's rich error object
+ */
+function extractErrorMessage(error?: {
+  code: string;
+  message: string;
+  details?: unknown;
+}): string {
+  return error?.message || 'Operation failed';
+}
+
+/**
+ * Interface for authentication helpers that matches what the website expects.
+ * This provides the same interface as before but uses the SDK directly.
+ */
+export interface AuthHelpers {
+  login: (
+    email: string,
+    password: string
+  ) => Promise<{ success: boolean; user?: User; error?: string }>;
+  register: (
+    name: string,
+    email: string,
+    password: string
+  ) => Promise<{ success: boolean; user?: User; error?: string }>;
+  logout: () => Promise<void>;
+  refreshAuth: () => Promise<boolean | undefined>;
+  reinitialize: () => Promise<void>;
+}
 
 /**
  * Global reactive authentication state.
  * This is the single source of truth for authentication state across the entire application.
- * Vue's reactive() makes this object automatically trigger re-renders when updated.
  */
 export const authState: AuthStateShape = reactive({
   isAuthenticated: false,
@@ -40,69 +56,156 @@ export const authState: AuthStateShape = reactive({
 
 /**
  * Vue plugin for integrating Altus4 SDK with Vue applications.
- *
- * This clean implementation focuses solely on Vue integration concerns:
- * - Installing the plugin with configuration
- * - Setting up authentication state
- * - Exposing SDK and helpers to components
- * - Providing debug tools in development
- *
- * All the complex SDK interaction logic has been moved to utility functions.
+ * This version uses the SDK directly without any compatibility adapter.
  */
 export default {
   /**
    * Vue plugin install method - called when app.use(altus4Plugin, options) is invoked.
-   * @param app - Vue application instance
-   * @param options - Plugin configuration options
    */
   install(app: App, options: Altus4PluginOptions) {
     // Initialize the Altus4 SDK with provided configuration
     const altus4 = new Altus4SDK({
       baseURL: options.baseURL,
-      timeout: options.timeout || 30000, // Default 30 second timeout
+      timeout: options.timeout || 30000,
     });
 
     // Set up debug tools in development mode
     if (options.debug && import.meta.env.DEV) {
-      const debugTools: Altus4DebugTools = {
-        sdk: altus4 as unknown as Altus4SDKExtended,
+      window.__altus4_debug__ = {
+        sdk: altus4 as any,
         authState,
-        TokenStorageManager,
-        getAuthStatus: () =>
-          (altus4 as unknown as Altus4SDKExtended).auth?.getAuthStatus?.(),
-        debugToken: () =>
-          (altus4 as unknown as Altus4SDKExtended).auth?.debugTokenState?.(),
+        TokenStorageManager: TokenStorageManager as any,
+        getAuthStatus: () => altus4.auth.getAuthStatus(),
+        debugToken: () => {
+          altus4.auth.debugTokenState();
+          return undefined;
+        },
       };
-
-      window.__altus4_debug__ = debugTools;
       console.log('Altus4 debug tools available at window.__altus4_debug__');
     }
 
     /**
-     * Initialize authentication state on application startup.
-     * Uses the extracted utility function for cleaner separation of concerns.
+     * Initialize authentication state using the SDK's built-in methods.
      */
     const initializeAuth = async (): Promise<void> => {
-      await initializeAuthState(altus4, authState);
+      authState.isLoading = true;
+      try {
+        // Use the SDK's initializeAuthState method
+        const initialized = await altus4.auth.initializeAuthState();
+
+        if (initialized) {
+          authState.isAuthenticated = true;
+
+          // Get current user using the SDK's method
+          const userResponse = await altus4.getCurrentUser();
+          if (userResponse.success) {
+            authState.user = userResponse.user || null;
+          }
+        } else {
+          authState.isAuthenticated = false;
+          authState.user = null;
+        }
+      } catch (error) {
+        console.warn('Failed to initialize auth state:', error);
+        authState.error = 'Failed to initialize authentication';
+      } finally {
+        authState.isLoading = false;
+      }
     };
 
     // Start auth initialization immediately when plugin is installed
-    // Using void to explicitly ignore the promise (fire-and-forget pattern)
     void initializeAuth();
 
     /**
-     * Create authentication helper methods using the utility factory.
-     * This provides a clean, consistent interface for authentication operations.
+     * Create authentication helper methods using the SDK directly.
      */
-    const authHelpers: AuthHelpers = createAuthHelpers(
-      altus4,
-      authState,
-      initializeAuth
-    );
+    const authHelpers: AuthHelpers = {
+      async login(email: string, password: string) {
+        authState.isLoading = true;
+        authState.error = null;
+
+        try {
+          // Use the SDK's direct login method
+          const result: AuthResult = await altus4.login(email, password);
+
+          if (result.success) {
+            authState.isAuthenticated = true;
+            authState.user = result.user || null;
+            return { success: true, user: result.user };
+          }
+
+          const message = extractErrorMessage(result.error);
+          authState.error = message;
+          return { success: false, error: message };
+        } catch (error) {
+          const message =
+            error instanceof Error ? error.message : 'Network error';
+          authState.error = message;
+          return { success: false, error: message };
+        } finally {
+          authState.isLoading = false;
+        }
+      },
+
+      async register(name: string, email: string, password: string) {
+        authState.isLoading = true;
+        authState.error = null;
+
+        try {
+          // Use the SDK's direct register method
+          const result: AuthResult = await altus4.register(
+            name,
+            email,
+            password
+          );
+
+          if (result.success) {
+            authState.isAuthenticated = true;
+            authState.user = result.user || null;
+            return { success: true, user: result.user };
+          }
+
+          const message = extractErrorMessage(result.error);
+          authState.error = message;
+          return { success: false, error: message };
+        } catch (error) {
+          const message =
+            error instanceof Error ? error.message : 'Network error';
+          authState.error = message;
+          return { success: false, error: message };
+        } finally {
+          authState.isLoading = false;
+        }
+      },
+
+      async logout() {
+        authState.isLoading = true;
+        try {
+          // Use the SDK's direct logout method
+          await altus4.logout();
+        } catch (error) {
+          console.error('Logout error:', error);
+        } finally {
+          // Always clear authentication state
+          authState.isAuthenticated = false;
+          authState.user = null;
+          authState.error = null;
+          authState.isLoading = false;
+        }
+      },
+
+      async refreshAuth() {
+        // Use the SDK's direct refresh method
+        return await altus4.refreshTokenIfNeeded();
+      },
+
+      async reinitialize() {
+        return initializeAuth();
+      },
+    };
 
     /**
      * Make SDK and auth helpers available throughout the Vue application.
-     * Uses both global properties (for Options API) and provide/inject (for Composition API).
      */
 
     // Global properties for Options API compatibility
@@ -117,8 +220,8 @@ export default {
     globalProps.$auth = authHelpers;
 
     // Provide dependencies for Composition API (modern Vue 3 approach)
-    app.provide('altus4', altus4); // SDK instance
-    app.provide('authHelpers', authHelpers); // Authentication methods
-    app.provide('authState', authState); // Reactive authentication state
+    app.provide('altus4', altus4);
+    app.provide('authHelpers', authHelpers);
+    app.provide('authState', authState);
   },
 };
